@@ -40,7 +40,7 @@ public class Poll {
         lastEditTime = LocalDateTime.now();
     }
 
-    private Long getId() {
+    public Long getId() {
         return id;
     }
 
