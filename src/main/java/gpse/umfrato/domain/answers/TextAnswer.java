@@ -2,9 +2,11 @@ package gpse.umfrato.domain.answers;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 
 @Entity
 public class TextAnswer extends Answer {
+    @Lob
     @Column
     private String answer;
 

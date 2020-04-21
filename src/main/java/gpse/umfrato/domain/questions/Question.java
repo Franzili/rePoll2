@@ -9,6 +9,7 @@ public abstract class Question {
     private Long id;
 
     @Column
+    @Lob
     private String title;
 
     public Long getId() {

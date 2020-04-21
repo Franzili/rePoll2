@@ -14,9 +14,11 @@ public class PollSection {
     private Long id;
 
     @Column
+    @Lob
     private String description;
 
     @Column
+    @Lob
     private String title;
 
     @OneToMany
