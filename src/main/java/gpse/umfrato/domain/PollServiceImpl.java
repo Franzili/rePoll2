@@ -17,7 +17,14 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public Iterable<Poll> getAll() {
+    public Iterable<Poll> findAll() {
         return pollRepository.findAll();
+    }
+
+    @Override
+    public Poll addPoll(String title) {
+        final Poll poll = new Poll(null, title);
+        this.pollRepository.save(poll);
+        return poll;
     }
 }

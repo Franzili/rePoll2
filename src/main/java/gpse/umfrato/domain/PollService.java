@@ -1,5 +1,6 @@
 package gpse.umfrato.domain;
 
 public interface PollService {
-    Iterable<Poll> getAll();
+    Iterable<Poll> findAll();
+    Poll addPoll(String title);
 }
