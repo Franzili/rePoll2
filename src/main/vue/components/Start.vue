@@ -11,8 +11,7 @@
                             id="input-group-1"
                             label="Username:"
                             label-for="input-1"
-                            description="We'll never share your username with anyone else."
-                        >
+                            description="We'll never share your username with anyone else.">
                             <b-form-input
                                 id="input-1"
                                 v-model="form.email"
