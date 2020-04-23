@@ -63,6 +63,7 @@ public class PollSection {
     }
 
     void setQuestions(List<Question> questions) {
-        this.questions = questions;
+        this.questions.clear();
+        this.questions.addAll(questions);
     }
 }

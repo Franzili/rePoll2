@@ -109,8 +109,7 @@ public class PollServiceImpl implements PollService {
                 section.setDescription(description);
             }
             if (questions != null) {
-                section.getQuestions().clear();
-                section.getQuestions().addAll(questions);
+                section.setQuestions(questions);
             }
         }
         return sectionOptional;
