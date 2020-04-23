@@ -9,6 +9,8 @@
                 <b-form-checkbox value="c4">bad</b-form-checkbox>
             </b-form-checkbox-group>
         </b-form-group>
+        <b-button @click="$emit('del-item', item.id)" variant="danger">delete</b-button>
+        <p class="bottom-line"></p>
     </div>
 </template>
 
@@ -21,4 +23,8 @@
 
 <style scoped>
 
+    .bottom-line {
+        padding: 10px;
+        border-bottom: 1px #000000 dotted;
+    }
 </style>

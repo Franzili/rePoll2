@@ -14,20 +14,11 @@
             <b-row align="center" class="my-row">
                 <b-col></b-col>
                 <b-col>
-                    <SurveyItemList v-bind:items="items"/>
+                    <SurveyItemList v-bind:items="items" v-on:del-item="deleteItem"/>
+                    <HelloWorld align="center" class="ml-auto" msg=""/>
+                    <AddQuestion v-on:add-item="addItem"/>
                 </b-col>
                 <b-col>
-                    <b-button type="submit" variant="secondary">edit</b-button>
-                    <b-button type="submit" variant="danger">delete</b-button>
-                </b-col>
-            </b-row>
-
-            <b-row align="center" class="my-row">
-                <b-col></b-col>
-                <b-col>Here Should be a Slider</b-col>
-                <b-col>
-                    <b-button type="submit" variant="secondary">edit</b-button>
-                    <b-button type="submit" variant="danger">delete</b-button>
                 </b-col>
             </b-row>
 
@@ -50,6 +41,7 @@
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
     import SurveyItemList from "../components/SurveyItemList";
+    import AddQuestion from "../components/AddQuestion";
 
     export default {
         name: "CreateSurvey",
@@ -74,11 +66,20 @@
                 ]
             }
         },
+        methods: {
+            deleteItem(id) {
+                this.items = this.items.filter(item => item.id !== id);
+            },
+            addItem(newItem) {
+                this.items = [...this.items, newItem];
+            }
+        },
         components: {
+            AddQuestion,
             SurveyItemList,
             NavBar,
             HelloWorld
-        },
+        }
     }
 </script>
 
