@@ -24,6 +24,20 @@ public class PollSection {
     @OneToMany
     private List<Question> questions = new ArrayList<>();
 
+    public PollSection() {
+
+    }
+
+    public PollSection(final String title,
+                       final String description,
+                       final List<Question> questions) {
+        this.title = title;
+        this.description = description;
+        if (questions != null) {
+            questions.addAll(questions);
+        }
+    }
+
     public Long getId() {
         return id;
     }
