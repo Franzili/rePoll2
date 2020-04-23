@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * Main Entry point for Spring Boot Application.
  */
-@SuppressWarnings("checkstyle:FinalClass")
+@SuppressWarnings({"checkstyle:FinalClass", "PMD.ClassWithOnlyPrivateConstructorsShouldBeFinal"})
 @SpringBootApplication
 @EnableJpaRepositories
 @EnableTransactionManagement
