@@ -2,6 +2,9 @@ package gpse.umfrato.domain.questions;
 
 import javax.persistence.*;
 
+/**
+ * Represents a single question belonging to a poll.
+ */
 @Entity
 public abstract class Question {
     @Id

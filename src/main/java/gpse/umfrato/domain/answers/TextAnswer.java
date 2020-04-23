@@ -4,17 +4,20 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 
+/**
+ * A textual answer to a question.
+ */
 @Entity
 public class TextAnswer extends Answer {
     @Lob
     @Column
-    private String answer;
+    private String text;
 
-    public String getAnswer() {
-        return answer;
+    public String getText() {
+        return text;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setText(String text) {
+        this.text = text;
     }
 }

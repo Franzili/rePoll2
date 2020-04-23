@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * A section is used to structure a {@link Poll} into smaller parts.
+ */
 @Entity
 public class PollSection {
     @Id
@@ -28,6 +31,12 @@ public class PollSection {
 
     }
 
+    /**
+     * Creates a new section.
+     * @param title The section title
+     * @param description The section description
+     * @param questions The set of questions to be added to this section
+     */
     public PollSection(final String title,
                        final String description,
                        final List<Question> questions) {

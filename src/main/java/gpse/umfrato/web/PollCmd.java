@@ -1,6 +1,11 @@
 package gpse.umfrato.web;
 
-public class PollCmd {
+import gpse.umfrato.domain.Poll;
+
+/**
+ * {@link Poll} helper object used for JSON serialisation
+ */
+class PollCmd {
     private String title;
 
     public String getTitle() {

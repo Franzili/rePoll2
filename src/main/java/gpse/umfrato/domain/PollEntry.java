@@ -7,6 +7,9 @@ import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents a set of answers given by one participant.
+ */
 @Entity
 public class PollEntry {
     @Id
@@ -27,10 +30,18 @@ public class PollEntry {
         this.associations = associations;
     }
 
+    /**
+     * Get the {@link User} that gave this set of answers.
+     * @return The {@link User} that gave this set of answers.
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * Set the {@link User} that gave this set of answers.
+     * @param user The {@link User} that gave this set of answers.
+     */
     public void setUser(User user) {
         this.user = user;
     }

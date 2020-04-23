@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main Poll object.
+ */
 @Entity
 public class Poll {
     @Id
@@ -43,6 +46,11 @@ public class Poll {
 
     }
 
+    /**
+     * Create a new poll.
+     * @param creator The user that is responsible for creating the poll.
+     * @param title The title of the poll.
+     */
     public Poll(User creator, String title) {
         this.creator = creator;
         this.title = title;

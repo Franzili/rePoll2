@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Default implementation of PollService
+ */
 @Service
 public class PollServiceImpl implements PollService {
 
@@ -20,11 +23,17 @@ public class PollServiceImpl implements PollService {
         this.pollSectionRepository = pollSectionRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Iterable<Poll> getAll() {
         return pollRepository.findAll();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Poll addPoll(String title) {
         final Poll poll = new Poll(null, title);
@@ -32,11 +41,17 @@ public class PollServiceImpl implements PollService {
         return poll;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Poll> getPoll(Long id) {
         return this.pollRepository.findById(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Poll> updatePoll(final Long id, final String title) {
         final Optional<Poll> poll = getPoll(id);
@@ -48,6 +63,9 @@ public class PollServiceImpl implements PollService {
 
     /* ----------------------- */
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<List<PollSection>> getAllSections(final Long pollId) {
         List<PollSection> result = null;
@@ -59,6 +77,9 @@ public class PollServiceImpl implements PollService {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<PollSection> addPollSection(final Long pollId,
                                                 final String title,
@@ -78,6 +99,9 @@ public class PollServiceImpl implements PollService {
         return Optional.ofNullable(result);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<PollSection> getPollSection(final Long pollId, final Long sectionId) {
         Optional<Poll> pollOptional = getPoll(pollId);
@@ -93,6 +117,9 @@ public class PollServiceImpl implements PollService {
         return Optional.ofNullable(result);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<PollSection> updatePollSection(final Long pollId,
                                          final Long sectionId,

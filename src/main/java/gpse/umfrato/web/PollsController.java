@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * REST Controller managing /api/v1/polls/* entry points
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
