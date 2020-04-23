@@ -6,8 +6,8 @@
 
             <b-navbar-toggle target="navbar-toggle-collapse">
                 <template v-slot:default="{ expanded }">
-                    <b-icon v-if="expanded" icon="chevron-bar-up"></b-icon>
-                    <b-icon v-else icon="chevron-bar-down"></b-icon>
+                    <b-icon class='my-icon' v-if="expanded" icon="caret-up-fill"></b-icon>
+                    <b-icon class="my-icon" v-else icon="caret-down-fill"></b-icon>
                 </template>
             </b-navbar-toggle>
 
@@ -35,6 +35,10 @@
 
 <style scoped>
     .nav-background {
-        background-color: #eaeaea;
+        background-color: #000000;
+    }
+
+    .my-icon {
+        color: white;
     }
 </style>

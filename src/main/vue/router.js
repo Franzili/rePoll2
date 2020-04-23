@@ -1,7 +1,7 @@
 import VueRouter from "vue-router";
-import CreateSurvey from "./components/CreateSurvey";
-import Start from "./components/Start";
-import Account from "./components/Account";
+import CreateSurvey from "./pages/CreateSurvey";
+import Start from "./pages/Start";
+import Account from "./pages/Account";
 
 export default new VueRouter({
     mode: 'history',

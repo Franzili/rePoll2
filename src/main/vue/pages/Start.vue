@@ -52,8 +52,8 @@
 
 <script>
 
-    import HelloWorld from './HelloWorld.vue'
-    import NavBar from "./NavBar";
+    import HelloWorld from '../components/HelloWorld.vue'
+    import NavBar from "../components/NavBar";
 
     export default {
         name: "Start",

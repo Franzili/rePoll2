@@ -14,15 +14,7 @@
             <b-row align="center" class="my-row">
                 <b-col></b-col>
                 <b-col>
-                    How are you
-                    <b-form-group id="input-group-1">
-                        <b-form-checkbox-group v-model="form.checked" id="checkboxes-4">
-                            <b-form-checkbox value="c1">very good</b-form-checkbox>
-                            <b-form-checkbox value="c2">good</b-form-checkbox>
-                            <b-form-checkbox value="c3">not good</b-form-checkbox>
-                            <b-form-checkbox value="c4">bad</b-form-checkbox>
-                        </b-form-checkbox-group>
-                    </b-form-group>
+                    <SurveyItemList v-bind:items="items"/>
                 </b-col>
                 <b-col>
                     <b-button type="submit" variant="secondary">edit</b-button>
@@ -55,8 +47,9 @@
 
 <script>
 
-    import HelloWorld from './HelloWorld.vue'
-    import NavBar from "./NavBar";
+    import HelloWorld from '../components/HelloWorld.vue'
+    import NavBar from "../components/NavBar";
+    import SurveyItemList from "../components/SurveyItemList";
 
     export default {
         name: "CreateSurvey",
@@ -68,27 +61,21 @@
                     name: '',
                     checked: []
                 },
-                show: true
-            }
-        },
-        methods: {
-            onSubmit(evt) {
-                evt.preventDefault()
-                alert(JSON.stringify(this.form))
-            },
-            onReset(evt) {
-                evt.preventDefault()
-                // Reset our form values
-                this.form.email = ''
-                this.form.name = ''
-                // Trick to reset/clear native browser form validation state
-                this.show = false
-                this.$nextTick(() => {
-                    this.show = true
-                })
+                show: true,
+                items: [
+                    {
+                        id: 1,
+                        question: "how are you"
+                    },
+                    {
+                        id: 2,
+                        question: "wie gehts"
+                    }
+                ]
             }
         },
         components: {
+            SurveyItemList,
             NavBar,
             HelloWorld
         },
