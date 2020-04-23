@@ -12,7 +12,18 @@ public interface PollService {
     Optional<Poll> updatePoll(Long id, String title);
 
     Optional<List<PollSection>> getAllSections(final Long id);
-    Optional<PollSection> addPollSection(final Long pollId, final String title, final String description, final List<Question> questions);
+    Optional<PollSection> addPollSection(
+        final Long pollId,
+        final String title,
+        final String description,
+        final List<Question> questions
+    );
     Optional<PollSection> getPollSection(final Long pollId, final Long sectionId);
-    Optional<PollSection> updatePollSection(final Long pollId, final Long sectionId, final String title, final String description, final List<Question> questions);
+    Optional<PollSection> updatePollSection(
+        final Long pollId,
+        final Long sectionId,
+        final String title,
+        final String description,
+        final List<Question> questions
+    );
 }

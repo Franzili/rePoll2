@@ -31,7 +31,7 @@ public class PollsController {
 
     @PostMapping("/")
     public Poll addPoll(@RequestBody PollCmd pollCmd) {
-        return pollService.addPoll(pollCmd.title);
+        return pollService.addPoll(pollCmd.getTitle());
     }
 
     @GetMapping("/{id:\\d+}")
@@ -43,7 +43,7 @@ public class PollsController {
 
     @PutMapping("/{id:\\d+}")
     public Poll updatePoll(@PathVariable("id") final String id, @RequestBody PollCmd pollCmd) {
-        Optional<Poll> result = pollService.updatePoll(Long.valueOf(id), pollCmd.title);
+        Optional<Poll> result = pollService.updatePoll(Long.valueOf(id), pollCmd.getTitle());
         return result.orElseThrow(NotFoundException::new);
     }
 
@@ -54,12 +54,13 @@ public class PollsController {
     }
 
     @PostMapping("/{pollId:\\d+}/sections")
-    public PollSection addPollSection(@PathVariable("pollId") final String pollId, @RequestBody PollSectionCmd pollSectionCmd) {
+    public PollSection addPollSection(@PathVariable("pollId") final String pollId,
+                                      @RequestBody PollSectionCmd pollSectionCmd) {
         Optional<PollSection> result = pollService.addPollSection(
             Long.valueOf(pollId),
-            pollSectionCmd.title,
-            pollSectionCmd.description,
-            pollSectionCmd.questions
+            pollSectionCmd.getTitle(),
+            pollSectionCmd.getDescription(),
+            pollSectionCmd.getQuestions()
         );
         return result.orElseThrow(NotFoundException::new);
     }
@@ -78,9 +79,9 @@ public class PollsController {
         Optional<PollSection> result = pollService.updatePollSection(
             Long.valueOf(pollId),
             Long.valueOf(sectionId),
-            pollSectionCmd.title,
-            pollSectionCmd.description,
-            pollSectionCmd.questions
+            pollSectionCmd.getTitle(),
+            pollSectionCmd.getDescription(),
+            pollSectionCmd.getQuestions()
         );
         return result.orElseThrow(NotFoundException::new);
     }

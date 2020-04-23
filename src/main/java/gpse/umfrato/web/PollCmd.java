@@ -1,6 +1,13 @@
 package gpse.umfrato.web;
 
 public class PollCmd {
-    public String title;
-    public int irgendwas;
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

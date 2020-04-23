@@ -1,17 +1,11 @@
 package gpse.umfrato.domain;
 
-import gpse.umfrato.domain.Poll;
-import gpse.umfrato.domain.PollRepository;
-import gpse.umfrato.domain.PollService;
 import gpse.umfrato.domain.questions.Question;
-import gpse.umfrato.web.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.Optional.empty;
 
 @Service
 public class PollServiceImpl implements PollService {

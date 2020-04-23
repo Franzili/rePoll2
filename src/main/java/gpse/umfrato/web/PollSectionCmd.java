@@ -5,7 +5,31 @@ import gpse.umfrato.domain.questions.Question;
 import java.util.List;
 
 public class PollSectionCmd {
-    public String title;
-    public String description;
-    public List<Question> questions;
+    private String title;
+    private String description;
+    private List<Question> questions;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
 }
