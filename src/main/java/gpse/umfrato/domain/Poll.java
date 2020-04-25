@@ -3,12 +3,16 @@ package gpse.umfrato.domain;
 import gpse.umfrato.domain.questions.Question;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Main Poll object.
+ *
+ * Poll objects are assumed to be equal if they have equal IDs.
  */
 @Entity
 public class Poll {
@@ -19,6 +23,7 @@ public class Poll {
 
     @Column
     @Lob
+    @NotEmpty
     private String title;
 
     @ManyToOne
@@ -56,6 +61,23 @@ public class Poll {
         this.title = title;
         creationTime = LocalDateTime.now();
         lastEditTime = LocalDateTime.now();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Poll)) return false;
+        Poll poll = (Poll) o;
+        return getId().equals(poll.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

@@ -1,6 +1,7 @@
 package gpse.umfrato.domain;
 
 import gpse.umfrato.domain.questions.Question;
+import gpse.umfrato.web.exceptions.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

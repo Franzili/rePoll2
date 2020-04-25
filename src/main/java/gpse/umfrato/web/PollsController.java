@@ -3,6 +3,7 @@ package gpse.umfrato.web;
 import gpse.umfrato.domain.Poll;
 import gpse.umfrato.domain.PollSection;
 import gpse.umfrato.domain.PollService;
+import gpse.umfrato.web.exceptions.BadRequestException;
 import gpse.umfrato.web.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,9 @@ public class PollsController {
 
     @PostMapping("/")
     public Poll addPoll(@RequestBody PollCmd pollCmd) {
+        if (pollCmd.getTitle() == null || pollCmd.getTitle().equals("")) {
+            throw new BadRequestException();
+        }
         return pollService.addPoll(pollCmd.getTitle());
     }
 
