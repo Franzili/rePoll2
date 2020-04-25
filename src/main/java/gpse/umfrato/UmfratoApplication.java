@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories
 @EnableTransactionManagement
 public class UmfratoApplication {
-    private UmfratoApplication() { }
+    protected UmfratoApplication() { }
 
     public static void main(final String... args) {
         SpringApplication.run(UmfratoApplication.class, args);
