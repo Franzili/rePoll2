@@ -3,32 +3,36 @@
         <nav-bar></nav-bar>
         <HelloWorld align="center" class="ml-auto" msg="Create your own Survey!"/>
 
-        <!-- better for Desktop version -->
-        <!-- <b-container class="my-contaier">
-
-            <b-row align="center" class="my-row" cols="3">
-                <b-col>Edit Area</b-col>
-                <b-col>Surveyname</b-col>
-                <b-col>Edit elements:</b-col>
-            </b-row>
-
-            <b-row align="center" class="my-row">
-                <b-col></b-col>
-                <b-col>
-                    <SurveyItemList v-bind:items="items" v-on:del-item="deleteItem"/>
-                    <HelloWorld align="center" class="ml-auto" msg=""/>
-                    <AddQuestion v-on:add-item="addItem"/>
-                </b-col>
-                <b-col>
-                </b-col>
-            </b-row>
-
-        </b-container> -->
-
         <!-- better for mobile version -->
-        <SurveyItemList v-bind:items="items" v-on:del-item="deleteItem"/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <AddQuestion v-on:add-item="addItem"/>
+        <div v-if="isMobile()">
+            <SurveyItemList v-bind:items="items" v-on:del-item="deleteItem"/>
+            <HelloWorld align="center" class="ml-auto" msg=""/>
+            <AddQuestion v-on:add-item="addItem"/>
+        </div>
+
+        <!-- better for Desktop version -->
+        <div v-else>
+            <b-container class="my-contaier">
+
+                <b-row align="center" class="my-row" cols="3">
+                    <b-col>Edit Area</b-col>
+                    <b-col>Surveyname</b-col>
+                    <b-col>Edit elements:</b-col>
+                </b-row>
+
+                <b-row align="center" class="my-row">
+                    <b-col></b-col>
+                    <b-col>
+                        <SurveyItemList v-bind:items="items" v-on:del-item="deleteItem"/>
+                        <HelloWorld align="center" class="ml-auto" msg=""/>
+                        <AddQuestion v-on:add-item="addItem"/>
+                    </b-col>
+                    <b-col>
+                    </b-col>
+                </b-row>
+
+            </b-container>
+        </div>
 
         <!-- to fill the whole page for background -->
         <HelloWorld align="center" class="ml-auto" msg=""/>
@@ -78,6 +82,13 @@
             },
             addItem(newItem) {
                 this.items = [...this.items, newItem];
+            },
+            isMobile() {
+                if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    return true
+                } else {
+                    return false
+                }
             }
         },
         components: {
