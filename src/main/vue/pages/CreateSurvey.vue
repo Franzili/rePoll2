@@ -3,11 +3,12 @@
         <nav-bar></nav-bar>
         <HelloWorld align="center" class="ml-auto" msg="Create your own Survey!"/>
 
-        <b-container class="my-contaier">
+        <!-- better for Desktop version -->
+        <!-- <b-container class="my-contaier">
 
             <b-row align="center" class="my-row" cols="3">
                 <b-col>Edit Area</b-col>
-                <b-col>Beschreibung der Umfrage</b-col>
+                <b-col>Surveyname</b-col>
                 <b-col>Edit elements:</b-col>
             </b-row>
 
@@ -22,7 +23,12 @@
                 </b-col>
             </b-row>
 
-        </b-container>
+        </b-container> -->
+
+        <!-- better for mobile version -->
+        <SurveyItemList v-bind:items="items" v-on:del-item="deleteItem"/>
+        <HelloWorld align="center" class="ml-auto" msg=""/>
+        <AddQuestion v-on:add-item="addItem"/>
 
         <!-- to fill the whole page for background -->
         <HelloWorld align="center" class="ml-auto" msg=""/>

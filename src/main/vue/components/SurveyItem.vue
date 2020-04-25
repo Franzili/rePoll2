@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div align="center">
         <p>{{item.question}}</p>
         <b-form-group id="input-group-1">
             <b-form-checkbox-group id="checkboxes-4">

@@ -38,13 +38,13 @@
 <style scoped>
 
     .surveys {
+        color: blue;
         box-sizing: border-box;
         margin: 0;
         padding: 0;
         font-family: Arial, Helvetica, sans-serif;
         font-size: 20px;
         line-height: 1.4;
-        background: 'lightblue';
         padding: 10px;
         border-bottom: 1px #000000 dotted;
     }
@@ -56,7 +56,6 @@
         font-family: Arial, Helvetica, sans-serif;
         font-size: 20px;
         line-height: 1.4;
-        background: 'lightblue';
         padding: 10px;
         border-bottom: 1px #000000 dotted;
         text-decoration: line-through;

@@ -48,8 +48,8 @@
             </b-container>
 
             <HelloWorld align="center" class="ml-auto" msg=""/>
-            <b-button variant="success">Save changes</b-button>
-            <b-button variant="secondary">Reset to default</b-button>
+            <b-button class="my-button" variant="success">Save changes</b-button>
+            <b-button class="my-button" variant="secondary">Reset to default</b-button>
 
             <!-- to fill the whole page for background -->
             <HelloWorld align="center" class="ml-auto" msg=""/>
@@ -79,5 +79,9 @@
 
     .fake-link {
         color: #0000ff;
+    }
+
+    .my-button {
+        margin: 10px;
     }
 </style>

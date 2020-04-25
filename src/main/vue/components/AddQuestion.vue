@@ -1,5 +1,5 @@
 <template>
-    <b-form @submit="addItem">
+    <b-form align="center" @submit="addItem">
         <b-form-group
             label="Enter new question:">
             <b-form-input
@@ -29,7 +29,7 @@
                     //TODO this id should be uniqe
                     id: uuidv4(),
                     question: this.question
-                }
+                };
                 this.$emit('add-item', newItem);
 
                 this.question = '';

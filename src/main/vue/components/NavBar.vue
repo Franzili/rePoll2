@@ -1,5 +1,5 @@
 <template>
-        <b-navbar toggleable type="dark" class="nav-background">
+        <b-navbar align="center" toggleable type="dark" class="nav-background">
             <b-navbar-brand href="#">
                 <router-link :to="'/'">rePOLL</router-link>
             </b-navbar-brand>
