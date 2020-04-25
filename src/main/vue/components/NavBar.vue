@@ -17,7 +17,7 @@
                         <router-link :to="'/account/'">Account</router-link>
                     </b-nav-item>
                     <b-nav-item href="#">
-                        <router-link :to="'/'">Surveys</router-link>
+                        <router-link :to="'/surveys'">Surveys</router-link>
                     </b-nav-item>
                     <b-nav-item href="#">
                         <router-link :to="'/create/'">Create Survey</router-link>
