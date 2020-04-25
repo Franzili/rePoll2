@@ -1,8 +1,11 @@
 package gpse.umfrato.domain;
 
+import gpse.umfrato.domain.answers.Answer;
 import gpse.umfrato.domain.questions.Question;
+import gpse.umfrato.domain.questions.TextQuestion;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -93,4 +96,40 @@ public interface PollService {
         final String description,
         final List<Question> questions
     );
+
+    /**
+     * Add a new PollEntry to a Poll.
+     * @param pollId The Poll's ID
+     * @param associations A map of question IDs to Answers
+     * @return An optional containing the newly created PollEntry, or an empty one if the corresponding Poll
+     * or any questions could not be found by their ID.
+     */
+    Optional<PollEntry> addPollEntry(Long pollId, Map<Long, Answer> associations);
+
+    /**
+     * Add a new TextQuestion to a Poll.
+     * @param pollId The Poll's ID
+     * @param questionTitle The title of the Question
+     * @return An optional containing the newly created TextQuestion, or an empty one if the corresponding Poll
+     * could not be found by its ID.
+     */
+    Optional<TextQuestion> addTextQuestion(Long pollId, String questionTitle);
+
+    /**
+     * Gets a Question belonging to a Poll.
+     * @param pollId The Poll's ID
+     * @param questionId The Questions's ID
+     * @return An Optional containing the Question, or an empty one if the Poll or the Question could not be found by
+     * their IDs
+     */
+    Optional<Question> getQuestion(Long pollId, Long questionId);
+
+    /**
+     * Update a TextQuestion
+     * @param pollId The Poll's ID
+     * @param questionTitle The title of the Question
+     * @return An optional containing the changed TextQuestion, or an empty one if the corresponding Poll
+     * could not be found by its ID.
+     */
+    Optional<TextQuestion> updateTextQuestion(Long pollId, Long questionId, String questionTitle);
 }
