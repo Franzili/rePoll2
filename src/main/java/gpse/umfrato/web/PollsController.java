@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 /**
- * REST Controller managing /api/v1/polls/* entry points
+ * REST Controller managing /api/v1/polls/* entry points.
  */
 @CrossOrigin
 @RestController

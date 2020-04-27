@@ -1,12 +1,11 @@
 package gpse.umfrato.web;
 
-import gpse.umfrato.domain.PollSection;
 import gpse.umfrato.domain.questions.Question;
 
 import java.util.List;
 
 /**
- * {@link PollSection} helper object used for JSON serialisation
+ * PollSection helper object used for JSON serialisation.
  */
 public class PollSectionCmd {
     private String title;

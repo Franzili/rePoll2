@@ -1,6 +1,5 @@
 package gpse.umfrato.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.umfrato.domain.answers.Answer;
 import gpse.umfrato.domain.questions.Question;
 
@@ -17,7 +16,7 @@ public class PollEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany()
+    @ManyToMany
     //@JsonSerialize TODO
     private Map<Question, Answer> associations = new HashMap<>();
 

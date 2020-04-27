@@ -9,5 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(value = TextAnswerCmd.class)
 })
 public abstract class AnswerCmd {
+    protected AnswerCmd() {
 
+    }
 }

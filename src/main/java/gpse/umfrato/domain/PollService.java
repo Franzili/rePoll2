@@ -70,7 +70,7 @@ public interface PollService {
     );
 
     /**
-     * Get a PollSection corresponding to a Poll
+     * Get a PollSection corresponding to a Poll.
      * @param pollId The Poll's ID
      * @param sectionId The PollSection's ID
      * @return An Optional containing the PollSection, or an empty one if the PollSection could not be found or
@@ -125,8 +125,9 @@ public interface PollService {
     Optional<Question> getQuestion(Long pollId, Long questionId);
 
     /**
-     * Update a TextQuestion
+     * Update a TextQuestion.
      * @param pollId The Poll's ID
+     * @param questionId The Question's ID
      * @param questionTitle The title of the Question
      * @return An optional containing the changed TextQuestion, or an empty one if the corresponding Poll
      * could not be found by its ID.

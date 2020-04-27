@@ -1,7 +1,6 @@
 package gpse.umfrato.domain;
 
 import gpse.umfrato.domain.answers.Answer;
-import gpse.umfrato.domain.answers.AnswerBaseRepository;
 import gpse.umfrato.domain.answers.TextAnswer;
 import gpse.umfrato.domain.answers.TextAnswerRepository;
 import gpse.umfrato.domain.questions.Question;
@@ -16,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Default implementation of PollService
+ * Default implementation of PollService.
  */
 @Service
 public class PollServiceImpl implements PollService {
@@ -169,13 +168,13 @@ public class PollServiceImpl implements PollService {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings({"PMD.AvoidThrowingRawExceptionTypes"}) // error handling von runtimeexception ist todo (s.u.)
     @Override
     public Optional<PollEntry> addPollEntry(final Long pollId,
                                             final Map<Long, Answer> associations) {
         PollEntry result = null;
         Optional<Poll> pollOptional = pollRepository.findById(pollId);
         if (pollOptional.isPresent()) {
-            Poll poll = pollOptional.get();
 
             PollEntry tmp = new PollEntry();
 
@@ -186,6 +185,7 @@ public class PollServiceImpl implements PollService {
                     if (answer instanceof TextAnswer) {
                         textAnswerRepository.save((TextAnswer) answer);
                     } else {
+                        //TODO
                         throw new RuntimeException("Invalid answer type");
                     }
                     tmp.getAssociations().put(questionOptional.get(), answer);
@@ -196,6 +196,7 @@ public class PollServiceImpl implements PollService {
             pollEntryRepository.save(tmp);
             result = tmp;
 
+            Poll poll = pollOptional.get();
             poll.getEntries().add(tmp);
             pollRepository.save(poll);
         }

@@ -65,8 +65,12 @@ public class Poll {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Poll)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Poll)) {
+            return false;
+        }
         Poll poll = (Poll) o;
         return getId().equals(poll.getId());
     }
