@@ -1,11 +1,13 @@
 package gpse.umfrato.domain;
 
 import gpse.umfrato.domain.answers.Answer;
+import gpse.umfrato.domain.answers.AnswerBaseRepository;
+import gpse.umfrato.domain.answers.TextAnswer;
+import gpse.umfrato.domain.answers.TextAnswerRepository;
 import gpse.umfrato.domain.questions.Question;
 import gpse.umfrato.domain.questions.QuestionBaseRepository;
 import gpse.umfrato.domain.questions.TextQuestion;
 import gpse.umfrato.domain.questions.TextQuestionRepository;
-import gpse.umfrato.web.exceptions.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,18 +26,21 @@ public class PollServiceImpl implements PollService {
     private final QuestionBaseRepository<Question> questionRepository;
     private final PollEntryRepository pollEntryRepository;
     private final TextQuestionRepository textQuestionRepository;
+    private final TextAnswerRepository textAnswerRepository;
 
     @Autowired
     public PollServiceImpl(final PollRepository pollRepository,
                            final PollSectionRepository pollSectionRepository,
                            final QuestionBaseRepository<Question> questionRepository,
                            final PollEntryRepository pollEntryRepository,
-                           final TextQuestionRepository textQuestionRepository) {
+                           final TextQuestionRepository textQuestionRepository,
+                           final TextAnswerRepository textAnswerRepository) {
         this.pollRepository = pollRepository;
         this.pollSectionRepository = pollSectionRepository;
         this.questionRepository = questionRepository;
         this.pollEntryRepository = pollEntryRepository;
         this.textQuestionRepository = textQuestionRepository;
+        this.textAnswerRepository = textAnswerRepository;
     }
 
     /**
@@ -177,12 +182,17 @@ public class PollServiceImpl implements PollService {
             for (Long questionId : associations.keySet()) {
                 Optional<Question> questionOptional = questionRepository.findById(questionId);
                 if (questionOptional.isPresent()) {
-                    tmp.getAssociations().put(questionOptional.get(), associations.get(questionId));
+                    Answer answer = associations.get(questionId);
+                    if (answer instanceof TextAnswer) {
+                        textAnswerRepository.save((TextAnswer) answer);
+                    } else {
+                        throw new RuntimeException("Invalid answer type");
+                    }
+                    tmp.getAssociations().put(questionOptional.get(), answer);
                 } else {
                     return Optional.empty();
                 }
             }
-
             pollEntryRepository.save(tmp);
             result = tmp;
 
@@ -248,6 +258,25 @@ public class PollServiceImpl implements PollService {
                     question.setTitle(title);
                     textQuestionRepository.save((TextQuestion) question);
                     result = (TextQuestion) question;
+                    break;
+                }
+            }
+        }
+        return Optional.ofNullable(result);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<PollEntry> getPollEntry(final Long pollId, final Long entryId) {
+        PollEntry result = null;
+        Optional<Poll> pollOptional = pollRepository.findById(pollId);
+        if (pollOptional.isPresent()) {
+            Poll poll = pollOptional.get();
+            for (PollEntry entry : poll.getEntries()) {
+                if (entry.getId().equals(entryId)) {
+                    result = entry;
                     break;
                 }
             }

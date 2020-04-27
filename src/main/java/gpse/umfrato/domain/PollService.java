@@ -132,4 +132,13 @@ public interface PollService {
      * could not be found by its ID.
      */
     Optional<TextQuestion> updateTextQuestion(Long pollId, Long questionId, String questionTitle);
+
+    /**
+     * Gets a PollEntry.
+     * @param pollId The Poll's ID
+     * @param entryId The Entry's ID
+     * @return An Optional containing the PollEntry, or an empty one if the Poll or the PollEntry could not be found by
+     * their IDs
+     */
+    Optional<PollEntry> getPollEntry(Long pollId, Long entryId);
 }

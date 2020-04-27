@@ -4,6 +4,8 @@ import gpse.umfrato.domain.Poll;
 import gpse.umfrato.domain.PollEntry;
 import gpse.umfrato.domain.PollSection;
 import gpse.umfrato.domain.PollService;
+import gpse.umfrato.domain.answers.Answer;
+import gpse.umfrato.domain.answers.TextAnswer;
 import gpse.umfrato.domain.questions.Question;
 import gpse.umfrato.web.exceptions.BadRequestException;
 import gpse.umfrato.web.exceptions.InternalServerErrorException;
@@ -11,9 +13,7 @@ import gpse.umfrato.web.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * REST Controller managing /api/v1/polls/* entry points
@@ -143,10 +143,42 @@ public class PollsController {
     @PostMapping("/{pollId:\\d+}/entries")
     public PollEntry addPollEntry(@PathVariable("pollId") final String pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
+        Map<Long, Answer> answers = new HashMap<>();
+        for (Long key : pollEntryCmd.getAnswers().keySet()) {
+            AnswerCmd answerCmd = pollEntryCmd.getAnswers().get(key);
+            Answer answer;
+            if (answerCmd instanceof TextAnswerCmd) {
+                answer = new TextAnswer();
+                String text  = ((TextAnswerCmd) answerCmd).getText();
+                ((TextAnswer) answer).setText(text);
+            } else {
+                throw new InternalServerErrorException();
+            }
+            answers.put(key, answer);
+        }
         Optional<PollEntry> result = pollService.addPollEntry(
             Long.valueOf(pollId),
-            pollEntryCmd.getAssociations()
+            answers
         );
+
         return result.orElseThrow(NotFoundException::new);
     }
+
+    @GetMapping("/{pollId:\\d+}/entries/{entryId:\\d+}")
+    public PollEntry getPollEntry(@PathVariable("pollId") final String pollId,
+                                  @PathVariable("entryId") final String entryId) {
+        Optional<PollEntry> result = pollService.getPollEntry(Long.valueOf(pollId), Long.valueOf(entryId));
+
+        return result.orElseThrow(NotFoundException::new);
+    }
+    /* TODO
+    @PutMapping("/{pollId:\\d+}/entries/{entryId:\\d+}")
+    public PollEntry updatePollEntry(@PathVariable("pollId") final String pollId,
+                                     @PathVariable("entryId") final String entryId,
+                                     @RequestBody PollEntryCmd pollEntryCmd) {
+
+    }
+
+     */
+
 }
