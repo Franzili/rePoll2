@@ -1,5 +1,5 @@
 <template>
-    <b-form align="center" @submit="addItem">
+    <b-form style="text-align:center;" @submit="addItem">
         <b-form-group
             label="Enter new question:">
             <b-form-input

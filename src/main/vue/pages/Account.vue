@@ -1,17 +1,17 @@
 <template>
-    <div :style="{ backgroundColor:'lightblue'}">
+    <div>
         <nav-bar></nav-bar>
 
-        <div align="center">
+        <div style="text-align:center;">
             <HelloWorld class="ml-auto" msg="Configure your Account!"/>
 
             <p class="greeting">Hello User!</p>
-            <HelloWorld align="center" class="ml-auto" msg=""/>
+            <HelloWorld class="ml-auto" msg=""/>
 
             <p class="fake-link">Change Email</p>
             <p class="fake-link">Change password</p>
 
-            <HelloWorld align="center" class="ml-auto" msg=""/>
+            <HelloWorld class="ml-auto" msg=""/>
             <p>Notifications:</p>
             <b-container>
                 <b-row>
@@ -47,13 +47,9 @@
 
             </b-container>
 
-            <HelloWorld align="center" class="ml-auto" msg=""/>
+            <HelloWorld class="ml-auto" msg=""/>
             <b-button class="my-button" variant="success">Save changes</b-button>
             <b-button class="my-button" variant="secondary">Reset to default</b-button>
-
-            <!-- to fill the whole page for background -->
-            <HelloWorld align="center" class="ml-auto" msg=""/>
-            <HelloWorld align="center" class="ml-auto" msg=""/>
         </div>
     </div>
 </template>

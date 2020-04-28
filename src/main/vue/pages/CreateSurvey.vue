@@ -1,12 +1,12 @@
 <template>
-    <div :style="{ backgroundColor:'lightblue'}">
+    <div>
         <nav-bar></nav-bar>
-        <HelloWorld align="center" class="ml-auto" msg="Create your own Survey!"/>
+        <HelloWorld style="text-align:center;" class="ml-auto" msg="Create your own Survey!"/>
 
         <!-- better for mobile version -->
         <div v-if="isMobile()">
             <SurveyItemList v-bind:items="items" v-on:del-item="deleteItem"/>
-            <HelloWorld align="center" class="ml-auto" msg=""/>
+            <HelloWorld style="text-align:center;" class="ml-auto" msg=""/>
             <AddQuestion v-on:add-item="addItem"/>
         </div>
 
@@ -14,17 +14,17 @@
         <div v-else>
             <b-container class="my-contaier">
 
-                <b-row align="center" class="my-row" cols="3">
+                <b-row style="text-align:center;" class="my-row" cols="3">
                     <b-col>Edit Area</b-col>
                     <b-col>Surveyname</b-col>
                     <b-col>Edit elements:</b-col>
                 </b-row>
 
-                <b-row align="center" class="my-row">
+                <b-row style="text-align:center;" class="my-row">
                     <b-col></b-col>
                     <b-col>
                         <SurveyItemList v-bind:items="items" v-on:del-item="deleteItem"/>
-                        <HelloWorld align="center" class="ml-auto" msg=""/>
+                        <HelloWorld class="ml-auto" msg=""/>
                         <AddQuestion v-on:add-item="addItem"/>
                     </b-col>
                     <b-col>
@@ -33,16 +33,6 @@
 
             </b-container>
         </div>
-
-        <!-- to fill the whole page for background -->
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
     </div>
 </template>
 
@@ -84,11 +74,7 @@
                 this.items = [...this.items, newItem];
             },
             isMobile() {
-                if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                    return true
-                } else {
-                    return false
-                }
+                return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             }
         },
         components: {

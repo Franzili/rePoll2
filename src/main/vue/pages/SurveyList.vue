@@ -1,23 +1,13 @@
 <template>
-    <div :style="{ backgroundColor:'lightblue'}">
+    <div>
         <nav-bar></nav-bar>
-        <HelloWorld align="center" class="ml-auto" msg="Your Surveys!"/>
+        <HelloWorld style="text-align:center;" class="ml-auto" msg="Your Surveys!"/>
 
-        <div align="center">
+        <div style="text-align:center;">
             <p class="surveys">First survey</p>
             <p class="is-complete">Second survey</p>
             <p class="surveys">Third survey</p>
         </div>
-
-        <!-- to fill the whole page for background -->
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
     </div>
 </template>
 
@@ -41,7 +31,6 @@
         color: blue;
         box-sizing: border-box;
         margin: 0;
-        padding: 0;
         font-family: Arial, Helvetica, sans-serif;
         font-size: 20px;
         line-height: 1.4;
@@ -52,7 +41,6 @@
     .is-complete {
         box-sizing: border-box;
         margin: 0;
-        padding: 0;
         font-family: Arial, Helvetica, sans-serif;
         font-size: 20px;
         line-height: 1.4;

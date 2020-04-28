@@ -1,7 +1,7 @@
 <template>
-        <b-navbar align="center" toggleable type="dark" class="nav-background">
+        <b-navbar style="text-align:center;" toggleable type="dark" class="nav-background">
             <b-navbar-brand href="#">
-                <router-link :to="'/'">rePOLL</router-link>
+                <img @click="toStart" src="../assets/logo.png" width="123" height="27">
             </b-navbar-brand>
 
             <b-navbar-toggle target="navbar-toggle-collapse">
@@ -14,13 +14,13 @@
             <b-collapse id="navbar-toggle-collapse" is-nav>
                 <b-navbar-nav class="ml-auto">
                     <b-nav-item href="#">
-                        <router-link :to="'/account/'">Account</router-link>
+                        <router-link class="link" :to="'/account/'">Account</router-link>
                     </b-nav-item>
                     <b-nav-item href="#">
-                        <router-link :to="'/surveys'">Surveys</router-link>
+                        <router-link class="link" :to="'/surveys'">Surveys</router-link>
                     </b-nav-item>
                     <b-nav-item href="#">
-                        <router-link :to="'/create/'">Create Survey</router-link>
+                        <router-link class="link" :to="'/create/'">Create Survey</router-link>
                     </b-nav-item>
                 </b-navbar-nav>
             </b-collapse>
@@ -29,16 +29,26 @@
 
 <script>
     export default {
-        name: "NavBar"
+        name: "NavBar",
+        methods: {
+            toStart() {
+                return this.$router.push('/');
+            }
+        }
     }
 </script>
 
 <style scoped>
     .nav-background {
-        background-color: #000000;
+        background-color: #ffffff;
     }
 
     .my-icon {
-        color: white;
+        color: #000000;
+    }
+
+    .link {
+        color: #3eab37;
+        font-size: 20px;
     }
 </style>

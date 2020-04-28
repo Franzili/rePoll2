@@ -1,7 +1,8 @@
 <template>
-    <div :style="{ backgroundColor:'#76d4b0'}">
+    <div>
+        <!-- :style="{ backgroundColor:'lightblue'}" -->
         <nav-bar></nav-bar>
-        <HelloWorld align="center" class="ml-auto" msg="Welcome to the best Survey App!"/>
+        <HelloWorld style="text-align:center;" class="ml-auto" msg="Welcome to the best Survey App!"/>
 
         <!-- this is better for mobile version -->
         <div v-if="isMobile()">
@@ -17,12 +18,13 @@
 
                 <b-form-group label="Password:" label-for="input-2">
                     <b-form-input
+                        type="password"
                         required
                         placeholder="Enter password"
                     ></b-form-input>
                 </b-form-group>
 
-                <div align="center">
+                <div>
                     <b-button class="my-button" variant="success">Login</b-button>
                     <b-button class="my-button" variant="secondary">Sign up</b-button>
                 </div>
@@ -38,8 +40,7 @@
                     <b-col>
                         <b-form>
                             <b-form-group
-                                label="Username:"
-                                description="We'll never share your username with anyone else.">
+                                label="Username:">
                                 <b-form-input
                                     required
                                     placeholder="Enter username"
@@ -62,14 +63,6 @@
                 </b-row>
             </b-container>
         </div>
-
-
-        <!-- to fill the whole page for background -->
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
-        <HelloWorld align="center" class="ml-auto" msg=""/>
     </div>
 </template>
 
@@ -86,11 +79,7 @@
         },
         methods: {
             isMobile() {
-                if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                    return true
-                } else {
-                    return false
-                }
+                return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             }
         }
     }
