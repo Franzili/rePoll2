@@ -43,7 +43,7 @@ public class PollSection {
         this.title = title;
         this.description = description;
         if (questions != null) {
-            questions.addAll(questions);
+            this.questions.addAll(questions);
         }
     }
 
