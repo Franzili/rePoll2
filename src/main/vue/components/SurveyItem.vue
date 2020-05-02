@@ -5,11 +5,10 @@
         <!-- all possible answers possibilities -->
         <div v-if="item.type === 'checkbox'">
             <b-form-group>
-                <b-form-checkbox-group id="checkboxes-4">
-                    <b-form-checkbox value="c1">very good</b-form-checkbox>
-                    <b-form-checkbox value="c2">good</b-form-checkbox>
-                    <b-form-checkbox value="c3">not good</b-form-checkbox>
-                    <b-form-checkbox value="c4">bad</b-form-checkbox>
+                <b-form-checkbox-group>
+                    <div v-bind:key="pos.id" v-for="pos in item.possibilities">
+                        <b-form-checkbox>{{pos.text}}</b-form-checkbox>
+                    </div>
                 </b-form-checkbox-group>
             </b-form-group>
         </div>
@@ -32,9 +31,11 @@
 
         <div v-if="item.type === 'dropdown'">
             <b-dropdown class="drop-down" text="Dropdown Button">
-                <b-dropdown-item>First Action</b-dropdown-item>
-                <b-dropdown-item>Second Action</b-dropdown-item>
-                <b-dropdown-item>Third Action</b-dropdown-item>
+                <div v-bind:key="pos.id" v-for="pos in item.possibilities">
+                    <b-dropdown-item>{{pos.text}}</b-dropdown-item>
+                </div>
+
+
             </b-dropdown>
         </div>
 

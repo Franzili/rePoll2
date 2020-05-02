@@ -17,6 +17,7 @@
             </b-form-group>
 
             <b-button class="my-margin" type="submit" variant="outline-primary">+</b-button>
+            <b-button class="my-margin" @click="$emit('save-pos', possibilities)" variant="outline-primary">save</b-button>
 
         </b-form>
     </div>
@@ -41,7 +42,9 @@
                     text: this.newPosText
                 };
                 this.possibilities = [...this.possibilities, newPos];
-            }
+
+                this.newPosText = '';
+            },
         },
         props: ["type"]
     }

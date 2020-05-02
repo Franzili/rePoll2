@@ -20,7 +20,7 @@
             </b-form-select>
 
 
-            <QuestionEditor v-if="type !== 'freetext'" v-bind:type="type"/>
+            <QuestionEditor v-if="type !== 'freetext'" v-bind:type="type" v-on:save-pos="savePos"/>
         </div>
 
         <b-button class="my-margin-18" type="submit" variant="success">add Question</b-button>
@@ -36,7 +36,8 @@
         data() {
             return {
                 question: '',
-                type: 'freetext'
+                type: 'freetext',
+                possibilities: []
             }
         },
         methods: {
@@ -45,11 +46,16 @@
                 const newItem = {
                     id: uuidv4(),
                     type: this.type,
-                    question: this.question
+                    question: this.question,
+                    possibilities: this.possibilities
                 };
                 this.$emit('add-item', newItem);
 
                 this.question = '';
+            },
+            savePos(p) {
+                //TODO delete function and just send the same event to CreateSurvey
+                this.possibilities = p;
             }
         }
     }

@@ -59,7 +59,8 @@
                     {
                         id: 1,
                         type: "freetext",
-                        question: "wie gehts"
+                        question: "wie gehts",
+                        possibilities: []
                     },
                     {
                         id: 2,
