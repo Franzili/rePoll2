@@ -21,11 +21,12 @@
                 </b-row>
 
                 <b-row style="text-align:center;" class="my-row">
-                    <b-col></b-col>
                     <b-col>
+                        <AddQuestion v-on:add-item="addItem"/>
+                    </b-col>
+                    <b-col cols="6">
                         <SurveyItemList v-bind:items="items" v-on:del-item="deleteItem"/>
                         <HelloWorld class="ml-auto" msg=""/>
-                        <AddQuestion v-on:add-item="addItem"/>
                     </b-col>
                     <b-col>
                     </b-col>
@@ -57,10 +58,22 @@
                 items: [
                     {
                         id: 1,
+                        type: "checkbox",
                         question: "how are you"
                     },
                     {
                         id: 2,
+                        type: "radio",
+                        question: "wie gehts"
+                    },
+                    {
+                        id: 3,
+                        type: "freetext",
+                        question: "wie gehts"
+                    },
+                    {
+                        id: 4,
+                        type: "dropdown",
                         question: "wie gehts"
                     }
                 ]

@@ -1,14 +1,44 @@
 <template>
     <div style="text-align:center;">
         <p>{{item.question}}</p>
-        <b-form-group id="input-group-1">
-            <b-form-checkbox-group id="checkboxes-4">
-                <b-form-checkbox value="c1">very good</b-form-checkbox>
-                <b-form-checkbox value="c2">good</b-form-checkbox>
-                <b-form-checkbox value="c3">not good</b-form-checkbox>
-                <b-form-checkbox value="c4">bad</b-form-checkbox>
-            </b-form-checkbox-group>
-        </b-form-group>
+
+        <!-- all possible answers possibilities -->
+        <div v-if="item.type === 'checkbox'">
+            <b-form-group>
+                <b-form-checkbox-group id="checkboxes-4">
+                    <b-form-checkbox value="c1">very good</b-form-checkbox>
+                    <b-form-checkbox value="c2">good</b-form-checkbox>
+                    <b-form-checkbox value="c3">not good</b-form-checkbox>
+                    <b-form-checkbox value="c4">bad</b-form-checkbox>
+                </b-form-checkbox-group>
+            </b-form-group>
+        </div>
+
+        <div v-if="item.type === 'radio'">
+            <!-- TODO must one be selected? -->
+            <b-form-group>
+                <b-form-radio-group
+                    :options="options"
+                    plain
+                    stacked
+                    name="plain-stacked"
+                ></b-form-radio-group>
+            </b-form-group>
+        </div>
+
+        <div v-if="item.type === 'freetext'">
+            <b-form-input class="text-box"/>
+        </div>
+
+        <div v-if="item.type === 'dropdown'">
+            <b-dropdown class="drop-down" text="Dropdown Button">
+                <b-dropdown-item>First Action</b-dropdown-item>
+                <b-dropdown-item>Second Action</b-dropdown-item>
+                <b-dropdown-item>Third Action</b-dropdown-item>
+            </b-dropdown>
+        </div>
+
+
         <b-button @click="$emit('del-item', item.id)" variant="danger">delete</b-button>
         <p class="bottom-line"></p>
     </div>
@@ -17,6 +47,15 @@
 <script>
     export default {
         name: "SurveyItem",
+        data() {
+            return {
+                options: [
+                    { text: 'very good'},
+                    { text: 'good'},
+                    { text: 'not good'}
+                ]
+            }
+        },
         props: ["item"]
     }
 </script>
@@ -26,5 +65,13 @@
     .bottom-line {
         padding: 10px;
         border-bottom: 1px #000000 dotted;
+    }
+
+    .text-box {
+        margin-bottom: 18px;
+    }
+
+    .drop-down {
+        margin-bottom: 18px;
     }
 </style>

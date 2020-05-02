@@ -9,6 +9,14 @@
                 v-model="question"
             ></b-form-input>
         </b-form-group>
+
+        <b-form-select v-model="type">
+            <option value="freetext">Free text</option>
+            <option value="checkbox">Checkbox</option>
+            <option value="radio">Radio Button</option>
+            <option value="dropdown">Drop down</option>
+        </b-form-select>
+
         <b-button type="submit" variant="success">add Question</b-button>
     </b-form>
 </template>
@@ -19,15 +27,16 @@
         name: "AddQuestion",
         data() {
             return {
-                question: ''
+                question: '',
+                type: 'freetext'
             }
         },
         methods: {
             addItem(e) {
                 e.preventDefault();
                 const newItem = {
-                    //TODO this id should be uniqe
                     id: uuidv4(),
+                    type: this.type,
                     question: this.question
                 };
                 this.$emit('add-item', newItem);
