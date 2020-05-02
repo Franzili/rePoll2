@@ -58,17 +58,17 @@
                 items: [
                     {
                         id: 1,
+                        type: "freetext",
+                        question: "wie gehts"
+                    },
+                    {
+                        id: 2,
                         type: "checkbox",
                         question: "how are you"
                     },
                     {
-                        id: 2,
-                        type: "radio",
-                        question: "wie gehts"
-                    },
-                    {
                         id: 3,
-                        type: "freetext",
+                        type: "radio",
                         question: "wie gehts"
                     },
                     {
