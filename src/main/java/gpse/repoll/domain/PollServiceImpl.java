@@ -7,6 +7,7 @@ import gpse.repoll.domain.questions.Question;
 import gpse.repoll.domain.questions.QuestionBaseRepository;
 import gpse.repoll.domain.questions.TextQuestion;
 import gpse.repoll.domain.questions.TextQuestionRepository;
+import gpse.repoll.domain.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,19 +65,17 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Optional<Poll> getPoll(Long id) {
-        return this.pollRepository.findById(id);
+    public Poll getPoll(Long id) {
+        return this.pollRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Optional<Poll> updatePoll(final Long id, final String title) {
-        final Optional<Poll> poll = getPoll(id);
-        if (poll.isPresent()) {
-            poll.get().setTitle(title);
-        }
+    public Poll updatePoll(final Long id, final String title) {
+        Poll poll = getPoll(id);
+        poll.setTitle(title);
         return poll;
     }
 
@@ -86,79 +85,69 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Optional<List<PollSection>> getAllSections(final Long pollId) {
+    public List<PollSection> getAllSections(final Long pollId) {
         List<PollSection> result = null;
-        final Optional<Poll> poll = getPoll(pollId);
-        if (poll.isPresent()) {
-            result = poll.get().getSections();
-        }
-        return Optional.ofNullable(result);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Optional<PollSection> addPollSection(final Long pollId,
-                                                final String title,
-                                                final String description,
-                                                final List<Question> questions) {
-        Optional<Poll> pollOptional = getPoll(pollId);
-        PollSection result = null;
-        if (pollOptional.isPresent()) {
-            Poll poll = pollOptional.get();
-            result = new PollSection(title, description, questions);
-
-            pollSectionRepository.save(result);
-            poll.getSections().add(result);
-            pollRepository.save(poll);
-        }
-
-        return Optional.ofNullable(result);
+        return getPoll(pollId).getSections();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Optional<PollSection> getPollSection(final Long pollId, final Long sectionId) {
-        Optional<Poll> pollOptional = getPoll(pollId);
-        PollSection result = null;
+    public PollSection addPollSection(final Long pollId,
+                                      final String title,
+                                      final String description,
+                                      final List<Question> questions) {
+        Poll poll = getPoll(pollId);
+        PollSection result = new PollSection(title, description, questions);
 
-        if (pollOptional.isPresent()) {
-            for (PollSection section : pollOptional.get().getSections()) {
-                if (section.getId().equals(sectionId)) {
-                    result = section;
-                }
+        pollSectionRepository.save(result);
+        poll.getSections().add(result);
+        pollRepository.save(poll);
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PollSection getPollSection(final Long pollId, final Long sectionId) {
+        Poll poll = getPoll(pollId);
+        PollSection result = null;
+        for (PollSection section : poll.getSections()) {
+            if (section.getId().equals(sectionId)) {
+                result = section;
             }
         }
-        return Optional.ofNullable(result);
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        else {
+            return result;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Optional<PollSection> updatePollSection(final Long pollId,
+    public PollSection updatePollSection(final Long pollId,
                                          final Long sectionId,
                                          final String title,
                                          final String description,
                                          final List<Question> questions) {
-        Optional<PollSection> sectionOptional = getPollSection(pollId, sectionId);
-        if (sectionOptional.isPresent()) {
-            PollSection section = sectionOptional.get();
-            if (title != null) {
-                section.setTitle(title);
-            }
-            if (description != null) {
-                section.setDescription(description);
-            }
-            if (questions != null) {
-                section.setQuestions(questions);
-            }
+        PollSection section = getPollSection(pollId, sectionId);
+        if (title != null) {
+            section.setTitle(title);
         }
-        return sectionOptional;
+        if (description != null) {
+            section.setDescription(description);
+        }
+        if (questions != null) {
+            section.setQuestions(questions);
+        }
+        return section;
     }
 
     /* ---------- */
@@ -170,118 +159,109 @@ public class PollServiceImpl implements PollService {
      */
     @SuppressWarnings({"PMD.AvoidThrowingRawExceptionTypes"}) // error handling von runtimeexception ist todo (s.u.)
     @Override
-    public Optional<PollEntry> addPollEntry(final Long pollId,
-                                            final Map<Long, Answer> associations) {
-        PollEntry result = null;
-        Optional<Poll> pollOptional = pollRepository.findById(pollId);
-        if (pollOptional.isPresent()) {
+    public PollEntry addPollEntry(final Long pollId,
+                                  final Map<Long, Answer> associations) {
+        PollEntry result = new PollEntry();
+        Poll poll = getPoll(pollId);
 
-            PollEntry tmp = new PollEntry();
-
-            for (Long questionId : associations.keySet()) {
-                Optional<Question> questionOptional = questionRepository.findById(questionId);
-                if (questionOptional.isPresent()) {
-                    Answer answer = associations.get(questionId);
-                    if (answer instanceof TextAnswer) {
-                        textAnswerRepository.save((TextAnswer) answer);
-                    } else {
-                        //TODO
-                        throw new RuntimeException("Invalid answer type");
-                    }
-                    tmp.getAssociations().put(questionOptional.get(), answer);
+        for (Long questionId : associations.keySet()) {
+            Optional<Question> questionOptional = questionRepository.findById(questionId);
+            if (questionOptional.isPresent()) {
+                Answer answer = associations.get(questionId);
+                if (answer instanceof TextAnswer) {
+                    textAnswerRepository.save((TextAnswer) answer);
                 } else {
-                    return Optional.empty();
+                    //TODO
+                    throw new RuntimeException("Invalid answer type");
                 }
+                result.getAssociations().put(questionOptional.get(), answer);
+            } else {
+                throw new NotFoundException();
             }
-            pollEntryRepository.save(tmp);
-            result = tmp;
-
-            Poll poll = pollOptional.get();
-            poll.getEntries().add(tmp);
-            pollRepository.save(poll);
         }
-        return Optional.ofNullable(result);
+        pollEntryRepository.save(result);
+        poll.getEntries().add(result);
+        pollRepository.save(poll);
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Optional<TextQuestion> addTextQuestion(final Long pollId, final String questionTitle) {
-        TextQuestion result = null;
-        Optional<Poll> pollOptional = pollRepository.findById(pollId);
-        if (pollOptional.isPresent()) {
-            Poll poll = pollOptional.get();
-            result = new TextQuestion();
-            result.setTitle(questionTitle);
-            textQuestionRepository.save(result);
+    public TextQuestion addTextQuestion(final Long pollId, final String questionTitle) {
+        Poll poll = getPoll(pollId);
+        TextQuestion question = new TextQuestion();
+        question.setTitle(questionTitle);
+        textQuestionRepository.save(question);
 
-            poll.getQuestions().add(result);
-            pollRepository.save(poll);
-        }
-        return Optional.ofNullable(result);
+        poll.getQuestions().add(question);
+        pollRepository.save(poll);
+        return question;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Optional<Question> getQuestion(final Long pollId, final Long questionId) {
+    public Question getQuestion(final Long pollId, final Long questionId) {
         Question result = null;
-        Optional<Poll> pollOptional = pollRepository.findById(pollId);
-        if (pollOptional.isPresent()) {
-            Poll poll = pollOptional.get();
-            for (Question question : poll.getQuestions()) {
-                if (question.getId().equals(questionId)) {
-                    result = question;
-                    break;
-                }
+        Poll poll = getPoll(pollId);
+        for (Question question : poll.getQuestions()) {
+            if (question.getId().equals(questionId)) {
+                result = question;
+                break;
             }
         }
-        return Optional.ofNullable(result);
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Optional<TextQuestion> updateTextQuestion(
+    public TextQuestion updateTextQuestion(
         final Long pollId,
         final Long questionId,
         final String title
     ) {
         TextQuestion result = null;
-        Optional<Poll> pollOptional = pollRepository.findById(pollId);
-        if (pollOptional.isPresent()) {
-            Poll poll = pollOptional.get();
-            for (Question question : poll.getQuestions()) {
-                if (question.getId().equals(questionId) && question instanceof TextQuestion) {
-                    question.setTitle(title);
-                    textQuestionRepository.save((TextQuestion) question);
-                    result = (TextQuestion) question;
-                    break;
-                }
+        Poll poll = getPoll(pollId);
+        for (Question question : poll.getQuestions()) {
+            if (question.getId().equals(questionId) && question instanceof TextQuestion) {
+                question.setTitle(title);
+                textQuestionRepository.save((TextQuestion) question);
+                result = (TextQuestion) question;
+                break;
             }
         }
-        return Optional.ofNullable(result);
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Optional<PollEntry> getPollEntry(final Long pollId, final Long entryId) {
+    public PollEntry getPollEntry(final Long pollId, final Long entryId) {
+        Poll poll = pollRepository.findById(pollId).orElseThrow(NotFoundException::new);
         PollEntry result = null;
-        Optional<Poll> pollOptional = pollRepository.findById(pollId);
-        if (pollOptional.isPresent()) {
-            Poll poll = pollOptional.get();
-            for (PollEntry entry : poll.getEntries()) {
-                if (entry.getId().equals(entryId)) {
-                    result = entry;
-                    break;
-                }
+
+        for (PollEntry entry : poll.getEntries()) {
+            if (entry.getId().equals(entryId)) {
+                result = entry;
+                break;
             }
         }
-        return Optional.ofNullable(result);
+
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        return result;
     }
 }

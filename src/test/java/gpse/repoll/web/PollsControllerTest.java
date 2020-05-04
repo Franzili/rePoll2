@@ -3,7 +3,7 @@ package gpse.repoll.web;
 
 import gpse.repoll.domain.Poll;
 import gpse.repoll.domain.PollService;
-import gpse.repoll.web.exceptions.BadRequestException;
+import gpse.repoll.domain.exceptions.BadRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

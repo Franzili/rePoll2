@@ -6,14 +6,9 @@ import gpse.repoll.domain.questions.TextQuestion;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Provides operations on polls to Controllers.
- * Most operations return an {@link Optional} instead of the raw object. If
- * an object could be found in the database, an Optional.empty() will be returned.
- * Hence, users of this class are responsible for taking appropriate actions if
- * an object could not be found.
  */
 public interface PollService {
     /**
@@ -33,9 +28,10 @@ public interface PollService {
     /**
      * Get a Poll by its ID.
      * @param id The Poll's ID
-     * @return An Optional containing the Poll, or an empty one if the Poll could not be found
+     * @return The Poll.
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Poll could not be found
      */
-    Optional<Poll> getPoll(Long id);
+    Poll getPoll(Long id);
 
     /**
      * Update a Poll.
@@ -44,14 +40,15 @@ public interface PollService {
      * @param title A new title, or null
      * @return An Optional containing the Poll, or an empty one if the Poll could not be found
      */
-    Optional<Poll> updatePoll(Long id, String title);
+    Poll updatePoll(Long id, String title);
 
     /**
      * Get all PollSections of a Poll.
      * @param id The polls ID
-     * @return An Optional containing the PollSections, or an empty one if the Poll could not be found
+     * @return The PollSections.
+     * @throws NullPointerException If the corresponding poll could not be found
      */
-    Optional<List<PollSection>> getAllSections(final Long id);
+    List<PollSection> getAllSections(final Long id);
 
     /**
      * Add a new PollSection to a Poll.
@@ -59,10 +56,10 @@ public interface PollService {
      * @param title The title of the new section
      * @param description The description of the new section, or null
      * @param questions An initial set of questions to be added to the PollSection, or null
-     * @return An Optional containing the newly created PollSection, or an empty one if the corresponding Poll
-     * could not be found.
+     * @return The newly created PollSection
+     * @throws gpse.repoll.domain.exceptions.NotFoundException if the corresponding Poll could not be found
      */
-    Optional<PollSection> addPollSection(
+    PollSection addPollSection(
         final Long pollId,
         final String title,
         final String description,
@@ -73,10 +70,11 @@ public interface PollService {
      * Get a PollSection corresponding to a Poll.
      * @param pollId The Poll's ID
      * @param sectionId The PollSection's ID
-     * @return An Optional containing the PollSection, or an empty one if the PollSection could not be found or
-     * does not belong to this Poll.
+     * @return The PollSection
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the PollSection or the corresponding Poll could
+     * not be found
      */
-    Optional<PollSection> getPollSection(final Long pollId, final Long sectionId);
+    PollSection getPollSection(final Long pollId, final Long sectionId);
 
     /**
      * Update a PollSection.
@@ -86,10 +84,11 @@ public interface PollService {
      * @param title The new title, or null
      * @param description The new description, or null
      * @param questions A new set of questions, or null
-     * @return An optional containing the changed PollSection, or an empty one if the PollSection could not be found
-     * or it does not belong to this Poll.
+     * @return the changed PollSection
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the PollSection or the corresponding Poll could
+     * not be found.
      */
-    Optional<PollSection> updatePollSection(
+    PollSection updatePollSection(
         final Long pollId,
         final Long sectionId,
         final String title,
@@ -101,45 +100,49 @@ public interface PollService {
      * Add a new PollEntry to a Poll.
      * @param pollId The Poll's ID
      * @param associations A map of question IDs to Answers
-     * @return An optional containing the newly created PollEntry, or an empty one if the corresponding Poll
-     * or any questions could not be found by their ID.
+     * @return The newly created PollEntry
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll or any of the Questions
+     * could not be found
      */
-    Optional<PollEntry> addPollEntry(Long pollId, Map<Long, Answer> associations);
+    PollEntry addPollEntry(Long pollId, Map<Long, Answer> associations);
 
     /**
      * Add a new TextQuestion to a Poll.
      * @param pollId The Poll's ID
      * @param questionTitle The title of the Question
-     * @return An optional containing the newly created TextQuestion, or an empty one if the corresponding Poll
-     * could not be found by its ID.
+     * @return The newly created TextQuestion
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    Optional<TextQuestion> addTextQuestion(Long pollId, String questionTitle);
+    TextQuestion addTextQuestion(Long pollId, String questionTitle);
 
     /**
      * Gets a Question belonging to a Poll.
      * @param pollId The Poll's ID
      * @param questionId The Questions's ID
-     * @return An Optional containing the Question, or an empty one if the Poll or the Question could not be found by
-     * their IDs
+     * @return The Question
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
+     * could not be found.
      */
-    Optional<Question> getQuestion(Long pollId, Long questionId);
+    Question getQuestion(Long pollId, Long questionId);
 
     /**
      * Update a TextQuestion.
      * @param pollId The Poll's ID
      * @param questionId The Question's ID
      * @param questionTitle The title of the Question
-     * @return An optional containing the changed TextQuestion, or an empty one if the corresponding Poll
-     * could not be found by its ID.
+     * @return The changed TextQuestion
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
+     * could not be found.
      */
-    Optional<TextQuestion> updateTextQuestion(Long pollId, Long questionId, String questionTitle);
+    TextQuestion updateTextQuestion(Long pollId, Long questionId, String questionTitle);
 
     /**
      * Gets a PollEntry.
      * @param pollId The Poll's ID
      * @param entryId The Entry's ID
-     * @return An Optional containing the PollEntry, or an empty one if the Poll or the PollEntry could not be found by
-     * their IDs
+     * @return The PollEntry
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the PollEntry or the corresponding Poll could
+     * not be found.
      */
-    Optional<PollEntry> getPollEntry(Long pollId, Long entryId);
+    PollEntry getPollEntry(Long pollId, Long entryId);
 }
