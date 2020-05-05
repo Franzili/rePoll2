@@ -38,7 +38,8 @@ public interface PollService {
      * Parameters that are null will not result in change in the Poll object.
      * @param id The Poll's ID
      * @param title A new title, or null
-     * @return An Optional containing the Poll, or an empty one if the Poll could not be found
+     * @return The updated Poll.
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the poll could not be found.
      */
     Poll updatePoll(Long id, String title);
 
@@ -46,7 +47,7 @@ public interface PollService {
      * Get all PollSections of a Poll.
      * @param id The polls ID
      * @return The PollSections.
-     * @throws NullPointerException If the corresponding poll could not be found
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding poll could not be found
      */
     List<PollSection> getAllSections(final Long id);
 
