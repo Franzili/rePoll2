@@ -3,6 +3,7 @@ package gpse.repoll.domain;
 import gpse.repoll.domain.answers.Answer;
 import gpse.repoll.domain.answers.TextAnswer;
 import gpse.repoll.domain.answers.TextAnswerRepository;
+import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.questions.Question;
 import gpse.repoll.domain.questions.QuestionBaseRepository;
 import gpse.repoll.domain.questions.TextQuestion;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Default implementation of PollService.
@@ -86,7 +86,6 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public List<PollSection> getAllSections(final Long pollId) {
-        List<PollSection> result = null;
         return getPoll(pollId).getSections();
     }
 
@@ -122,8 +121,7 @@ public class PollServiceImpl implements PollService {
         }
         if (result == null) {
             throw new NotFoundException();
-        }
-        else {
+        } else {
             return result;
         }
     }
@@ -157,29 +155,26 @@ public class PollServiceImpl implements PollService {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings({"PMD.AvoidThrowingRawExceptionTypes"}) // error handling von runtimeexception ist todo (s.u.)
     @Override
     public PollEntry addPollEntry(final Long pollId,
                                   final Map<Long, Answer> associations) {
         PollEntry result = new PollEntry();
-        Poll poll = getPoll(pollId);
 
         for (Long questionId : associations.keySet()) {
-            Optional<Question> questionOptional = questionRepository.findById(questionId);
-            if (questionOptional.isPresent()) {
-                Answer answer = associations.get(questionId);
-                if (answer instanceof TextAnswer) {
-                    textAnswerRepository.save((TextAnswer) answer);
-                } else {
-                    //TODO
-                    throw new RuntimeException("Invalid answer type");
-                }
-                result.getAssociations().put(questionOptional.get(), answer);
+            /* We need to check if the question exists beforehand -> hence ignoring PMD's PrematureDeclaration
+               error */
+            Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);  //NOPMD
+            Answer answer = associations.get(questionId);
+            if (answer instanceof TextAnswer) {
+                textAnswerRepository.save((TextAnswer) answer);
             } else {
-                throw new NotFoundException();
+                throw new InternalServerErrorException();
             }
+            result.getAssociations().put(question, answer);
         }
+
         pollEntryRepository.save(result);
+        Poll poll = getPoll(pollId);
         poll.getEntries().add(result);
         pollRepository.save(poll);
         return result;

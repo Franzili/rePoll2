@@ -9,7 +9,6 @@ import gpse.repoll.domain.answers.TextAnswer;
 import gpse.repoll.domain.questions.Question;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
-import gpse.repoll.domain.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
