@@ -65,17 +65,47 @@
                     {
                         id: 2,
                         type: "checkbox",
-                        question: "how are you"
+                        question: "how are you",
+                        possibilities: [
+                            {
+                                id: 1,
+                                text: "bla bla asdikawzug l hif",
+                            },
+                            {
+                                id: 2,
+                                text: "yes",
+                            }
+                        ]
                     },
                     {
                         id: 3,
                         type: "radio",
-                        question: "wie gehts"
+                        question: "wie gehts",
+                        possibilities: [
+                            {
+                                id: 1,
+                                text: "bla bla asdikawzug l hif",
+                            },
+                            {
+                                id: 2,
+                                text: "yes",
+                            }
+                        ]
                     },
                     {
                         id: 4,
                         type: "dropdown",
-                        question: "wie gehts"
+                        question: "wie gehts",
+                        possibilities: [
+                            {
+                                id: 1,
+                                text: "bla bla asdikawzug l hif",
+                            },
+                            {
+                                id: 2,
+                                text: "yes",
+                            }
+                        ]
                     }
                 ]
             }

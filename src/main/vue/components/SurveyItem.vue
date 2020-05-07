@@ -3,11 +3,10 @@
         <p>{{item.question}}</p>
 
         <!-- all possible answers possibilities -->
-        <!-- TODO organize that, remove redundancy-->
         <div v-if="item.type === 'checkbox'">
             <b-form-group>
                 <b-form-checkbox-group>
-                    <div v-bind:key="pos.id" v-for="pos in item.possibilities">
+                    <div class="text-left" v-bind:key="pos.id" v-for="pos in item.possibilities">
                         <b-form-checkbox>{{pos.text}}</b-form-checkbox>
                     </div>
                 </b-form-checkbox-group>
@@ -17,7 +16,7 @@
         <div v-if="item.type === 'radio'">
             <!-- TODO must one be selected? -->
             <b-form-group>
-                <div v-bind:key="pos.id" v-for="pos in item.possibilities">
+                <div class="text-left" v-bind:key="pos.id" v-for="pos in item.possibilities">
                     <b-form-radio>{{pos.text}}</b-form-radio>
                 </div>
             </b-form-group>
@@ -29,11 +28,9 @@
 
         <div v-if="item.type === 'dropdown'">
             <b-dropdown class="drop-down" text="Dropdown Button">
-                <div v-bind:key="pos.id" v-for="pos in item.possibilities">
+                <div class="text-left" v-bind:key="pos.id" v-for="pos in item.possibilities">
                     <b-dropdown-item>{{pos.text}}</b-dropdown-item>
                 </div>
-
-
             </b-dropdown>
         </div>
 
