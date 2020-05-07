@@ -1,54 +1,33 @@
 <template>
-    <div>
+    <div style="text-align:center;">
         <nav-bar></nav-bar>
-        <HelloWorld style="text-align:center;" class="ml-auto" msg="Create your own Survey!"/>
+        <HelloWorld class="ml-auto" msg="Answer your Survey!"/>
 
-        <!-- better for mobile version -->
-        <div v-if="isMobile()">
-            <SurveyItemList v-bind:items="items" v-bind:edit="edit" v-on:del-item="deleteItem"/>
-            <HelloWorld style="text-align:center;" class="ml-auto" msg=""/>
-            <AddQuestion v-on:add-item="addItem"/>
-        </div>
+        <b-container>
+            <b-row>
+                <b-col></b-col>
+                <b-col>
+                    <SurveyItemList v-bind:items="items" v-bind:edit="edit"/>
+                </b-col>
+                <b-col></b-col>
+            </b-row>
+        </b-container>
 
-        <!-- better for Desktop version -->
-        <div v-else>
-            <b-container>
-
-                <b-row style="text-align:center;" class="my-row" cols="3">
-                    <b-col>Edit Area</b-col>
-                    <b-col>Surveyname</b-col>
-                    <b-col>Edit elements:</b-col>
-                </b-row>
-
-                <b-row style="text-align:center;" class="my-row">
-                    <b-col>
-                        <AddQuestion v-on:add-item="addItem"/>
-                    </b-col>
-                    <b-col cols="6">
-                        <SurveyItemList v-bind:items="items" v-bind:edit="edit" v-on:del-item="deleteItem"/>
-                        <HelloWorld class="ml-auto" msg=""/>
-                    </b-col>
-                    <b-col>
-                    </b-col>
-                </b-row>
-
-            </b-container>
-        </div>
+        <b-button class="my-button" variant="primary">Save</b-button>
+        <b-button class="my-button" variant="success">Submit!</b-button>
     </div>
 </template>
 
 <script>
-
-    import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
+    import HelloWorld from "../components/HelloWorld";
     import SurveyItemList from "../components/SurveyItemList";
-    import AddQuestion from "../components/AddQuestion";
 
     export default {
-        name: "CreateSurvey",
+        name: "AnswerSurvey",
         data() {
             return {
-                edit: true,
+                edit: false,
                 items: [
                     {
                         id: 1,
@@ -104,29 +83,18 @@
                 ]
             }
         },
-        methods: {
-            deleteItem(id) {
-                this.items = this.items.filter(item => item.id !== id);
-            },
-            addItem(newItem) {
-                this.items = [...this.items, newItem];
-            },
-            isMobile() {
-                return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-            }
-        },
         components: {
-            AddQuestion,
-            SurveyItemList,
             NavBar,
-            HelloWorld
-        }
+            HelloWorld,
+            SurveyItemList
+        },
     }
 </script>
 
 <style scoped>
-
-    .my-row {
-        padding: 20px;
+    .my-button{
+        margin-left: 10px;
+        margin-right: 10px;
     }
+
 </style>

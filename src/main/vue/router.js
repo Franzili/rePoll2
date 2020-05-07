@@ -3,6 +3,7 @@ import CreateSurvey from "./pages/CreateSurvey";
 import Start from "./pages/Start";
 import Account from "./pages/Account";
 import SurveyList from "./pages/SurveyList";
+import AnswerSurvey from "./pages/AnswerSurvey";
 
 export default new VueRouter({
     mode: 'history',
@@ -22,6 +23,10 @@ export default new VueRouter({
         {
             path: '/surveys/',
             component: SurveyList
+        },
+        {
+            path: '/answer/',
+            component: AnswerSurvey
         }
     ]
 })

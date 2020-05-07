@@ -35,7 +35,7 @@
         </div>
 
 
-        <b-button @click="$emit('del-item', item.id)" variant="danger">delete</b-button>
+        <b-button v-if="edit === true" @click="$emit('del-item', item.id)" variant="danger">delete</b-button>
         <p class="bottom-line"></p>
     </div>
 </template>
@@ -52,7 +52,7 @@
                 ]
             }
         },
-        props: ["item"]
+        props: ["item", "edit"]
     }
 </script>
 
