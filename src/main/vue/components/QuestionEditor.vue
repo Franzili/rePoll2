@@ -2,7 +2,7 @@
     <div>
         <b-card-text class="my-margin">Possible answers:</b-card-text>
         <div v-bind:key="possibility.id" v-for="possibility in possibilities">
-            - {{possibility.text}}
+            <Possibility v-bind:possibility="possibility" v-on:del-pos="delPos"/>
         </div>
         <b-form style="text-align:center;" @submit="addPossibility">
 
@@ -25,9 +25,11 @@
 
 <script>
     import { v4 as uuidv4 } from 'uuid';
+    import Possibility from "./Possibility";
 
     export default {
         name: "QuestionEditor",
+        components: {Possibility},
         data() {
             return {
                 newPosText: '',
@@ -45,6 +47,12 @@
 
                 this.newPosText = '';
             },
+            delPos(id) {
+                this.possibilities = this.possibilities.filter(possibilitiy => possibilitiy.id !== id);
+            },
+            resetPossibilities(){
+                this.possibilities = [];
+            }
         },
         props: ["type"]
     }

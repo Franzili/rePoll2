@@ -3,6 +3,7 @@
         <p>{{item.question}}</p>
 
         <!-- all possible answers possibilities -->
+        <!-- TODO organize that, remove redundancy-->
         <div v-if="item.type === 'checkbox'">
             <b-form-group>
                 <b-form-checkbox-group>
@@ -16,12 +17,9 @@
         <div v-if="item.type === 'radio'">
             <!-- TODO must one be selected? -->
             <b-form-group>
-                <b-form-radio-group
-                    :options="options"
-                    plain
-                    stacked
-                    name="plain-stacked"
-                ></b-form-radio-group>
+                <div v-bind:key="pos.id" v-for="pos in item.possibilities">
+                    <b-form-radio>{{pos.text}}</b-form-radio>
+                </div>
             </b-form-group>
         </div>
 

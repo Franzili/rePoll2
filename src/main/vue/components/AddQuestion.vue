@@ -20,7 +20,7 @@
             </b-form-select>
 
 
-            <QuestionEditor v-if="type !== 'freetext'" v-bind:type="type" v-on:save-pos="savePos"/>
+            <QuestionEditor ref="editor" v-if="type !== 'freetext'" v-bind:type="type" v-on:save-pos="savePos"/>
         </div>
 
         <b-button class="my-margin-18" type="submit" variant="success">add Question</b-button>
@@ -52,6 +52,7 @@
                 this.$emit('add-item', newItem);
 
                 this.question = '';
+                this.$refs.editor.resetPossibilities();
             },
             savePos(p) {
                 //TODO delete function and just send the same event to CreateSurvey
