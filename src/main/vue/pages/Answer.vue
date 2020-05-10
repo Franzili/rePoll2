@@ -1,17 +1,26 @@
 <template>
-    <div>
-        <h1>Survey ausfüllen</h1>
+    <div style="text-align:center;">
+        <nav-bar></nav-bar>
+        <HelloWorld class="ml-auto" msg="Fill out your Survey!"/>
+
+
         <div>
             Titel: <input type="text" v-model="survey.title">
         </div>
         <div>
             Text: <textarea v-model="survey.text" rows="7"></textarea>
+
+
         </div>
-        <button @click="save">Speichern</button>
+        <b-button class="my-button" variant="primary">Save</b-button>
+        <b-button class="my-button" variant="success">Submit!</b-button>
     </div>
 </template>
 
 <script>
+    import NavBar from "../components/NavBar";
+    import HelloWorld from "../components/HelloWorld";
+    import SurveyItemList from "../components/SurveyItemList";
     import {mapGetters, mapMutations} from "vuex";
 
     export default {
@@ -29,7 +38,7 @@
         computed: {
             ...mapGetters(['getSurvey']),
         },
-        methods: {
+        /*methods: {
             ...mapMutations([
                 'updateSurvey'
             ]),
@@ -37,13 +46,18 @@
                 this.updateSurvey(this.survey)
                 this.$router.push('/')
             }
+        },*/
+        comments: {
+            NavBar,
+            HelloWorld,
+            SurveyItemList
         }
     }
 </script>
 
 <style scoped>
-
-    .my-row {
-        padding: 20px;
+    .my-button{
+        margin-left: 10px;
+        margin-right: 10px;
     }
 </style>
