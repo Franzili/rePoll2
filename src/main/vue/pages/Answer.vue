@@ -4,6 +4,7 @@
         <HelloWorld class="ml-auto" msg="Fill out your Survey!"/>
 
 
+
         <div>
             Titel: <input type="text" v-model="survey.title">
         </div>
@@ -14,6 +15,7 @@
         </div>
         <b-button class="my-button" variant="primary">Save</b-button>
         <b-button class="my-button" variant="success">Submit!</b-button>
+
     </div>
 </template>
 
@@ -21,6 +23,7 @@
     import NavBar from "../components/NavBar";
     import HelloWorld from "../components/HelloWorld";
     import SurveyItemList from "../components/SurveyItemList";
+
     import {mapGetters, mapMutations} from "vuex";
 
     export default {
@@ -53,7 +56,7 @@
             SurveyItemList
         }
     }
-    
+
 </script>
 
 <style scoped>
