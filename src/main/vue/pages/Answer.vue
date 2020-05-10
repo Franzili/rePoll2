@@ -24,7 +24,7 @@
     import HelloWorld from "../components/HelloWorld";
     import SurveyItemList from "../components/SurveyItemList";
 
-    import {mapGetters, mapMutations} from "vuex";
+    import {mapGetters} from "vuex"; //mapMutations
 
     export default {
         name: "Answer",
@@ -54,7 +54,7 @@
             NavBar,
             HelloWorld,
             SurveyItemList
-        }
+        },
     }
 
 </script>

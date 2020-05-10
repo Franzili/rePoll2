@@ -8,6 +8,9 @@
 <script>
 
     import {mapGetters} from "vuex";
+    import NavBar from "../components/NavBar";
+    import HelloWorld from "../components/HelloWorld";
+    import SurveyItemList from "../components/SurveyItemList";
 
     export default {
         name: "Survey",
@@ -24,7 +27,12 @@
             survey() {
                 return this.getSurvey(this.id)
             }
-        }
+        },
+        comments: {
+            NavBar,
+            HelloWorld,
+            SurveyItemList
+        },
     }
 </script>
 
