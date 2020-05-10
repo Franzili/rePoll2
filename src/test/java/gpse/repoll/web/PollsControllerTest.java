@@ -4,6 +4,7 @@ package gpse.repoll.web;
 import gpse.repoll.domain.Poll;
 import gpse.repoll.domain.PollService;
 import gpse.repoll.domain.exceptions.BadRequestException;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,6 +63,22 @@ public class PollsControllerTest {
         Assertions.assertThrows(BadRequestException.class, () -> {
             controller.addPoll(cmd);
         });
+    }
+
+    @Test
+    void testRemovePollNormal() {
+
+        PollCmd cmd = new PollCmd();
+        cmd.setId(1L);
+        cmd.setTitle("Poll 1");
+        controller.addPoll(cmd);
+        verify(service).addPoll("Poll 1");
+        controller.removePoll(String.valueOf(cmd.getId()));
+        verify(service).removePoll(cmd.getId());
+
+
+
+
     }
 
 }

@@ -78,6 +78,37 @@ public class PollServiceImpl implements PollService {
         poll.setTitle(title);
         return poll;
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Poll removePoll(final Long id) {
+        Poll poll = getPoll(id);
+        //this.pollRepository.deleteById(id);
+        List<PollSection> pollSectionList = getAllSections(id);
+        for(int i = pollSectionList.size(); i >= 0; i--) {
+            if(pollSectionList.get(0) != null) {
+                pollSectionList.remove(0);
+            }
+            else
+                throw new NotFoundException();
+        }
+        List<PollEntry> pollEntryList = getPoll(id).getEntries();
+        for(int i = pollEntryList.size(); i >= 0; i--) {
+            if(pollEntryList.get(0) != null) {
+                pollEntryList.remove(0);
+            }
+            else
+                throw new NotFoundException();
+
+        }
+        poll.setTitle(null);
+        poll.setCreator(null);
+        poll.setLastEditor(null);
+        poll.setLastEditTime(null);
+
+        return poll;
+    }
 
     /* ----------------------- */
 
@@ -147,6 +178,7 @@ public class PollServiceImpl implements PollService {
         }
         return section;
     }
+
 
     /* ---------- */
 

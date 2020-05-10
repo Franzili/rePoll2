@@ -5,6 +5,7 @@ package gpse.repoll.web;
  */
 class PollCmd {
     private String title;
+    private long id;
 
     public String getTitle() {
         return title;
@@ -12,5 +13,13 @@ class PollCmd {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

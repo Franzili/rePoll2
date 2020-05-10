@@ -44,6 +44,12 @@ public interface PollService {
     Poll updatePoll(Long id, String title);
 
     /**
+     * Deletes all connections of a poll.
+     * @param id
+     */
+    Poll removePoll(final Long id);
+
+    /**
      * Get all PollSections of a Poll.
      * @param id The polls ID
      * @return The PollSections.
