@@ -8,6 +8,9 @@
             <p class="is-complete">Second survey</p>
             <p class="surveys">Third survey</p>
         </div>
+        <li v-for="survey in surveys" :key="survey.id">
+            <router-link :to="'/survey/' + survey.id">{{ survey.title }}</router-link>
+        </li>
     </div>
 </template>
 
@@ -15,9 +18,13 @@
 
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
+    import {mapState} from "vuex";
 
     export default {
         name: "SurveyList",
+        computed: mapState({
+            surveys: state => state.surveys
+        }),
         components: {
             NavBar,
             HelloWorld
