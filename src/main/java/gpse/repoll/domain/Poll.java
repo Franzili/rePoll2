@@ -22,6 +22,9 @@ public class Poll {
     private Long id;
 
     @Column
+    private PollStatus status;
+
+    @Column
     @Lob
     @NotEmpty
     private String title;
@@ -146,5 +149,13 @@ public class Poll {
 
     public String getTitle() {
         return title;
+    }
+
+    public PollStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PollStatus status) {
+        this.status = status;
     }
 }
