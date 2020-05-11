@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div style="min-height: 100vh; background-color: lightgray">
         <nav-bar></nav-bar>
-        <HelloWorld style="text-align:center;" class="ml-auto" msg="Your Surveys!"/>
+        <HelloWorld style="text-align:center;" class="ml-auto" msg="Meine Umfragen"/>
 
         <div style="text-align:center;">
             <p class="surveys">First survey</p>
@@ -17,7 +17,7 @@
     import NavBar from "../components/NavBar";
 
     export default {
-        name: "SurveyList",
+        name: "SurveyTable",
         components: {
             NavBar,
             HelloWorld

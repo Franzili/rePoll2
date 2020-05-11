@@ -2,7 +2,7 @@ import VueRouter from "vue-router";
 import CreateSurvey from "./pages/CreateSurvey";
 import Start from "./pages/Start";
 import Account from "./pages/Account";
-import SurveyList from "./pages/SurveyList";
+import SurveyTable from "./pages/SurveyTable";
 
 export default new VueRouter({
     mode: 'history',
@@ -21,7 +21,7 @@ export default new VueRouter({
         },
         {
             path: '/surveys/',
-            component: SurveyList
+            component: SurveyTable
         }
     ]
 })
