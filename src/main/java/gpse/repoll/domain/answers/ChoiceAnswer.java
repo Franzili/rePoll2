@@ -1,5 +1,7 @@
 package gpse.repoll.domain.answers;
 
+import gpse.repoll.domain.Choice;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
@@ -12,13 +14,13 @@ import java.util.List;
 public class ChoiceAnswer extends Answer {
 
     @OneToMany
-    private List<String> choices = new ArrayList<>();
+    private List<Choice> choices = new ArrayList<>();
 
-    public List<String> getChoices() {
+    public List<Choice> getChoices() {
         return choices;
     }
 
-    public void setChoices(List<String> choices) {
+    public void setChoices(List<Choice> choices) {
         this.choices = choices;
     }
 }
