@@ -84,22 +84,23 @@ public class PollServiceImpl implements PollService {
     @Override
     public Poll removePoll(final Long id) {
         Poll poll = getPoll(id);
-        //this.pollRepository.deleteById(id);
         List<PollSection> pollSectionList = getAllSections(id);
-        for(int i = pollSectionList.size(); i >= 0; i--) {
-            if(pollSectionList.get(0) != null) {
+        for (int i = pollSectionList.size(); i >= 0; i--) {
+            if (pollSectionList.get(0) != null) {
                 pollSectionList.remove(0);
             }
-            else
+            else {
                 throw new NotFoundException();
+            }
         }
         List<PollEntry> pollEntryList = getPoll(id).getEntries();
-        for(int i = pollEntryList.size(); i >= 0; i--) {
-            if(pollEntryList.get(0) != null) {
+        for (int i = pollEntryList.size(); i >= 0; i--) {
+            if (pollEntryList.get(0) != null) {
                 pollEntryList.remove(0);
             }
-            else
+            else {
                 throw new NotFoundException();
+            }
 
         }
         poll.setTitle(null);

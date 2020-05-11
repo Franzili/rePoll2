@@ -54,9 +54,8 @@ public class PollsController {
         return pollService.updatePoll(Long.valueOf(id), pollCmd.getTitle());
     }
 
-    @GetMapping("/{id:\\d+}")
+    @PutMapping("/delete/{id:\\d+}")
     public Poll removePoll(@PathVariable("id") final String id) {
-        // we know that id is a string of regex \d+, so we dont need to check for NumberFormatException.
         return pollService.removePoll(Long.valueOf(id));
     }
 

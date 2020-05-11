@@ -67,7 +67,6 @@ public class PollsControllerTest {
 
     @Test
     void testRemovePollNormal() {
-
         PollCmd cmd = new PollCmd();
         cmd.setId(1L);
         cmd.setTitle("Poll 1");
@@ -75,10 +74,6 @@ public class PollsControllerTest {
         verify(service).addPoll("Poll 1");
         controller.removePoll(String.valueOf(cmd.getId()));
         verify(service).removePoll(cmd.getId());
-
-
-
-
     }
 
 }
