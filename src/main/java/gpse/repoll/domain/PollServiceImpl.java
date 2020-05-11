@@ -83,7 +83,6 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public Poll removePoll(final Long id) {
-        Poll poll = getPoll(id);
         List<PollSection> pollSectionList = getAllSections(id);
         for (int i = pollSectionList.size(); i >= 0; i--) {
             if (pollSectionList.get(0) != null) {
@@ -103,6 +102,7 @@ public class PollServiceImpl implements PollService {
             }
 
         }
+        Poll poll = getPoll(id);
         poll.setTitle(null);
         poll.setCreator(null);
         poll.setLastEditor(null);
