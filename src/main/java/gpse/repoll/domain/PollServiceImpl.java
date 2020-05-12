@@ -73,9 +73,10 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Poll updatePoll(final Long id, final String title) {
+    public Poll updatePoll(final Long id, final String title, final PollStatus status) {
         Poll poll = getPoll(id);
         poll.setTitle(title);
+        poll.setStatus(status);
         return poll;
     }
 
