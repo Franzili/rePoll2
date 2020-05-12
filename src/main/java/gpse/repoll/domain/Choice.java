@@ -16,6 +16,10 @@ public class Choice {
     @Column
     private String text;
 
+    public Long getId() {
+        return id;
+    }
+
     public String getText() {
         return text;
     }
