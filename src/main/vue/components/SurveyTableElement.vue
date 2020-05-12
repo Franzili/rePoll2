@@ -1,6 +1,6 @@
 <template>
-    <div>
-
+    <div style="text-align: center; background-color: white">
+        <p>Hallo welt</p>
     </div>
 
 </template>
