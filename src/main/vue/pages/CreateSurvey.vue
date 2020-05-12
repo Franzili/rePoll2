@@ -27,7 +27,7 @@
                         <div class="col-1">
                             <draggable
                                 class="list-group" :list="palette"
-                                group="group"
+                                :group="{ name: 'group', pull: 'clone', put: false }"
                                 @change="log"
                             >
                                 <div
