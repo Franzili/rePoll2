@@ -8,7 +8,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(value = TextQuestionCmd.class)
 })
 public abstract class QuestionCmd {
+
     private String title;
+
+    private int questionOrder;
+
 
     public String getTitle() {
         return title;

@@ -15,6 +15,9 @@ public abstract class Question {
     @Lob
     private String title;
 
+    @Column
+    private int questionOrder;
+
     public Long getId() {
         return id;
     }
@@ -29,5 +32,13 @@ public abstract class Question {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getQuestionOrder() {
+        return questionOrder;
+    }
+
+    public void setQuestionOrder(int questionOrder) {
+        this.questionOrder = questionOrder;
     }
 }

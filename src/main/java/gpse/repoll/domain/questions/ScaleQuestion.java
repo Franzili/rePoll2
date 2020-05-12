@@ -10,24 +10,35 @@ import javax.persistence.Entity;
 public class ScaleQuestion extends Question {
 
     @Column
-    private String scaleLeft;
+    private String scaleNameLeft;
 
     @Column
-    private String scaleRight;
+    private String scaleNameRight;
+
+    @Column
+    private int stepCount;
 
     public String getScaleLeft() {
-        return scaleLeft;
+        return scaleNameLeft;
     }
 
     public void setScaleLeft(String agree) {
-        this.scaleLeft = agree;
+        this.scaleNameLeft = agree;
     }
 
     public String getScaleRight() {
-        return scaleRight;
+        return scaleNameRight;
     }
 
     public void setScaleRight(String disagree) {
-        this.scaleRight = disagree;
+        this.scaleNameRight = disagree;
+    }
+
+    public String getScaleNameLeft() {
+        return scaleNameLeft;
+    }
+
+    public void setScaleNameLeft(String scaleNameLeft) {
+        this.scaleNameLeft = scaleNameLeft;
     }
 }

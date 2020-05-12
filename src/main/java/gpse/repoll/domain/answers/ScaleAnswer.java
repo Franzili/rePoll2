@@ -10,13 +10,13 @@ import javax.persistence.Entity;
 public class ScaleAnswer extends Answer {
 
     @Column
-    private float percentage;
+    private int scaleNumber;
 
-    public float getPercentage() {
-        return percentage;
+    public int getScaleNumber() {
+        return scaleNumber;
     }
 
-    public void setPercentage(float percentage) {
-        this.percentage = percentage;
+    public void setScaleNumber(int scaleNumber) {
+        this.scaleNumber = scaleNumber;
     }
 }

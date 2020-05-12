@@ -1,7 +1,10 @@
 package gpse.repoll.domain.answers;
 
+import gpse.repoll.domain.Choice;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 /**
  * The one chosen Answer of multiple options.
@@ -9,14 +12,14 @@ import javax.persistence.Entity;
 @Entity
 public class RadioButtonAnswer extends Answer {
 
-    @Column
-    private String choice;
+    @OneToOne
+    private Choice choice;
 
-    public String getChoice() {
+    public Choice getChoice() {
         return choice;
     }
 
-    public void setChoice(String choice) {
+    public void setChoice(Choice choice) {
         this.choice = choice;
     }
 }
