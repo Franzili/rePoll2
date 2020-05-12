@@ -42,15 +42,13 @@
                     id: uuidv4(),
                     text: this.newPosText
                 };
-                this.possibilities = [...this.possibilities, newPos];
+
+                this.$emit('add-pos', newPos);
 
                 this.newPosText = '';
             },
             delPos(id) {
                 this.possibilities = this.possibilities.filter(possibilitiy => possibilitiy.id !== id);
-            },
-            resetPossibilities(){
-                this.possibilities = [];
             },
             getPossibilities(){
                 return this.possibilities;

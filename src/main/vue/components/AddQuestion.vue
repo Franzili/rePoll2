@@ -18,9 +18,6 @@
                 <option value="radio">Radio Button</option>
                 <option value="dropdown">Drop down</option>
             </b-form-select>
-
-
-            <QuestionEditor ref="editor" v-if="type !== 'freetext'" v-bind:type="type"/>
         </div>
 
         <b-button class="my-margin-18" type="submit" variant="success">add Question</b-button>
@@ -29,31 +26,26 @@
 
 <script>
     import { v4 as uuidv4 } from 'uuid';
-    import QuestionEditor from "./QuestionEditor";
     export default {
         name: "AddQuestion",
-        components: {QuestionEditor},
         data() {
             return {
                 question: '',
-                type: 'freetext',
-                possibilities: []
+                type: 'freetext'
             }
         },
         methods: {
             addItem(e) {
                 e.preventDefault();
-                this.possibilities = this.$refs.editor.getPossibilities();
                 const newItem = {
                     id: uuidv4(),
                     type: this.type,
                     question: this.question,
-                    possibilities: this.possibilities
+                    possibilities: []
                 };
                 this.$emit('add-item', newItem);
 
                 this.question = '';
-                this.$refs.editor.resetPossibilities();
             }
         }
     }

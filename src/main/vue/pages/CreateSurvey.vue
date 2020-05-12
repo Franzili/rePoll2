@@ -77,11 +77,11 @@
                         question: "wie gehts",
                         possibilities: [
                             {
-                                id: 1,
+                                id: 3,
                                 text: "bla bla asdikawzug l hif",
                             },
                             {
-                                id: 2,
+                                id: 4,
                                 text: "yes",
                             }
                         ]
@@ -92,11 +92,11 @@
                         question: "wie gehts",
                         possibilities: [
                             {
-                                id: 1,
+                                id: 5,
                                 text: "bla bla asdikawzug l hif",
                             },
                             {
-                                id: 2,
+                                id: 6,
                                 text: "yes",
                             }
                         ]

@@ -8,6 +8,7 @@
                 <b-form-checkbox-group>
                     <div class="text-left" v-bind:key="pos.id" v-for="pos in item.possibilities">
                         <b-form-checkbox>{{pos.text}}</b-form-checkbox>
+                        <button v-if="edit === true" @click="delPos(pos.id)">x</button>
                     </div>
                 </b-form-checkbox-group>
             </b-form-group>
@@ -24,6 +25,7 @@
 
         <div v-if="item.type === 'freetext'">
             <b-form-input class="text-box"/>
+            <b-form-input v-if="edit === true" placeholder="Set chracter limit..." class="text-box"/>
         </div>
 
         <div v-if="item.type === 'dropdown'">
@@ -34,25 +36,32 @@
             </b-dropdown>
         </div>
 
+        <QuestionEditor v-if="edit === true && item.type !== 'freetext'" ref="editor" v-on:add-pos="addPos"/>
 
-        <b-button v-if="edit === true" @click="$emit('del-item', item.id)" variant="danger">delete</b-button>
+        <b-button class="my-btn" v-if="edit === true" @click="$emit('del-item', item.id)" variant="danger">delete</b-button>
         <p class="bottom-line"></p>
     </div>
 </template>
 
 <script>
+
+    import QuestionEditor from "./QuestionEditor";
+
     export default {
         name: "SurveyItem",
-        data() {
-            return {
-                options: [
-                    { text: 'very good'},
-                    { text: 'good'},
-                    { text: 'not good'}
-                ]
+        components: {QuestionEditor},
+        props: ["item", "edit"],
+        methods:{
+            addPos(newPos){
+                this.item.possibilities = [...this.item.possibilities, newPos];
+            },
+            delPos(id){
+                this.item.possibilities = this.item.possibilities.filter(possibilitiy => possibilitiy.id !== id);
+            },
+            getPossibilities() {
+                return this.possibilities;
             }
-        },
-        props: ["item", "edit"]
+        }
     }
 </script>
 
@@ -69,5 +78,9 @@
 
     .drop-down {
         margin-bottom: 18px;
+    }
+
+    .my-btn {
+        margin-top: 10px;
     }
 </style>
