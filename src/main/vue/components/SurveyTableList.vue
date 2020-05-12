@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-bind:key="survey.id" v-for="survey in surveys">
-            <SurveyListElement></SurveyListElement>
+            <SurveyListElement v-bind:survey="survey"></SurveyListElement>
         </div>
     </div>
 </template>

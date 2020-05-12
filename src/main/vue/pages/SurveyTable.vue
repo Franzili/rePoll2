@@ -3,7 +3,7 @@
         <nav-bar></nav-bar>
         <HelloWorld style="text-align:center;" class="ml-auto" msg="Meine Umfragen"/>
         <b-container class="my-container">
-            <b-button style="background-color: black">+</b-button>
+            <b-button class="my-button" @click="$router.push('/create/')">+</b-button>
             <b-row style="text-align: center" class="my-row">
                 <b-col>
                     <SurveyTableList v-bind:surveys="surveys"/>
@@ -46,6 +46,13 @@
 </script>
 
 <style scoped>
+    .my-button {
+        background-color: black;
+        margin-left: 15px;
+        font-size: 140%;
+        width: 50px;
+        height: 50px;
+    }
 
     /*.surveys {
         color: blue;
