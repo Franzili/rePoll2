@@ -16,7 +16,7 @@
                 ></b-form-input>
             </b-form-group>
 
-            <b-button class="my-margin" type="submit" variant="outline-primary">+</b-button>
+            <b-button type="submit" variant="outline-primary">+</b-button>
 
         </b-form>
     </div>
@@ -59,7 +59,4 @@
 </script>
 
 <style scoped>
-    .my-margin {
-        margin-top: 18px;
-    }
 </style>
