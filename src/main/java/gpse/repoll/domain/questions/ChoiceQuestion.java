@@ -3,6 +3,7 @@ package gpse.repoll.domain.questions;
 import gpse.repoll.domain.Choice;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 public class ChoiceQuestion extends Question {
 
     @OneToMany
+    @JoinColumn
     List<Choice> choices = new ArrayList<>();
 
     public List<Choice> getChoices() {

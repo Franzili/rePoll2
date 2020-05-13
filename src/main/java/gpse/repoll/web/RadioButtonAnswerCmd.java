@@ -1,18 +1,17 @@
 package gpse.repoll.web;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import gpse.repoll.domain.Choice;
 
 @JsonTypeName("RadioButtonAnswer")
 public class RadioButtonAnswerCmd extends AnswerCmd {
 
-    private Choice choice;
+    private Long choiceId;
 
-    public Choice getChoice() {
-        return choice;
+    public Long getChoice() {
+        return choiceId;
     }
 
-    public void setChoice(Choice choice) {
-        this.choice = choice;
+    public void setChoice(Long choiceId) {
+        this.choiceId = choiceId;
     }
 }

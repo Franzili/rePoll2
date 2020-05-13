@@ -1,9 +1,7 @@
 package gpse.repoll.domain.answers;
 
-import gpse.repoll.domain.Choice;
-
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,14 +11,14 @@ import java.util.List;
 @Entity
 public class ChoiceAnswer extends Answer {
 
-    @OneToMany
-    private List<Choice> choices = new ArrayList<>();
+    @ElementCollection
+    private List<Long> choiceIds = new ArrayList<>();
 
-    public List<Choice> getChoices() {
-        return choices;
+    public List<Long> getChoiceIds() {
+        return choiceIds;
     }
 
-    public void setChoices(List<Choice> choices) {
-        this.choices = choices;
+    public void setChoiceIds(List<Long> choiceIds) {
+        this.choiceIds = choiceIds;
     }
 }

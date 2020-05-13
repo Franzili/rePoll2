@@ -9,7 +9,7 @@ public class ScaleQuestionCmd extends QuestionCmd {
 
     private String scaleNameRight;
 
-    private String stepCount;
+    private int stepCount;
 
     public String getScaleNameLeft() {
         return scaleNameLeft;
@@ -27,11 +27,11 @@ public class ScaleQuestionCmd extends QuestionCmd {
         this.scaleNameRight = scaleNameRight;
     }
 
-    public String getStepCount() {
+    public int getStepCount() {
         return stepCount;
     }
 
-    public void setStepCount(String stepCount) {
+    public void setStepCount(int stepCount) {
         this.stepCount = stepCount;
     }
 }

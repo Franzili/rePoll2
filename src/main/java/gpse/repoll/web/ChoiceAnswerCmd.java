@@ -1,20 +1,21 @@
 package gpse.repoll.web;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import gpse.repoll.domain.Choice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonTypeName("ChoiceAnswer")
 public class ChoiceAnswerCmd extends AnswerCmd {
 
-    private List<Choice> choices;
+    private List<Long> choiceIds = new ArrayList<>();
 
-    public List<Choice> getChoices() {
-        return choices;
+    public List<Long> getChoiceIds() {
+        return choiceIds;
     }
 
-    public void setChoices(List<Choice> choices) {
-        this.choices = choices;
+    public void setChoiceIds(List<Long> choiceIds) {
+        this.choiceIds.clear();
+        this.choiceIds.addAll(choiceIds);
     }
 }

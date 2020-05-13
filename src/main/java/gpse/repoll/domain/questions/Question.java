@@ -9,6 +9,7 @@ import javax.persistence.*;
 public abstract class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
     @Column

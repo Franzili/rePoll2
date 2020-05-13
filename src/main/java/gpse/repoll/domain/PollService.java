@@ -1,8 +1,7 @@
 package gpse.repoll.domain;
 
 import gpse.repoll.domain.answers.Answer;
-import gpse.repoll.domain.questions.Question;
-import gpse.repoll.domain.questions.TextQuestion;
+import gpse.repoll.domain.questions.*;
 
 import java.util.List;
 import java.util.Map;
@@ -117,6 +116,39 @@ public interface PollService {
     TextQuestion addTextQuestion(Long pollId, String questionTitle);
 
     /**
+     * Add a new ScaleQuestion to a Poll.
+     * @param pollId The Poll's ID
+     * @param questionTitle The title of the Question
+     * @param scaleNameLeft The name for the left part of the scale
+     * @param scaleNameRight The name for the right part of the scale
+     * @param stepCount The number of steps the scale has
+     * @return The newly created ScaleQuestion
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
+     */
+    ScaleQuestion addScaleQuestion(Long pollId, String questionTitle, String scaleNameLeft, String scaleNameRight,
+                                   int stepCount);
+
+    /**
+     * Add a new RadioButtonQuestion to a Poll.
+     * @param pollId The Poll's ID
+     * @param questionTitle The title of the Question
+     * @param choices The possible answers
+     * @return The newly created RadioButtonQuestion
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
+     */
+    RadioButtonQuestion addRadioButtonQuestion(Long pollId, String questionTitle, List<Choice> choices);
+
+    /**
+     * Add a new ChoiceQuestion to a Poll.
+     * @param pollId The Poll's ID
+     * @param questionTitle The title of the Question
+     * @param choices The possible answers
+     * @return The newly created ChoiceQuestion
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
+     */
+    ChoiceQuestion addChoiceQuestion(Long pollId, String questionTitle, List<Choice> choices);
+
+    /**
      * Gets a Question belonging to a Poll.
      * @param pollId The Poll's ID
      * @param questionId The Questions's ID
@@ -136,6 +168,46 @@ public interface PollService {
      * could not be found.
      */
     TextQuestion updateTextQuestion(Long pollId, Long questionId, String questionTitle);
+
+    /**
+     * Update a ScaleQuestion.
+     * @param pollId The Poll's ID
+     * @param questionId The Question's ID
+     * @param questionTitle The title of the Question
+     * @param scaleNameLeft The name of the left part of the scale
+     * @param scaleNameRight The name of the right part of the scale
+     * @param stepCount The number of steps the scale has
+     * @return The changed ScaleQuestion
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
+     * could not be found.
+     */
+    ScaleQuestion updateScaleQuestion(Long pollId, Long questionId, String questionTitle, String scaleNameLeft,
+                                     String scaleNameRight, int stepCount);
+
+    /**
+     * Update a RadioButtonQuestion.
+     * @param pollId The Poll's ID
+     * @param questionId The Question's ID
+     * @param questionTitle The title of the Question
+     * @param choices The possible answers
+     * @return The changed RadioButtonQuestion
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
+     * could not be found.
+     */
+    RadioButtonQuestion updateRadioButtonQuestion(Long pollId, Long questionId, String questionTitle,
+                                                  List<Choice> choices);
+    /**
+     * Update a ChoiceQuestion.
+     * @param pollId The Poll's ID
+     * @param questionId The Question's ID
+     * @param questionTitle The title of the Question
+     * @param choices The possible answers
+     * @return The changed ChoiceQuestion
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
+     * could not be found.
+     */
+    ChoiceQuestion updateChoiceQuestion(Long pollId, Long questionId, String questionTitle,
+                                        List<Choice> choices);
 
     /**
      * Gets a PollEntry.

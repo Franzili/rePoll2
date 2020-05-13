@@ -10,11 +10,18 @@ public class Choice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
 
     @Column
     private String text;
+
+    protected Choice() {
+
+    }
+
+    public Choice(String text) {
+        this.text = text;
+    }
 
     public Long getId() {
         return id;

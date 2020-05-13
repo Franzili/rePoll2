@@ -1,7 +1,6 @@
 package gpse.repoll.domain.questions;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 /**
  * A question that can be answered with a @link{ScaleAnswer}.
@@ -18,27 +17,27 @@ public class ScaleQuestion extends Question {
     @Column
     private int stepCount;
 
-    public String getScaleLeft() {
-        return scaleNameLeft;
-    }
-
-    public void setScaleLeft(String agree) {
-        this.scaleNameLeft = agree;
-    }
-
-    public String getScaleRight() {
-        return scaleNameRight;
-    }
-
-    public void setScaleRight(String disagree) {
-        this.scaleNameRight = disagree;
-    }
-
     public String getScaleNameLeft() {
         return scaleNameLeft;
     }
 
     public void setScaleNameLeft(String scaleNameLeft) {
         this.scaleNameLeft = scaleNameLeft;
+    }
+
+    public String getScaleNameRight() {
+        return scaleNameRight;
+    }
+
+    public void setScaleNameRight(String scaleNameRight) {
+        this.scaleNameRight = scaleNameRight;
+    }
+
+    public int getStepCount() {
+        return stepCount;
+    }
+
+    public void setStepCount(int stepCount) {
+        this.stepCount = stepCount;
     }
 }
