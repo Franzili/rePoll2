@@ -47,7 +47,7 @@ public class PollsController {
 
     @PutMapping("/{id:\\d+}")
     public Poll updatePoll(@PathVariable("id") final String id, @RequestBody PollCmd pollCmd) {
-        return pollService.updatePoll(Long.valueOf(id), pollCmd.getTitle());
+        return pollService.updatePoll(Long.valueOf(id), pollCmd.getTitle(), pollCmd.getStatus());
     }
 
     @GetMapping("/{pollId:\\d+}/sections")
