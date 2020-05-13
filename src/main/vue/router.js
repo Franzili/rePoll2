@@ -3,6 +3,7 @@ import CreateSurvey from "./pages/CreateSurvey";
 import Start from "./pages/Start";
 import Account from "./pages/Account";
 import SurveyTable from "./pages/SurveyTable";
+import SurveySetup from "./pages/SurveySetup";
 
 export default new VueRouter({
     mode: 'history',
@@ -22,6 +23,10 @@ export default new VueRouter({
         {
             path: '/surveys/',
             component: SurveyTable
+        },
+        {
+            path: '/config/',
+            component: SurveySetup
         }
     ]
 })

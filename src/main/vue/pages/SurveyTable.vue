@@ -1,5 +1,5 @@
 <template>
-    <div style="min-height: 100vh; background-color: lightgray">
+    <div class="my-back">
         <nav-bar></nav-bar>
         <HelloWorld style="text-align:center;" class="ml-auto" msg="Meine Umfragen"/>
         <b-container class="my-container">
@@ -52,6 +52,11 @@
         font-size: 140%;
         width: 50px;
         height: 50px;
+    }
+
+    .my-back {
+        min-height: 100vh;
+        background-color: lightgray
     }
 
     /*.surveys {

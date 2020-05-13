@@ -15,7 +15,7 @@
                 <b-col></b-col>
                 <b-col></b-col>
                 <b-col>
-                    <p class="my-config-link">Konfigurieren</p>
+                    <router-link class="my-config-link" :to="'/config/'">Konfiguration</router-link>
                 </b-col>
 
             </b-row>
@@ -27,7 +27,8 @@
 <script>
     export default {
         name: "SurveyListElement",
-        props: ["survey"]
+        props: ["survey",]
+
     }
 </script>
 
