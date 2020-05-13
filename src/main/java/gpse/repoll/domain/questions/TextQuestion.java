@@ -8,4 +8,13 @@ import javax.persistence.Entity;
 @Entity
 public class TextQuestion extends Question {
 
+    private int charLimit;
+
+    public int getCharLimit() {
+        return charLimit;
+    }
+
+    public void setCharLimit(int charLimit) {
+        this.charLimit = charLimit;
+    }
 }

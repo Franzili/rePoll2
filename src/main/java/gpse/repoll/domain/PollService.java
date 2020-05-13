@@ -110,10 +110,11 @@ public interface PollService {
      * Add a new TextQuestion to a Poll.
      * @param pollId The Poll's ID
      * @param questionTitle The title of the Question
+     * @param charLimit The char limit for the answer.
      * @return The newly created TextQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    TextQuestion addTextQuestion(Long pollId, String questionTitle);
+    TextQuestion addTextQuestion(Long pollId, String questionTitle, int charLimit);
 
     /**
      * Add a new ScaleQuestion to a Poll.

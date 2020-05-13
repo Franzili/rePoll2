@@ -207,10 +207,11 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public TextQuestion addTextQuestion(final Long pollId, final String questionTitle) {
+    public TextQuestion addTextQuestion(final Long pollId, final String questionTitle, final int charLimit) {
         Poll poll = getPoll(pollId);
         TextQuestion question = new TextQuestion();
         question.setTitle(questionTitle);
+        question.setCharLimit(charLimit);
         textQuestionRepository.save(question);
 
         poll.getQuestions().add(question);

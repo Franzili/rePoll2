@@ -90,10 +90,10 @@ public class PollsController {
                                 @RequestBody QuestionCmd questionCmd) {
 
         if (questionCmd instanceof TextQuestionCmd) {
-            return pollService.addTextQuestion(
-                Long.valueOf(pollId),
-                ((TextQuestionCmd) questionCmd).getTitle()
-            );
+            TextQuestionCmd textQuestionCmd = (TextQuestionCmd) questionCmd;
+            return pollService.addTextQuestion(Long.valueOf(pollId),
+                                               textQuestionCmd.getTitle(),
+                                               textQuestionCmd.getCharLimit());
         } else if (questionCmd instanceof ScaleQuestionCmd) {
             ScaleQuestionCmd scaleQuestionCmd = (ScaleQuestionCmd) questionCmd;
             return pollService.addScaleQuestion(Long.valueOf(pollId),
