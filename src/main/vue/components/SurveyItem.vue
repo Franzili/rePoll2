@@ -91,8 +91,8 @@
     }
 
     .del-pos-btn {
-        padding-top: 3px;
-        padding-bottom: 3px;
+        padding: 3px 8px;
+        font-size: 10px;
     }
 
     .question {

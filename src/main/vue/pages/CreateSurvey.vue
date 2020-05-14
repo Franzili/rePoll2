@@ -1,7 +1,14 @@
 <template>
     <div>
         <nav-bar></nav-bar>
-        <p style="text-align:center;" class="my-head">Moby Dick</p>
+        <div class="my-head">
+            <div class="my-titel">
+                Titel:
+            </div>
+            <div>
+                Moby Dick
+            </div>
+        </div>
 
         <!-- better for mobile version -->
         <div v-if="isMobile()">
@@ -14,12 +21,13 @@
 
         <!-- better for Desktop version -->
         <div v-else>
+            <p class="section">2. Die Gesellschaft</p>
             <b-container>
 
-                <b-row style="text-align:center;" class="my-row" cols="3">
-                    <b-col>Edit Area</b-col>
-                    <b-col>Surveyname</b-col>
-                    <b-col>Edit elements:</b-col>
+                <b-row style="text-align: center">
+                    <b-col>Palette</b-col>
+                    <b-col></b-col>
+                    <b-col>Gliederung</b-col>
                 </b-row>
 
                 <b-row style="text-align:center;" class="my-row">
@@ -33,7 +41,7 @@
                             >
                                 <div class="drag-item flex flex-justify-between">
                                     <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                    <b-icon-fullscreen></b-icon-fullscreen>
+                                    <b-icon-square></b-icon-square>
                                     <!-- <AddQuestion v-on:add-item="addItem"/> -->
                                 </div>
                             </draggable>
@@ -206,9 +214,25 @@
         will-change: transform;
     }
 
+    .my-titel {
+        color: #868686;
+    }
+
     .my-head {
+        text-align:center;
         background-color: lightgray;
         font-size: 25px;
         padding: 1px;
+    }
+    .my-head > div {
+        vertical-align:top;
+        display:inline-block;
+    }
+
+    .section {
+        margin-top: 20px;
+        color: #868686;
+        font-size: 30px;
+        text-align: center;
     }
 </style>
