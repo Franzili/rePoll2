@@ -26,12 +26,15 @@
                     <b-col>
                         <div class="col-4">
                             <draggable
-                                class="list-group" :list="palette"
+                                class="list-group" v-model="palette"
                                 group="group"
                                 @change="log"
+                                v-on:end="updatePalette"
                             >
                                 <div class="drag-item flex flex-justify-between">
-                                    <AddQuestion v-on:add-item="addItem"/>
+                                    <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+                                    <b-icon-fullscreen></b-icon-fullscreen>
+                                    <!-- <AddQuestion v-on:add-item="addItem"/> -->
                                 </div>
                             </draggable>
                         </div>
@@ -40,7 +43,7 @@
                     <b-col class="cols-14">
                             <div>
                                 <draggable
-                                    class="list-group" :list="items"
+                                    class="list-group" v-model="items"
                                     group="group"
                                     @change="log">
                                     <div class="drag-item flex flex-justify-between" :key="item.id" v-for="item in items">
@@ -65,6 +68,7 @@
     import AddQuestion from "../components/AddQuestion";
     import SurveyItem from "../components/SurveyItem";
     import draggable from "vuedraggable";
+    import {v4 as uuidv4} from "uuid";
 
     export default {
         name: "CreateSurvey",
@@ -127,7 +131,7 @@
                 palette: [
                     {
                         id: 8,
-                        type: "dropdown",
+                        type: "checkbox",
                         question: "test",
                         possibilities: [
                             {
@@ -152,6 +156,24 @@
             },
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+            },
+            updatePalette() {
+                const newItem = {
+                    id: uuidv4(),
+                    type: "checkbox",
+                    question: "test",
+                    possibilities: [
+                        {
+                            id: 5,
+                            text: "bla bla asdikawzug l hif",
+                        },
+                        {
+                            id: 6,
+                            text: "yes",
+                        }
+                    ]
+                };
+                this.palette = [...this.palette, newItem];
             },
             log: function (...e) {
                     console.log(...e);

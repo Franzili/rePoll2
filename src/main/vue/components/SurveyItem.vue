@@ -10,7 +10,7 @@
                         <b-container>
                             <b-row>
                                 <b-col class="text-left" cols="8"><b-form-checkbox :value="pos.text">{{pos.text}}</b-form-checkbox></b-col>
-                                <b-col><button v-if="edit === true" @click="delPos(pos.id)">x</button></b-col>
+                                <b-col><b-button class="del-pos-btn" variant="outline-secondary" pill v-if="edit === true" @click="delPos(pos.id)">x</b-button></b-col>
                             </b-row>
                         </b-container>
                     </div>
@@ -24,7 +24,7 @@
                     <b-container>
                         <b-row>
                             <b-col class="text-left" cols="8"><b-form-radio v-model="selected" :value="pos.text">{{pos.text}}</b-form-radio></b-col>
-                            <b-col><button v-if="edit === true" @click="delPos(pos.id)">x</button></b-col>
+                            <b-col><b-button class="del-pos-btn" variant="outline-secondary" pill v-if="edit === true" @click="delPos(pos.id)">x</b-button></b-col>
                         </b-row>
                     </b-container>
                 </div>
@@ -48,7 +48,7 @@
 
         <QuestionEditor v-if="edit === true && item.type !== 'freetext'" ref="editor" v-on:add-pos="addPos"/>
 
-        <b-button class="my-btn" v-if="edit === true" @click="$emit('del-item', item.id)" variant="danger">delete question</b-button>
+        <b-button class="my-btn" v-if="edit === true" @click="$emit('del-item', item.id)" pill variant="outline-secondary">delete question</b-button>
     </div>
 </template>
 
@@ -71,9 +71,6 @@
             },
             delPos(id){
                 this.item.possibilities = this.item.possibilities.filter(possibilitiy => possibilitiy.id !== id);
-            },
-            getPossibilities() {
-                return this.possibilities;
             }
         }
     }
@@ -91,6 +88,11 @@
     .my-btn {
         margin-top: 15px;
         margin-bottom: 100px;
+    }
+
+    .del-pos-btn {
+        padding-top: 3px;
+        padding-bottom: 3px;
     }
 
     .question {
