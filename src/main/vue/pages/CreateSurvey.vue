@@ -1,11 +1,13 @@
 <template>
     <div>
         <nav-bar></nav-bar>
-        <HelloWorld style="text-align:center;" class="ml-auto" msg="Create your own Survey!"/>
+        <p style="text-align:center;" class="my-head">Moby Dick</p>
 
         <!-- better for mobile version -->
         <div v-if="isMobile()">
-            <SurveyItemList v-bind:items="items" v-bind:edit="edit" v-on:del-item="deleteItem"/>
+            <div :key="item.id" v-for="item in items">
+                <SurveyItem v-bind:item="item" v-bind:edit="edit" v-on:del-item="deleteItem(item.id)"/>
+            </div>
             <HelloWorld style="text-align:center;" class="ml-auto" msg=""/>
             <AddQuestion v-on:add-item="addItem"/>
         </div>
@@ -22,16 +24,35 @@
 
                 <b-row style="text-align:center;" class="my-row">
                     <b-col>
-                        <AddQuestion v-on:add-item="addItem"/>
+                        <div class="col-4">
+                            <draggable
+                                class="list-group" :list="palette"
+                                group="group"
+                                @change="log"
+                            >
+                                <div class="drag-item flex flex-justify-between">
+                                    <AddQuestion v-on:add-item="addItem"/>
+                                </div>
+                            </draggable>
+                        </div>
+
                     </b-col>
-                    <b-col cols="6">
-                        <SurveyItemList v-bind:items="items" v-bind:edit="edit" v-on:del-item="deleteItem"/>
+                    <b-col class="cols-14">
+                            <div>
+                                <draggable
+                                    class="list-group" :list="items"
+                                    group="group"
+                                    @change="log">
+                                    <div class="drag-item flex flex-justify-between" :key="item.id" v-for="item in items">
+                                        <SurveyItem v-bind:item="item" v-bind:edit="edit" v-on:del-item="deleteItem(item.id)"/>
+                                    </div>
+                                </draggable>
+                            </div>
                         <HelloWorld class="ml-auto" msg=""/>
                     </b-col>
                     <b-col>
                     </b-col>
                 </b-row>
-
             </b-container>
         </div>
     </div>
@@ -41,8 +62,9 @@
 
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
-    import SurveyItemList from "../components/SurveyItemList";
     import AddQuestion from "../components/AddQuestion";
+    import SurveyItem from "../components/SurveyItem";
+    import draggable from "vuedraggable";
 
     export default {
         name: "CreateSurvey",
@@ -101,6 +123,23 @@
                             }
                         ]
                     }
+                ],
+                palette: [
+                    {
+                        id: 8,
+                        type: "dropdown",
+                        question: "test",
+                        possibilities: [
+                            {
+                                id: 5,
+                                text: "bla bla asdikawzug l hif",
+                            },
+                            {
+                                id: 6,
+                                text: "yes",
+                            }
+                        ]
+                    }
                 ]
             }
         },
@@ -113,13 +152,17 @@
             },
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-            }
+            },
+            log: function (...e) {
+                    console.log(...e);
+                }
         },
         components: {
             AddQuestion,
-            SurveyItemList,
+            SurveyItem,
             NavBar,
-            HelloWorld
+            HelloWorld,
+            draggable
         }
     }
 </script>
@@ -128,5 +171,22 @@
 
     .my-row {
         padding: 20px;
+    }
+
+    .drag-item {
+        padding: 15px 10px;
+        background-color: whitesmoke;
+        min-width: 10vw;
+        max-width: 90vw;
+        margin: 0 auto 10px;
+        cursor: grab;
+        transition: transform 0.25s cubic-bezier(0.02, 1.01, 0.94, 1.01);
+        will-change: transform;
+    }
+
+    .my-head {
+        background-color: lightgray;
+        font-size: 25px;
+        padding: 1px;
     }
 </style>

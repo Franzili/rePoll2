@@ -7,7 +7,9 @@
             <b-row>
                 <b-col></b-col>
                 <b-col>
-                    <SurveyItemList v-bind:items="items" v-bind:edit="edit"/>
+                    <div :key="item.id" v-for="item in items">
+                        <SurveyItem v-bind:item="item" v-bind:edit="edit"/>
+                    </div>
                 </b-col>
                 <b-col></b-col>
             </b-row>
@@ -21,7 +23,7 @@
 <script>
     import NavBar from "../components/NavBar";
     import HelloWorld from "../components/HelloWorld";
-    import SurveyItemList from "../components/SurveyItemList";
+    import SurveyItem from "../components/SurveyItem";
 
     export default {
         name: "AnswerSurvey",
@@ -86,7 +88,7 @@
         components: {
             NavBar,
             HelloWorld,
-            SurveyItemList
+            SurveyItem
         },
     }
 </script>
