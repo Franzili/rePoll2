@@ -3,17 +3,27 @@
         <nav-bar></nav-bar>
         <HelloWorld class="ml-auto" msg="Answer your Survey!"/>
 
-        <b-container>
-            <b-row>
-                <b-col></b-col>
-                <b-col>
-                    <div :key="item.id" v-for="item in items">
-                        <SurveyItem v-bind:item="item" v-bind:edit="edit"/>
-                    </div>
-                </b-col>
-                <b-col></b-col>
-            </b-row>
-        </b-container>
+        <div v-if="isMobile()">
+            <div :key="item.id" v-for="item in items">
+                <SurveyItem v-bind:item="item" v-bind:edit="edit"/>
+            </div>
+        </div>
+
+        <div v-else>
+            <b-container>
+                <b-row>
+                    <b-col></b-col>
+                    <b-col>
+                        <div :key="item.id" v-for="item in items">
+                            <SurveyItem v-bind:item="item" v-bind:edit="edit"/>
+                        </div>
+                    </b-col>
+                    <b-col></b-col>
+                </b-row>
+            </b-container>
+        </div>
+
+        <hr>
 
         <b-button class="my-button" variant="primary">Save</b-button>
         <b-button class="my-button" variant="success">Submit!</b-button>
@@ -83,6 +93,11 @@
                         ]
                     }
                 ]
+            }
+        },
+        methods: {
+            isMobile() {
+                return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             }
         },
         components: {
