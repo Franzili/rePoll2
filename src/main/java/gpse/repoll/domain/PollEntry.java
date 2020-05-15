@@ -14,6 +14,7 @@ import java.util.Map;
 public class PollEntry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
     @ManyToMany

@@ -22,6 +22,9 @@ public class Poll {
     private Long id;
 
     @Column
+    private PollStatus status;
+
+    @Column
     @Lob
     @NotEmpty
     private String title;
@@ -59,6 +62,7 @@ public class Poll {
     public Poll(User creator, String title) {
         this.creator = creator;
         this.title = title;
+        this.status = PollStatus.IN_PROCESSING;
         creationTime = LocalDateTime.now();
         lastEditTime = LocalDateTime.now();
     }
@@ -146,5 +150,13 @@ public class Poll {
 
     public String getTitle() {
         return title;
+    }
+
+    public PollStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PollStatus status) {
+        this.status = status;
     }
 }

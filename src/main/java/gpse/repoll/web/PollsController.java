@@ -1,11 +1,7 @@
 package gpse.repoll.web;
 
-import gpse.repoll.domain.Poll;
-import gpse.repoll.domain.PollEntry;
-import gpse.repoll.domain.PollSection;
-import gpse.repoll.domain.PollService;
-import gpse.repoll.domain.answers.Answer;
-import gpse.repoll.domain.answers.TextAnswer;
+import gpse.repoll.domain.*;
+import gpse.repoll.domain.answers.*;
 import gpse.repoll.domain.questions.Question;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
@@ -51,7 +47,7 @@ public class PollsController {
 
     @PutMapping("/{id:\\d+}")
     public Poll updatePoll(@PathVariable("id") final String id, @RequestBody PollCmd pollCmd) {
-        return pollService.updatePoll(Long.valueOf(id), pollCmd.getTitle());
+        return pollService.updatePoll(Long.valueOf(id), pollCmd.getTitle(), pollCmd.getStatus());
     }
 
     @PutMapping("/delete/{id:\\d+}")
@@ -99,14 +95,30 @@ public class PollsController {
                                 @RequestBody QuestionCmd questionCmd) {
 
         if (questionCmd instanceof TextQuestionCmd) {
-            return pollService.addTextQuestion(
-                Long.valueOf(pollId),
-                ((TextQuestionCmd) questionCmd).getTitle()
-            );
+            TextQuestionCmd textQuestionCmd = (TextQuestionCmd) questionCmd;
+            return pollService.addTextQuestion(Long.valueOf(pollId),
+                                               textQuestionCmd.getTitle(),
+                                               textQuestionCmd.getCharLimit());
+        } else if (questionCmd instanceof ScaleQuestionCmd) {
+            ScaleQuestionCmd scaleQuestionCmd = (ScaleQuestionCmd) questionCmd;
+            return pollService.addScaleQuestion(Long.valueOf(pollId),
+                                         questionCmd.getTitle(),
+                                         scaleQuestionCmd.getScaleNameLeft(),
+                                         scaleQuestionCmd.getScaleNameRight(),
+                                         scaleQuestionCmd.getStepCount());
+        } else if (questionCmd instanceof RadioButtonQuestionCmd) {
+            RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
+            return pollService.addRadioButtonQuestion(Long.valueOf(pollId),
+                                               radioButtonQuestionCmd.getTitle(),
+                                               radioButtonQuestionCmd.getChoices());
+        } else if (questionCmd instanceof ChoiceQuestionCmd) {
+            ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
+            List<Choice> choices = new ArrayList<>();
+            for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
+                choices.add(new Choice(choiceCmd.getText()));
+            }
+            return pollService.addChoiceQuestion(Long.valueOf(pollId), choiceQuestionCmd.getTitle(), choices);
         }
-        /*else if (questionCmd instanceof RangeQuestionCmd) {
-            pollService.addRangeQuestion((RangeQuestionCmd) questionCmd).attribute())
-        } */
 
         // this should never happen.
         throw new InternalServerErrorException();
@@ -131,12 +143,37 @@ public class PollsController {
                 Long.valueOf(questionId),
                 questionCmd.getTitle()
             );
+        } else if (questionCmd instanceof ScaleQuestionCmd) {
+            ScaleQuestionCmd scaleQuestionCmd = (ScaleQuestionCmd) questionCmd;
+            return pollService.updateScaleQuestion(Long.valueOf(pollId),
+                                            Long.valueOf(questionId),
+                                            scaleQuestionCmd.getTitle(),
+                                            scaleQuestionCmd.getScaleNameLeft(),
+                                            scaleQuestionCmd.getScaleNameRight(),
+                                            scaleQuestionCmd.getStepCount());
+        } else if (questionCmd instanceof RadioButtonQuestionCmd) {
+            RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
+            return pollService.updateRadioButtonQuestion(Long.valueOf(pollId),
+                                                  Long.valueOf(questionId),
+                                                  radioButtonQuestionCmd.getTitle(),
+                                                  radioButtonQuestionCmd.getChoices());
+        } else if (questionCmd instanceof ChoiceQuestionCmd) {
+            ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
+            List<Choice> choices = new ArrayList<>();
+            for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
+                choices.add(new Choice(choiceCmd.getText()));
+            }
+            return pollService.updateChoiceQuestion(Long.valueOf(pollId),
+                                             Long.valueOf(questionId),
+                                             choiceQuestionCmd.getTitle(),
+                                             choices);
         }
 
         // This should not be reached
         throw new InternalServerErrorException();
     }
 
+    //todo Handling wrong answer type
     @PostMapping("/{pollId:\\d+}/entries")
     public PollEntry addPollEntry(@PathVariable("pollId") final String pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
@@ -148,6 +185,18 @@ public class PollsController {
                 answer = new TextAnswer();
                 String text  = ((TextAnswerCmd) answerCmd).getText();
                 ((TextAnswer) answer).setText(text);
+            } else if (answerCmd instanceof ScaleAnswerCmd) {
+                answer = new ScaleAnswer();
+                int scaleNumber = ((ScaleAnswerCmd) answerCmd).getScaleNumber();
+                ((ScaleAnswer) answer).setScaleNumber(scaleNumber);
+            } else if (answerCmd instanceof RadioButtonAnswerCmd) {
+                answer = new RadioButtonAnswer();
+                Long choiceId = ((RadioButtonAnswerCmd) answerCmd).getChoice();
+                ((RadioButtonAnswer) answer).setChoiceId(choiceId);
+            } else if (answerCmd instanceof ChoiceAnswerCmd) {
+                answer = new ChoiceAnswer();
+                List<Long> choiceIds = ((ChoiceAnswerCmd) answerCmd).getChoiceIds();
+                ((ChoiceAnswer) answer).getChoiceIds().addAll(choiceIds);
             } else {
                 throw new InternalServerErrorException();
             }
