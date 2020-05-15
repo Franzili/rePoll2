@@ -8,11 +8,6 @@
                 <b-col >
                     <SurveyTableList v-bind:surveys="surveys"/>
                 </b-col>
-                <!--
-                <b-col v-for="survey in surveys" :key="survey.id">
-                    <router-link :to="'/survey/' + survey.id">{{ survey.title }}</router-link>
-                </b-col>
-                -->
             </b-row>
         </b-container>
     </div>
@@ -43,8 +38,6 @@
                 ]
             }
         },*/
-
-        //computet die surveys aus store
         computed: mapState({
             surveys: state => state.surveys
         }),
