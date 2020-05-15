@@ -72,7 +72,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Poll addPoll(String title) {
+    public Poll addPoll(String title) { // TODO
         final Poll poll = new Poll(null, title);
         this.pollRepository.save(poll);
         return poll;
@@ -90,7 +90,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Poll updatePoll(final Long id, final String title, final PollStatus status) {
+    public Poll updatePoll(final Long id, final String title, final PollStatus status) { // TODO
         Poll poll = getPoll(id);
         poll.setTitle(title);
         poll.setStatus(status);
