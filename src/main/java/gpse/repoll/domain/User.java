@@ -1,8 +1,9 @@
 package gpse.repoll.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents a User of the application.
@@ -13,6 +14,10 @@ import javax.persistence.Id;
 public class User {
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
     private String userName;
 
     @Column
@@ -20,6 +25,14 @@ public class User {
 
     @Column
     private String email;
+
+    @Column
+    @OneToMany(mappedBy = "owner")
+    private List<Poll> ownPolls = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
 
     /**
      * Gets the user's unique name.
@@ -64,4 +77,17 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public void addOwnPoll(Poll poll) {
+        ownPolls.add(poll);
+    }
+
+    public void removeOwnPoll(Poll poll) {
+        ownPolls.remove(poll);
+    }
+
+    public List<Poll> getOwnPolls() {
+        return Collections.unmodifiableList(ownPolls);
+    }
 }
+
