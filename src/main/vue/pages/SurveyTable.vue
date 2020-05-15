@@ -5,24 +5,14 @@
         <b-container class="my-container">
             <b-button class="my-button" @click="$router.push('/create/')">+</b-button>
             <b-row style="text-align: center" class="my-row">
-                <!--
-                <b-col>
-                    <SurveyTableList v-bind:surveys="surveys"/>
-                </b-col>
-                -->
-                <!--
-                    soll surves aus store laden und anzeigen.
-
-                <li v-for="survey in surveys" :key="survey.id">
-                    <router-link :to="'/survey/' + survey.id">{{ survey.title }}</router-link>
-                </li>
-                -->
                 <b-col >
                     <SurveyTableList v-bind:surveys="surveys"/>
                 </b-col>
+                <!--
                 <b-col v-for="survey in surveys" :key="survey.id">
                     <router-link :to="'/survey/' + survey.id">{{ survey.title }}</router-link>
                 </b-col>
+                -->
             </b-row>
         </b-container>
     </div>

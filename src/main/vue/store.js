@@ -45,7 +45,7 @@ export default new Vuex.Store({
                 ]
             },
             {
-                id: 3,
+                id: 2,
                 name: "are there two ?",
                 status: "READY",
                 items: [

@@ -43,6 +43,9 @@
                     <b-col>
                         <router-link class="my-config-link" :to="'/config/'">Konfiguration</router-link>
                     </b-col>
+                    <b-col>
+                        <router-link class="my-config-link" :to="'/survey/' + survey.id + '/answer/'">Fill Out</router-link>
+                    </b-col>
 
                 </b-row>
             </b-container>

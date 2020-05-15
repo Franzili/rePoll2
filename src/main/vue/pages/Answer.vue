@@ -7,8 +7,11 @@
 
 
         <div>
-            Titel: <input type="text" v-model="survey.title">
+            Titel: <input type="text" v-model="survey.nacl">
         </div>
+        <!--
+        items , also fragebn hier statt test
+        -->
         <div>
             Text: <textarea v-model="survey.text" rows="7"></textarea>
 
