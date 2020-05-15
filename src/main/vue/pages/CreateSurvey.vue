@@ -23,13 +23,13 @@
         <div v-else>
             <p class="section">2. Die Gesellschaft</p>
             <b-container>
-
                 <b-row style="text-align: center">
                     <b-col>Palette</b-col>
                     <b-col></b-col>
                     <b-col>Gliederung</b-col>
                 </b-row>
 
+                <!-- draggable palette items -->
                 <b-row style="text-align:center;" class="my-row">
                     <b-col>
                         <div class="col-4">
@@ -71,11 +71,11 @@
 
 <script>
 
+    import draggable from "vuedraggable"
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
     import AddQuestion from "../components/AddQuestion";
     import SurveyItem from "../components/SurveyItem";
-    import draggable from "vuedraggable";
     import {v4 as uuidv4} from "uuid";
 
     export default {

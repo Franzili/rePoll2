@@ -7,9 +7,8 @@ import gpse.repoll.domain.PollService;
 import gpse.repoll.domain.answers.Answer;
 import gpse.repoll.domain.answers.TextAnswer;
 import gpse.repoll.domain.questions.Question;
-import gpse.repoll.web.exceptions.BadRequestException;
-import gpse.repoll.web.exceptions.InternalServerErrorException;
-import gpse.repoll.web.exceptions.NotFoundException;
+import gpse.repoll.domain.exceptions.BadRequestException;
+import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,53 +46,47 @@ public class PollsController {
     @GetMapping("/{id:\\d+}")
     public Poll getPoll(@PathVariable("id") final String id) {
         // we know that id is a string of regex \d+, so we dont need to check for NumberFormatException.
-        Optional<Poll> result = pollService.getPoll(Long.valueOf(id));
-        return result.orElseThrow(NotFoundException::new);
+        return pollService.getPoll(Long.valueOf(id));
     }
 
     @PutMapping("/{id:\\d+}")
     public Poll updatePoll(@PathVariable("id") final String id, @RequestBody PollCmd pollCmd) {
-        Optional<Poll> result = pollService.updatePoll(Long.valueOf(id), pollCmd.getTitle());
-        return result.orElseThrow(NotFoundException::new);
+        return pollService.updatePoll(Long.valueOf(id), pollCmd.getTitle(), pollCmd.getStatus());
     }
 
     @GetMapping("/{pollId:\\d+}/sections")
     public List<PollSection> listPollSections(@PathVariable("pollId") final String pollId) {
-        Optional<List<PollSection>> result = pollService.getAllSections(Long.valueOf(pollId));
-        return result.orElseThrow(NotFoundException::new);
+        return pollService.getAllSections(Long.valueOf(pollId));
     }
 
     @PostMapping("/{pollId:\\d+}/sections")
     public PollSection addPollSection(@PathVariable("pollId") final String pollId,
                                       @RequestBody PollSectionCmd pollSectionCmd) {
-        Optional<PollSection> result = pollService.addPollSection(
+        return pollService.addPollSection(
             Long.valueOf(pollId),
             pollSectionCmd.getTitle(),
             pollSectionCmd.getDescription(),
             pollSectionCmd.getQuestions()
         );
-        return result.orElseThrow(NotFoundException::new);
     }
 
     @GetMapping("/{pollId:\\d+}/sections/{sectionId:\\d+}")
     public PollSection getPollSection(@PathVariable("pollId") final String pollId,
                                       @PathVariable("sectionId") final String sectionId) {
-        Optional<PollSection> result = pollService.getPollSection(Long.valueOf(pollId), Long.valueOf(sectionId));
-        return result.orElseThrow(NotFoundException::new);
+        return pollService.getPollSection(Long.valueOf(pollId), Long.valueOf(sectionId));
     }
 
     @PutMapping("/{pollId:\\d+}/sections/{sectionId:\\d+}")
     public PollSection updatePollSection(@PathVariable("pollId") final String pollId,
                                          @PathVariable("sectionId") final String sectionId,
                                          @RequestBody PollSectionCmd pollSectionCmd) {
-        Optional<PollSection> result = pollService.updatePollSection(
+        return pollService.updatePollSection(
             Long.valueOf(pollId),
             Long.valueOf(sectionId),
             pollSectionCmd.getTitle(),
             pollSectionCmd.getDescription(),
             pollSectionCmd.getQuestions()
         );
-        return result.orElseThrow(NotFoundException::new);
     }
 
     @PostMapping("/{pollId:\\d+}/questions")
@@ -104,7 +97,7 @@ public class PollsController {
             return pollService.addTextQuestion(
                 Long.valueOf(pollId),
                 ((TextQuestionCmd) questionCmd).getTitle()
-            ).orElseThrow(NotFoundException::new);
+            );
         }
         /*else if (questionCmd instanceof RangeQuestionCmd) {
             pollService.addRangeQuestion((RangeQuestionCmd) questionCmd).attribute())
@@ -117,11 +110,10 @@ public class PollsController {
     @GetMapping("/{pollId:\\d+}/questions/{questionId:\\d+}")
     public Question getQuestion(@PathVariable("pollId") final String pollId,
                             @PathVariable("questionId") final String questionId) {
-        Optional<Question> result = pollService.getQuestion(
+        return pollService.getQuestion(
             Long.valueOf(pollId),
             Long.valueOf(questionId)
         );
-        return result.orElseThrow(NotFoundException::new);
     }
 
     @PutMapping("/{pollId:\\d+}/questions/{questionId:\\d+}")
@@ -133,7 +125,7 @@ public class PollsController {
                 Long.valueOf(pollId),
                 Long.valueOf(questionId),
                 questionCmd.getTitle()
-            ).orElseThrow(NotFoundException::new);
+            );
         }
 
         // This should not be reached
@@ -156,21 +148,21 @@ public class PollsController {
             }
             answers.put(key, answer);
         }
-        Optional<PollEntry> result = pollService.addPollEntry(
+        return pollService.addPollEntry(
             Long.valueOf(pollId),
             answers
         );
-
-        return result.orElseThrow(NotFoundException::new);
     }
 
     @GetMapping("/{pollId:\\d+}/entries/{entryId:\\d+}")
     public PollEntry getPollEntry(@PathVariable("pollId") final String pollId,
                                   @PathVariable("entryId") final String entryId) {
-        Optional<PollEntry> result = pollService.getPollEntry(Long.valueOf(pollId), Long.valueOf(entryId));
-
-        return result.orElseThrow(NotFoundException::new);
+        return  pollService.getPollEntry(Long.valueOf(pollId), Long.valueOf(entryId));
     }
+
+
+
+
     /* TODO
     @PutMapping("/{pollId:\\d+}/entries/{entryId:\\d+}")
     public PollEntry updatePollEntry(@PathVariable("pollId") final String pollId,
