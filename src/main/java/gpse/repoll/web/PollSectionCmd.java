@@ -2,6 +2,7 @@ package gpse.repoll.web;
 
 import gpse.repoll.domain.questions.Question;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
 public class PollSectionCmd {
     private String title;
     private String description;
-    private List<Question> questions;
+    private List<Question> questions = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -33,6 +34,7 @@ public class PollSectionCmd {
     }
 
     public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+        this.questions.clear();
+        this.questions.addAll(questions);
     }
 }

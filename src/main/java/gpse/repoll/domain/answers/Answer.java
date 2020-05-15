@@ -1,9 +1,6 @@
 package gpse.repoll.domain.answers;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Represents an answer to a single question given by one participant.
@@ -12,6 +9,7 @@ import javax.persistence.Id;
 public abstract class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     protected Long id;
 
     public Long getId() {
