@@ -48,6 +48,23 @@
                         </div>
 
                     </b-col>
+                    <b-col>
+                        <div class="col-5">
+                            <draggable
+                                class="list-group" v-model="radio"
+                                group="group"
+                                @change="log"
+                                v-on:end="updatePalette"
+                            >
+                                <div class="drag-item flex flex-justify-between">
+                                    <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+                                    <b-icon-square></b-icon-square>
+                                    <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                </div>
+                            </draggable>
+                        </div>
+
+                    </b-col>
                     <b-col class="cols-14">
                             <div>
                                 <draggable
@@ -139,7 +156,7 @@
                 palette: [
                     {
                         id: 8,
-                        type: "checkbox",
+                        type: "question-circle",
                         question: "test",
                         possibilities: [
                             {
@@ -168,7 +185,7 @@
             updatePalette() {
                 const newItem = {
                     id: uuidv4(),
-                    type: "checkbox",
+                    type: "question-circle",
                     question: "test",
                     possibilities: [
                         {
