@@ -1,7 +1,8 @@
+
 <template>
     <div style="text-align:center;">
         <nav-bar></nav-bar>
-        <HelloWorld class="ml-auto" msg="Fill out your Survey!"/>
+        <HelloWorld class="ml-auto" msg="Answer your Survey!"/>
 
 
 
@@ -19,10 +20,10 @@
     </div>
 </template>
 
+
 <script>
     import NavBar from "../components/NavBar";
     import HelloWorld from "../components/HelloWorld";
-    import SurveyItemList from "../components/SurveyItemList";
 
     import {mapGetters} from "vuex"; //mapMutations
 
@@ -52,8 +53,9 @@
         },*/
         comments: {
             NavBar,
-            HelloWorld,
-            SurveyItemList
+            HelloWorld
+            //,
+            //SurveyItemList
         },
     }
 

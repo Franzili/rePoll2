@@ -10,7 +10,6 @@
     import {mapGetters} from "vuex";
     import NavBar from "../components/NavBar";
     import HelloWorld from "../components/HelloWorld";
-    import SurveyItemList from "../components/SurveyItemList";
 
     export default {
         name: "Survey",
@@ -30,8 +29,9 @@
         },
         comments: {
             NavBar,
-            HelloWorld,
-            SurveyItemList
+            HelloWorld
+            //,
+            //SurveyItemList
         },
     }
 </script>
