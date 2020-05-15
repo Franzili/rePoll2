@@ -1,6 +1,9 @@
 <template>
     <div style="text-align:center;">
-        <p class="question">{{item.question}}</p>
+        <b-form-input v-if="editQuestion" v-model="item.question"></b-form-input>
+        <p v-else class="question">{{item.question}}</p>
+        <b-icon-check-all scale="2" animation="fade" v-if="editQuestion" @click="changeEditQuestion"></b-icon-check-all>
+        <b-icon-wrench scale="1.5" v-else @click="changeEditQuestion"></b-icon-wrench>
 
         <!-- all possible answers possibilities -->
         <div v-if="item.type === 'checkbox'">
@@ -61,11 +64,15 @@
         components: {QuestionEditor},
         data() {
             return {
+                editQuestion: false,
                 selected: []
             }
         },
         props: ["item", "edit"],
         methods:{
+            changeEditQuestion() {
+                this.editQuestion = !this.editQuestion;
+            },
             addPos(newPos){
                 this.item.possibilities = [...this.item.possibilities, newPos];
             },
@@ -78,10 +85,12 @@
 
 <style scoped>
     .text-box {
+        margin-top: 10px;
         margin-bottom: 18px;
     }
 
     .drop-down {
+        margin-top: 10px;
         margin-bottom: 18px;
     }
 

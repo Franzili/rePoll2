@@ -140,7 +140,7 @@
                     {
                         id: 8,
                         type: "checkbox",
-                        question: "test",
+                        question: "new question",
                         possibilities: [
                             {
                                 id: 5,
