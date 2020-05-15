@@ -3,6 +3,7 @@ package gpse.repoll.domain;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = new User();
-        user.setUserName(userName);
+        user.setUsername(userName);
         user.setFullName(fullName);
         user.setEmail(email);
         userRepository.save(user);
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
 
         /* If we want to change the username */
-        String oldUserName = user.getUserName();
+        String oldUserName = user.getUsername();
         if (newUserName != null && !oldUserName.equals(newUserName)) {
             /* Check if Username is already taken */
             Optional<User> otherUser = userRepository.findByUserName(newUserName);
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (newUserName != null) {
-            user.setUserName(newUserName);
+            user.setUsername(newUserName);
         }
         if (email != null) {
             user.setEmail(email);
@@ -73,5 +74,10 @@ public class UserServiceImpl implements UserService {
     public List<Poll> getOwnedPolls(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
         return user.getOwnPolls();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(final String username) {
+        return userRepository.findByUserName(username).orElseThrow(NotFoundException::new);
     }
 }

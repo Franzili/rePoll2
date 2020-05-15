@@ -2,8 +2,14 @@ package gpse.repoll.domain;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Represents a User of the application.
@@ -11,14 +17,16 @@ import java.util.List;
  * them privileges to e.g. create new Polls.
  */
 @Entity
-public class User {
+public class User implements UserDetails {
+    private static final long serialVersionUID = 5L;
+
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    private String userName;
+    private String username;
 
     @Column
     private String fullName;
@@ -26,30 +34,20 @@ public class User {
     @Column
     private String email;
 
+    @JsonIgnore
+    @Column
+    private String password;
+
+    @JsonIgnore
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles;
+
     @Column
     @OneToMany(mappedBy = "owner")
     private List<Poll> ownPolls = new ArrayList<>();
 
     public Long getId() {
         return id;
-    }
-
-    /**
-     * Gets the user's unique name.
-     * (e.g. jdoe)
-     * @return The user's unique name
-     */
-    public String getUserName() {
-        return userName;
-    }
-
-    /**
-     * Sets the user's unique name.
-     * (e.g. jdoe)
-     * @param userName The user's new unique name
-     */
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     /**
@@ -88,6 +86,61 @@ public class User {
 
     public List<Poll> getOwnPolls() {
         return Collections.unmodifiableList(ownPolls);
+    }
+
+    @JsonIgnore
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return AuthorityUtils.createAuthorityList((String[]) roles.toArray());
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Gets the user's unique name.
+     * (e.g. jdoe)
+     * @return The user's unique name
+     */
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Sets the user's unique name.
+     * (e.g. jdoe)
+     * @param userName The user's new unique name
+     */
+    public void setUsername(String userName) {
+        this.username = userName;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
 
