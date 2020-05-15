@@ -9,7 +9,8 @@ export default new Vuex.Store({
         surveys: [
             {
                 id: 1,
-                title: "is there a survey ?",
+                name: "is there a survey ?",
+                status: "READY",
                 items: [
                     {
                         id: 1,
@@ -45,7 +46,8 @@ export default new Vuex.Store({
             },
             {
                 id: 3,
-                title: "are there two ?",
+                name: "are there two ?",
+                status: "READY",
                 items: [
                     {
                         id: 1,

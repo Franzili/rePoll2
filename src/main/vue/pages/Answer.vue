@@ -54,8 +54,7 @@
         comments: {
             NavBar,
             HelloWorld
-            //,
-            //SurveyItemList
+            //,            SurveyItemList
         },
     }
 

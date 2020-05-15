@@ -5,14 +5,23 @@
         <b-container class="my-container">
             <b-button class="my-button" @click="$router.push('/create/')">+</b-button>
             <b-row style="text-align: center" class="my-row">
+                <!--
                 <b-col>
                     <SurveyTableList v-bind:surveys="surveys"/>
-                    <!--
+                </b-col>
+                -->
+                <!--
                     soll surves aus store laden und anzeigen.
-                    <li v-for="survey in surveys" :key="survey.id">
+
+                <li v-for="survey in surveys" :key="survey.id">
                     <router-link :to="'/survey/' + survey.id">{{ survey.title }}</router-link>
-                    </li>
-                    -->
+                </li>
+                -->
+                <b-col >
+                    <SurveyTableList v-bind:surveys="surveys"/>
+                </b-col>
+                <b-col v-for="survey in surveys" :key="survey.id">
+                    <router-link :to="'/survey/' + survey.id">{{ survey.title }}</router-link>
                 </b-col>
             </b-row>
         </b-container>
@@ -24,10 +33,11 @@
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
     import SurveyTableList from "../components/SurveyTableList";
+    import {mapState} from "vuex";
 
     export default {
         name: "SurveyTable",
-        data() {
+        /*data() {
             return {
                 surveys: [
                     {
@@ -42,13 +52,13 @@
                     }
                 ]
             }
-        },
-        /*
-        computet die surveys aus store
+        },*/
+
+        //computet die surveys aus store
         computed: mapState({
             surveys: state => state.surveys
         }),
-        */
+
         components: {
             NavBar,
             HelloWorld,
