@@ -3,7 +3,7 @@
         <b-form-input v-if="editQuestion" v-model="item.question"></b-form-input>
         <p v-else class="question">{{item.question}}</p>
         <b-icon-check-all scale="2" animation="fade" v-if="editQuestion" @click="changeEditQuestion"></b-icon-check-all>
-        <b-icon-wrench scale="1.5" v-else @click="changeEditQuestion"></b-icon-wrench>
+        <b-icon-wrench scale="1.5" v-else-if="edit" @click="changeEditQuestion"></b-icon-wrench>
 
         <!-- all possible answers possibilities -->
         <div v-if="item.type === 'checkbox'">
