@@ -41,7 +41,7 @@
                     <b-col></b-col>
                     <b-col></b-col>
                     <b-col>
-                        <router-link class="my-config-link" :to="'/config/'">Konfiguration</router-link>
+                        <router-link class="my-config-link" :to="{ name: 'config', params: { thisSurvey: survey}}">Konfiguration</router-link>
                     </b-col>
 
                 </b-row>
@@ -61,7 +61,7 @@
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             },
             toConfig() {
-                return this.$router.push('/config/')
+                return this.$router.push({name: 'config', params: { thisSurvey: this.survey}})
             }
         }
 

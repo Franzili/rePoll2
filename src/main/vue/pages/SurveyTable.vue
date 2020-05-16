@@ -28,12 +28,22 @@
                     {
                         id: 1,
                         name: "Peter Pan",
-                        status: "IN PROCESSING"
+                        status: "IN_PROCESS"
                     },
                     {
                         id: 2,
                         name: "Mobby Dick",
                         status: "READY"
+                    },
+                    {
+                        id: 3,
+                        name: "調査",
+                        status: 'ACTIVATED'
+                    },
+                    {
+                        id: 4,
+                        name: '彼女',
+                        status: 'DEACTIVATED'
                     }
                 ]
             }
@@ -69,27 +79,4 @@
         min-height: 100vh;
         background-color: lightgray
     }
-
-    /*.surveys {
-        color: blue;
-        box-sizing: border-box;
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 20px;
-        line-height: 1.4;
-        padding: 10px;
-        border-bottom: 1px #000000 dotted;
-    }
-
-    .is-complete {
-        box-sizing: border-box;
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 20px;
-        line-height: 1.4;
-        padding: 10px;
-        border-bottom: 1px #000000 dotted;
-        text-decoration: line-through;
-    }*/
-
 </style>
