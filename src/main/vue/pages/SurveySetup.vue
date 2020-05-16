@@ -5,7 +5,7 @@
             <b-container class="my-container">
                 <b-row style="text-align: center" class="my-row">
                     <b-col>
-                        <HelloWorld style="text-align:center;" class="ml-auto" msg="Konfigurationsseite"/>
+                        <HelloWorld style="text-align:center;" class="ml-auto" :msg="survey.name"/>
                     </b-col>
                 </b-row>
 
@@ -26,21 +26,15 @@
 
                     </b-col>
                     <b-col>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="iRadio1" value="option1" checked>
-                            <label class="form-check-label" for="iRadio1">In Bearbeitung</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="iRadio2" value="option2">
-                            <label class="form-check-label" for="iRadio2">Bereit</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="iRadio3" value="option3">
-                            <label class="form-check-label" for="iRadio3">Aktiviert</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="iRadio4" value="option4">
-                            <label class="form-check-label" for="iRadio4">Deaktiviert</label>
+                        <div>
+                            <b-form-group label="Raido v3">
+                                <b-form-radio-group
+                                v-model="selected"
+                                :options="options"
+                                plain
+                                name="plain-inline">
+                                </b-form-radio-group>
+                            </b-form-group>
                         </div>
                     </b-col>
 
@@ -56,6 +50,25 @@
     import HelloWorld from "../components/HelloWorld";
     export default {
         name: "SurveySetup",
+        data() {
+            return {
+                survey: {
+                    id: 0,
+                    name: '',
+                    status: ''
+                },
+                selected: '',
+                options: [
+                    { text: 'In Bearbeitung', value: 'IN_PROCESSING'},
+                    { text: 'Bereit', value: 'READY'},
+                    { text: 'Aktiviert', value: 'ACTIVATED'},
+                    { text: 'Deaktiviert', value: 'DEACTIVATED'}
+                ]
+            }
+        },
+        created() {
+            this.survey = this.$route.params.thisSurvey;
+        },
         components: {
             NavBar,
             HelloWorld,
