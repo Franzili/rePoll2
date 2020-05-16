@@ -31,40 +31,60 @@
 
                 <!-- draggable palette items -->
                 <b-row style="text-align:center;" class="my-row">
-                    <b-col>
-                        <div class="col-4">
-                            <draggable
-                                class="list-group" v-model="palette"
-                                group="group"
-                                @change="log"
-                                v-on:end="updatePalette"
-                            >
-                                <div class="drag-item flex flex-justify-between">
-                                    <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                    <b-icon-square></b-icon-square>
-                                    <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                    <div>
+                        <b-button v-b-toggle.sidebar-1>Add Question</b-button>
+                        <b-sidebar id="sidebar-1" title="Add Questions" shadow>
+                            <div class="px-3 py-2">
+                                <b-img src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Die_drei_fragezeichen.svg" fluid thumbnail></b-img>
+                                <p>
+                                    Add a Question into your Survey via Drag and Drop!
+                                </p>
+                                <div class="col-4">
+                                    <draggable
+                                        class="list-group" v-model="palette"
+                                        group="group"
+                                        @change="log"
+                                        v-on:end="updatePalette"
+                                    >
+                                        <div class="drag-item flex flex-justify-between">
+                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+                                            <b-icon-question-square></b-icon-question-square>
+                                            <b-text>Testquestion</b-text>
+                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                        </div>
+                                    </draggable>
+                                    <draggable
+                                        class="list-group" v-model="palette"
+                                        group="group"
+                                        @change="log"
+                                        v-on:end="updatePaletteQuestion2"
+                                    >
+                                        <div class="drag-item flex flex-justify-between">
+                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+                                            <b-icon-book></b-icon-book>
+                                            <b-text>Testquestion2</b-text>
+                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                        </div>
+                                    </draggable>
+                                    <draggable
+                                        class="list-group" v-model="palette"
+                                        group="group"
+                                        @change="log"
+                                        v-on:end="updatePaletteSurvey"
+                                    >
+                                        <div class="drag-item flex flex-justify-between">
+                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+                                            <b-icon-bookmarks></b-icon-bookmarks>
+                                            <b-text>New Section</b-text>
+                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                        </div>
+                                    </draggable>
                                 </div>
-                            </draggable>
-                        </div>
 
-                    </b-col>
-                    <b-col>
-                        <div class="col-5">
-                            <draggable
-                                class="list-group" v-model="radio"
-                                group="group"
-                                @change="log"
-                                v-on:end="updatePalette"
-                            >
-                                <div class="drag-item flex flex-justify-between">
-                                    <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                    <b-icon-square></b-icon-square>
-                                    <!-- <AddQuestion v-on:add-item="addItem"/> -->
-                                </div>
-                            </draggable>
-                        </div>
 
-                    </b-col>
+                            </div>
+                        </b-sidebar>
+                    </div>
                     <b-col class="cols-14">
                             <div>
                                 <draggable
@@ -156,15 +176,15 @@
                 palette: [
                     {
                         id: 8,
-                        type: "question-circle",
-                        question: "test",
+                        type: "checkbox",
+                        question: "Frage aus der Palette",
                         possibilities: [
                             {
-                                id: 5,
+                                id: 10,
                                 text: "bla bla asdikawzug l hif",
                             },
                             {
-                                id: 6,
+                                id: 11,
                                 text: "yes",
                             }
                         ]
@@ -185,16 +205,64 @@
             updatePalette() {
                 const newItem = {
                     id: uuidv4(),
-                    type: "question-circle",
+                    type: "radio",
                     question: "test",
                     possibilities: [
                         {
-                            id: 5,
-                            text: "bla bla asdikawzug l hif",
+                            id: 1,
+                            text: "Wie geht es dir Morgens?",
                         },
                         {
-                            id: 6,
-                            text: "yes",
+                            id: 2,
+                            text: "Wie geht es dir Mittags?",
+                        },
+                        {
+                            id: 1,
+                            text: "Wie geht es dir Abends?",
+                        }
+                    ]
+                };
+                this.palette = [...this.palette, newItem];
+            },
+            updatePaletteQuestion2() {
+                const newItem = {
+                    id: uuidv4(),
+                    type: "dropdown",
+                    question: "test",
+                    possibilities: [
+                        {
+                            id: 1,
+                            text: "Meditierst du regelmäßig?",
+                        },
+                        {
+                            id: 2,
+                            text: "Machst du regelmäßig Sport?",
+                        },
+                        {
+                            id: 3,
+                            text: "Nimmst du regelmäßig kalte Duschen?",
+                        }
+                    ]
+                };
+                this.palette = [...this.palette, newItem];
+            },
+            updatePaletteSurvey() {
+                const newItem = {
+                    id: uuidv4(),
+                    type: "section",
+                    question: "test",
+                    possibilities: [
+                        {
+                            id: 1,
+                            text: "Meditierst du regelmäßig?",
+                        },
+                        {
+                            id: 2,
+                            text: "Machst du regelmäßig Sport?",
+                        },
+                        {
+                            id: 3,
+                            text: "Nimmst du regelmäßig kalte Duschen?",
                         }
                     ]
                 };

@@ -30,6 +30,9 @@
                 </div>
             </b-form-group>
         </div>
+        <div v-if="item.type === 'section'">
+            <textarea></textarea>
+        </div>
 
         <div v-if="item.type === 'freetext'">
             <!-- TODO enter new variable for text instead of array (v-model)? -->
