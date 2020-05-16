@@ -1,5 +1,5 @@
 <template>
-        <b-navbar style="text-align:center;" toggleable type="dark" class="nav-background">
+        <b-navbar style="text-align:center;" toggleable="" type="dark" class="nav-background">
             <b-navbar-brand href="#">
                 <img @click="toStart" src="../assets/logo.png" width="123" height="27">
             </b-navbar-brand>
@@ -13,14 +13,17 @@
 
             <b-collapse id="navbar-toggle-collapse" is-nav>
                 <b-navbar-nav class="ml-auto">
-                    <b-nav-item href="#">
+                    <b-nav-item>
                         <router-link class="link" :to="'/account/'">Account</router-link>
                     </b-nav-item>
-                    <b-nav-item href="#">
+                    <b-nav-item>
                         <router-link class="link" :to="'/surveys'">Surveys</router-link>
                     </b-nav-item>
-                    <b-nav-item href="#">
+                    <b-nav-item>
                         <router-link class="link" :to="'/create/'">Create Survey</router-link>
+                    </b-nav-item>
+                    <b-nav-item>
+                        <router-link class="link" :to="'/answer/'">Answer Survey</router-link>
                     </b-nav-item>
                 </b-navbar-nav>
             </b-collapse>
