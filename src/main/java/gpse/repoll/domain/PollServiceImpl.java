@@ -7,6 +7,7 @@ import gpse.repoll.domain.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -64,8 +65,10 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Iterable<Poll> getAll() {
-        return pollRepository.findAll();
+    public List<Poll> getAll() {
+        List<Poll> polls = new ArrayList<>();
+        pollRepository.findAll().forEach(polls::add);
+        return polls;
     }
 
     /**
@@ -74,7 +77,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public Poll addPoll(String title) {
         final Poll poll = new Poll(null, title);
-        this.pollRepository.save(poll);
+        pollRepository.save(poll);
         return poll;
     }
 
@@ -83,7 +86,7 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public Poll getPoll(Long id) {
-        return this.pollRepository.findById(id).orElseThrow(NotFoundException::new);
+        return pollRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     /**
@@ -94,6 +97,7 @@ public class PollServiceImpl implements PollService {
         Poll poll = getPoll(id);
         poll.setTitle(title);
         poll.setStatus(status);
+        pollRepository.save(poll);
         return poll;
     }
     /**
@@ -195,6 +199,9 @@ public class PollServiceImpl implements PollService {
         if (questions != null) {
             section.setQuestions(questions);
         }
+        pollSectionRepository.save(section);
+        Poll poll = getPoll(pollId);
+        pollRepository.save(poll);
         return section;
     }
 
@@ -247,7 +254,8 @@ public class PollServiceImpl implements PollService {
         question.setTitle(questionTitle);
         question.setCharLimit(charLimit);
         textQuestionRepository.save(question);
-
+        // todo
+        // PollSection der Frage speichern
         poll.getQuestions().add(question);
         pollRepository.save(poll);
         return question;
@@ -321,6 +329,15 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
+    public List<Question> getAllQuestions(Long pollId) {
+        Poll poll = getPoll(pollId);
+        return poll.getQuestions();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Question getQuestion(final Long pollId, final Long questionId) {
         Question result = null;
         Poll poll = getPoll(pollId);
@@ -356,6 +373,7 @@ public class PollServiceImpl implements PollService {
         if (result == null) {
             throw new NotFoundException();
         }
+        pollRepository.save(poll);
         return result;
     }
 
@@ -386,6 +404,7 @@ public class PollServiceImpl implements PollService {
         if (result == null) {
             throw new NotFoundException();
         }
+        pollRepository.save(poll);
         return result;
     }
 
@@ -412,6 +431,7 @@ public class PollServiceImpl implements PollService {
         if (result == null) {
             throw new NotFoundException();
         }
+        pollRepository.save(poll);
         return result;
     }
 
@@ -438,6 +458,7 @@ public class PollServiceImpl implements PollService {
         if (result == null) {
             throw new NotFoundException();
         }
+        pollRepository.save(poll);
         return result;
     }
 

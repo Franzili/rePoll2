@@ -12,9 +12,9 @@ import java.util.Map;
 public interface PollService {
     /**
      * Get all Polls.
-     * @return An Iterator on all polls
+     * @return A List of all polls
      */
-    Iterable<Poll> getAll();
+    List<Poll> getAll();
 
     /**
      * Add a new Poll.
@@ -155,6 +155,13 @@ public interface PollService {
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
     ChoiceQuestion addChoiceQuestion(Long pollId, String questionTitle, List<Choice> choices);
+
+    /**
+     * Gets all Questions belonging to a Poll.
+     * @param pollId The Polls's ID
+     * @return The list of all Questions
+     */
+    List<Question> getAllQuestions(Long pollId);
 
     /**
      * Gets a Question belonging to a Poll.
