@@ -70,8 +70,12 @@ surveyTabelElement als template testen
                         template save buttons!!!
                         <b-button variant="primary" type="submit">Speichern</b-button>
                         -->
-                        <b-button class="my-button" variant="primary">Save</b-button>
+                        <b-button class="my-button" type="submit">Save</b-button>
+                        <!--
+                        Submit Button for later
+                        Final Submit, then answers can't be edited animore
                         <b-button class="my-button" variant="success">Submit!</b-button>
+                        -->
                     </b-form>
                 <!--
                 </b-card>
@@ -125,7 +129,7 @@ surveyTabelElement als template testen
         ...mapMutations([
             'updateSurvey'
         ]),
-        answer() {
+        save() {
             this.updateSurvey(this.survey)
             this.$router.push('/')
         }
