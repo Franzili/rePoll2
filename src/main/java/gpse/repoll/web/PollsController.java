@@ -37,23 +37,23 @@ public class PollsController {
         return pollService.addPoll(pollCmd.getTitle());
     }
 
-    @GetMapping("/{id:\\d+}")
+    @GetMapping("/{id:\\d+}/")
     public Poll getPoll(@PathVariable("id") final String id) {
         // we know that id is a string of regex \d+, so we dont need to check for NumberFormatException.
         return pollService.getPoll(Long.valueOf(id));
     }
 
-    @PutMapping("/{id:\\d+}")
+    @PutMapping("/{id:\\d+}/")
     public Poll updatePoll(@PathVariable("id") final String id, @RequestBody PollCmd pollCmd) {
         return pollService.updatePoll(Long.valueOf(id), pollCmd.getTitle(), pollCmd.getStatus());
     }
 
-    @GetMapping("/{pollId:\\d+}/sections")
+    @GetMapping("/{pollId:\\d+}/sections/")
     public List<PollSection> listPollSections(@PathVariable("pollId") final String pollId) {
         return pollService.getAllSections(Long.valueOf(pollId));
     }
 
-    @PostMapping("/{pollId:\\d+}/sections")
+    @PostMapping("/{pollId:\\d+}/sections/")
     public PollSection addPollSection(@PathVariable("pollId") final String pollId,
                                       @RequestBody PollSectionCmd pollSectionCmd) {
         return pollService.addPollSection(
@@ -64,13 +64,13 @@ public class PollsController {
         );
     }
 
-    @GetMapping("/{pollId:\\d+}/sections/{sectionId:\\d+}")
+    @GetMapping("/{pollId:\\d+}/sections/{sectionId:\\d+}/")
     public PollSection getPollSection(@PathVariable("pollId") final String pollId,
                                       @PathVariable("sectionId") final String sectionId) {
         return pollService.getPollSection(Long.valueOf(pollId), Long.valueOf(sectionId));
     }
 
-    @PutMapping("/{pollId:\\d+}/sections/{sectionId:\\d+}")
+    @PutMapping("/{pollId:\\d+}/sections/{sectionId:\\d+}/")
     public PollSection updatePollSection(@PathVariable("pollId") final String pollId,
                                          @PathVariable("sectionId") final String sectionId,
                                          @RequestBody PollSectionCmd pollSectionCmd) {
@@ -83,7 +83,7 @@ public class PollsController {
         );
     }
 
-    @PostMapping("/{pollId:\\d+}/questions")
+    @PostMapping("/{pollId:\\d+}/questions/")
     public Question addQuestion(@PathVariable("pollId") final String pollId,
                                 @RequestBody QuestionCmd questionCmd) {
 
@@ -117,7 +117,7 @@ public class PollsController {
         throw new InternalServerErrorException();
     }
 
-    @GetMapping("/{pollId:\\d+}/questions/{questionId:\\d+}")
+    @GetMapping("/{pollId:\\d+}/questions/{questionId:\\d+}/")
     public Question getQuestion(@PathVariable("pollId") final String pollId,
                             @PathVariable("questionId") final String questionId) {
         return pollService.getQuestion(
@@ -126,7 +126,7 @@ public class PollsController {
         );
     }
 
-    @PutMapping("/{pollId:\\d+}/questions/{questionId:\\d+}")
+    @PutMapping("/{pollId:\\d+}/questions/{questionId:\\d+}/")
     public Question updateQuestion(@PathVariable("pollId") final String pollId,
                                    @PathVariable("questionId") final String questionId,
                                    @RequestBody QuestionCmd questionCmd) {
@@ -166,8 +166,8 @@ public class PollsController {
         throw new InternalServerErrorException();
     }
 
-    //todo Handling wrong answer type
-    @PostMapping("/{pollId:\\d+}/entries")
+    //todo handling wrong answer type
+    @PostMapping("/{pollId:\\d+}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final String pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
         Map<Long, Answer> answers = new HashMap<>();
@@ -201,7 +201,7 @@ public class PollsController {
         );
     }
 
-    @GetMapping("/{pollId:\\d+}/entries/{entryId:\\d+}")
+    @GetMapping("/{pollId:\\d+}/entries/{entryId:\\d+}/")
     public PollEntry getPollEntry(@PathVariable("pollId") final String pollId,
                                   @PathVariable("entryId") final String entryId) {
         return  pollService.getPollEntry(Long.valueOf(pollId), Long.valueOf(entryId));
