@@ -62,7 +62,7 @@ public class Poll {
     public Poll(User creator, String title) {
         this.creator = creator;
         this.title = title;
-        this.status = PollStatus.IN_PROCESSING;
+        this.status = PollStatus.IN_PROCESS;
         creationTime = LocalDateTime.now();
         lastEditTime = LocalDateTime.now();
     }

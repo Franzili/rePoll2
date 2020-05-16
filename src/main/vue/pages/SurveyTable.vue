@@ -27,7 +27,7 @@
                     {
                         id: 1,
                         name: "Peter Pan",
-                        status: "IN_PROCESSING"
+                        status: "IN_PROCESS"
                     },
                     {
                         id: 2,

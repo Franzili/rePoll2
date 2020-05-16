@@ -35,7 +35,7 @@
                                 v-model="selected"
                                 plain
                                 name="plain-inline">
-                                    <b-form-radio value="IN_PRECESSING"
+                                    <b-form-radio value="IN_PROCESS"
                                     :disabled="survey.status === 'READY'
                                     || survey.status === 'ACTIVATED'
                                     || survey.status === 'DEACTIVATED'">In Bearbeitung</b-form-radio>
@@ -43,8 +43,8 @@
                                     :disabled="survey.status === 'ACTIVATED'
                                     || survey.status === 'DEACTIVATED'">Bereit</b-form-radio>
                                     <b-form-radio value="ACTIVATED"
-                                    :disabled="survey.status === 'DEACTIVATED'">Activiert</b-form-radio>
-                                    <b-form-radio value="DEACTIVATED">Deactiviert</b-form-radio>
+                                    :disabled="survey.status === 'DEACTIVATED'">Aktiviert</b-form-radio>
+                                    <b-form-radio value="DEACTIVATED">Deaktiviert</b-form-radio>
                                 </b-form-radio-group>
                             </b-form-group>
                         </div>
@@ -90,13 +90,7 @@
                     status: ''
                 },
                 confirm: false,
-                selected: '',
-                options: [
-                    { text: 'In Bearbeitung', value: 'IN_PROCESSING'},
-                    { text: 'Bereit', value: 'READY'},
-                    { text: 'Aktiviert', value: 'ACTIVATED'},
-                    { text: 'Deaktiviert', value: 'DEACTIVATED'}
-                ]
+                selected: ''
             }
         },
         methods: {
