@@ -44,12 +44,11 @@ public class PollsController {
         return pollService.updatePoll(Long.valueOf(id), pollCmd.getTitle(), pollCmd.getStatus());
     }
 
-    @PutMapping("/delete/{id:\\d+}")
+    @PutMapping("/{id:\\d+}/delete/")
     public Poll removePoll(@PathVariable("id") final String id) {
         return pollService.removePoll(Long.valueOf(id));
     }
 
-    @GetMapping("/{pollId:\\d+}/sections")
     @GetMapping("/{pollId:\\d+}/sections/")
     public List<PollSection> listPollSections(@PathVariable("pollId") final String pollId) {
         return pollService.getAllSections(Long.valueOf(pollId));
