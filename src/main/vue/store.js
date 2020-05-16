@@ -83,6 +83,21 @@ export default new Vuex.Store({
             }
         ],
     },
+    mutations: {
+        updateSurvey(survey) {
+            let index = this.state.surveys.findIndex(a => a.id == survey.id)
+            this.state.surveys[index] = survey
+        }
+        /*
+        ,
+        for saving a new survey
+        saveSurvey(state, survey) {
+            let id = this.state.surveys.length
+            survey.id = id + 1
+            this.state.surveys.push(survey)
+        }
+        */
+    },
     getters: {
         getSurvey: (state) => {
             return (id) => {

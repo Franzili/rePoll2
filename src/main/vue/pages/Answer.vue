@@ -70,7 +70,7 @@ surveyTabelElement als template testen
                         template save buttons!!!
                         <b-button variant="primary" type="submit">Speichern</b-button>
                         -->
-                        <b-button class="my-button" type="submit">Save</b-button>
+                        <button @click="save">Save</button>
                         <!--
                         Submit Button for later
                         Final Submit, then answers can't be edited animore
@@ -120,8 +120,6 @@ surveyTabelElement als template testen
             ...mapGetters(['getItem'])
 
     },
-
-
     methods: {
         isMobile() {
             return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
