@@ -84,7 +84,7 @@ export default new Vuex.Store({
         ],
     },
     mutations: {
-        updateSurvey(survey) {
+        updateSurvey(state, survey) {
             let index = this.state.surveys.findIndex(a => a.id == survey.id)
             this.state.surveys[index] = survey
         }

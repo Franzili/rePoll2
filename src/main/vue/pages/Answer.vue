@@ -109,6 +109,7 @@ surveyTabelElement als template testen
         mounted() {
             this.id = this.$route.params.id
             this.survey = this.getSurvey(this.id)
+            this.item = this.getItem(this.id)
         },
         created() {
             this.id = this.$route.params.id
@@ -129,7 +130,7 @@ surveyTabelElement als template testen
         ]),
         save() {
             this.updateSurvey(this.survey)
-            this.$router.push('/')
+            this.$router.push('/') //redirect to page '', here start page
         }
     },
     comments: {
