@@ -5,8 +5,19 @@
             <div class="my-titel">
                 Titel:
             </div>
-            <div>
-                Moby Dick
+
+            <div v-if="editTitle">
+                <b-form-input  v-model="surveyTitle"></b-form-input>
+            </div>
+            <div v-else>
+                {{surveyTitle}}
+            </div>
+
+            <div v-if="editTitle">
+                <b-icon-check-all class="my-icon" scale="1.8" animation="fade" @click="changeEditTitle"></b-icon-check-all>
+            </div>
+            <div v-else>
+                <b-icon-wrench class="my-icon" scale="1.2" @click="changeEditTitle"></b-icon-wrench>
             </div>
         </div>
 
@@ -82,6 +93,8 @@
         name: "CreateSurvey",
         data() {
             return {
+                surveyTitle: "Moby Dick",
+                editTitle: false,
                 edit: true,
                 items: [
                     {
@@ -156,6 +169,9 @@
             }
         },
         methods: {
+            changeEditTitle() {
+                this.editTitle = !this.editTitle;
+            },
             deleteItem(id) {
                 this.items = this.items.filter(item => item.id !== id);
             },
@@ -216,6 +232,10 @@
 
     .my-titel {
         color: #868686;
+    }
+
+    .my-icon {
+        margin-left: 20px;
     }
 
     .my-head {
