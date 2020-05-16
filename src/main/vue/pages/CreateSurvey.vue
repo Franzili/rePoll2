@@ -82,6 +82,7 @@
         name: "CreateSurvey",
         data() {
             return {
+                title: "Moby Dick",
                 edit: true,
                 items: [
                     {
@@ -185,7 +186,7 @@
             },
             log: function (...e) {
                     console.log(...e);
-                }
+            }
         },
         components: {
             AddQuestion,
