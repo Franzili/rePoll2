@@ -38,6 +38,7 @@ surveyTabelElement als template testen
 -->
 
 <template>
+    <div style="text-align:center;">
     <b-container class="mt-3">
         <nav-bar></nav-bar>
         <HelloWorld></HelloWorld>
@@ -53,14 +54,18 @@ surveyTabelElement als template testen
                             -->
                             <p class="my-name">{{survey.name}}</p>
                         </b-form-group>
-                        <b-form-group>
-                            <!--
-                            <b-form-textarea type="textarea" rows="10" v-model="survey.item"></b-form-textarea>
-                            -->
-                            <div :key="item.id" v-for="item in survey.items">
-                                <SurveyItem v-bind:item="item" v-bind:edit="edit"/>
-                            </div>
-                        </b-form-group>
+                        <b-row>
+                            <b-col></b-col>
+                            <b-form-group>
+                                <!--
+                                <b-form-textarea type="textarea" rows="10" v-model="survey.item"></b-form-textarea>
+                                -->
+                                <div :key="item.id" v-for="item in survey.items">
+                                    <SurveyItem v-bind:item="item" v-bind:edit="edit"/>
+                                </div>
+                            </b-form-group>
+                            <b-col></b-col>
+                        </b-row>
                         <!--
                         template save buttons!!!
                         <b-button variant="primary" type="submit">Speichern</b-button>
@@ -74,6 +79,7 @@ surveyTabelElement als template testen
             </b-col>
         </b-row>
     </b-container>
+    </div>
 </template>
 
 
