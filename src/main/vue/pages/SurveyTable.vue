@@ -33,6 +33,16 @@
                         id: 2,
                         name: "Mobby Dick",
                         status: "READY"
+                    },
+                    {
+                        id: 3,
+                        name: "調査",
+                        status: 'ACTIVATED'
+                    },
+                    {
+                        id: 4,
+                        name: '彼女',
+                        status: 'DEACTIVATED'
                     }
                 ]
             }

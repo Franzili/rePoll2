@@ -61,7 +61,7 @@
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             },
             toConfig() {
-                return this.$router.push('/config/')
+                return this.$router.push({name: 'config', params: { thisSurvey: this.survey}})
             }
         }
 
