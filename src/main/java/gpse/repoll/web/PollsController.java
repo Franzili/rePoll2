@@ -117,6 +117,11 @@ public class PollsController {
         throw new InternalServerErrorException();
     }
 
+    @GetMapping("/{pollId:\\d+}/questions/")
+    public List<Question> listQuestions(@PathVariable("pollId") final String pollId) {
+        return pollService.getAllQuestions(Long.valueOf(pollId));
+    }
+
     @GetMapping("/{pollId:\\d+}/questions/{questionId:\\d+}/")
     public Question getQuestion(@PathVariable("pollId") final String pollId,
                             @PathVariable("questionId") final String questionId) {

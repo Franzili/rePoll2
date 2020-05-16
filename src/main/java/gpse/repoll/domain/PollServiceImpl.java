@@ -296,6 +296,15 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
+    public List<Question> getAllQuestions(Long pollId) {
+        Poll poll = getPoll(pollId);
+        return poll.getQuestions();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Question getQuestion(final Long pollId, final Long questionId) {
         Question result = null;
         Poll poll = getPoll(pollId);

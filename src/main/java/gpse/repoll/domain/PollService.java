@@ -151,6 +151,13 @@ public interface PollService {
     ChoiceQuestion addChoiceQuestion(Long pollId, String questionTitle, List<Choice> choices);
 
     /**
+     * Gets all Questions belonging to a Poll.
+     * @param pollId The Polls's ID
+     * @return The list of all Questions
+     */
+    List<Question> getAllQuestions(Long pollId);
+
+    /**
      * Gets a Question belonging to a Poll.
      * @param pollId The Poll's ID
      * @param questionId The Questions's ID
