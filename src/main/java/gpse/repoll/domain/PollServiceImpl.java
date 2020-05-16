@@ -1,17 +1,13 @@
 package gpse.repoll.domain;
 
-import gpse.repoll.domain.answers.Answer;
-import gpse.repoll.domain.answers.TextAnswer;
-import gpse.repoll.domain.answers.TextAnswerRepository;
+import gpse.repoll.domain.answers.*;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
-import gpse.repoll.domain.questions.Question;
-import gpse.repoll.domain.questions.QuestionBaseRepository;
-import gpse.repoll.domain.questions.TextQuestion;
-import gpse.repoll.domain.questions.TextQuestionRepository;
+import gpse.repoll.domain.questions.*;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,31 +20,55 @@ public class PollServiceImpl implements PollService {
     private final PollRepository pollRepository;
     private final PollSectionRepository pollSectionRepository;
     private final QuestionBaseRepository<Question> questionRepository;
+    private final ChoiceRepository choiceRepository;
     private final PollEntryRepository pollEntryRepository;
     private final TextQuestionRepository textQuestionRepository;
     private final TextAnswerRepository textAnswerRepository;
+    private final ScaleQuestionRepository scaleQuestionRepository;
+    private final ScaleAnswerRepository scaleAnswerRepository;
+    private final RadioButtonQuestionRepository radioButtonQuestionRepository;
+    private final RadioButtonAnswerRepository radioButtonAnswerRepository;
+    private final ChoiceQuestionRepository choiceQuestionRepository;
+    private final ChoiceAnswerRepository choiceAnswerRepository;
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
     public PollServiceImpl(final PollRepository pollRepository,
                            final PollSectionRepository pollSectionRepository,
                            final QuestionBaseRepository<Question> questionRepository,
+                           final ChoiceRepository choiceRepository,
                            final PollEntryRepository pollEntryRepository,
                            final TextQuestionRepository textQuestionRepository,
-                           final TextAnswerRepository textAnswerRepository) {
+                           final TextAnswerRepository textAnswerRepository,
+                           final ScaleQuestionRepository scaleQuestionRepository,
+                           final ScaleAnswerRepository scaleAnswerRepository,
+                           final RadioButtonQuestionRepository radioButtonQuestionRepository,
+                           final RadioButtonAnswerRepository radioButtonAnswerRepository,
+                           final ChoiceQuestionRepository choiceQuestionRepository,
+                           final ChoiceAnswerRepository choiceAnswerRepository) {
         this.pollRepository = pollRepository;
         this.pollSectionRepository = pollSectionRepository;
         this.questionRepository = questionRepository;
+        this.choiceRepository = choiceRepository;
         this.pollEntryRepository = pollEntryRepository;
         this.textQuestionRepository = textQuestionRepository;
         this.textAnswerRepository = textAnswerRepository;
+        this.scaleQuestionRepository = scaleQuestionRepository;
+        this.scaleAnswerRepository = scaleAnswerRepository;
+        this.radioButtonQuestionRepository = radioButtonQuestionRepository;
+        this.radioButtonAnswerRepository = radioButtonAnswerRepository;
+        this.choiceQuestionRepository = choiceQuestionRepository;
+        this.choiceAnswerRepository = choiceAnswerRepository;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Iterable<Poll> getAll() {
-        return pollRepository.findAll();
+    public List<Poll> getAll() {
+        List<Poll> polls = new ArrayList<>();
+        pollRepository.findAll().forEach(polls::add);
+        return polls;
     }
 
     /**
@@ -57,7 +77,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public Poll addPoll(String title) {
         final Poll poll = new Poll(null, title);
-        this.pollRepository.save(poll);
+        pollRepository.save(poll);
         return poll;
     }
 
@@ -66,7 +86,7 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public Poll getPoll(Long id) {
-        return this.pollRepository.findById(id).orElseThrow(NotFoundException::new);
+        return pollRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     /**
@@ -77,6 +97,7 @@ public class PollServiceImpl implements PollService {
         Poll poll = getPoll(id);
         poll.setTitle(title);
         poll.setStatus(status);
+        pollRepository.save(poll);
         return poll;
     }
 
@@ -146,6 +167,9 @@ public class PollServiceImpl implements PollService {
         if (questions != null) {
             section.setQuestions(questions);
         }
+        pollSectionRepository.save(section);
+        Poll poll = getPoll(pollId);
+        pollRepository.save(poll);
         return section;
     }
 
@@ -168,6 +192,12 @@ public class PollServiceImpl implements PollService {
             Answer answer = associations.get(questionId);
             if (answer instanceof TextAnswer) {
                 textAnswerRepository.save((TextAnswer) answer);
+            } else if (answer instanceof ScaleAnswer) {
+                scaleAnswerRepository.save((ScaleAnswer) answer);
+            } else if (answer instanceof RadioButtonAnswer) {
+                radioButtonAnswerRepository.save((RadioButtonAnswer) answer);
+            } else if (answer instanceof ChoiceAnswer) {
+                choiceAnswerRepository.save((ChoiceAnswer) answer);
             } else {
                 throw new InternalServerErrorException();
             }
@@ -185,15 +215,90 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public TextQuestion addTextQuestion(final Long pollId, final String questionTitle) {
+    public TextQuestion addTextQuestion(final Long pollId, final String questionTitle, final int charLimit) {
         Poll poll = getPoll(pollId);
         TextQuestion question = new TextQuestion();
         question.setTitle(questionTitle);
+        question.setCharLimit(charLimit);
         textQuestionRepository.save(question);
+        // todo
+        // PollSection der Frage speichern
+        poll.getQuestions().add(question);
+        pollRepository.save(poll);
+        return question;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ScaleQuestion addScaleQuestion(final Long pollId,
+                                          final String questionTitle,
+                                          final String scaleNameLeft,
+                                          final String scaleNameRight,
+                                          final int stepCount) {
+        Poll poll = getPoll(pollId);
+        ScaleQuestion question = new ScaleQuestion();
+        question.setTitle(questionTitle);
+        question.setScaleNameLeft(scaleNameLeft);
+        question.setScaleNameRight(scaleNameRight);
+        question.setStepCount(stepCount);
+        scaleQuestionRepository.save(question);
 
         poll.getQuestions().add(question);
         pollRepository.save(poll);
         return question;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public RadioButtonQuestion addRadioButtonQuestion(final Long pollId,
+                                                      final String questionTitle,
+                                                      final List<Choice> choices) {
+        Poll poll = getPoll(pollId);
+        RadioButtonQuestion question = new RadioButtonQuestion();
+        for (Choice choice : choices) {
+            choiceRepository.save(choice);
+        }
+        question.setTitle(questionTitle);
+        question.getChoices().addAll(choices);
+        radioButtonQuestionRepository.save(question);
+
+        poll.getQuestions().add(question);
+        pollRepository.save(poll);
+        return question;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ChoiceQuestion addChoiceQuestion(final Long pollId,
+                                            final String questionTitle,
+                                            final List<Choice> choices) {
+        Poll poll = getPoll(pollId);
+        for (Choice choice : choices) {
+            choiceRepository.save(choice);
+        }
+        ChoiceQuestion question = new ChoiceQuestion();
+        question.setTitle(questionTitle);
+        question.getChoices().addAll(choices);
+        choiceQuestionRepository.save(question);
+
+        poll.getQuestions().add(question);
+        pollRepository.save(poll);
+        return question;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Question> getAllQuestions(Long pollId) {
+        Poll poll = getPoll(pollId);
+        return poll.getQuestions();
     }
 
     /**
@@ -219,11 +324,9 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public TextQuestion updateTextQuestion(
-        final Long pollId,
-        final Long questionId,
-        final String title
-    ) {
+    public TextQuestion updateTextQuestion(final Long pollId,
+                                           final Long questionId,
+                                           final String title) {
         TextQuestion result = null;
         Poll poll = getPoll(pollId);
         for (Question question : poll.getQuestions()) {
@@ -237,6 +340,92 @@ public class PollServiceImpl implements PollService {
         if (result == null) {
             throw new NotFoundException();
         }
+        pollRepository.save(poll);
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ScaleQuestion updateScaleQuestion(final Long pollId,
+                                             final Long questionId,
+                                             final String title,
+                                             final String scaleNameLeft,
+                                             final String scaleNameRight,
+                                             final int stepCount) {
+        ScaleQuestion result = null;
+        Poll poll = getPoll(pollId);
+        for (Question question : poll.getQuestions()) {
+            if (question.getId().equals(questionId) && question instanceof ScaleQuestion) {
+                ScaleQuestion scaleQuestion = (ScaleQuestion) question;
+                scaleQuestion.setTitle(title);
+                scaleQuestion.setScaleNameLeft(scaleNameLeft);
+                scaleQuestion.setScaleNameRight(scaleNameRight);
+                scaleQuestion.setStepCount(stepCount);
+                scaleQuestionRepository.save(scaleQuestion);
+                result = scaleQuestion;
+                break;
+            }
+        }
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        pollRepository.save(poll);
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public RadioButtonQuestion updateRadioButtonQuestion(final Long pollId,
+                                                         final Long questionId,
+                                                         final String title,
+                                                         final List<Choice> choices) {
+        RadioButtonQuestion result = null;
+        Poll poll = getPoll(pollId);
+        for (Question question : poll.getQuestions()) {
+            if (question.getId().equals(questionId) && question instanceof RadioButtonQuestion) {
+                RadioButtonQuestion radioButtonQuestion = (RadioButtonQuestion) question;
+                radioButtonQuestion.setTitle(title);
+                radioButtonQuestion.setChoices(choices);
+                radioButtonQuestionRepository.save(radioButtonQuestion);
+                result = radioButtonQuestion;
+                break;
+            }
+        }
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        pollRepository.save(poll);
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ChoiceQuestion updateChoiceQuestion(final Long pollId,
+                                               final Long questionId,
+                                               final String title,
+                                               final List<Choice> choices) {
+        ChoiceQuestion result = null;
+        Poll poll = getPoll(pollId);
+        for (Question question : poll.getQuestions()) {
+            if (question.getId().equals(questionId) && question instanceof ChoiceQuestion) {
+                ChoiceQuestion choiceQuestion = (ChoiceQuestion) question;
+                choiceQuestion.setTitle(title);
+                choiceQuestion.setChoices(choices);
+                choiceQuestionRepository.save(choiceQuestion);
+                result = choiceQuestion;
+                break;
+            }
+        }
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        pollRepository.save(poll);
         return result;
     }
 

@@ -3,7 +3,7 @@
         <nav-bar></nav-bar>
         <HelloWorld style="text-align:center;" class="ml-auto" msg="Meine Umfragen"/>
         <b-container class="my-container">
-            <b-button class="my-button" @click="$router.push('/create/')">+</b-button>
+            <b-button class="my-button" @click="save">+</b-button>
             <b-row style="text-align: center" class="my-row">
                 <b-col>
                     <SurveyTableList v-bind:surveys="surveys"/>
@@ -18,6 +18,7 @@
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
     import SurveyTableList from "../components/SurveyTableList";
+    import axios from "axios";
 
     export default {
         name: "SurveyTable",
@@ -45,6 +46,16 @@
                         status: 'DEACTIVATED'
                     }
                 ]
+            }
+        },
+        methods: {
+            savePoll() {
+                let pollCmd = {title: "new Poll"};
+                return axios.post('/api/v1/polls/', pollCmd);
+            },
+            save: function () {
+                this.savePoll();
+                return this.$router.push('/create/');
             }
         },
         components: {
