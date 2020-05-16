@@ -25,7 +25,9 @@
             <b-container>
                 <b-row style="text-align: center">
                     <b-col>Palette</b-col>
-                    <b-col></b-col>
+                    <b-col>
+                        <b-button @click="savePollToBackend" variant="primary">save</b-button>                 <!-- TODO -->
+                    </b-col>
                     <b-col>Gliederung</b-col>
                 </b-row>
 
@@ -77,12 +79,20 @@
     import AddQuestion from "../components/AddQuestion";
     import SurveyItem from "../components/SurveyItem";
     import {v4 as uuidv4} from "uuid";
+ //   import {mapActions} from "vuex";
+    import axios from 'axios';
 
     export default {
         name: "CreateSurvey",
         data() {
             return {
+                id: 1,
                 edit: true,
+                title: "Titel ist geaendert",
+                poll: {
+                    title: "test title",
+                    id: 1
+                },
                 items: [
                     {
                         id: 1,
@@ -156,6 +166,13 @@
             }
         },
         methods: {
+            //...mapActions(['savePoll']),
+            savePollToBackend() {
+               // this.savePoll(this.poll)                                      //TODO id allgemein setzen
+                //this.$router.push('/')
+                let pollCmd = {title: "Titel geaendert hard", status: "IN_PROCESSING"};
+                return axios.post('/api/v1/polls/', pollCmd);
+            },
             deleteItem(id) {
                 this.items = this.items.filter(item => item.id !== id);
             },
