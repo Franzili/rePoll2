@@ -17,7 +17,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/v1/polls")
 public class PollsController {
-    private PollService pollService;
+    private final PollService pollService;
 
     @Autowired
     public PollsController(PollService service) {
@@ -26,9 +26,7 @@ public class PollsController {
 
     @GetMapping("/")
     public List<Poll> getAll() {
-        List<Poll> result = new ArrayList<>();
-        pollService.getAll().forEach(result::add);
-        return result;
+        return pollService.getAll();
     }
 
     @PostMapping("/")

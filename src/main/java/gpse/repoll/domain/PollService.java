@@ -12,9 +12,9 @@ import java.util.Map;
 public interface PollService {
     /**
      * Get all Polls.
-     * @return An Iterator on all polls
+     * @return A List of all polls
      */
-    Iterable<Poll> getAll();
+    List<Poll> getAll();
 
     /**
      * Add a new Poll.
