@@ -17,7 +17,7 @@
                 <b-icon-check-all class="my-icon" scale="1.8" animation="fade" @click="changeEditTitle"></b-icon-check-all>
             </div>
             <div v-else>
-                <b-icon-wrench class="my-icon" scale="1.2" @click="changeEditTitle"></b-icon-wrench>
+                <b-icon-pencil class="my-icon" scale="1.2" @click="changeEditTitle"></b-icon-pencil>
             </div>
         </div>
 
