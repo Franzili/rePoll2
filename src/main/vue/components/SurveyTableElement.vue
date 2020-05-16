@@ -43,6 +43,13 @@
                     <b-col>
                         <router-link class="my-config-link" :to="'/config/'">Konfiguration</router-link>
                     </b-col>
+                    <b-col></b-col>
+                    <b-col></b-col>
+                    <b-col></b-col>
+                    <b-col></b-col>
+                    <b-col>
+                        <router-link class="my-delete-link" :to="'/delete/'">Delete</router-link>
+                    </b-col>
 
                 </b-row>
             </b-container>
@@ -71,6 +78,11 @@
 <style scoped>
 
     .my-config-link {
+        font-size: 18px;
+        color: #7F7E7F;
+    }
+
+    .my-delete-link {
         font-size: 18px;
         color: #7F7E7F;
     }

@@ -14,7 +14,8 @@
         components: {
             SurveyListElement
         },
-        props: ["surveys"]
+        props: ["surveys"],
+
     }
 </script>
 
