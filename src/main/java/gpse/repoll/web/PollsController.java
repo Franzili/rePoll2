@@ -3,7 +3,6 @@ package gpse.repoll.web;
 import gpse.repoll.domain.*;
 import gpse.repoll.domain.answers.*;
 import gpse.repoll.domain.questions.Question;
-import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +30,6 @@ public class PollsController {
 
     @PostMapping("/")
     public Poll addPoll(@RequestBody PollCmd pollCmd) {
-        if (pollCmd.getTitle() == null || pollCmd.getTitle().equals("")) {
-            throw new BadRequestException();
-        }
         return pollService.addPoll(pollCmd.getTitle());
     }
 
