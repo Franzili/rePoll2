@@ -45,6 +45,7 @@ public class User implements UserDetails {
     private List<Poll> ownPolls = new ArrayList<>();
 
     public User() {
+        // Todo: refine user roles
         roles.add(Roles.ALL);
     }
 
