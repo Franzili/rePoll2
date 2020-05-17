@@ -7,6 +7,30 @@ import api from "./api";
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+    state: {
+        token: null,
+        authenticated: null
+    },
+
+    actions: {
+        requestToken({commit}, credentials) {
+            return new Promise((resolve, reject) => {
+                api.auth.login(credentials.username, credentials.password)
+                    .then(function(res) {
+                        console.log("Authentication successful.");
+                        let token = res.headers.authorization
+                        commit('authenticate', token)
+                        resolve()
+                    })
+                    .catch(function() {
+                        console.log("Authentication failed. Clearing tokens.")
+                        commit('authenticate', null)
+                        reject()
+                    });
+            })
+        },
+    },
+
     mutations: {
         authenticate(state, token) {
             if (token !== null) {
@@ -19,32 +43,15 @@ const store = new Vuex.Store({
         },
 
         initializeStore(state) {
-            console.log("I bims");
+            // Get content from localStorage and set state with it.
             if (localStorage.getItem('store')) {
-                this.replaceState(Object.assign(state, JSON.parse(localStorage.getItem('store'))))
+                this.replaceState(
+                    Object.assign(state, JSON.parse(localStorage.getItem('store')) )
+                )
             }
         }
     },
-    actions: {
-        requestToken({commit}, credentials) {
-            return new Promise((resolve, reject) => {
-                console.log(api.auth.login);
-                api.auth.login(credentials.username, credentials.password).then(res => {
-                    let token = res.headers.authorization
-                    commit('authenticate', token)
-                    resolve()
-                }).catch(() => {
-                    commit('authenticate', null)
-                    reject()
-                })
-            })
-        },
-    },
-    getters: {
-        isAuthenticated: (state) => {
-            return state.authenticated;
-        }
-    }
+
 })
 
 store.subscribe((mutation, state) => {

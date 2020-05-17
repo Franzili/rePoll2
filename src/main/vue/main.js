@@ -15,9 +15,11 @@ Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 
+// Initialize Store from Browser localStorage.
+store.commit('initializeStore');
+
 new Vue({
     render: h => h(App),
     router,
     store,
-    //beforeCreate: () => this.$store.commit('initializeStore')
 }).$mount('#app');
