@@ -57,6 +57,9 @@ public class Poll {
     @OneToMany
     private List<Question> questions = new ArrayList<>();
 
+    @ManyToOne
+    private User owner;
+
     protected Poll() {
 
     }
@@ -162,5 +165,13 @@ public class Poll {
 
     public void setStatus(PollStatus status) {
         this.status = status;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }
