@@ -44,6 +44,7 @@
                                 <b-form-input
                                     required
                                     placeholder="Enter username"
+                                    v-bind="auth.username"
                                 ></b-form-input>
                             </b-form-group>
 
@@ -51,10 +52,11 @@
                                 <b-form-input
                                     required
                                     placeholder="Enter password"
+                                    v-bind="auth.password"
                                 ></b-form-input>
                             </b-form-group>
 
-                            <b-button variant="success">Login</b-button>
+                            <b-button variant="primary" v-on:click="login()">Login</b-button>
                             <b-button variant="secondary">Sign up</b-button>
                         </b-form>
                     </b-col>
@@ -67,9 +69,10 @@
 </template>
 
 <script>
-
-    import HelloWorld from '../components/HelloWorld.vue'
+    import HelloWorld from '../components/HelloWorld.vue';
     import NavBar from "../components/NavBar";
+
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: "Start",
@@ -77,14 +80,32 @@
             NavBar,
             HelloWorld
         },
+        data() {
+            return {
+                auth: {
+                    username: '',
+                    password: ''
+                }
+            }
+        },
+        computed: {
+            ...mapGetters({
+                authenticated: 'isAuthenticated'
+            })
+        },
         methods: {
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+            },
+            ...mapActions(['requestToken']),
+            login() {
+                console.log("MOIN MOIN IHR LANDRATTEN!");
+                this.requestToken(this.auth).then(() => this.$router.push('/'))
+                console.log("Landratten2");
             }
-        }
+        },
     }
 </script>
-
 <style scoped>
 
     .my-button {
