@@ -1,6 +1,9 @@
 package gpse.repoll.domain;
 
 import gpse.repoll.domain.questions.Question;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -15,6 +18,7 @@ import java.util.Objects;
  * Poll objects are assumed to be equal if they have equal IDs.
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,12 +36,14 @@ public class Poll {
     @ManyToOne
     private User creator;
 
+    @CreatedDate
     @Column
     private LocalDateTime creationTime;
 
     @ManyToOne
     private User lastEditor;
 
+    @LastModifiedDate
     @Column
     private LocalDateTime lastEditTime;
 
@@ -63,8 +69,8 @@ public class Poll {
         this.creator = creator;
         this.title = title;
         this.status = PollStatus.IN_PROCESSING;
-        creationTime = LocalDateTime.now();
-        lastEditTime = LocalDateTime.now();
+        //creationTime = LocalDateTime.now();
+        //lastEditTime = LocalDateTime.now();
     }
 
     @Override
