@@ -26,7 +26,6 @@
                 <b-row style="text-align: center">
                     <b-col>Palette</b-col>
                     <b-col>
-                        <b-button @click="updatePoll" variant="primary">save</b-button>                 <!-- TODO -->
                     </b-col>
                     <b-col>Gliederung</b-col>
                 </b-row>
@@ -60,10 +59,12 @@
                                         <SurveyItem v-bind:item="item" v-bind:edit="edit" v-on:del-item="deleteItem(item.id)"/>
                                     </div>
                                 </draggable>
+                                <b-button @click="updatePoll">save</b-button>
                             </div>
                         <HelloWorld class="ml-auto" msg=""/>
                     </b-col>
                     <b-col>
+
                     </b-col>
                 </b-row>
             </b-container>
