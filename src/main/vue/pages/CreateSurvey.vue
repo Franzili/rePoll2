@@ -90,23 +90,25 @@
                 edit: true,
                 status: "IN_PROCESSING",
                 title: "jap",
-                question: {
-                    id: 1,
-                    type: "TextQuestion",
-                    question: "test",
-                    possibilities: []
-                },
+                sections: [
+                    {
+                        "id": 1,
+                        "description": "this is a poll section",
+                        "title": "Poll section 1 updated 2",
+                        "questions": []
+                    }
+                ],
                 items: [
                     {
                         id: 1,
                         type: "TextQuestion",
-                        question: "put 2",
+                        question: "put ja 2",
                         possibilities: []
                     },
                     {
                         id: 2,
                         type: "RadioButtonQuestion",
-                        question: "radioButton put 2",
+                        question: "radioButton put ja 2",
                         possibilities: [
                             {
                                 id: 3,
@@ -169,35 +171,16 @@
             }
         },
         methods: {
-            updatePoll() {              // TODO
+            updatePoll() {
+                // update poll
                 let pollCmd = {
                     title: this.title,
                     status: this.status
                 };
                 axios.put('/api/v1/polls/1/', pollCmd);
-                axios.put('/api/v1/polls/2/', pollCmd);
 
-
-                //let questionCmd = { }
-
-                //axios.post('/api/v1/polls/1/questions/', questionCmd);
-                /*this.items.forEach(
-                    questionCmd.title = "hallo",
-                    questionCmd.type = "TextQuestion",
-                    axios.post('/api/v1/polls/1/questions/', questionCmd)
-                );*/
-
-               // var i;
-                /*for (var i = 0; i < this.items.length-1; i++) {
-                    let questionCmd = {
-                        title: this.items[i].question,
-                        type: this.items[i].type
-                    }
-                    axios.post('/api/v1/polls/1/questions/', questionCmd)
-                }*/
-
-
-                for (var i = 0; i < this.items.length-1; i++) {
+                // update questions
+                for (var i = 0; i < this.items.length; i++) {
                     let questionCmd = {
                         title: this.items[i].question,
                         type: this.items[i].type
@@ -208,7 +191,16 @@
                     )
                 }
 
-                return;
+                // update sections
+                for (i = 0; i < this.sections.length; i++) {
+                    let pollSectionCmd = {
+                        title: this.sections[i].title
+                    }
+                    axios.put(
+                        '/api/v1/polls/' + this.id + '/sections/' + this.sections[i].id + '/',
+                        pollSectionCmd
+                    )
+                }
 
             },
 
