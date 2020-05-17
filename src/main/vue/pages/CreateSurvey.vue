@@ -86,24 +86,24 @@
         name: "CreateSurvey",
         data() {
             return {
-                id: 1,
+                id: "7ac88593-e6e7-4281-bfaf-9d0da069de8d",
                 title: "Moby Dick",
                 edit: true,
                 status: "IN_PROCESSING",
                 sections: [
                     {
-                        "id": 1,
-                        "description": "this is a poll section",
-                        "title": "Poll section 1 updated 2",
-                        "questions": []
+                        id: 1,
+                        description: "this is a poll section okay",
+                        title: "Poll section 1 updated 2 okay",
+                        questions: []
                     }
                 ],
                 items: [
                     {
                         id: 1,
                         type: "TextQuestion",
-                        question: "put ja 2",
-                        possibilities: []
+                        title: "okay",
+                        //possibilities: []
                     },
                     {
                         id: 2,
@@ -177,31 +177,22 @@
                     title: this.title,
                     status: this.status
                 };
-                axios.put('/api/v1/polls/1/', pollCmd);
+                axios.put('/api/v1/polls/'+ this.id + '/', pollCmd);
 
                 // update questions
                 for (var i = 0; i < this.items.length; i++) {
-                    let questionCmd = {
-                        title: this.items[i].question,
-                        type: this.items[i].type
-                    }
                     axios.put(
                         '/api/v1/polls/' + this.id + '/questions/' + this.items[i].id + '/',
-                        questionCmd
-                    )
+                        this.items[i]                    )
                 }
 
                 // update sections
                 for (i = 0; i < this.sections.length; i++) {
-                    let pollSectionCmd = {
-                        title: this.sections[i].title
-                    }
                     axios.put(
                         '/api/v1/polls/' + this.id + '/sections/' + this.sections[i].id + '/',
-                        pollSectionCmd
+                        this.sections[i]
                     )
                 }
-
             },
 
             deleteItem(id) {
