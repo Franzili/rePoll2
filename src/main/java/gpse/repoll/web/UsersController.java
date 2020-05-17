@@ -30,6 +30,7 @@ public class UsersController {
     public User addUser(@RequestBody UserCmd userCmd) {
         return userService.addUser(
             userCmd.getUsername(),
+            userCmd.getPassword(),
             userCmd.getFullName(),
             userCmd.getEmail()
         );

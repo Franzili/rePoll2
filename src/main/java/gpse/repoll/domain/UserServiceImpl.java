@@ -28,14 +28,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User addUser(String userName, String fullName, String email) {
-        Optional<User> existingUser = userRepository.findByUsername(userName);
+    public User addUser(String username, String password, String fullName, String email) {
+        Optional<User> existingUser = userRepository.findByUsername(username);
         if (existingUser.isPresent()) {
             throw new UserNameAlreadyTakenException();
         }
 
         User user = new User();
-        user.setUsername(userName);
+        user.setUsername(username);
         user.setFullName(fullName);
         user.setEmail(email);
         userRepository.save(user);
