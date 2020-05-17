@@ -87,9 +87,9 @@
         data() {
             return {
                 id: 1,
+                title: "Moby Dick",
                 edit: true,
                 status: "IN_PROCESSING",
-                title: "jap",
                 sections: [
                     {
                         "id": 1,
@@ -233,7 +233,7 @@
             },
             log: function (...e) {
                     console.log(...e);
-                }
+            }
         },
         components: {
             AddQuestion,
