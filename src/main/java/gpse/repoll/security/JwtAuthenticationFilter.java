@@ -17,6 +17,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * JwtAuthenticationFilter is a Filter Bean used to grant users authorization to access @Secured endpoints.
+ *
+ * Ie. this Bean has to be used to get an authorization token *before* accessing @Secured endpoints.
+ */
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -30,8 +35,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         setFilterProcessesUrl(this.securityConstants.getAuthLoginUrl());
     }
 
+    /**
+     * Attempt to authenticate a User
+     * @param request The Request the user sent.
+     * @param response The Respose to send to the user
+     * @return An Authentication
+     */
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) { //<3>
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
@@ -39,6 +50,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return authenticationManager.authenticate(authenticationToken);
     }
 
+    /**
+     * On successful Authentication, generate a JWT token.
+     * @param request
+     * @param response
+     * @param filterChain
+     * @param authentication
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) {

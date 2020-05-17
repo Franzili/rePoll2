@@ -18,6 +18,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * JwtAuthorizationFilter is a OncePerRequestFilter that checks if the user has the authorization to make
+ * a request.
+ */
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
@@ -28,6 +32,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         this.securityConstants = securityConstants;
     }
 
+    /**
+     * Check the request for authorization.
+     * @param request The Request.
+     * @param response The Response.
+     * @param filterChain The FilterChain this Filter is a part of.
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
@@ -41,6 +53,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * Parse the JWT token and grant authorization.
+     * @param request The request containing the JWT token
+     * @return The parsed Authorization
+     */
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(securityConstants.getTokenHeader());
         if (token != null && !token.equals("") && token.startsWith(securityConstants.getTokenPrefix())) {
