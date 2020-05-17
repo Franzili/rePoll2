@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,7 +44,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long userId, String newUserName, String fullName, String email) {
+    public User getUser(UUID id) {
+        return userRepository.findById(id).orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public User getUser(String username) {
+        return null;
+    }
+
+    @Override
+    public User updateUser(UUID userId, String newUserName, String fullName, String email) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
 
         /* If we want to change the username */
@@ -71,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Poll> getOwnedPolls(Long userId) {
+    public List<Poll> getOwnedPolls(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
         return user.getOwnPolls();
     }

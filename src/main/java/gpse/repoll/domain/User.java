@@ -1,10 +1,7 @@
 package gpse.repoll.domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,9 +18,9 @@ public class User implements UserDetails {
     private static final long serialVersionUID = 5L;
 
     @Id
+    @GeneratedValue(generator = "uuid2")
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column(unique = true)
     private String username;
@@ -46,7 +43,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner")
     private List<Poll> ownPolls = new ArrayList<>();
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin
 @RestController
@@ -36,8 +37,8 @@ public class UsersController {
         );
     }
 
-    @PutMapping("/{userId:\\d+}")
-    public User updateUser(@PathVariable Long userId, @RequestBody UserCmd userCmd) {
+    @PutMapping("/{userId}/")
+    public User updateUser(@PathVariable UUID userId, @RequestBody UserCmd userCmd) {
         return userService.updateUser(
             userId,
             userCmd.getUsername(),
