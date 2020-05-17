@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Main Poll object.
@@ -17,9 +18,9 @@ import java.util.Objects;
 @Entity
 public class Poll {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "uuid2")
     @Column
-    private Long id;
+    private UUID id;
 
     @Column
     private PollStatus status;
@@ -65,7 +66,7 @@ public class Poll {
     public Poll(User creator, String title) {
         this.creator = creator;
         this.title = title;
-        this.status = PollStatus.IN_PROCESSING;
+        this.status = PollStatus.IN_PROCESS;
         creationTime = LocalDateTime.now();
         lastEditTime = LocalDateTime.now();
     }
@@ -87,11 +88,7 @@ public class Poll {
         return Objects.hash(getId());
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 

@@ -1,7 +1,78 @@
 <template>
     <div class="my-back">
         <nav-bar></nav-bar>
-        <HelloWorld style="text-align:center;" class="ml-auto" msg="Konfigurationsseite"/>
+        <div class="my-sh">
+            <b-container class="my-container">
+
+                <!-- -->
+                <b-row style="text-align: center" class="my-row">
+                    <b-col>
+                        <HelloWorld style="text-align:center;" class="ml-auto" :msg="survey.name"/>
+                    </b-col>
+                </b-row>
+
+                <b-row align-h="center">
+                    <b-form>
+                        <b-button class="my-button">Bearbeiten</b-button>
+                        <b-button class="my-button">Analyse</b-button>
+                    </b-form>
+                </b-row>
+
+                <b-row>
+                    <p style="margin-left: 20vw; margin-top: 2vh">Design</p>
+                </b-row>
+
+                <!-- Freaking Cool Radio Buttons -->
+                <b-row align-h="center">
+                    <b-col>
+                        <p>Status</p>
+                        <p>{{ survey. status }}</p>
+                    </b-col>
+                    <b-col>
+                        <div>
+                            <b-form-group label="Raido v6.7">
+                                <b-form-radio-group
+                                v-model="selected"
+                                plain
+                                name="plain-inline">
+                                    <b-form-radio value="IN_PROCESS"
+                                    :disabled="survey.status === 'READY'
+                                    || survey.status === 'ACTIVATED'
+                                    || survey.status === 'DEACTIVATED'">In Bearbeitung</b-form-radio>
+                                    <b-form-radio value="READY"
+                                    :disabled="survey.status === 'ACTIVATED'
+                                    || survey.status === 'DEACTIVATED'">Bereit</b-form-radio>
+                                    <b-form-radio value="ACTIVATED"
+                                    :disabled="survey.status === 'DEACTIVATED'">Aktiviert</b-form-radio>
+                                    <b-form-radio value="DEACTIVATED">Deaktiviert</b-form-radio>
+                                </b-form-radio-group>
+                            </b-form-group>
+                        </div>
+                    </b-col>
+                </b-row>
+
+                <b-row>
+                    <p>{{selected}}</p>
+                </b-row>
+
+                <!-- Warning Modal Component -->
+                <b-row align-h="center">
+                    <div>
+                        <b-button class="my-button2" v-b-modal.modal-center>Anwenden</b-button>
+                        <b-modal v-if="isStatusChange()"
+                                 id="modal-center"
+                                 centered
+                                 title="Warnung: Status wurde geändert!"
+                                 header-bg-variant="danger"
+                                 @ok="handleOk">
+                            <p class="my-4">Wenn Sie den Status ändern kann er nicht mehr in einen
+                                früheren Status gewechselt werden.</p>
+                        </b-modal>
+                    </div>
+                </b-row>
+
+            </b-container>
+        </div>
     </div>
 </template>
 
@@ -11,10 +82,32 @@
     import HelloWorld from "../components/HelloWorld";
     export default {
         name: "SurveySetup",
+        data() {
+            return {
+                survey: {
+                    id: 0,
+                    name: '',
+                    status: ''
+                },
+                confirm: false,
+                selected: ''
+            }
+        },
+        methods: {
+            isStatusChange() {
+                return !(this.selected === this.survey.status)
+            },
+            handleOk() {
+                this.survey.status = this.selected
+            },
+        },
         components: {
             NavBar,
             HelloWorld,
-        }
+        },
+        created: function () {
+            this.survey = this.$route.params.thisSurvey;
+        },
     }
 </script>
 
@@ -22,5 +115,29 @@
     .my-back {
         min-height: 100vh;
         background-color: lightgray
+    }
+
+    .my-container {
+        text-align: center;
+        box-shadow: 10px 10px 5px grey;
+        alignment: center;
+        background-color: #EEEDEE;
+        margin-top: 30px;
+        height: 70vh;
+    }
+    .my-button {
+        background-color: black;
+        font-size: 100%;
+        color: #ACABAB;
+        margin-left: 2vw;
+        margin-right: 2vw;
+    }
+
+    .my-button2 {
+        background-color: lightgray;
+        font-size: 100%;
+        color: black;
+        margin-left: 2vw;
+        margin-right: 2vw;
     }
 </style>

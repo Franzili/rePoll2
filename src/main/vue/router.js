@@ -27,6 +27,7 @@ export default new VueRouter({
         },
         {
             path: '/config/',
+            name: 'config',
             component: SurveySetup
         },
         {
