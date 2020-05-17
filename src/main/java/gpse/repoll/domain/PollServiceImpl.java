@@ -7,8 +7,10 @@ import gpse.repoll.domain.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Default implementation of PollService.
@@ -64,8 +66,10 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Iterable<Poll> getAll() {
-        return pollRepository.findAll();
+    public List<Poll> getAll() {
+        List<Poll> polls = new ArrayList<>();
+        pollRepository.findAll().forEach(polls::add);
+        return polls;
     }
 
     /**
@@ -74,7 +78,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public Poll addPoll(String title) { // TODO
         final Poll poll = new Poll(null, title);
-        this.pollRepository.save(poll);
+        pollRepository.save(poll);
         return poll;
     }
 
@@ -82,18 +86,19 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Poll getPoll(Long id) {
-        return this.pollRepository.findById(id).orElseThrow(NotFoundException::new);
+    public Poll getPoll(UUID id) {
+        return pollRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Poll updatePoll(final Long id, final String title, final PollStatus status) { // TODO
+    public Poll updatePoll(final UUID id, final String title, final PollStatus status) {
         Poll poll = getPoll(id);
         poll.setTitle(title);
         poll.setStatus(status);
+        pollRepository.save(poll);
         return poll;
     }
 
@@ -103,7 +108,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public List<PollSection> getAllSections(final Long pollId) {
+    public List<PollSection> getAllSections(final UUID pollId) {
         return getPoll(pollId).getSections();
     }
 
@@ -111,7 +116,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public PollSection addPollSection(final Long pollId,
+    public PollSection addPollSection(final UUID pollId,
                                       final String title,
                                       final String description,
                                       final List<Question> questions) {
@@ -129,7 +134,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public PollSection getPollSection(final Long pollId, final Long sectionId) {
+    public PollSection getPollSection(final UUID pollId, final Long sectionId) {
         Poll poll = getPoll(pollId);
         PollSection result = null;
         for (PollSection section : poll.getSections()) {
@@ -148,7 +153,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public PollSection updatePollSection(final Long pollId,
+    public PollSection updatePollSection(final UUID pollId,
                                          final Long sectionId,
                                          final String title,
                                          final String description,
@@ -163,6 +168,9 @@ public class PollServiceImpl implements PollService {
         if (questions != null) {
             section.setQuestions(questions);
         }
+        pollSectionRepository.save(section);
+        Poll poll = getPoll(pollId);
+        pollRepository.save(poll);
         return section;
     }
 
@@ -174,7 +182,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public PollEntry addPollEntry(final Long pollId,
+    public PollEntry addPollEntry(final UUID pollId,
                                   final Map<Long, Answer> associations) {
         PollEntry result = new PollEntry();
 
@@ -208,13 +216,14 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public TextQuestion addTextQuestion(final Long pollId, final String questionTitle, final int charLimit) {
+    public TextQuestion addTextQuestion(final UUID pollId, final String questionTitle, final int charLimit) {
         Poll poll = getPoll(pollId);
         TextQuestion question = new TextQuestion();
         question.setTitle(questionTitle);
         question.setCharLimit(charLimit);
         textQuestionRepository.save(question);
-
+        // todo
+        // PollSection der Frage speichern
         poll.getQuestions().add(question);
         pollRepository.save(poll);
         return question;
@@ -224,7 +233,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public ScaleQuestion addScaleQuestion(final Long pollId,
+    public ScaleQuestion addScaleQuestion(final UUID pollId,
                                           final String questionTitle,
                                           final String scaleNameLeft,
                                           final String scaleNameRight,
@@ -246,7 +255,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public RadioButtonQuestion addRadioButtonQuestion(final Long pollId,
+    public RadioButtonQuestion addRadioButtonQuestion(final UUID pollId,
                                                       final String questionTitle,
                                                       final List<Choice> choices) {
         Poll poll = getPoll(pollId);
@@ -267,7 +276,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public ChoiceQuestion addChoiceQuestion(final Long pollId,
+    public ChoiceQuestion addChoiceQuestion(final UUID pollId,
                                             final String questionTitle,
                                             final List<Choice> choices) {
         Poll poll = getPoll(pollId);
@@ -288,7 +297,16 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Question getQuestion(final Long pollId, final Long questionId) {
+    public List<Question> getAllQuestions(UUID pollId) {
+        Poll poll = getPoll(pollId);
+        return poll.getQuestions();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Question getQuestion(final UUID pollId, final Long questionId) {
         Question result = null;
         Poll poll = getPoll(pollId);
         for (Question question : poll.getQuestions()) {
@@ -307,7 +325,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public TextQuestion updateTextQuestion(final Long pollId,
+    public TextQuestion updateTextQuestion(final UUID pollId,
                                            final Long questionId,
                                            final String title) {
         TextQuestion result = null;
@@ -323,6 +341,7 @@ public class PollServiceImpl implements PollService {
         if (result == null) {
             throw new NotFoundException();
         }
+        pollRepository.save(poll);
         return result;
     }
 
@@ -330,7 +349,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public ScaleQuestion updateScaleQuestion(final Long pollId,
+    public ScaleQuestion updateScaleQuestion(final UUID pollId,
                                              final Long questionId,
                                              final String title,
                                              final String scaleNameLeft,
@@ -353,6 +372,7 @@ public class PollServiceImpl implements PollService {
         if (result == null) {
             throw new NotFoundException();
         }
+        pollRepository.save(poll);
         return result;
     }
 
@@ -360,7 +380,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public RadioButtonQuestion updateRadioButtonQuestion(final Long pollId,
+    public RadioButtonQuestion updateRadioButtonQuestion(final UUID pollId,
                                                          final Long questionId,
                                                          final String title,
                                                          final List<Choice> choices) {
@@ -379,6 +399,7 @@ public class PollServiceImpl implements PollService {
         if (result == null) {
             throw new NotFoundException();
         }
+        pollRepository.save(poll);
         return result;
     }
 
@@ -386,7 +407,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public ChoiceQuestion updateChoiceQuestion(final Long pollId,
+    public ChoiceQuestion updateChoiceQuestion(final UUID pollId,
                                                final Long questionId,
                                                final String title,
                                                final List<Choice> choices) {
@@ -405,6 +426,7 @@ public class PollServiceImpl implements PollService {
         if (result == null) {
             throw new NotFoundException();
         }
+        pollRepository.save(poll);
         return result;
     }
 
@@ -412,7 +434,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public PollEntry getPollEntry(final Long pollId, final Long entryId) {
+    public PollEntry getPollEntry(final UUID pollId, final Long entryId) {
         Poll poll = pollRepository.findById(pollId).orElseThrow(NotFoundException::new);
         PollEntry result = null;
 
