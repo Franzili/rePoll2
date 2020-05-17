@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import gpse.repoll.security.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,7 +38,7 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles;
+    private List<String> roles = new ArrayList<>();
 
     @Column
     @OneToMany(mappedBy = "owner")
@@ -45,6 +46,10 @@ public class User implements UserDetails {
 
     public UUID getId() {
         return id;
+    }
+
+    public User() {
+        roles.add(Roles.ALL);
     }
 
     /**
@@ -86,15 +91,18 @@ public class User implements UserDetails {
     }
 
     @JsonIgnore
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList((String[]) roles.toArray());
+        return AuthorityUtils.createAuthorityList( roles.toArray(new String[0]));
     }
 
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     /**

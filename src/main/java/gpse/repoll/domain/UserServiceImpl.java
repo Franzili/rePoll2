@@ -4,6 +4,7 @@ import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
 
         User user = new User();
         user.setUsername(username);
+        user.setPassword(password);
         user.setFullName(fullName);
         user.setEmail(email);
         userRepository.save(user);
@@ -50,7 +52,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String username) {
-        return null;
+        return userRepository.findByUsername(username).orElseThrow(() -> {
+            throw new UsernameNotFoundException("Could not find " + username);
+        });
     }
 
     @Override
@@ -89,6 +93,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) {
-        return userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
+        return getUser(username);
     }
 }

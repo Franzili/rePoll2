@@ -3,6 +3,7 @@ package gpse.repoll;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import gpse.repoll.domain.*;
@@ -47,7 +48,9 @@ public class InitializeDatabase implements InitializingBean {
         transactionTemplate.execute(status -> {
             try {
                 userService.getUser("JamesBond");
-            } catch (NotFoundException e) {
+                System.out.println("Found.");
+            } catch (UsernameNotFoundException e) {
+                System.out.println("Not  found!!!!!!!");
                 final User user = userService.addUser(
                     "JamesBond",
                     // Passwort: GutenTag
@@ -56,6 +59,7 @@ public class InitializeDatabase implements InitializingBean {
                 );
             }
             return null;
+
         });
     }
 }
