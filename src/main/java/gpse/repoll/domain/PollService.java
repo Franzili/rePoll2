@@ -48,7 +48,7 @@ public interface PollService {
      * Deletes all connections of a poll.
      * @param id
      */
-    Poll removePoll(UUID id);
+    void removePoll(UUID id);
 
     /**
      * Get all PollSections of a Poll.

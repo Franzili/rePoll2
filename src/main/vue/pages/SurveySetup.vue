@@ -112,7 +112,7 @@
             },
             deletePoll() {
                 let pollCmd = {title: this.name, status: this.status};
-                return axios.put('/api/v1/polls/' + this.id + '/', pollCmd);
+                return axios.delete('/api/v1/polls/' + this.id + '/', pollCmd);
             },
 
         },
