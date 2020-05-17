@@ -10,7 +10,6 @@ import java.util.UUID;
 class PollCmd {
 
     private String title;
-    private UUID id;
 
     private PollStatus status;
 
@@ -30,11 +29,4 @@ class PollCmd {
         this.status = status;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 }

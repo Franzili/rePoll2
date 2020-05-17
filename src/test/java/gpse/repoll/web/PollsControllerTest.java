@@ -68,12 +68,11 @@ public class PollsControllerTest {
     void testRemovePollNormal() {
         PollCmd cmd = new PollCmd();
         UUID uuid = UUID.randomUUID();
-        cmd.setId(uuid);
         cmd.setTitle("Poll 1");
         controller.addPoll(cmd);
         verify(service).addPoll("Poll 1");
-        controller.removePoll(cmd.getId());
-        verify(service).removePoll(cmd.getId());
+        controller.removePoll(uuid);
+        verify(service).removePoll(uuid);
     }
 
 }

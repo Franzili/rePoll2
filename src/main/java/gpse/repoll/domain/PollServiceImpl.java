@@ -126,6 +126,7 @@ public class PollServiceImpl implements PollService {
 
         }
         Poll poll = getPoll(id);
+        poll.setStatus(null);
         poll.setTitle(null);
         poll.setCreator(null);
         poll.setLastEditor(null);

@@ -71,8 +71,8 @@
                         <b-button class="my-button2" v-b-modal.modal-1>Delete Poll</b-button>
                         <b-modal id="modal-1"
                                  centered
-                                 title="Are you sure you want to delete this poll?">
-                                 <b-button class="my-button2" @click="delete">Delete</b-button>
+                                 title="Are you sure you want to delete this poll?"
+                                 @ok="deletePoll">
                         </b-modal>
                     </div>
                 </b-row>
@@ -108,13 +108,10 @@
                 this.survey.status = this.selected
             },
             deletePoll() {
-                let pollCmd = {title: survey.name, status: survey.status, id: survey.id};
-                return axios.put('/api/v1/polls/' + survey.id + '/delete/', pollCmd);
+                let pollCmd = {title: this.name, status: this.status};
+                return axios.put('/api/v1/polls/' + this.id + '/', pollCmd);
             },
-            delete: function () {
-                this.deletePoll();
-                return this.$router.push('/delete/');
-            }
+
         },
         components: {
             NavBar,

@@ -48,7 +48,7 @@ public class PollsController {
         return pollService.updatePoll(id, pollCmd.getTitle(), pollCmd.getStatus());
     }
 
-    @PutMapping("/{id}/delete/")
+    @DeleteMapping("/{id}/")
     public Poll removePoll(@PathVariable("id") final UUID id) {
         return pollService.removePoll(id);
     }
