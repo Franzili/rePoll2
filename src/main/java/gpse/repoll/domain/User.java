@@ -44,12 +44,13 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner")
     private List<Poll> ownPolls = new ArrayList<>();
 
-    public UUID getId() {
-        return id;
-    }
-
     public User() {
         roles.add(Roles.ALL);
+    }
+
+
+    public UUID getId() {
+        return id;
     }
 
     /**
@@ -93,7 +94,7 @@ public class User implements UserDetails {
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList( roles.toArray(new String[0]));
+        return AuthorityUtils.createAuthorityList(roles.toArray(new String[0]));
     }
 
     @Override

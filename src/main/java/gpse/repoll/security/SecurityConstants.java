@@ -2,6 +2,11 @@ package gpse.repoll.security;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Constants used for security configuration.
+ *
+ * These constants are set in the application.properties file.
+ */
 @ConfigurationProperties("security")
 public class SecurityConstants {
 

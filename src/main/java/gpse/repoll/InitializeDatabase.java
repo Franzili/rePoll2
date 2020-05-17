@@ -1,6 +1,5 @@
 package gpse.repoll;
 
-import gpse.repoll.domain.exceptions.NotFoundException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,6 +31,7 @@ public class InitializeDatabase implements InitializingBean {
     /**
      * Add Dummy Data to Database using calls to the service layer.
      */
+    @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:MagicNumber"})
     @Override
     public void afterPropertiesSet() {
         /* !!! Important !!!
@@ -41,7 +41,7 @@ public class InitializeDatabase implements InitializingBean {
 
         transactionTemplate.execute(status -> {
             Poll poll = pollService.addPoll("Poll 1");
-            pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?", 1234);
+            pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?", 1000);
             return null;
         });
 
