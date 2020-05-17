@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(String userName, String fullName, String email) {
-        Optional<User> existingUser = userRepository.findByUserName(userName);
+        Optional<User> existingUser = userRepository.findByUsername(userName);
         if (existingUser.isPresent()) {
             throw new UserNameAlreadyTakenException();
         }
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         String oldUserName = user.getUsername();
         if (newUserName != null && !oldUserName.equals(newUserName)) {
             /* Check if Username is already taken */
-            Optional<User> otherUser = userRepository.findByUserName(newUserName);
+            Optional<User> otherUser = userRepository.findByUsername(newUserName);
             if (otherUser.isPresent()) {
                 throw new UserNameAlreadyTakenException();
             }
@@ -78,6 +78,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) {
-        return userRepository.findByUserName(username).orElseThrow(NotFoundException::new);
+        return userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
     }
 }

@@ -29,7 +29,7 @@ public class UsersController {
     @PostMapping("/")
     public User addUser(@RequestBody UserCmd userCmd) {
         return userService.addUser(
-            userCmd.getUserName(),
+            userCmd.getUsername(),
             userCmd.getFullName(),
             userCmd.getEmail()
         );
@@ -39,7 +39,7 @@ public class UsersController {
     public User updateUser(@PathVariable Long userId, @RequestBody UserCmd userCmd) {
         return userService.updateUser(
             userId,
-            userCmd.getUserName(),
+            userCmd.getUsername(),
             userCmd.getFullName(),
             userCmd.getEmail()
         );
