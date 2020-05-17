@@ -51,7 +51,7 @@ public class Poll {
     @OneToMany
     private List<Question> questions = new ArrayList<>();
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private User owner;
 
     protected Poll() {
