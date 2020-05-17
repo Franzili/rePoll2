@@ -26,7 +26,7 @@
                 <b-row style="text-align: center">
                     <b-col>Palette</b-col>
                     <b-col>
-                        <b-button @click="savePollToBackend" variant="primary">save</b-button>                 <!-- TODO -->
+                        <b-button @click="updatePoll" variant="primary">save</b-button>                 <!-- TODO -->
                     </b-col>
                     <b-col>Gliederung</b-col>
                 </b-row>
@@ -88,20 +88,38 @@
             return {
                 id: 1,
                 edit: true,
-                title: "Titel ist geaendert",
-                poll: {
-                    title: "test title",
-                    id: 1
+                status: "IN_PROCESSING",
+                title: "jap",
+                question: {
+                    id: 1,
+                    type: "TextQuestion",
+                    question: "test",
+                    possibilities: []
                 },
                 items: [
                     {
                         id: 1,
-                        type: "freetext",
-                        question: "wie gehts",
+                        type: "TextQuestion",
+                        question: "put 2",
                         possibilities: []
                     },
                     {
                         id: 2,
+                        type: "RadioButtonQuestion",
+                        question: "radioButton put 2",
+                        possibilities: [
+                            {
+                                id: 3,
+                                text: "bla bla asdikawzug l hif",
+                            },
+                            {
+                                id: 4,
+                                text: "yes",
+                            }
+                        ]
+                    },
+                    {
+                        id: 3,
                         type: "checkbox",
                         question: "how are you",
                         possibilities: [
@@ -111,21 +129,6 @@
                             },
                             {
                                 id: 2,
-                                text: "yes",
-                            }
-                        ]
-                    },
-                    {
-                        id: 3,
-                        type: "radio",
-                        question: "wie gehts",
-                        possibilities: [
-                            {
-                                id: 3,
-                                text: "bla bla asdikawzug l hif",
-                            },
-                            {
-                                id: 4,
                                 text: "yes",
                             }
                         ]
@@ -166,13 +169,49 @@
             }
         },
         methods: {
-            //...mapActions(['savePoll']),
-            savePollToBackend() {
-               // this.savePoll(this.poll)                                      //TODO id allgemein setzen
-                //this.$router.push('/')
-                let pollCmd = {title: "Titel geaendert hard", status: "IN_PROCESSING"};
-                return axios.post('/api/v1/polls/', pollCmd);
+            updatePoll() {              // TODO
+                let pollCmd = {
+                    title: this.title,
+                    status: this.status
+                };
+                axios.put('/api/v1/polls/1/', pollCmd);
+                axios.put('/api/v1/polls/2/', pollCmd);
+
+
+                //let questionCmd = { }
+
+                //axios.post('/api/v1/polls/1/questions/', questionCmd);
+                /*this.items.forEach(
+                    questionCmd.title = "hallo",
+                    questionCmd.type = "TextQuestion",
+                    axios.post('/api/v1/polls/1/questions/', questionCmd)
+                );*/
+
+               // var i;
+                /*for (var i = 0; i < this.items.length-1; i++) {
+                    let questionCmd = {
+                        title: this.items[i].question,
+                        type: this.items[i].type
+                    }
+                    axios.post('/api/v1/polls/1/questions/', questionCmd)
+                }*/
+
+
+                for (var i = 0; i < this.items.length-1; i++) {
+                    let questionCmd = {
+                        title: this.items[i].question,
+                        type: this.items[i].type
+                    }
+                    axios.put(
+                        '/api/v1/polls/' + this.id + '/questions/' + this.items[i].id + '/',
+                        questionCmd
+                    )
+                }
+
+                return;
+
             },
+
             deleteItem(id) {
                 this.items = this.items.filter(item => item.id !== id);
             },
