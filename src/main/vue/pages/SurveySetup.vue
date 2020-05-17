@@ -102,6 +102,9 @@
         },
         methods: {
             isStatusChange() {
+                if (this.selected === '') {
+                    return false
+                }
                 return !(this.selected === this.survey.status)
             },
             handleOk() {
