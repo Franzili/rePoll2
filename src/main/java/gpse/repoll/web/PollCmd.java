@@ -2,13 +2,15 @@ package gpse.repoll.web;
 
 import gpse.repoll.domain.PollStatus;
 
+import java.util.UUID;
+
 /**
  * Poll helper object used for JSON serialisation.
  */
 class PollCmd {
 
     private String title;
-    private long id;
+    private UUID id;
 
     private PollStatus status;
 
@@ -28,11 +30,11 @@ class PollCmd {
         this.status = status;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 }

@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -32,8 +33,6 @@ public class PollsControllerTest {
     void testGetAllNormal() {
         Poll poll1 = new Poll(null, "Poll1");
         Poll poll2 = new Poll(null, "Poll2");
-        poll1.setId(1L);
-        poll2.setId(2L);
         ArrayList<Poll> polls = new ArrayList<>();
         polls.add(poll1);
         polls.add(poll2);
@@ -68,11 +67,12 @@ public class PollsControllerTest {
     @Test
     void testRemovePollNormal() {
         PollCmd cmd = new PollCmd();
-        cmd.setId(1L);
+        UUID uuid = UUID.randomUUID();
+        cmd.setId(uuid);
         cmd.setTitle("Poll 1");
         controller.addPoll(cmd);
         verify(service).addPoll("Poll 1");
-        controller.removePoll(String.valueOf(cmd.getId()));
+        controller.removePoll(cmd.getId());
         verify(service).removePoll(cmd.getId());
     }
 
