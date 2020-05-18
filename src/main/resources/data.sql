@@ -1,4 +1,7 @@
 
+
+
+/*
 INSERT INTO user(userName, fullName, email)
 VALUE ('me', 'myselve', 'justAMail')
 
@@ -11,7 +14,7 @@ INSERT INTO poll(id, status, title, creator, creationTime, lastEditor, lastEditT
  entries, sections, questions)
 VALUE (2, 'READY', 'are there two', 'me', '2020-05-17 16:20:00.0','me', '2020-05-17 16:20:00.0',
 [],[],[])
-
+*/
 /*
 
  private Long id;

@@ -9,7 +9,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         token: null,
-        authenticated: null
+        authenticated: null,
+        surveys: []
     },
 
     actions: {
@@ -29,6 +30,27 @@ const store = new Vuex.Store({
                     });
             })
         },
+        requestSurveys({commit}) {
+            return new Promise((resolve, reject) => {
+                api.survey.list().then(res => {
+                    commit('setSurveys', res.data)
+                    resolve()
+                }).catch(() => {
+                    commit('setSurveys', [])
+                    reject()
+                })
+            })
+        },
+        requestSurvey({commit}, id) {
+            return new Promise((resolve, reject) => {
+                api.survey.get(id).then(res => {
+                    commit('updateSurvey', res.data)
+                    resolve()
+                }).catch(() => {
+                    reject()
+                })
+            })
+        }
     },
 
     mutations: {
@@ -49,7 +71,15 @@ const store = new Vuex.Store({
                     Object.assign(state, JSON.parse(localStorage.getItem('store')) )
                 )
             }
+        },
+        setSurveys(state, surveys) {
+            this.state.surveys = surveys
+        },
+        updateSurvey(state, survey) {
+            let index = this.state.surveys.findIndex(a => a.id === survey.id)
+            this.state.surveys[index] = survey
         }
+
     },
 })
 
