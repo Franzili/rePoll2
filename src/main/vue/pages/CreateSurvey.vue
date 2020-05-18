@@ -42,74 +42,135 @@
 
                 <!-- draggable palette items -->
                 <b-row style="text-align:center;" class="my-row">
-                    <div>
-                        <b-button v-b-toggle.sidebar-1>Add Question</b-button>
-                        <b-sidebar id="sidebar-1" title="Add Questions" shadow>
-                            <div class="px-3 py-2">
-                                <b-img src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Die_drei_fragezeichen.svg" fluid thumbnail></b-img>
-                                <p>
-                                    Add a Question into your Survey via Drag and Drop!
-                                </p>
+                    <b-col>
+                        <div class="col-4">
+                            <b-button v-b-toggle.sidebar-1>Add Question</b-button>
+                            <b-sidebar v-model="visible" id="sidebar-1" localShow=true title="Add Questions" shadow>
 
-                                <div class="col-4">
-                                    <draggable
-                                        class="list-group" v-model="palette"
-                                        group="group"
-                                        @change="log"
-                                        v-on:end="updateSurveyItemsX"
-                                    >
-                                    <div class="drag-item flex flex-justify-between">
-                                        <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                        <b-icon-question-square></b-icon-question-square>
-                                        <b-text> Simple Question</b-text>
-                                        <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                <div class="px-3 py-2">
+
+                                    <b-img src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Die_drei_fragezeichen.svg" fluid thumbnail></b-img>
+
+                                    <p>
+
+                                        Add a Question into your Survey via Drag and Drop!
+
+                                    </p>
+
+                                    <div class="col-4">
+
+                                        <draggable
+
+                                            class="list-group" v-model="palette"
+
+                                            group="group"
+
+                                            @change="log"
+
+                                            v-on:end="updateSurveyItemsX"
+
+                                        >
+
+                                            <div class="drag-item flex flex-justify-between">
+
+                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+
+                                                <b-icon-question-square></b-icon-question-square>
+
+                                                <b-text> Simple Question</b-text>
+
+                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+
+                                            </div>
+
+                                        </draggable>
+
+                                        <draggable
+
+                                            class="list-group" v-model="palette"
+
+                                            group="group"
+
+                                            @change="log"
+
+                                            v-on:end="updateSurveyItemsPossibilities"
+
+                                        >
+
+                                            <div class="drag-item flex flex-justify-between">
+
+                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+
+                                                <b-icon-square></b-icon-square>
+
+                                                <b-text> Multiple-choice with Possibilities</b-text>
+
+                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+
+                                            </div>
+
+                                        </draggable>
+
+                                        <draggable
+
+                                            class="list-group" v-model="palette"
+
+                                            group="group"
+
+                                            @change="log"
+
+                                            v-on:end="updateSurveyItemsSelect"
+
+                                        >
+
+                                            <div class="drag-item flex flex-justify-between">
+
+                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+
+                                                <b-icon-caret-down-fill></b-icon-caret-down-fill>
+
+                                                <b-text> Select Answer with Possibility</b-text>
+
+                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+
+                                            </div>
+
+                                        </draggable>
+
+                                        <draggable
+
+                                            class="list-group" v-model="palette"
+
+                                            group="group"
+
+                                            @change="log"
+
+                                            v-on:end="updateSurveyItemsText"
+
+                                        >
+
+                                            <div class="drag-item flex flex-justify-between">
+
+                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+
+                                                <b-icon-type></b-icon-type>
+
+                                                <b-text> Textquestion with Possibility</b-text>
+
+                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+
+                                            </div>
+
+                                        </draggable>
+
                                     </div>
-                                    </draggable>
-                                    <draggable
-                                        class="list-group" v-model="palette"
-                                        group="group"
-                                        @change="log"
-                                        v-on:end="updateSurveyItemsPossibilities"
-                                    >
-                                        <div class="drag-item flex flex-justify-between">
-                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                            <b-icon-square></b-icon-square>
-                                            <b-text> Multiple-choice with Possibilities</b-text>
-                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
-                                        </div>
-                                    </draggable>
-                                    <draggable
-                                        class="list-group" v-model="palette"
-                                        group="group"
-                                        @change="log"
-                                        v-on:end="updateSurveyItemsSelect"
-                                    >
-                                        <div class="drag-item flex flex-justify-between">
-                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                            <b-icon-caret-down-fill></b-icon-caret-down-fill>
-                                            <b-text> Select Answer with Possibility</b-text>
-                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
-                                        </div>
-                                    </draggable>
-                                    <draggable
-                                        class="list-group" v-model="palette"
-                                        group="group"
-                                        @change="log"
-                                        v-on:end="updateSurveyItemsText"
-                                    >
-                                        <div class="drag-item flex flex-justify-between">
-                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                            <b-icon-type></b-icon-type>
-                                            <b-text> Textquestion with Possibility</b-text>
-                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
-                                        </div>
-                                    </draggable>
+
                                 </div>
 
+                            </b-sidebar>
 
-                            </div>
-                        </b-sidebar>
-                    </div>
+                        </div>
+                    </b-col>
                     <b-col class="cols-14">
                         <div>
                             <draggable
@@ -144,10 +205,29 @@
         name: "CreateSurvey",
         data() {
             return {
+                visible:true,
                 surveyTitle: "Moby Dick",
                 editTitle: false,
                 edit: true,
-                items: [
+                items: [{
+                    id: uuidv4(),
+                    type: "radio",
+                    question: "Testquestion with Possibility",
+                    possibilities: [
+                        {
+                            id: 1,
+                            text: "Wie geht es dir Morgens?",
+                        },
+                        {
+                            id: 2,
+                            text: "Wie geht es dir Mittags?",
+                        },
+                        {
+                            id: 1,
+                            text: "Wie geht es dir Abends?",
+                        }
+                    ]
+                }
                 ],
                 palette: []
             }
@@ -243,6 +323,7 @@
 
     .my-row {
         padding: 20px;
+        align-content: center;
     }
 
     .drag-item {
