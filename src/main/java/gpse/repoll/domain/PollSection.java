@@ -5,6 +5,8 @@ import gpse.repoll.domain.questions.Question;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 
 /**
@@ -13,9 +15,9 @@ import java.util.List;
 @Entity
 public class PollSection {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "uuid2")
     @Column
-    private Long id;
+    private UUID id;
 
     @Column
     @Lob
@@ -26,6 +28,7 @@ public class PollSection {
     private String title;
 
     @OneToMany
+    @JoinColumn
     private List<Question> questions = new ArrayList<>();
 
     public PollSection() {
@@ -36,19 +39,13 @@ public class PollSection {
      * Creates a new section.
      * @param title The section title
      * @param description The section description
-     * @param questions The set of questions to be added to this section
      */
-    public PollSection(final String title,
-                       final String description,
-                       final List<Question> questions) {
+    public PollSection(final String title, final String description) {
         this.title = title;
         this.description = description;
-        if (questions != null) {
-            this.questions.addAll(questions);
-        }
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -75,5 +72,22 @@ public class PollSection {
     void setQuestions(List<Question> questions) {
         this.questions.clear();
         this.questions.addAll(questions);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof PollSection)) {
+            return false;
+        }
+        PollSection section = (PollSection) o;
+        return Objects.equals(id, section.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -1,6 +1,7 @@
 package gpse.repoll.domain.questions;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * Represents a single question belonging to a poll.
@@ -41,5 +42,22 @@ public abstract class Question {
 
     public void setQuestionOrder(int questionOrder) {
         this.questionOrder = questionOrder;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Question)) {
+            return false;
+        }
+        Question question = (Question) o;
+        return Objects.equals(id, question.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

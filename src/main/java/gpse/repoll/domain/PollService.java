@@ -39,10 +39,11 @@ public interface PollService {
      * @param id The Poll's ID
      * @param title A new title, or null
      * @param status The status of the Poll
+     * @param structure The structure for the Poll
      * @return The updated Poll.
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the poll could not be found.
      */
-    Poll updatePoll(UUID id, String title, PollStatus status);
+    Poll updatePoll(UUID id, String title, PollStatus status, Map<UUID, List<Long>> structure);
 
     /**
      * Get all PollSections of a Poll.
@@ -57,16 +58,10 @@ public interface PollService {
      * @param pollId The Poll's ID
      * @param title The title of the new section
      * @param description The description of the new section, or null
-     * @param questions An initial set of questions to be added to the PollSection, or null
      * @return The newly created PollSection
      * @throws gpse.repoll.domain.exceptions.NotFoundException if the corresponding Poll could not be found
      */
-    PollSection addPollSection(
-        final UUID pollId,
-        final String title,
-        final String description,
-        final List<Question> questions
-    );
+    PollSection addPollSection(final UUID pollId, final String title, final String description);
 
     /**
      * Get a PollSection corresponding to a Poll.
@@ -76,7 +71,7 @@ public interface PollService {
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the PollSection or the corresponding Poll could
      * not be found
      */
-    PollSection getPollSection(final UUID pollId, final Long sectionId);
+    PollSection getPollSection(final UUID pollId, final UUID sectionId);
 
     /**
      * Update a PollSection.
@@ -85,17 +80,15 @@ public interface PollService {
      * @param sectionId The PollSection's ID
      * @param title The new title, or null
      * @param description The new description, or null
-     * @param questions A new set of questions, or null
      * @return the changed PollSection
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the PollSection or the corresponding Poll could
      * not be found.
      */
     PollSection updatePollSection(
         final UUID pollId,
-        final Long sectionId,
+        final UUID sectionId,
         final String title,
-        final String description,
-        final List<Question> questions
+        final String description
     );
 
     /**
@@ -112,44 +105,61 @@ public interface PollService {
      * Add a new TextQuestion to a Poll.
      * @param pollId The Poll's ID
      * @param questionTitle The title of the Question
+     * @param questionOrder The order for the Questions
      * @param charLimit The char limit for the answer.
      * @return The newly created TextQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    TextQuestion addTextQuestion(UUID pollId, String questionTitle, int charLimit);
+    TextQuestion addTextQuestion(UUID pollId, String questionTitle, int questionOrder, int charLimit);
 
     /**
      * Add a new ScaleQuestion to a Poll.
      * @param pollId The Poll's ID
      * @param questionTitle The title of the Question
+     * @param questionOrder The order for the Questions
      * @param scaleNameLeft The name for the left part of the scale
      * @param scaleNameRight The name for the right part of the scale
      * @param stepCount The number of steps the scale has
      * @return The newly created ScaleQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    ScaleQuestion addScaleQuestion(UUID pollId, String questionTitle, String scaleNameLeft, String scaleNameRight,
-                                   int stepCount);
+    ScaleQuestion addScaleQuestion(
+        UUID pollId,
+        String questionTitle,
+        int questionOrder,
+        String scaleNameLeft,
+        String scaleNameRight,
+        int stepCount);
 
     /**
      * Add a new RadioButtonQuestion to a Poll.
      * @param pollId The Poll's ID
      * @param questionTitle The title of the Question
+     * @param questionOrder The order for the Questions
      * @param choices The possible answers
      * @return The newly created RadioButtonQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    RadioButtonQuestion addRadioButtonQuestion(UUID pollId, String questionTitle, List<Choice> choices);
+    RadioButtonQuestion addRadioButtonQuestion(
+        UUID pollId,
+        String questionTitle,
+        int questionOrder,
+        List<Choice> choices);
 
     /**
      * Add a new ChoiceQuestion to a Poll.
      * @param pollId The Poll's ID
      * @param questionTitle The title of the Question
+     * @param questionOrder The order for the Questions
      * @param choices The possible answers
      * @return The newly created ChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    ChoiceQuestion addChoiceQuestion(UUID pollId, String questionTitle, List<Choice> choices);
+    ChoiceQuestion addChoiceQuestion(
+        UUID pollId,
+        String questionTitle,
+        int questionOrder,
+        List<Choice> choices);
 
     /**
      * Gets all Questions belonging to a Poll.
@@ -172,17 +182,25 @@ public interface PollService {
      * Update a TextQuestion.
      * @param pollId The Poll's ID
      * @param questionId The Question's ID
+     * @param questionOrder The order for the Questions
      * @param questionTitle The title of the Question
+     * @param charLimit The limit of characters for the answer
      * @return The changed TextQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    TextQuestion updateTextQuestion(UUID pollId, Long questionId, String questionTitle);
+    TextQuestion updateTextQuestion(
+        UUID pollId,
+        Long questionId,
+        int questionOrder,
+        String questionTitle,
+        int charLimit);
 
     /**
      * Update a ScaleQuestion.
      * @param pollId The Poll's ID
      * @param questionId The Question's ID
+     * @param questionOrder The order for the Questions
      * @param questionTitle The title of the Question
      * @param scaleNameLeft The name of the left part of the scale
      * @param scaleNameRight The name of the right part of the scale
@@ -191,33 +209,49 @@ public interface PollService {
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    ScaleQuestion updateScaleQuestion(UUID pollId, Long questionId, String questionTitle, String scaleNameLeft,
-                                     String scaleNameRight, int stepCount);
+    ScaleQuestion updateScaleQuestion(
+        UUID pollId,
+        Long questionId,
+        int questionOrder,
+        String questionTitle,
+        String scaleNameLeft,
+        String scaleNameRight,
+        int stepCount);
 
     /**
      * Update a RadioButtonQuestion.
      * @param pollId The Poll's ID
      * @param questionId The Question's ID
+     * @param questionOrder The order for the Questions
      * @param questionTitle The title of the Question
      * @param choices The possible answers
      * @return The changed RadioButtonQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    RadioButtonQuestion updateRadioButtonQuestion(UUID pollId, Long questionId, String questionTitle,
-                                                  List<Choice> choices);
+    RadioButtonQuestion updateRadioButtonQuestion(
+        UUID pollId,
+        Long questionId,
+        int questionOrder,
+        String questionTitle,
+        List<Choice> choices);
     /**
      * Update a ChoiceQuestion.
      * @param pollId The Poll's ID
      * @param questionId The Question's ID
      * @param questionTitle The title of the Question
+     * @param questionOrder The order for the Questions
      * @param choices The possible answers
      * @return The changed ChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    ChoiceQuestion updateChoiceQuestion(UUID pollId, Long questionId, String questionTitle,
-                                        List<Choice> choices);
+    ChoiceQuestion updateChoiceQuestion(
+        UUID pollId,
+        Long questionId,
+        int questionOrder,
+        String questionTitle,
+        List<Choice> choices);
 
     /**
      * Gets a PollEntry.
