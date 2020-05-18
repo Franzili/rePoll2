@@ -7,7 +7,7 @@
 
 <script>
 
-    import {mapGetters} from "vuex";
+    import {mapActions, mapGetters} from "vuex";
     import NavBar from "../components/NavBar";
     import HelloWorld from "../components/HelloWorld";
 
@@ -20,12 +20,16 @@
         },
         created() {
             this.id = this.$route.params.id
+            this.requestSurvey(this.id)
         },
         computed: {
             ...mapGetters(['getSurvey']),
             survey() {
                 return this.getSurvey(this.id)
             }
+        },
+        methods: {
+            ...mapActions(['requestSurvey'])
         },
         comments: {
             NavBar,

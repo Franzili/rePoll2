@@ -70,17 +70,27 @@
 
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
+    import {mapActions, mapState} from "vuex";
 
     export default {
         name: "Start",
         components: {
             NavBar,
-            HelloWorld
+            HelloWorld,
+            ...mapState({
+                surveys: state => state.surveys
+            })
         },
         methods: {
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             }
+        },
+        ...mapActions([
+            'requestSurveys'
+        ]),
+        created() {
+            this.requestSurveys()
         }
     }
 </script>

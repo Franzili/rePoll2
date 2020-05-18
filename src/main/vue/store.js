@@ -1,9 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import api from "./api";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+    /*
     state: {
         authenticated: null, //
         surveys: [
@@ -83,9 +85,17 @@ export default new Vuex.Store({
             }
         ],
     },
+    */
+    state: {
+        //authenticated: null,
+        surveys: [],
+    },
     mutations: {
+        setSurveys(state, surveys) {
+            this.state.surveys = surveys
+        },
         updateSurvey(state, survey) {
-            let index = this.state.surveys.findIndex(a => a.id == survey.id)
+            let index = this.state.surveys.findIndex(a => a.id === survey.id)
             this.state.surveys[index] = survey
         }
         /*
@@ -98,10 +108,33 @@ export default new Vuex.Store({
         }
         */
     },
+    actions: {
+        requestSurveys({commit}) {
+            return new Promise((resolve, reject) => {
+                api.survey.list().then(res => {
+                    commit('setSurveys', res.data)
+                    resolve()
+                }).catch(() => {
+                    commit('setSurveys', [])
+                    reject()
+                })
+            })
+        },
+        requestSurvey({commit}, id) {
+            return new Promise((resolve, reject) => {
+                api.survey.get(id).then(res => {
+                    commit('updateSurvey', res.data)
+                    resolve()
+                }).catch(() => {
+                    reject()
+                })
+            })
+        }
+    },
     getters: {
         getSurvey: (state) => {
             return (id) => {
-                return state.surveys.find(survey => survey.id == id)
+                return state.surveys.find(survey => survey.id === id)
             }
         }/*,
         isAuthenticated: (state) => {
