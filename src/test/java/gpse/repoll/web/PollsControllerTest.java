@@ -31,8 +31,6 @@ public class PollsControllerTest {
     void testGetAllNormal() {
         Poll poll1 = new Poll(null, "Poll1");
         Poll poll2 = new Poll(null, "Poll2");
-        poll1.setId(1L);
-        poll2.setId(2L);
         ArrayList<Poll> polls = new ArrayList<>();
         polls.add(poll1);
         polls.add(poll2);

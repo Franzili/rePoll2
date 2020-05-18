@@ -227,7 +227,7 @@
             },
             log: function (...e) {
                     console.log(...e);
-                }
+            }
         },
         components: {
             AddQuestion,
