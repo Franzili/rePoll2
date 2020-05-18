@@ -23,32 +23,6 @@
 
     export default {
         name: "SurveyTable",
-        /*data() {
-            return {
-                surveys: [
-                    {
-                        id: 1,
-                        name: "Peter Pan",
-                        status: "IN_PROCESS"
-                    },
-                    {
-                        id: 2,
-                        name: "Mobby Dick",
-                        status: "READY"
-                    },
-                    {
-                        id: 3,
-                        name: "調査",
-                        status: 'ACTIVATED'
-                    },
-                    {
-                        id: 4,
-                        name: '彼女',
-                        status: 'DEACTIVATED'
-                    }
-                ]
-            }
-        },*/
         computed: mapState({
             surveys: state => state.surveys
         }),

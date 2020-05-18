@@ -31,7 +31,7 @@ public class PollsController {
         this.userService = userService;
     }
 
-    @Secured(Roles.ALL)
+    //@Secured(Roles.ALL)
     @GetMapping("/")
     public List<Poll> getAll() {
         return pollService.getAll();

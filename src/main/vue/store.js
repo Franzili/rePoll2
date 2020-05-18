@@ -49,7 +49,7 @@ const store = new Vuex.Store({
                 })
             })
         },
-        aveSurvey({commit}, survey) {
+        saveSurvey({commit}, survey) {
             return new Promise((resolve, reject) => {
                 api.survey.save(survey).then(res => {
                     commit('updateSurvey', res.data)
