@@ -44,17 +44,12 @@
                 <b-row style="text-align:center;" class="my-row">
                     <b-col>
                         <div class="col-4">
-                            <b-button v-b-toggle.sidebar-1>Add Question</b-button>
-                            <b-sidebar v-model="visible" id="sidebar-1" localShow=true title="Add Questions" shadow>
-
+                            <b-button v-if="!visible" v-b-toggle.sidebar-1-footer @click="changePaletteVisible" >Add Question</b-button>
+                            <b-sidebar v-model="visible" id="sidebar-1" localShow=true bg-variant="light" title="Add Questions" shadow='lg'>
                                 <div class="px-3 py-2">
 
-                                    <b-img src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Die_drei_fragezeichen.svg" fluid thumbnail></b-img>
-
                                     <p>
-
                                         Add a Question into your Survey via Drag and Drop!
-
                                     </p>
 
                                     <div class="col-4">
@@ -164,24 +159,23 @@
                                         </draggable>
 
                                     </div>
-
                                 </div>
-
                             </b-sidebar>
 
                         </div>
                     </b-col>
                     <b-col class="cols-14">
-                        <div>
-                            <draggable
-                                class="list-group" v-model="items"
-                                group="group"
-                                @change="log">
-                                <div class="drag-item flex flex-justify-between" :key="item.id" v-for="item in items">
-                                    <SurveyItem v-bind:item="item" v-bind:edit="edit" v-on:del-item="deleteItem(item.id)"/>
-                                </div>
-                            </draggable>
-                        </div>
+                            <div>
+                                <draggable
+                                    class="list-group" v-model="items"
+                                    group="group"
+                                    @change="log">
+                                    <div class="drag-item flex flex-justify-between" :key="item.id" v-for="item in items">
+                                        <SurveyItem v-bind:item="item" v-bind:edit="edit" v-on:del-item="deleteItem(item.id)"/>
+                                    </div>
+                                </draggable>
+                                <b-button @click="updatePoll">save</b-button>
+                            </div>
                         <HelloWorld class="ml-auto" msg=""/>
                     </b-col>
                     <b-col>
@@ -200,12 +194,18 @@
     import AddQuestion from "../components/AddQuestion";
     import SurveyItem from "../components/SurveyItem";
     import {v4 as uuidv4} from "uuid";
+ //   import {mapActions} from "vuex";
+    import axios from 'axios';
 
     export default {
         name: "CreateSurvey",
         data() {
             return {
                 visible:true,
+                id: "7ac99593-e6e7-42810bfaf09d0da069fkj",
+                title: "Moby Dick",
+                status: "IN_PROCESSING",
+                sections: [],
                 surveyTitle: "Moby Dick",
                 editTitle: false,
                 edit: true,
@@ -233,9 +233,36 @@
             }
         },
         methods: {
+            changePaletteVisible(){
+                this.visible = !this.visible;
+            },
             changeEditTitle() {
                 this.editTitle = !this.editTitle;
             },
+            updatePoll() {
+                // update poll
+                let pollCmd = {
+                    title: this.title,
+                    status: this.status
+                };
+                axios.put('/api/v1/polls/'+ this.id + '/', pollCmd);
+
+                // update questions
+                for (var i = 0; i < this.items.length; i++) {
+                    axios.put(
+                        '/api/v1/polls/' + this.id + '/questions/' + this.items[i].id + '/',
+                        this.items[i]                    )
+                }
+
+                // update sections
+                for (i = 0; i < this.sections.length; i++) {
+                    axios.put(
+                        '/api/v1/polls/' + this.id + '/sections/' + this.sections[i].id + '/',
+                        this.sections[i]
+                    )
+                }
+            },
+
             deleteItem(id) {
                 this.items = this.items.filter(item => item.id !== id);
             },
