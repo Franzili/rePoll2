@@ -263,3 +263,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/java,intellij,spring,maven,windows,linux,node,npm,macos,vue
+
+# data directory (db persistence)
+data

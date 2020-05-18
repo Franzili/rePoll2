@@ -5,8 +5,13 @@ import gpse.repoll.domain.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.questions.Question;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
+import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 
 /**
@@ -17,31 +22,40 @@ import java.util.*;
 @RequestMapping("/api/v1/polls")
 public class PollsController {
     private final PollService pollService;
+    private final UserService userService;
 
     @Autowired
-    public PollsController(PollService service) {
-        this.pollService = service;
+    public PollsController(PollService pollService, UserService userService) {
+        this.pollService = pollService;
+        this.userService = userService;
     }
 
+    @Secured(Roles.ALL)
     @GetMapping("/")
     public List<Poll> getAll() {
         return pollService.getAll();
     }
 
+    @Secured(Roles.ALL)
     @PostMapping("/")
     public Poll addPoll(@RequestBody PollCmd pollCmd) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User creator = userService.getUser(auth.getName());
+
         if (pollCmd.getTitle() == null || pollCmd.getTitle().equals("")) {
             throw new BadRequestException("Title cannot be empty!");
         }
-        return pollService.addPoll(pollCmd.getTitle());
+        return pollService.addPoll(pollCmd.getTitle(), creator);
     }
 
+    @Secured(Roles.ALL)
     @GetMapping("/{id}/")
     public Poll getPoll(@PathVariable("id") final UUID id) {
         // we know that id is a string of regex \d+, so we dont need to check for NumberFormatException.
         return pollService.getPoll(id);
     }
 
+    @Secured(Roles.ALL)
     @PutMapping("/{id}/")
     public Poll updatePoll(@PathVariable("id") final UUID id, @RequestBody PollCmd pollCmd) {
         Map<UUID, List<Long>> structure = null;
@@ -51,11 +65,13 @@ public class PollsController {
         return pollService.updatePoll(id, pollCmd.getTitle(), pollCmd.getStatus(), structure);
     }
 
+    @Secured(Roles.ALL)
     @GetMapping("/{pollId}/sections/")
     public List<PollSection> listPollSections(@PathVariable("pollId") final UUID pollId) {
         return pollService.getAllSections(pollId);
     }
 
+    @Secured(Roles.ALL)
     @PostMapping("/{pollId}/sections/")
     public PollSection addPollSection(@PathVariable("pollId") final UUID pollId,
                                       @RequestBody PollSectionCmd pollSectionCmd) {
@@ -66,12 +82,14 @@ public class PollsController {
         );
     }
 
+    @Secured(Roles.ALL)
     @GetMapping("/{pollId}/sections/{sectionId}/")
     public PollSection getPollSection(@PathVariable("pollId") final UUID pollId,
                                       @PathVariable("sectionId") final UUID sectionId) {
         return pollService.getPollSection(pollId, sectionId);
     }
 
+    @Secured(Roles.ALL)
     @PutMapping("/{pollId}/sections/{sectionId}/")
     public PollSection updatePollSection(@PathVariable("pollId") final UUID pollId,
                                          @PathVariable("sectionId") final UUID sectionId,
@@ -84,6 +102,7 @@ public class PollsController {
         );
     }
 
+    @Secured(Roles.ALL)
     @PostMapping("/{pollId}/questions/")
     public Question addQuestion(@PathVariable("pollId") final UUID pollId,
                                 @RequestBody QuestionCmd questionCmd) {
@@ -120,11 +139,13 @@ public class PollsController {
         throw new InternalServerErrorException();
     }
 
+    @Secured(Roles.ALL)
     @GetMapping("/{pollId+}/questions/")
     public List<Question> listQuestions(@PathVariable("pollId") final UUID pollId) {
         return pollService.getAllQuestions(pollId);
     }
 
+    @Secured(Roles.ALL)
     @GetMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question getQuestion(@PathVariable("pollId") final UUID pollId,
                             @PathVariable("questionId") final String questionId) {
@@ -134,6 +155,7 @@ public class PollsController {
         );
     }
 
+    @Secured(Roles.ALL)
     @PutMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question updateQuestion(@PathVariable("pollId") final UUID pollId,
                                    @PathVariable("questionId") final String qId,
@@ -177,6 +199,7 @@ public class PollsController {
     }
 
     //todo handling wrong answer type
+    @Secured(Roles.ALL)
     @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
@@ -211,6 +234,7 @@ public class PollsController {
         );
     }
 
+    @Secured(Roles.ALL)
     @GetMapping("/{pollId}/entries/{entryId:\\d+}/")
     public PollEntry getPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @PathVariable("entryId") final String entryId) {

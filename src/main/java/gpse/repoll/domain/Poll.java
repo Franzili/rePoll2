@@ -3,6 +3,9 @@ package gpse.repoll.domain;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.questions.Question;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -15,6 +18,7 @@ import java.util.*;
  * Poll objects are assumed to be equal if they have equal IDs.
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Poll {
 
     @Id
@@ -33,12 +37,14 @@ public class Poll {
     @ManyToOne
     private User creator;
 
+    @CreatedDate
     @Column
     private LocalDateTime creationTime;
 
     @ManyToOne
     private User lastEditor;
 
+    @LastModifiedDate
     @Column
     private LocalDateTime lastEditTime;
 
@@ -50,6 +56,9 @@ public class Poll {
 
     @OneToMany
     private List<Question> questions = new ArrayList<>();
+
+    @ManyToOne
+    private User owner;
 
     protected Poll() {
 
@@ -64,8 +73,6 @@ public class Poll {
         this.creator = creator;
         this.title = title;
         this.status = PollStatus.IN_PROCESS;
-        creationTime = LocalDateTime.now();
-        lastEditTime = LocalDateTime.now();
     }
 
     @Override
@@ -155,6 +162,14 @@ public class Poll {
 
     public void setStatus(PollStatus status) {
         this.status = status;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     private PollSection getSection(UUID sectionId) {

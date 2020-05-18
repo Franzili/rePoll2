@@ -21,9 +21,10 @@ public interface PollService {
      * Add a new Poll.
      * This internally creates a new Poll object and sets the appropriate parameters.
      * @param title The title of the Poll object
+     * @param creator The user that was responsible for creating the poll.
      * @return The Poll object created.
      */
-    Poll addPoll(String title);
+    Poll addPoll(String title, User creator);
 
     /**
      * Get a Poll by its ID.
