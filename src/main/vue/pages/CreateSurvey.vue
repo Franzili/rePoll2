@@ -48,8 +48,8 @@
                                     >
                                         <div class="drag-item flex flex-justify-between">
                                             <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                            <b-icon-question-square></b-icon-question-square>
-                                            <b-text>Multiple-choice with Possibilities</b-text>
+                                            <b-icon-square></b-icon-square>
+                                            <b-text> Multiple-choice with Possibilities</b-text>
                                             <!-- <AddQuestion v-on:add-item="addItem"/> -->
                                         </div>
                                     </draggable>
@@ -61,8 +61,8 @@
                                     >
                                         <div class="drag-item flex flex-justify-between">
                                             <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                            <b-icon-book></b-icon-book>
-                                            <b-text>Select Answer with Possibility</b-text>
+                                            <b-icon-caret-down-fill></b-icon-caret-down-fill>
+                                            <b-text> Select Answer with Possibility</b-text>
                                             <!-- <AddQuestion v-on:add-item="addItem"/> -->
                                         </div>
                                     </draggable>
@@ -74,8 +74,8 @@
                                     >
                                         <div class="drag-item flex flex-justify-between">
                                             <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                            <b-icon-bookmarks></b-icon-bookmarks>
-                                            <b-text>Textquestion with Possibility</b-text>
+                                            <b-icon-type></b-icon-type>
+                                            <b-text> Textquestion with Possibility</b-text>
                                             <!-- <AddQuestion v-on:add-item="addItem"/> -->
                                         </div>
                                     </draggable>
