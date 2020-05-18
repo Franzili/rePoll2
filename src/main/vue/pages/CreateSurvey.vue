@@ -6,7 +6,7 @@
                 Titel:
             </div>
             <div>
-                Moby Dick
+                Moby
             </div>
         </div>
 
@@ -25,7 +25,7 @@
             <b-container>
                 <b-row style="text-align: center">
                     <b-col>Palette</b-col>
-                    <b-col></b-col>
+                    <b-col>Umfrage</b-col>
                     <b-col>Gliederung</b-col>
                 </b-row>
 
@@ -49,7 +49,7 @@
                                         <div class="drag-item flex flex-justify-between">
                                             <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
                                             <b-icon-question-square></b-icon-question-square>
-                                            <b-text>Testquestion</b-text>
+                                            <b-text>Testquestion with Possibilities</b-text>
                                             <!-- <AddQuestion v-on:add-item="addItem"/> -->
                                         </div>
                                     </draggable>
@@ -86,16 +86,16 @@
                         </b-sidebar>
                     </div>
                     <b-col class="cols-14">
-                            <div>
-                                <draggable
-                                    class="list-group" v-model="items"
-                                    group="group"
-                                    @change="log">
-                                    <div class="drag-item flex flex-justify-between" :key="item.id" v-for="item in items">
-                                        <SurveyItem v-bind:item="item" v-bind:edit="edit" v-on:del-item="deleteItem(item.id)"/>
-                                    </div>
-                                </draggable>
-                            </div>
+                        <div>
+                            <draggable
+                                class="list-group" v-model="items"
+                                group="group"
+                                @change="log">
+                                <div class="drag-item flex flex-justify-between" :key="item.id" v-for="item in items">
+                                    <SurveyItem v-bind:item="item" v-bind:edit="edit" v-on:del-item="deleteItem(item.id)"/>
+                                </div>
+                            </draggable>
+                        </div>
                         <HelloWorld class="ml-auto" msg=""/>
                     </b-col>
                     <b-col>
@@ -121,74 +121,8 @@
             return {
                 edit: true,
                 items: [
-                    {
-                        id: 1,
-                        type: "freetext",
-                        question: "wie gehts",
-                        possibilities: []
-                    },
-                    {
-                        id: 2,
-                        type: "checkbox",
-                        question: "how are you",
-                        possibilities: [
-                            {
-                                id: 1,
-                                text: "bla bla asdikawzug l hif",
-                            },
-                            {
-                                id: 2,
-                                text: "yes",
-                            }
-                        ]
-                    },
-                    {
-                        id: 3,
-                        type: "radio",
-                        question: "wie gehts",
-                        possibilities: [
-                            {
-                                id: 3,
-                                text: "bla bla asdikawzug l hif",
-                            },
-                            {
-                                id: 4,
-                                text: "yes",
-                            }
-                        ]
-                    },
-                    {
-                        id: 4,
-                        type: "dropdown",
-                        question: "wie gehts",
-                        possibilities: [
-                            {
-                                id: 5,
-                                text: "bla bla asdikawzug l hif",
-                            },
-                            {
-                                id: 6,
-                                text: "yes",
-                            }
-                        ]
-                    }
                 ],
                 palette: [
-                    {
-                        id: 8,
-                        type: "checkbox",
-                        question: "Frage aus der Palette",
-                        possibilities: [
-                            {
-                                id: 10,
-                                text: "bla bla asdikawzug l hif",
-                            },
-                            {
-                                id: 11,
-                                text: "yes",
-                            }
-                        ]
-                    }
                 ]
             }
         },
@@ -206,7 +140,7 @@
                 const newItem = {
                     id: uuidv4(),
                     type: "radio",
-                    question: "test",
+                    question: "Testquestion with Possibility",
                     possibilities: [
                         {
                             id: 1,
