@@ -18,7 +18,7 @@
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
     import SurveyTableList from "../components/SurveyTableList";
-    import {mapState} from "vuex";
+    import {mapState, mapActions} from "vuex";
     import axios from "axios";
 
     export default {
@@ -60,7 +60,13 @@
             save: function () {
                 this.savePoll();
                 return this.$router.push('/create/');
-            }
+            },
+            ...mapActions([
+                'requestSurveys'
+            ])
+        },
+        created() {
+            this.requestSurveys()
         },
         components: {
             NavBar,

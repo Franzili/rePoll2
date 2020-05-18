@@ -5,14 +5,12 @@ import api from "./api";
 
 Vue.use(Vuex)
 
-
 const store = new Vuex.Store({
     state: {
         token: null,
         authenticated: null,
         surveys: []
     },
-
     actions: {
         requestToken({commit}, credentials) {
             return new Promise((resolve, reject) => {
@@ -50,6 +48,26 @@ const store = new Vuex.Store({
                     reject()
                 })
             })
+        },
+        aveSurvey({commit}, survey) {
+            return new Promise((resolve, reject) => {
+                api.survey.save(survey).then(res => {
+                    commit('updateSurvey', res.data)
+                    resolve()
+                }).catch(() => {
+                    reject()
+                })
+            })
+        },
+        updateSurvey({commit}, survey) {
+            return new Promise((resolve, reject) => {
+                api.survey.update(survey).then(res => {
+                    commit('updateSurvey', res.data)
+                    resolve()
+                }).catch(() => {
+                    reject()
+                })
+            })
         }
     },
 
@@ -75,12 +93,25 @@ const store = new Vuex.Store({
         setSurveys(state, surveys) {
             this.state.surveys = surveys
         },
+        saveSurveys(state, survey) {
+            this.state.surveys.push(survey)
+        },
         updateSurvey(state, survey) {
             let index = this.state.surveys.findIndex(a => a.id === survey.id)
             this.state.surveys[index] = survey
         }
 
     },
+    getters: {
+        getSurvey: (state) => {
+            return (id) => {
+                return state.surveys.find(survey => survey.id === id)
+            }
+        },
+        isAuthenticated: (state) => {
+            return state.authenticated
+        }
+    }
 })
 
 store.subscribe((mutation, state) => {
