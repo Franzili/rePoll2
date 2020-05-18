@@ -51,6 +51,9 @@ public class InitializeDatabase implements InitializingBean {
                     "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
                     "Bob", "jbond@mi6.com"
                 );
+                //add dummy polls:
+                pollService.addPoll("is there a poll", user);
+                pollService.addPoll("are there two", user);
             }
             return null;
 
