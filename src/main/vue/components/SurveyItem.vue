@@ -36,8 +36,19 @@
 
         <div v-if="item.type === 'freetext'">
             <!-- TODO enter new variable for text instead of array (v-model)? -->
-            <b-form-input v-model="selected" class="text-box"/>
-            <b-form-input v-if="edit === true" placeholder="Set chracter limit..." class="text-box"/>
+            <b-form-input :maxlength="item.possibilities[0].limit" v-model="selected" class="text-box"/>
+
+            <div v-if="edit && !editCharLimit">
+                character limit:
+                {{ item.possibilities[0].limit }}
+                <b-icon-pencil class="freetext-pen" scale="1.5"  @click="changeEditCharLimit"></b-icon-pencil>
+            </div>
+
+            <div v-if="edit && editCharLimit">
+                character limit:
+                <b-form-input v-model="item.possibilities[0].limit" placeholder="Set chracter limit..." class="text-box"/>
+                <b-icon-check-all class="my-icon" scale="2" animation="fade" @click="changeEditCharLimit"></b-icon-check-all>
+            </div>
         </div>
 
         <div v-if="item.type === 'dropdown'">
@@ -50,6 +61,10 @@
         </div>
 
         <div v-if="item.type === 'slider'">
+            <div class="slider">
+                {{ val.toFixed(2) }}
+            </div>
+
             <b-form-input
                 id="bg-opacity"
                 v-model="val"
@@ -59,9 +74,6 @@
                 :max="item.possibilities[0].max"
                 :step="item.possibilities[0].step"
             ></b-form-input>
-            <b-input-group-append is-text class="text-monospace">
-                {{ val }}
-            </b-input-group-append>
 
             <b-icon-pencil class="my-icon" scale="1.5" v-if="edit && !editSlider" @click="changeEditSlider"></b-icon-pencil>
 
@@ -76,7 +88,6 @@
 
                 <b-icon-check-all class="my-icon" scale="2" animation="fade" @click="changeEditSlider"></b-icon-check-all>
             </div>
-
         </div>
 
         <QuestionEditor v-if="edit === true && item.type !== 'freetext' && item.type !== 'slider'" ref="editor" v-on:add-pos="addPos"/>
@@ -96,6 +107,7 @@
             return {
                 editQuestion: false,
                 editSlider: false,
+                editCharLimit: false,
                 val: this.item.possibilities[0].min,
                 selected: []
             }
@@ -107,6 +119,9 @@
             },
             changeEditSlider() {
                 this.editSlider = !this.editSlider;
+            },
+            changeEditCharLimit() {
+                this.editCharLimit = !this.editCharLimit;
             },
             addPos(newPos){
                 this.item.possibilities = [...this.item.possibilities, newPos];
@@ -133,9 +148,17 @@
         margin-bottom: 10px;
     }
 
+    .freetext-pen {
+        margin-left: 10px;
+    }
+
     .my-btn {
         margin-top: 15px;
         margin-bottom: 100px;
+    }
+
+    .slider {
+        margin-top: 15px;
     }
 
     .del-pos-btn {

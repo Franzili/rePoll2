@@ -100,7 +100,7 @@
                     {
                         id: 0,
                         type: "slider",
-                        question: "wie gehts",
+                        question: "how much do you earn(in 1000 Dollar)",
                         possibilities: [
                             {
                                 min: 20,
@@ -113,7 +113,11 @@
                         id: 1,
                         type: "freetext",
                         question: "wie gehts",
-                        possibilities: []
+                        possibilities: [
+                            {
+                                limit: 10
+                            }
+                        ]
                     },
                     {
                         id: 2,
