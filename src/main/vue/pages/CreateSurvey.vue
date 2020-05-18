@@ -39,7 +39,21 @@
                                 <p>
                                     Add a Question into your Survey via Drag and Drop!
                                 </p>
+
                                 <div class="col-4">
+                                    <draggable
+                                        class="list-group" v-model="palette"
+                                        group="group"
+                                        @change="log"
+                                        v-on:end="updateSurveyItemsX"
+                                    >
+                                    <div class="drag-item flex flex-justify-between">
+                                        <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+                                        <b-icon-question-square></b-icon-question-square>
+                                        <b-text> Simple Question</b-text>
+                                        <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                    </div>
+                                    </draggable>
                                     <draggable
                                         class="list-group" v-model="palette"
                                         group="group"
@@ -162,7 +176,7 @@
                 const newItem = {
                     id: uuidv4(),
                     type: "dropdown",
-                    question: "test",
+                    question: "Select Answer with Possibility",
                     possibilities: [
                         {
                             id: 1,
@@ -184,7 +198,15 @@
                 const newItem = {
                     id: uuidv4(),
                     type: "section",
-                    question: "test",
+                    question: "Textquestion with Possibility",
+                };
+                this.items = [...this.items, newItem];
+            },
+            updateSurveyItemsX() {
+                const newItem = {
+                    id: uuidv4(),
+                    type: "checkbox",
+                    question: "Simple Question",
                 };
                 this.items = [...this.items, newItem];
             },
