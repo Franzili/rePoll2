@@ -31,7 +31,7 @@ public class PollsController {
         this.userService = userService;
     }
 
-    //@Secured(Roles.ALL)
+    //@Secured(Roles.ALL)   <---this has to be fixed in future, now is Blocking frontend from accesing the database
     @GetMapping("/")
     public List<Poll> getAll() {
         return pollService.getAll();
