@@ -44,12 +44,12 @@
                                         class="list-group" v-model="palette"
                                         group="group"
                                         @change="log"
-                                        v-on:end="updatePalette"
+                                        v-on:end="updateSurveyItemsPossibilities"
                                     >
                                         <div class="drag-item flex flex-justify-between">
                                             <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
                                             <b-icon-question-square></b-icon-question-square>
-                                            <b-text>Testquestion with Possibilities</b-text>
+                                            <b-text>Multiple-choice with Possibilities</b-text>
                                             <!-- <AddQuestion v-on:add-item="addItem"/> -->
                                         </div>
                                     </draggable>
@@ -57,12 +57,12 @@
                                         class="list-group" v-model="palette"
                                         group="group"
                                         @change="log"
-                                        v-on:end="updatePaletteQuestion2"
+                                        v-on:end="updateSurveyItemsSelect"
                                     >
                                         <div class="drag-item flex flex-justify-between">
                                             <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
                                             <b-icon-book></b-icon-book>
-                                            <b-text>Testquestion2</b-text>
+                                            <b-text>Select Answer with Possibility</b-text>
                                             <!-- <AddQuestion v-on:add-item="addItem"/> -->
                                         </div>
                                     </draggable>
@@ -70,12 +70,12 @@
                                         class="list-group" v-model="palette"
                                         group="group"
                                         @change="log"
-                                        v-on:end="updatePaletteSurvey"
+                                        v-on:end="updateSurveyItemsText"
                                     >
                                         <div class="drag-item flex flex-justify-between">
                                             <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
                                             <b-icon-bookmarks></b-icon-bookmarks>
-                                            <b-text>New Section</b-text>
+                                            <b-text>Textquestion with Possibility</b-text>
                                             <!-- <AddQuestion v-on:add-item="addItem"/> -->
                                         </div>
                                     </draggable>
@@ -136,7 +136,7 @@
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             },
-            updatePalette() {
+            updateSurveyItemsPossibilities() {
                 const newItem = {
                     id: uuidv4(),
                     type: "radio",
@@ -156,9 +156,9 @@
                         }
                     ]
                 };
-                this.palette = [...this.palette, newItem];
+                this.items = [...this.items, newItem];
             },
-            updatePaletteQuestion2() {
+            updateSurveyItemsSelect() {
                 const newItem = {
                     id: uuidv4(),
                     type: "dropdown",
@@ -178,29 +178,15 @@
                         }
                     ]
                 };
-                this.palette = [...this.palette, newItem];
+                this.items = [...this.items, newItem];
             },
-            updatePaletteSurvey() {
+            updateSurveyItemsText() {
                 const newItem = {
                     id: uuidv4(),
                     type: "section",
                     question: "test",
-                    possibilities: [
-                        {
-                            id: 1,
-                            text: "Meditierst du regelmäßig?",
-                        },
-                        {
-                            id: 2,
-                            text: "Machst du regelmäßig Sport?",
-                        },
-                        {
-                            id: 3,
-                            text: "Nimmst du regelmäßig kalte Duschen?",
-                        }
-                    ]
                 };
-                this.palette = [...this.palette, newItem];
+                this.items = [...this.items, newItem];
             },
             log: function (...e) {
                     console.log(...e);
