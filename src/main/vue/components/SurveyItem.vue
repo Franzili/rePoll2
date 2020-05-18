@@ -55,13 +55,28 @@
                 v-model="val"
                 type="range"
                 number
-                min="0"
-                max="100"
-                step="1"
+                :min="item.possibilities[0].min"
+                :max="item.possibilities[0].max"
+                :step="item.possibilities[0].step"
             ></b-form-input>
             <b-input-group-append is-text class="text-monospace">
                 {{ val }}
             </b-input-group-append>
+
+            <b-icon-pencil class="my-icon" scale="1.5" v-if="edit && !editSlider" @click="changeEditSlider"></b-icon-pencil>
+
+            <div v-if="edit && editSlider">
+
+                min-value:
+                <b-form-input v-model="item.possibilities[0].min"></b-form-input>
+                max-value:
+                <b-form-input v-model="item.possibilities[0].max"></b-form-input>
+                stepsize:
+                <b-form-input class="my-form" v-model="item.possibilities[0].step"></b-form-input>
+
+                <b-icon-check-all class="my-icon" scale="2" animation="fade" @click="changeEditSlider"></b-icon-check-all>
+            </div>
+
         </div>
 
         <QuestionEditor v-if="edit === true && item.type !== 'freetext' && item.type !== 'slider'" ref="editor" v-on:add-pos="addPos"/>
@@ -80,7 +95,8 @@
         data() {
             return {
                 editQuestion: false,
-                val: 0,
+                editSlider: false,
+                val: this.item.possibilities[0].min,
                 selected: []
             }
         },
@@ -88,6 +104,9 @@
         methods:{
             changeEditQuestion() {
                 this.editQuestion = !this.editQuestion;
+            },
+            changeEditSlider() {
+                this.editSlider = !this.editSlider;
             },
             addPos(newPos){
                 this.item.possibilities = [...this.item.possibilities, newPos];
@@ -126,6 +145,10 @@
 
     .question {
         font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .my-form {
         margin-bottom: 10px;
     }
 </style>

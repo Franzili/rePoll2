@@ -101,7 +101,13 @@
                         id: 0,
                         type: "slider",
                         question: "wie gehts",
-                        possibilities: []
+                        possibilities: [
+                            {
+                                min: 20,
+                                max: 100,
+                                step: 10
+                            }
+                        ]
                     },
                     {
                         id: 1,
