@@ -12,7 +12,9 @@ module.exports = {
             }
         },
     },
-
+    configureWebpack: {
+        devtool: 'source-map'
+    },
     pages: {
         index: {
             entry: 'src/main/vue/main.js',

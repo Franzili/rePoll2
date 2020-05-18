@@ -8,7 +8,9 @@ import SurveyTable from "./pages/SurveyTable";
 import SurveySetup from "./pages/SurveySetup";
 import AnswerSurvey from "./pages/AnswerSurvey";
 
-export default new VueRouter({
+import store from "./store";
+
+var router = new VueRouter({
     mode: 'history',
     routes: [
         {
@@ -40,6 +42,7 @@ export default new VueRouter({
         },
         {
             path: '/config/',
+            name: 'config',
             component: SurveySetup
         },
         {
@@ -47,4 +50,24 @@ export default new VueRouter({
             component: AnswerSurvey
         }
     ]
-})
+});
+
+
+// Route Guard. Run before each routing.
+router.beforeEach((to, from , next) => {
+    // if we are not authenticated, redirect to login page.
+    if (!store.state.authenticated && to.path !== "/") {
+        next("/");
+    }
+
+    if (store.state.authenticated && to.path === "/") {
+        next("/surveys");
+    }
+
+    else {
+        // else proceed to the route as planned.
+        next();
+    }
+});
+
+export default router;

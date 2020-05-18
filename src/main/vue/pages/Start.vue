@@ -1,74 +1,44 @@
 <template>
     <div>
-        <!-- :style="{ backgroundColor:'lightblue'}" -->
         <nav-bar></nav-bar>
         <HelloWorld style="text-align:center;" class="ml-auto" msg="Welcome to the best Survey App!"/>
 
-        <!-- this is better for mobile version -->
-        <div v-if="isMobile()">
-            <b-form class="my-form">
-                <b-form-group
-                    label="Username:"
-                    description="We'll never share your username with anyone else.">
-                    <b-form-input
-                        required
-                        placeholder="Enter username"
-                    ></b-form-input>
-                </b-form-group>
-
-                <b-form-group label="Password:" label-for="input-2">
-                    <b-form-input
-                        type="password"
-                        required
-                        placeholder="Enter password"
-                    ></b-form-input>
-                </b-form-group>
-
-                <div>
-                    <b-button class="my-button" variant="success">Login</b-button>
-                    <b-button class="my-button" variant="secondary">Sign up</b-button>
-                </div>
-
-            </b-form>
-        </div>
 
         <!-- this is better for desktop version -->
-        <div v-else>
-            <b-container>
-                <b-row align-h="center" class="login">
-                    <b-col></b-col>
-                    <b-col>
-                        <b-form>
-                            <b-form-group
-                                label="Username:">
-                                <b-form-input
-                                    required
-                                    placeholder="Enter username"
-                                ></b-form-input>
-                            </b-form-group>
+        <b-row align-h="center" class="login" fluid="md">
+            <b-col md="4">
+                <b-card>
+                    <b-alert variant="danger" :show="authenticated === false">
+                        Username and Password do not match :( Please try again!
+                    </b-alert>
+                    <b-form @submit.prevent="login()">
+                        <b-form-group
+                            label="Username:">
+                            <b-form-input
+                                required
+                                placeholder="Enter username"
+                                v-model="auth.username"
+                            ></b-form-input>
+                        </b-form-group>
 
-                            <b-form-group label="Password:" label-for="input-2">
-                                <b-form-input
-                                    required
-                                    placeholder="Enter password"
-                                ></b-form-input>
-                            </b-form-group>
+                        <b-form-group label="Password:" label-for="input-2">
+                            <b-form-input
+                                required
+                                placeholder="Enter password"
+                                v-model="auth.password"
+                            ></b-form-input>
+                        </b-form-group>
 
-                            <b-button variant="success">Login</b-button>
-                            <b-button variant="secondary">Sign up</b-button>
-                        </b-form>
-                    </b-col>
-                    <b-col></b-col>
-
-                </b-row>
-            </b-container>
-        </div>
+                        <b-button variant="primary" v-on:click="login()">Login</b-button>
+                    </b-form>
+                </b-card>
+            </b-col>
+        </b-row>
     </div>
 </template>
 
 <script>
-
-    import HelloWorld from '../components/HelloWorld.vue'
+    import HelloWorld from '../components/HelloWorld.vue';
     import NavBar from "../components/NavBar";
     import {mapActions, mapState} from "vuex";
 
@@ -81,20 +51,42 @@
                 surveys: state => state.surveys
             })
         },
+        data() {
+            return {
+                auth: {
+                    username: '',
+                    password: ''
+                },
+            }
+        },
         methods: {
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+            },
+            ...mapActions(['requestToken']),
+            login() {
+                this.requestToken(this.auth)
+                    .then(() => {
+                        this.$router.push("/surveys");
+                    })
+                    .catch(() => {
+
+                    })
             }
         },
         ...mapActions([
             'requestSurveys'
         ]),
-        created() {
-            this.requestSurveys()
+        created(){
+        this.requestSurveys()
+        },
+        computed: {
+            ...mapState({
+                authenticated: 'authenticated'
+            })
         }
     }
 </script>
-
 <style scoped>
 
     .my-button {

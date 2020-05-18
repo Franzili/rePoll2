@@ -2,13 +2,18 @@ package gpse.repoll.web;
 
 import gpse.repoll.domain.*;
 import gpse.repoll.domain.answers.*;
-import gpse.repoll.domain.questions.Question;
 import gpse.repoll.domain.exceptions.BadRequestException;
+import gpse.repoll.domain.questions.Question;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
+import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+
 
 /**
  * REST Controller managing /api/v1/polls/* entry points.
@@ -17,67 +22,78 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/v1/polls")
 public class PollsController {
-    private PollService pollService;
+    private final PollService pollService;
+    private final UserService userService;
 
     @Autowired
-    public PollsController(PollService service) {
-        this.pollService = service;
+    public PollsController(PollService pollService, UserService userService) {
+        this.pollService = pollService;
+        this.userService = userService;
     }
 
+    @Secured(Roles.ALL)
     @GetMapping("/")
     public List<Poll> getAll() {
-        List<Poll> result = new ArrayList<>();
-        pollService.getAll().forEach(result::add);
-        return result;
+        return pollService.getAll();
     }
 
+    @Secured(Roles.ALL)
     @PostMapping("/")
     public Poll addPoll(@RequestBody PollCmd pollCmd) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User creator = userService.getUser(auth.getName());
+
         if (pollCmd.getTitle() == null || pollCmd.getTitle().equals("")) {
-            throw new BadRequestException();
+            throw new BadRequestException("Title cannot be empty!");
         }
-        return pollService.addPoll(pollCmd.getTitle());
+        return pollService.addPoll(pollCmd.getTitle(), creator);
     }
 
-    @GetMapping("/{id:\\d+}")
-    public Poll getPoll(@PathVariable("id") final String id) {
+    @Secured(Roles.ALL)
+    @GetMapping("/{id}/")
+    public Poll getPoll(@PathVariable("id") final UUID id) {
         // we know that id is a string of regex \d+, so we dont need to check for NumberFormatException.
-        return pollService.getPoll(Long.valueOf(id));
+        return pollService.getPoll(id);
     }
 
-    @PutMapping("/{id:\\d+}")
-    public Poll updatePoll(@PathVariable("id") final String id, @RequestBody PollCmd pollCmd) {
-        return pollService.updatePoll(Long.valueOf(id), pollCmd.getTitle(), pollCmd.getStatus());
+    @Secured(Roles.ALL)
+    @PutMapping("/{id}/")
+    public Poll updatePoll(@PathVariable("id") final UUID id, @RequestBody PollCmd pollCmd) {
+        return pollService.updatePoll(id, pollCmd.getTitle(), pollCmd.getStatus());
     }
 
-    @GetMapping("/{pollId:\\d+}/sections")
-    public List<PollSection> listPollSections(@PathVariable("pollId") final String pollId) {
-        return pollService.getAllSections(Long.valueOf(pollId));
+    @Secured(Roles.ALL)
+    @GetMapping("/{pollId}/sections/")
+    public List<PollSection> listPollSections(@PathVariable("pollId") final UUID pollId) {
+        return pollService.getAllSections(pollId);
     }
 
-    @PostMapping("/{pollId:\\d+}/sections")
-    public PollSection addPollSection(@PathVariable("pollId") final String pollId,
+    @Secured(Roles.ALL)
+    @PostMapping("/{pollId}/sections/")
+    public PollSection addPollSection(@PathVariable("pollId") final UUID pollId,
                                       @RequestBody PollSectionCmd pollSectionCmd) {
         return pollService.addPollSection(
-            Long.valueOf(pollId),
+            pollId,
             pollSectionCmd.getTitle(),
             pollSectionCmd.getDescription(),
             pollSectionCmd.getQuestions()
         );
     }
 
-    @GetMapping("/{pollId:\\d+}/sections/{sectionId:\\d+}")
-    public PollSection getPollSection(@PathVariable("pollId") final String pollId,
+    @Secured(Roles.ALL)
+    @GetMapping("/{pollId}/sections/{sectionId:\\d+}/")
+    public PollSection getPollSection(@PathVariable("pollId") final UUID pollId,
                                       @PathVariable("sectionId") final String sectionId) {
-        return pollService.getPollSection(Long.valueOf(pollId), Long.valueOf(sectionId));
+        return pollService.getPollSection(pollId, Long.valueOf(sectionId));
     }
 
-    @PutMapping("/{pollId:\\d+}/sections/{sectionId:\\d+}")
-    public PollSection updatePollSection(@PathVariable("pollId") final String pollId,
+    @Secured(Roles.ALL)
+    @PutMapping("/{pollId}/sections/{sectionId:\\d+}/")
+    public PollSection updatePollSection(@PathVariable("pollId") final UUID pollId,
                                          @PathVariable("sectionId") final String sectionId,
                                          @RequestBody PollSectionCmd pollSectionCmd) {
         return pollService.updatePollSection(
-            Long.valueOf(pollId),
+            pollId,
             Long.valueOf(sectionId),
             pollSectionCmd.getTitle(),
             pollSectionCmd.getDescription(),
@@ -85,92 +101,91 @@ public class PollsController {
         );
     }
 
-    @PostMapping("/{pollId:\\d+}/questions")
-    public Question addQuestion(@PathVariable("pollId") final String pollId,
+    @Secured(Roles.ALL)
+    @PostMapping("/{pollId}/questions/")
+    public Question addQuestion(@PathVariable("pollId") final UUID pollId,
                                 @RequestBody QuestionCmd questionCmd) {
-
+        String title = questionCmd.getTitle();
         if (questionCmd instanceof TextQuestionCmd) {
             TextQuestionCmd textQuestionCmd = (TextQuestionCmd) questionCmd;
-            return pollService.addTextQuestion(Long.valueOf(pollId),
-                                               textQuestionCmd.getTitle(),
-                                               textQuestionCmd.getCharLimit());
+            return pollService.addTextQuestion(pollId, title, textQuestionCmd.getCharLimit());
         } else if (questionCmd instanceof ScaleQuestionCmd) {
             ScaleQuestionCmd scaleQuestionCmd = (ScaleQuestionCmd) questionCmd;
-            return pollService.addScaleQuestion(Long.valueOf(pollId),
-                                         questionCmd.getTitle(),
-                                         scaleQuestionCmd.getScaleNameLeft(),
-                                         scaleQuestionCmd.getScaleNameRight(),
-                                         scaleQuestionCmd.getStepCount());
+            return pollService.addScaleQuestion(pollId, title,
+                                                scaleQuestionCmd.getScaleNameLeft(),
+                                                scaleQuestionCmd.getScaleNameRight(),
+                                                scaleQuestionCmd.getStepCount());
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            return pollService.addRadioButtonQuestion(Long.valueOf(pollId),
-                                               radioButtonQuestionCmd.getTitle(),
-                                               radioButtonQuestionCmd.getChoices());
+            return pollService.addRadioButtonQuestion(pollId, title, radioButtonQuestionCmd.getChoices());
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
             List<Choice> choices = new ArrayList<>();
             for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return pollService.addChoiceQuestion(Long.valueOf(pollId), choiceQuestionCmd.getTitle(), choices);
+            return pollService.addChoiceQuestion(pollId, title, choices);
         }
 
         // this should never happen.
         throw new InternalServerErrorException();
     }
 
-    @GetMapping("/{pollId:\\d+}/questions/{questionId:\\d+}")
-    public Question getQuestion(@PathVariable("pollId") final String pollId,
+    @Secured(Roles.ALL)
+    @GetMapping("/{pollId+}/questions/")
+    public List<Question> listQuestions(@PathVariable("pollId") final UUID pollId) {
+        return pollService.getAllQuestions(pollId);
+    }
+
+    @Secured(Roles.ALL)
+    @GetMapping("/{pollId}/questions/{questionId:\\d+}/")
+    public Question getQuestion(@PathVariable("pollId") final UUID pollId,
                             @PathVariable("questionId") final String questionId) {
         return pollService.getQuestion(
-            Long.valueOf(pollId),
+            pollId,
             Long.valueOf(questionId)
         );
     }
 
-    @PutMapping("/{pollId:\\d+}/questions/{questionId:\\d+}")
-    public Question updateQuestion(@PathVariable("pollId") final String pollId,
+    @Secured(Roles.ALL)
+    @PutMapping("/{pollId}/questions/{questionId:\\d+}/")
+    public Question updateQuestion(@PathVariable("pollId") final UUID pollId,
                                    @PathVariable("questionId") final String questionId,
                                    @RequestBody QuestionCmd questionCmd) {
+        String title = questionCmd.getTitle();
         if (questionCmd instanceof TextQuestionCmd) {
-            return pollService.updateTextQuestion(
-                Long.valueOf(pollId),
-                Long.valueOf(questionId),
-                questionCmd.getTitle()
-            );
+            return pollService.updateTextQuestion(pollId, Long.valueOf(questionId), title);
         } else if (questionCmd instanceof ScaleQuestionCmd) {
             ScaleQuestionCmd scaleQuestionCmd = (ScaleQuestionCmd) questionCmd;
-            return pollService.updateScaleQuestion(Long.valueOf(pollId),
-                                            Long.valueOf(questionId),
-                                            scaleQuestionCmd.getTitle(),
-                                            scaleQuestionCmd.getScaleNameLeft(),
-                                            scaleQuestionCmd.getScaleNameRight(),
-                                            scaleQuestionCmd.getStepCount());
+            return pollService.updateScaleQuestion(pollId,
+                                                   Long.valueOf(questionId),
+                                                   title,
+                                                   scaleQuestionCmd.getScaleNameLeft(),
+                                                   scaleQuestionCmd.getScaleNameRight(),
+                                                   scaleQuestionCmd.getStepCount());
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            return pollService.updateRadioButtonQuestion(Long.valueOf(pollId),
-                                                  Long.valueOf(questionId),
-                                                  radioButtonQuestionCmd.getTitle(),
-                                                  radioButtonQuestionCmd.getChoices());
+            return pollService.updateRadioButtonQuestion(pollId,
+                                                         Long.valueOf(questionId),
+                                                         title,
+                                                         radioButtonQuestionCmd.getChoices());
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
             List<Choice> choices = new ArrayList<>();
             for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return pollService.updateChoiceQuestion(Long.valueOf(pollId),
-                                             Long.valueOf(questionId),
-                                             choiceQuestionCmd.getTitle(),
-                                             choices);
+            return pollService.updateChoiceQuestion(pollId, Long.valueOf(questionId), title, choices);
         }
 
         // This should not be reached
         throw new InternalServerErrorException();
     }
 
-    //todo Handling wrong answer type
-    @PostMapping("/{pollId:\\d+}/entries")
-    public PollEntry addPollEntry(@PathVariable("pollId") final String pollId,
+    //todo handling wrong answer type
+    @Secured(Roles.ALL)
+    @PostMapping("/{pollId}/entries/")
+    public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
         Map<Long, Answer> answers = new HashMap<>();
         for (Long key : pollEntryCmd.getAnswers().keySet()) {
@@ -198,23 +213,24 @@ public class PollsController {
             answers.put(key, answer);
         }
         return pollService.addPollEntry(
-            Long.valueOf(pollId),
+            pollId,
             answers
         );
     }
 
-    @GetMapping("/{pollId:\\d+}/entries/{entryId:\\d+}")
-    public PollEntry getPollEntry(@PathVariable("pollId") final String pollId,
+    @Secured(Roles.ALL)
+    @GetMapping("/{pollId}/entries/{entryId:\\d+}/")
+    public PollEntry getPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @PathVariable("entryId") final String entryId) {
-        return  pollService.getPollEntry(Long.valueOf(pollId), Long.valueOf(entryId));
+        return  pollService.getPollEntry(pollId, Long.valueOf(entryId));
     }
 
 
 
 
     /* TODO
-    @PutMapping("/{pollId:\\d+}/entries/{entryId:\\d+}")
-    public PollEntry updatePollEntry(@PathVariable("pollId") final String pollId,
+    @PutMapping("/{pollId}/entries/{entryId:\\d+}")
+    public PollEntry updatePollEntry(@PathVariable("pollId") final UUID pollId,
                                      @PathVariable("entryId") final String entryId,
                                      @RequestBody PollEntryCmd pollEntryCmd) {
 
