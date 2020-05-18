@@ -1,9 +1,9 @@
 <template>
-    <div class="" style="text-align:center;">
-        <b-form-input v-if="editQuestion" v-model="item.question"></b-form-input>
+    <div style="text-align:center;">
+        <b-form-input v-if="editQuestion" class="question" v-model="item.question"></b-form-input>
         <p v-else class="question">{{item.question}}</p>
-        <b-icon-check-all scale="2" animation="fade" v-if="editQuestion" @click="changeEditQuestion"></b-icon-check-all>
-        <b-icon-pencil scale="1.5" v-else-if="edit" @click="changeEditQuestion"></b-icon-pencil>
+        <b-icon-check-all class="my-icon" scale="2" animation="fade" v-if="editQuestion" @click="changeEditQuestion"></b-icon-check-all>
+        <b-icon-pencil class="my-icon" scale="1.5" v-else-if="edit" @click="changeEditQuestion"></b-icon-pencil>
 
         <!-- all possible answers possibilities -->
         <div v-if="item.type === 'checkbox'">
@@ -49,7 +49,22 @@
             </b-dropdown>
         </div>
 
-        <QuestionEditor v-if="edit === true && item.type !== 'freetext'" ref="editor" v-on:add-pos="addPos"/>
+        <div v-if="item.type === 'slider'">
+            <b-form-input
+                id="bg-opacity"
+                v-model="val"
+                type="range"
+                number
+                min="0"
+                max="100"
+                step="1"
+            ></b-form-input>
+            <b-input-group-append is-text class="text-monospace">
+                {{ val }}
+            </b-input-group-append>
+        </div>
+
+        <QuestionEditor v-if="edit === true && item.type !== 'freetext' && item.type !== 'slider'" ref="editor" v-on:add-pos="addPos"/>
 
         <b-button class="my-btn" v-if="edit === true" @click="$emit('del-item', item.id)" pill variant="outline-secondary">delete question</b-button>
     </div>
@@ -65,6 +80,7 @@
         data() {
             return {
                 editQuestion: false,
+                val: 0,
                 selected: []
             }
         },
@@ -94,6 +110,10 @@
         margin-bottom: 18px;
     }
 
+    .my-icon {
+        margin-bottom: 10px;
+    }
+
     .my-btn {
         margin-top: 15px;
         margin-bottom: 100px;
@@ -106,5 +126,6 @@
 
     .question {
         font-weight: bold;
+        margin-bottom: 10px;
     }
 </style>

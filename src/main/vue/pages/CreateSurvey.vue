@@ -98,6 +98,12 @@
                 edit: true,
                 items: [
                     {
+                        id: 0,
+                        type: "slider",
+                        question: "wie gehts",
+                        possibilities: []
+                    },
+                    {
                         id: 1,
                         type: "freetext",
                         question: "wie gehts",
