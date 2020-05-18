@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <QuestionEditor v-if="edit === true && item.type !== 'freetext' && item.type !== 'slider'" ref="editor" v-on:add-pos="addPos"/>
+        <QuestionEditor v-if="edit === true && item.type !== 'freetext' && item.type !== 'slider' && item.type !== 'section'" ref="editor" v-on:add-pos="addPos"/>
 
         <b-button class="my-btn" v-if="edit === true" @click="$emit('del-item', item.id)" pill variant="outline-secondary">delete question</b-button>
     </div>
