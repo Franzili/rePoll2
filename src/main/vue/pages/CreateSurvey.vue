@@ -51,7 +51,6 @@
                                     <p>
                                         Add a Question into your Survey via Drag and Drop!
                                     </p>
-
                                     <div class="col-4">
 
                                         <draggable

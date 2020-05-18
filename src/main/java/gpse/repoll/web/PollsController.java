@@ -8,9 +8,12 @@ import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+
 
 /**
  * REST Controller managing /api/v1/polls/* entry points.
@@ -20,10 +23,12 @@ import java.util.*;
 @RequestMapping("/api/v1/polls")
 public class PollsController {
     private final PollService pollService;
+    private final UserService userService;
 
     @Autowired
-    public PollsController(PollService service) {
-        this.pollService = service;
+    public PollsController(PollService pollService, UserService userService) {
+        this.pollService = pollService;
+        this.userService = userService;
     }
 
     @Secured(Roles.ALL)
@@ -35,10 +40,13 @@ public class PollsController {
     @Secured(Roles.ALL)
     @PostMapping("/")
     public Poll addPoll(@RequestBody PollCmd pollCmd) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User creator = userService.getUser(auth.getName());
+
         if (pollCmd.getTitle() == null || pollCmd.getTitle().equals("")) {
             throw new BadRequestException("Title cannot be empty!");
         }
-        return pollService.addPoll(pollCmd.getTitle());
+        return pollService.addPoll(pollCmd.getTitle(), creator);
     }
 
     @Secured(Roles.ALL)
