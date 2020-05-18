@@ -42,9 +42,7 @@ public class InitializeDatabase implements InitializingBean {
         transactionTemplate.execute(status -> {
             try {
                 userService.getUser("JamesBond");
-                System.out.println("Found.");
             } catch (UsernameNotFoundException e) {
-                System.out.println("Not  found!!!!!!!");
                 final User user = userService.addUser(
                     "JamesBond",
                     // Passwort: GutenTag

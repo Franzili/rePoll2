@@ -40,12 +40,11 @@ public class PollsController {
     @Secured(Roles.ALL)
     @PostMapping("/")
     public Poll addPoll(@RequestBody PollCmd pollCmd) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User creator = userService.getUser(auth.getName());
-
         if (pollCmd.getTitle() == null || pollCmd.getTitle().equals("")) {
             throw new BadRequestException("Title cannot be empty!");
         }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User creator = userService.getUser(auth.getName());
         return pollService.addPoll(pollCmd.getTitle(), creator);
     }
 
