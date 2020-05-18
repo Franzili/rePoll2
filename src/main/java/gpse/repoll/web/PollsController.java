@@ -60,7 +60,7 @@ public class PollsController {
         pollService.removePoll(id);
     }
 
-
+    @Secured(Roles.ALL)
     @GetMapping("/{pollId}/sections/")
     public List<PollSection> listPollSections(@PathVariable("pollId") final UUID pollId) {
         return pollService.getAllSections(pollId);
