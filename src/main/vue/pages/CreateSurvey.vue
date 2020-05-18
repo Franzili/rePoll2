@@ -5,8 +5,19 @@
             <div class="my-titel">
                 Titel:
             </div>
-            <div>
-                Moby Dick
+            <div v-if="editTitle">
+                <b-form-input  v-model="surveyTitle"></b-form-input>
+            </div>
+            <div v-else>
+                {{surveyTitle}}
+            </div>
+
+            <div v-if="editTitle">
+                <b-icon-check-all class="my-icon" scale="1.8" animation="fade" @click="changeEditTitle"></b-icon-check-all>
+            </div>
+            <div v-else>
+                <b-icon-pencil class="my-icon" scale="1.2" @click="changeEditTitle"></b-icon-pencil>
+
             </div>
         </div>
 
@@ -25,30 +36,80 @@
             <b-container>
                 <b-row style="text-align: center">
                     <b-col>Palette</b-col>
-                    <b-col>
-                    </b-col>
+                    <b-col>Umfrage</b-col>
                     <b-col>Gliederung</b-col>
                 </b-row>
 
                 <!-- draggable palette items -->
                 <b-row style="text-align:center;" class="my-row">
-                    <b-col>
-                        <div class="col-4">
-                            <draggable
-                                class="list-group" v-model="palette"
-                                group="group"
-                                @change="log"
-                                v-on:end="updatePalette"
-                            >
-                                <div class="drag-item flex flex-justify-between">
-                                    <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                    <b-icon-square></b-icon-square>
-                                    <!-- <AddQuestion v-on:add-item="addItem"/> -->
-                                </div>
-                            </draggable>
-                        </div>
+                    <div>
+                        <b-button v-b-toggle.sidebar-1>Add Question</b-button>
+                        <b-sidebar id="sidebar-1" title="Add Questions" shadow>
+                            <div class="px-3 py-2">
+                                <b-img src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Die_drei_fragezeichen.svg" fluid thumbnail></b-img>
+                                <p>
+                                    Add a Question into your Survey via Drag and Drop!
+                                </p>
 
-                    </b-col>
+                                <div class="col-4">
+                                    <draggable
+                                        class="list-group" v-model="palette"
+                                        group="group"
+                                        @change="log"
+                                        v-on:end="updateSurveyItemsX"
+                                    >
+                                    <div class="drag-item flex flex-justify-between">
+                                        <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+                                        <b-icon-question-square></b-icon-question-square>
+                                        <b-text> Simple Question</b-text>
+                                        <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                    </div>
+                                    </draggable>
+                                    <draggable
+                                        class="list-group" v-model="palette"
+                                        group="group"
+                                        @change="log"
+                                        v-on:end="updateSurveyItemsPossibilities"
+                                    >
+                                        <div class="drag-item flex flex-justify-between">
+                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+                                            <b-icon-square></b-icon-square>
+                                            <b-text> Multiple-choice with Possibilities</b-text>
+                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                        </div>
+                                    </draggable>
+                                    <draggable
+                                        class="list-group" v-model="palette"
+                                        group="group"
+                                        @change="log"
+                                        v-on:end="updateSurveyItemsSelect"
+                                    >
+                                        <div class="drag-item flex flex-justify-between">
+                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+                                            <b-icon-caret-down-fill></b-icon-caret-down-fill>
+                                            <b-text> Select Answer with Possibility</b-text>
+                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                        </div>
+                                    </draggable>
+                                    <draggable
+                                        class="list-group" v-model="palette"
+                                        group="group"
+                                        @change="log"
+                                        v-on:end="updateSurveyItemsText"
+                                    >
+                                        <div class="drag-item flex flex-justify-between">
+                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+                                            <b-icon-type></b-icon-type>
+                                            <b-text> Textquestion with Possibility</b-text>
+                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                        </div>
+                                    </draggable>
+                                </div>
+
+
+                            </div>
+                        </b-sidebar>
+                    </div>
                     <b-col class="cols-14">
                             <div>
                                 <draggable
@@ -64,7 +125,6 @@
                         <HelloWorld class="ml-auto" msg=""/>
                     </b-col>
                     <b-col>
-
                     </b-col>
                 </b-row>
             </b-container>
@@ -87,91 +147,22 @@
         name: "CreateSurvey",
         data() {
             return {
-                id: "7ac88593-e6e7-4281-bfaf-9d0da069de8d",
+                id: "7ac99593-e6e7-42810bfaf09d0da069fkj",
                 title: "Moby Dick",
-                edit: true,
                 status: "IN_PROCESSING",
-                sections: [
-                    {
-                        id: 1,
-                        description: "this is a poll section okay",
-                        title: "Poll section 1 updated 2 okay",
-                        questions: []
-                    }
-                ],
+                sections: [],
+                surveyTitle: "Moby Dick",
+                editTitle: false,
+                edit: true,
                 items: [
-                    {
-                        id: 1,
-                        type: "TextQuestion",
-                        title: "okay",
-                        //possibilities: []
-                    },
-                    {
-                        id: 2,
-                        type: "RadioButtonQuestion",
-                        question: "radioButton put ja 2",
-                        possibilities: [
-                            {
-                                id: 3,
-                                text: "bla bla asdikawzug l hif",
-                            },
-                            {
-                                id: 4,
-                                text: "yes",
-                            }
-                        ]
-                    },
-                    {
-                        id: 3,
-                        type: "checkbox",
-                        question: "how are you",
-                        possibilities: [
-                            {
-                                id: 1,
-                                text: "bla bla asdikawzug l hif",
-                            },
-                            {
-                                id: 2,
-                                text: "yes",
-                            }
-                        ]
-                    },
-                    {
-                        id: 4,
-                        type: "dropdown",
-                        question: "wie gehts",
-                        possibilities: [
-                            {
-                                id: 5,
-                                text: "bla bla asdikawzug l hif",
-                            },
-                            {
-                                id: 6,
-                                text: "yes",
-                            }
-                        ]
-                    }
                 ],
-                palette: [
-                    {
-                        id: 8,
-                        type: "checkbox",
-                        question: "test",
-                        possibilities: [
-                            {
-                                id: 5,
-                                text: "bla bla asdikawzug l hif",
-                            },
-                            {
-                                id: 6,
-                                text: "yes",
-                            }
-                        ]
-                    }
-                ]
+                palette: []
             }
         },
         methods: {
+            changeEditTitle() {
+                this.editTitle = !this.editTitle;
+            },
             updatePoll() {
                 // update poll
                 let pollCmd = {
@@ -205,23 +196,65 @@
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             },
-            updatePalette() {
+            updateSurveyItemsPossibilities() {
                 const newItem = {
                     id: uuidv4(),
-                    type: "checkbox",
-                    question: "test",
+                    type: "radio",
+                    question: "Testquestion with Possibility",
                     possibilities: [
                         {
-                            id: 5,
-                            text: "bla bla asdikawzug l hif",
+                            id: 1,
+                            text: "Wie geht es dir Morgens?",
                         },
                         {
-                            id: 6,
-                            text: "yes",
+                            id: 2,
+                            text: "Wie geht es dir Mittags?",
+                        },
+                        {
+                            id: 1,
+                            text: "Wie geht es dir Abends?",
                         }
                     ]
                 };
-                this.palette = [...this.palette, newItem];
+                this.items = [...this.items, newItem];
+            },
+            updateSurveyItemsSelect() {
+                const newItem = {
+                    id: uuidv4(),
+                    type: "dropdown",
+                    question: "Select Answer with Possibility",
+                    possibilities: [
+                        {
+                            id: 1,
+                            text: "Meditierst du regelmäßig?",
+                        },
+                        {
+                            id: 2,
+                            text: "Machst du regelmäßig Sport?",
+                        },
+                        {
+                            id: 3,
+                            text: "Nimmst du regelmäßig kalte Duschen?",
+                        }
+                    ]
+                };
+                this.items = [...this.items, newItem];
+            },
+            updateSurveyItemsText() {
+                const newItem = {
+                    id: uuidv4(),
+                    type: "section",
+                    question: "Textquestion with Possibility",
+                };
+                this.items = [...this.items, newItem];
+            },
+            updateSurveyItemsX() {
+                const newItem = {
+                    id: uuidv4(),
+                    type: "checkbox",
+                    question: "Simple Question",
+                };
+                this.items = [...this.items, newItem];
             },
             log: function (...e) {
                     console.log(...e);
@@ -256,6 +289,10 @@
 
     .my-titel {
         color: #868686;
+    }
+
+    .my-icon {
+        margin-left: 20px;
     }
 
     .my-head {
