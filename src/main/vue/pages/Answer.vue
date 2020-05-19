@@ -1,42 +1,3 @@
-<!--
-surveyTabelElement als template testen
--->
-<!--
-<template>
-    <div style="text-align:center;">
-        <nav-bar></nav-bar>
-        <HelloWorld class="ml-auto" msg="Answer your Survey!"/>
-
-
-
-        <div>
-            Titel: <input type="text" v-model="survey.name">
-        </div>
-        <!-
-        items , also fragebn hier statt test
-        <SurveyTableList v-bind:surveys="surveys"/>
-
-         <SurveyItem v-bind:item="item" v-bind:edit="edit"/>
-        ->
-
-        <div :key="item.id" v-for="item in items">
-            <SurveyItem v-bind:item="item" v-bind:edit="false"/>
-        </div>
-
-        <!-
-        <div>
-            <SurveyItem v-bind:items="items" v-bind:edit="edit"/>
-        </div>
-        ->
-
-
-        <b-button class="my-button" variant="primary">Save</b-button>
-        <b-button class="my-button" variant="success">Submit!</b-button>
-
-    </div>
-</template>
--->
-
 <template>
     <div style="text-align:center;">
     <b-container class="mt-3">
@@ -44,23 +5,19 @@ surveyTabelElement als template testen
         <HelloWorld></HelloWorld>
         <b-row>
             <b-col>
-                <!--
-                <b-card header="Fill out your survey">
-                    -->
                     <b-form @submit.prevent="save">
                         <b-form-group>
-                            <!--
-                            <b-form-input type="text" v-model="survey.name"></b-form-input>
-                            -->
                             <p class="my-name">{{survey.title}}</p>
                         </b-form-group>
                         <b-row>
                             <b-col></b-col>
                             <b-form-group>
+
+                                <div :key="item.id" v-for="item in this.survey.questions">
+
                                 <!--
-                                <b-form-textarea type="textarea" rows="10" v-model="survey.item"></b-form-textarea>
-                                -->
                                 <div :key="item.id" v-for="item in items">
+                                    -->
                                     <SurveyItem v-bind:item="item" v-bind:edit="edit"/>
                                 </div>
                             </b-form-group>
@@ -77,9 +34,6 @@ surveyTabelElement als template testen
                         <b-button class="my-button" variant="success">Submit!</b-button>
                         -->
                     </b-form>
-                <!--
-                </b-card>
-                -->
             </b-col>
         </b-row>
     </b-container>
@@ -105,7 +59,7 @@ surveyTabelElement als template testen
         created() {
             this.id = this.$route.params.id
             this.survey = this.getSurvey(this.id)
-            this.setQuestion()
+            //this.setQuestion()
         },
         computed: {
             ...mapGetters(['getSurvey'])
@@ -123,15 +77,17 @@ surveyTabelElement als template testen
             this.$router.push('/') //redirect to page '', here start page
         },
         //TODO go through whole array to change title to question
-        setQuestion() {
-            const newItem = {
-                id: this.survey.questions[0].id,
-                question: this.survey.questions[0].title,
-                type: 'freetext'
+        /*setQuestion() {
+            for (var i = 0; i < this.survey.questions.length; i++) {
+                const newItem = {
+                    id: this.survey.questions[i].id,
+                    question: this.survey.questions[i].title,
+                    type: 'freetext' //TODO for all types,now missing in backend
+                }
+                this.items = [...this.items, newItem]
+                //this.items.push({newItem});
             }
-            this.items = [...this.items, newItem]
-
-        }
+        }*/
     },
     comments: {
         NavBar,

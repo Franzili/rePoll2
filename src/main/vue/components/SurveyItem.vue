@@ -1,7 +1,7 @@
 <template>
     <div style="text-align:center;">
         <b-form-input v-if="editQuestion" class="question" v-model="item.question"></b-form-input>
-        <p v-else class="question">{{item.question}}</p>
+        <p v-else class="question">{{item.title}}</p> <!-- was item.question   otherwise no questions on answer page-->
         <b-icon-check-all class="my-icon" scale="2" animation="fade" v-if="editQuestion" @click="changeEditQuestion"></b-icon-check-all>
         <b-icon-pencil class="my-icon" scale="1.5" v-else-if="edit" @click="changeEditQuestion"></b-icon-pencil>
 

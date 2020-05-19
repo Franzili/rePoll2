@@ -10,9 +10,12 @@
                 </b-row>
 
                 <b-row>
+                    <!--
+                    status of the survey. not needed for regular user
                     <b-col>
                         <p class="my-status">{{survey.status}}</p>
                     </b-col>
+                    -->
                     <b-col>
                         <p>
                             <b-icon icon="gear" animation="spin" font-scale="2" @click="toConfig"/>
@@ -34,9 +37,12 @@
                 </b-row>
                 <b-row></b-row>
                 <b-row style="text-align: center;" cols="5">
+                    <!--
+                    status of the survey. not needed for regular user
                     <b-col>
                         <p class="my-status">{{survey.status}}</p>
                     </b-col>
+                    -->
                     <b-col></b-col>
                     <b-col></b-col>
                     <b-col></b-col>

@@ -56,8 +56,12 @@ public class InitializeDatabase implements InitializingBean {
 
         transactionTemplate.execute(status -> {
             User user = userService.getUser("JamesBond");
-            Poll poll = pollService.addPoll("Poll 1", user);
+            Poll poll = pollService.addPoll("Gummibaerchen", user);
             pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?", 1000, user);
+            pollService.addTextQuestion(poll.getId(), "Warum magst du keine Gummibaerchen?", 1000, user);
+            Poll poll2 = pollService.addPoll("About this App", user);
+            pollService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?", 1000, user);
+            pollService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?", 1000, user);
             return null;
         });
 
