@@ -37,7 +37,6 @@
         <nav-bar></nav-bar>
         <HelloWorld style="text-align:center;" class="ml-auto" msg="Fill yout our surveys"/>
         <b-container class="my-container">
-            <b-button class="my-button" @click="save">+</b-button>
             <b-row style="text-align: center" class="my-row">
                 <b-col >
                     <AnswerSurveyTableList v-bind:surveys="surveys"/>

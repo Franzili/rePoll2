@@ -100,10 +100,10 @@ surveyTabelElement als template testen
             return {
                 id: 0,
                 survey: {}
-                /*
+
                 ,
                 items: []
-                */
+
             }
         },
         mounted() {
