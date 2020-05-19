@@ -3,7 +3,7 @@
         <nav-bar></nav-bar>
         <div class="my-head">
             <div class="my-titel">
-                Titel:
+                Title:
             </div>
             <div v-if="editTitle">
                 <b-form-input  v-model="surveyTitle"></b-form-input>
@@ -17,7 +17,6 @@
             </div>
             <div v-else>
                 <b-icon-pencil class="my-icon" scale="1.2" @click="changeEditTitle"></b-icon-pencil>
-
             </div>
         </div>
 
@@ -31,186 +30,139 @@
         </div>
 
         <!-- better for Desktop version -->
+        <!-- TODO dont drop the items back to the palette !!!-->
         <div v-else>
-            <p class="section">2. Die Gesellschaft</p>
             <b-container>
-                <b-row style="text-align: center">
-                    <b-col>Palette</b-col>
-                    <b-col>Umfrage</b-col>
-                    <b-col>Gliederung</b-col>
+                <b-row>
+                    <b-col></b-col>
+                    <b-col>
+                        <div class="my-section">
+                            <div v-if="editSection">
+                                <b-form-input style="text-align: center" class="my-section-input" v-model="sectionTitle"></b-form-input>
+                                <b-icon-check-all class="my-icon" scale="1.8" animation="fade" @click="changeEditSection"></b-icon-check-all>
+                            </div>
+
+                            <div v-else>
+                                <p class="section">{{sectionTitle}}</p>
+                                <b-icon-pencil class="my-icon" scale="1.2" @click="changeEditSection"></b-icon-pencil>
+                            </div>
+                        </div>
+                    </b-col>
+                    <b-col></b-col>
                 </b-row>
+            </b-container>
+
+
+
+            <b-container>
 
                 <!-- draggable palette items -->
                 <b-row style="text-align:center;" class="my-row">
                     <b-col>
                         <div>
                             <b-button v-if="!visible" v-b-toggle.sidebar-1-footer @click="changePaletteVisible" >Add Question</b-button>
-                            <b-sidebar v-model="visible" id="sidebar-1" bg-variant="light" localShow=true title="Add Questions" shadow>
+                            <b-sidebar v-model="visible" id="sidebar-1" bg-variant="gray-900" localShow=true>
                                 <div class="px-3 py-2">
 
-                                    <p>
-                                        Add a Question into your Survey via Drag and Drop!
+                                    <p class="margin-top-side">
+                                        Add a Question into your Poll via Drag and Drop!
                                     </p>
+
+
+
                                     <div class="col-4">
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsText"
-
-                                        >
+                                            v-on:end="updateSurveyItemsText">
 
                                             <div class="drag-item flex flex-justify-between">
-
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
 
                                                 <b-icon-pen></b-icon-pen>
-
-                                                <b-text> Text-Question</b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Text-Question
 
                                             </div>
 
                                         </draggable>
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsLimChar"
-
-                                        >
+                                            v-on:end="updateSurveyItemsLimChar">
 
                                             <div class="drag-item flex flex-justify-between">
-
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
 
                                                 <b-icon-pencil-square></b-icon-pencil-square>
-
-                                                <b-text> Limited Character Question</b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Limited Character Question
 
                                             </div>
 
                                         </draggable>
 
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsPossibilities"
-
-                                        >
+                                            v-on:end="updateSurveyItemsPossibilities">
 
                                             <div class="drag-item flex flex-justify-between">
-
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
 
                                                 <b-icon-list-task></b-icon-list-task>
-
-                                                <b-text> Single Choice Question</b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Single Choice Question
 
                                             </div>
 
                                         </draggable>
 
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsCheckbox"
-
-                                        >
+                                            v-on:end="updateSurveyItemsCheckbox">
 
                                             <div class="drag-item flex flex-justify-between">
-
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
 
                                                 <b-icon-list-task></b-icon-list-task>
-
-                                                <b-text> Multiple Choice Question </b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Multiple Choice Question
 
                                             </div>
 
                                         </draggable>
 
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsSelect"
-
-                                        >
+                                            v-on:end="updateSurveyItemsSelect">
 
                                             <div class="drag-item flex flex-justify-between">
-
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
 
                                                 <b-icon-caret-down-fill></b-icon-caret-down-fill>
-
-                                                <b-text> Select Answer Question</b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Select Answer Question
 
                                             </div>
-
                                         </draggable>
 
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsX"
-
-                                        >
+                                            v-on:end="updateSurveyItemsX">
 
                                             <div class="drag-item flex flex-justify-between">
 
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-
                                                 <b-icon-question-square></b-icon-question-square>
-
-                                                <b-text> Slider Question</b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Slider Question
 
                                             </div>
-
                                         </draggable>
+
+
 
                                     </div>
                                 </div>
                             </b-sidebar>
-
                         </div>
                     </b-col>
                     <b-col class="cols-14">
@@ -227,8 +179,7 @@
                             </div>
                         <HelloWorld class="ml-auto" msg=""/>
                     </b-col>
-                    <b-col>
-                    </b-col>
+                    <b-col></b-col>
                 </b-row>
             </b-container>
         </div>
@@ -255,24 +206,26 @@
                 status: "IN_PROCESSING",
                 sections: [],
                 surveyTitle: "Moby Dick",
+                sectionTitle: "1. The Society",
                 editTitle: false,
+                editSection: false,
                 edit: true,
                 items: [{
-                    id: uuidv4(),
+                    id: 1,
                     type: "radio",
-                    question: "Testquestion with Possibility",
+                    question: "Wie findest du das RePoll Umfragetool?",
                     possibilities: [
                         {
                             id: 1,
-                            text: "Wie geht es dir Morgens?",
+                            text: "perfekt",
                         },
                         {
                             id: 2,
-                            text: "Wie geht es dir Mittags?",
+                            text: "sehr gut",
                         },
                         {
                             id: 3,
-                            text: "Wie geht es dir Abends?",
+                            text: "gut",
                         }
                     ]
                 }
@@ -281,13 +234,21 @@
             }
         },
         methods: {
-            changePaletteVisible(){
+            changePaletteVisible() {
                 this.visible = !this.visible;
             },
             changeEditTitle() {
                 this.editTitle = !this.editTitle;
             },
+            changeEditSection() {
+                this.editSection = !this.editSection;
+            },
             updatePoll() {
+
+                this.$bvToast.toast(`Poll saved`, {
+                    autoHideDelay: 1000
+                });
+
                 // update poll
                 let pollCmd = {
                     title: this.title,
@@ -440,7 +401,6 @@
 
     .my-row {
         padding: 20px;
-        align-content: center;
     }
 
     .drag-item {
@@ -456,6 +416,7 @@
 
     .my-titel {
         color: #868686;
+        margin-right: 5px;
     }
 
     .my-icon {
@@ -476,8 +437,24 @@
 
     .section {
         margin-top: 20px;
+        margin-bottom: 0px;
         color: #868686;
         font-size: 30px;
         text-align: center;
+    }
+
+    .my-section {
+        text-align:center;
+        font-size: 30px;
+        padding: 1px;
+    }
+
+    .margin-top-side {
+        margin-top: 70px;
+    }
+
+    .my-section-input {
+        margin-top: 20px;
+        margin-bottom: 10px;
     }
 </style>

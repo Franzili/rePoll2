@@ -1,5 +1,6 @@
 <template>
     <div style="text-align:center;">
+        <b-card border-variant="dark">
         <b-form-input v-if="editQuestion" class="question" v-model="item.question"></b-form-input>
         <p v-else class="question">{{item.question}}</p>
         <b-icon-check-all class="my-icon" scale="2" animation="fade" v-if="editQuestion" @click="changeEditQuestion"></b-icon-check-all>
@@ -7,6 +8,7 @@
 
         <!-- all possible answers possibilities -->
         <div v-if="item.type === 'checkbox'">
+
             <b-form-group>
                 <b-form-checkbox-group v-model="selected">
                     <div v-bind:key="pos.id" v-for="pos in item.possibilities">
@@ -96,6 +98,10 @@
         <QuestionEditor v-if="edit === true && item.type !== 'freetext' && item.type !== 'slider' && item.type !== 'section'" ref="editor" v-on:add-pos="addPos"/>
 
         <b-button class="my-btn" v-if="edit === true" @click="$emit('del-item', item.id)" pill variant="outline-secondary">delete question</b-button>
+            </b-card>
+        <div v-if="!edit" class="my-test">
+
+        </div>
     </div>
 </template>
 
@@ -157,7 +163,6 @@
 
     .my-btn {
         margin-top: 15px;
-        margin-bottom: 100px;
     }
 
     .slider {
@@ -176,5 +181,9 @@
 
     .my-form {
         margin-bottom: 10px;
+    }
+
+    .my-test {
+        margin-bottom: 50px;
     }
 </style>

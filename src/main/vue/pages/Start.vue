@@ -1,7 +1,7 @@
 <template>
     <div>
         <nav-bar></nav-bar>
-        <HelloWorld style="text-align:center;" class="ml-auto" msg="Welcome to the best Survey App!"/>
+        <HelloWorld style="text-align:center;" class="ml-auto" msg="Welcome to the best Poll App!"/>
 
 
         <!-- this is better for desktop version -->
