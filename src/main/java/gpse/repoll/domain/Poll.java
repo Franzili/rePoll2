@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.lang.annotation.Target;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,7 @@ public class Poll {
      */
     public Poll(User creator, String title) {
         this.creator = creator;
+        this.lastEditor = creator;
         this.title = title;
         this.status = PollStatus.IN_PROCESS;
         //creationTime = LocalDateTime.now();

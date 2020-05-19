@@ -42,74 +42,177 @@
 
                 <!-- draggable palette items -->
                 <b-row style="text-align:center;" class="my-row">
-                    <div>
-                        <b-button v-b-toggle.sidebar-1>Add Question</b-button>
-                        <b-sidebar id="sidebar-1" title="Add Questions" shadow>
-                            <div class="px-3 py-2">
-                                <b-img src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Die_drei_fragezeichen.svg" fluid thumbnail></b-img>
-                                <p>
-                                    Add a Question into your Survey via Drag and Drop!
-                                </p>
+                    <b-col>
+                        <div>
+                            <b-button v-if="!visible" v-b-toggle.sidebar-1-footer @click="changePaletteVisible" >Add Question</b-button>
+                            <b-sidebar v-model="visible" id="sidebar-1" bg-variant="light" localShow=true title="Add Questions" shadow>
+                                <div class="px-3 py-2">
 
-                                <div class="col-4">
-                                    <draggable
-                                        class="list-group" v-model="palette"
-                                        group="group"
-                                        @change="log"
-                                        v-on:end="updateSurveyItemsX"
-                                    >
-                                    <div class="drag-item flex flex-justify-between">
-                                        <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                        <b-icon-question-square></b-icon-question-square>
-                                        <b-text> Simple Question</b-text>
-                                        <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                    <p>
+                                        Add a Question into your Survey via Drag and Drop!
+                                    </p>
+                                    <div class="col-4">
+                                        <draggable
+
+                                            class="list-group" v-model="palette"
+
+                                            group="group"
+
+                                            @change="log"
+
+                                            v-on:end="updateSurveyItemsText"
+
+                                        >
+
+                                            <div class="drag-item flex flex-justify-between">
+
+                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+
+                                                <b-icon-pen></b-icon-pen>
+
+                                                <b-text> Text-Question</b-text>
+
+                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+
+                                            </div>
+
+                                        </draggable>
+                                        <draggable
+
+                                            class="list-group" v-model="palette"
+
+                                            group="group"
+
+                                            @change="log"
+
+                                            v-on:end="updateSurveyItemsLimChar"
+
+                                        >
+
+                                            <div class="drag-item flex flex-justify-between">
+
+                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+
+                                                <b-icon-pencil-square></b-icon-pencil-square>
+
+                                                <b-text> Limited Character Question</b-text>
+
+                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+
+                                            </div>
+
+                                        </draggable>
+
+                                        <draggable
+
+                                            class="list-group" v-model="palette"
+
+                                            group="group"
+
+                                            @change="log"
+
+                                            v-on:end="updateSurveyItemsPossibilities"
+
+                                        >
+
+                                            <div class="drag-item flex flex-justify-between">
+
+                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+
+                                                <b-icon-list-task></b-icon-list-task>
+
+                                                <b-text> Single Choice Question</b-text>
+
+                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+
+                                            </div>
+
+                                        </draggable>
+
+                                        <draggable
+
+                                            class="list-group" v-model="palette"
+
+                                            group="group"
+
+                                            @change="log"
+
+                                            v-on:end="updateSurveyItemsCheckbox"
+
+                                        >
+
+                                            <div class="drag-item flex flex-justify-between">
+
+                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+
+                                                <b-icon-list-task></b-icon-list-task>
+
+                                                <b-text> Multiple Choice Question </b-text>
+
+                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+
+                                            </div>
+
+                                        </draggable>
+
+                                        <draggable
+
+                                            class="list-group" v-model="palette"
+
+                                            group="group"
+
+                                            @change="log"
+
+                                            v-on:end="updateSurveyItemsSelect"
+
+                                        >
+
+                                            <div class="drag-item flex flex-justify-between">
+
+                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+
+                                                <b-icon-caret-down-fill></b-icon-caret-down-fill>
+
+                                                <b-text> Select Answer Question</b-text>
+
+                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+
+                                            </div>
+
+                                        </draggable>
+
+                                        <draggable
+
+                                            class="list-group" v-model="palette"
+
+                                            group="group"
+
+                                            @change="log"
+
+                                            v-on:end="updateSurveyItemsX"
+
+                                        >
+
+                                            <div class="drag-item flex flex-justify-between">
+
+                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
+
+                                                <b-icon-question-square></b-icon-question-square>
+
+                                                <b-text> Slider Question</b-text>
+
+                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+
+                                            </div>
+
+                                        </draggable>
+
                                     </div>
-                                    </draggable>
-                                    <draggable
-                                        class="list-group" v-model="palette"
-                                        group="group"
-                                        @change="log"
-                                        v-on:end="updateSurveyItemsPossibilities"
-                                    >
-                                        <div class="drag-item flex flex-justify-between">
-                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                            <b-icon-square></b-icon-square>
-                                            <b-text> Multiple-choice with Possibilities</b-text>
-                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
-                                        </div>
-                                    </draggable>
-                                    <draggable
-                                        class="list-group" v-model="palette"
-                                        group="group"
-                                        @change="log"
-                                        v-on:end="updateSurveyItemsSelect"
-                                    >
-                                        <div class="drag-item flex flex-justify-between">
-                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                            <b-icon-caret-down-fill></b-icon-caret-down-fill>
-                                            <b-text> Select Answer with Possibility</b-text>
-                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
-                                        </div>
-                                    </draggable>
-                                    <draggable
-                                        class="list-group" v-model="palette"
-                                        group="group"
-                                        @change="log"
-                                        v-on:end="updateSurveyItemsText"
-                                    >
-                                        <div class="drag-item flex flex-justify-between">
-                                            <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-                                            <b-icon-type></b-icon-type>
-                                            <b-text> Textquestion with Possibility</b-text>
-                                            <!-- <AddQuestion v-on:add-item="addItem"/> -->
-                                        </div>
-                                    </draggable>
                                 </div>
+                            </b-sidebar>
 
-
-                            </div>
-                        </b-sidebar>
-                    </div>
+                        </div>
+                    </b-col>
                     <b-col class="cols-14">
                             <div>
                                 <draggable
@@ -140,26 +243,47 @@
     import AddQuestion from "../components/AddQuestion";
     import SurveyItem from "../components/SurveyItem";
     import {v4 as uuidv4} from "uuid";
- //   import {mapActions} from "vuex";
     import axios from 'axios';
 
     export default {
         name: "CreateSurvey",
         data() {
             return {
-                id: "7ac99593-e6e7-42810bfaf09d0da069fkj",
+                visible:true,
+                id: "c4fdc95e-11e7-46ef-9396-83c950e0d482",
                 title: "Moby Dick",
                 status: "IN_PROCESSING",
                 sections: [],
                 surveyTitle: "Moby Dick",
                 editTitle: false,
                 edit: true,
-                items: [
+                items: [{
+                    id: uuidv4(),
+                    type: "radio",
+                    question: "Testquestion with Possibility",
+                    possibilities: [
+                        {
+                            id: 1,
+                            text: "Wie geht es dir Morgens?",
+                        },
+                        {
+                            id: 2,
+                            text: "Wie geht es dir Mittags?",
+                        },
+                        {
+                            id: 3,
+                            text: "Wie geht es dir Abends?",
+                        }
+                    ]
+                }
                 ],
                 palette: []
             }
         },
         methods: {
+            changePaletteVisible(){
+                this.visible = !this.visible;
+            },
             changeEditTitle() {
                 this.editTitle = !this.editTitle;
             },
@@ -200,19 +324,19 @@
                 const newItem = {
                     id: uuidv4(),
                     type: "radio",
-                    question: "Testquestion with Possibility",
+                    question: "Wie findest du Repoll?",
                     possibilities: [
                         {
                             id: 1,
-                            text: "Wie geht es dir Morgens?",
+                            text: "perfekt",
                         },
                         {
                             id: 2,
-                            text: "Wie geht es dir Mittags?",
+                            text: "sehr gut",
                         },
                         {
-                            id: 1,
-                            text: "Wie geht es dir Abends?",
+                            id: 3,
+                            text: "gut",
                         }
                     ]
                 };
@@ -222,19 +346,19 @@
                 const newItem = {
                     id: uuidv4(),
                     type: "dropdown",
-                    question: "Select Answer with Possibility",
+                    question: "Was ist deine Lieblingsfarbe?",
                     possibilities: [
                         {
                             id: 1,
-                            text: "Meditierst du regelmäßig?",
+                            text: "Blau",
                         },
                         {
                             id: 2,
-                            text: "Machst du regelmäßig Sport?",
+                            text: "Gelb",
                         },
                         {
                             id: 3,
-                            text: "Nimmst du regelmäßig kalte Duschen?",
+                            text: "Rosa",
                         }
                     ]
                 };
@@ -244,15 +368,57 @@
                 const newItem = {
                     id: uuidv4(),
                     type: "section",
-                    question: "Textquestion with Possibility",
+                    question: "Was hast du heute geschafft?",
+                };
+                this.items = [...this.items, newItem];
+            },
+            updateSurveyItemsLimChar() {
+                const newItem = {
+                    id: uuidv4(),
+                    type: "freetext",
+                    question: "Was ist deine Lieblingsprogrammiersprache?",
+                    possibilities: [
+                        {
+                            limit: 10
+                        }
+                    ]
                 };
                 this.items = [...this.items, newItem];
             },
             updateSurveyItemsX() {
                 const newItem = {
                     id: uuidv4(),
+                    type: "slider",
+                    question: "Wie gerne magst du Brokkoli, von 1 bis 10?",
+                    possibilities: [
+                        {
+                            min: 1,
+                            max: 10,
+                            step: 1
+                        }
+                    ]
+                };
+                this.items = [...this.items, newItem];
+            },
+            updateSurveyItemsCheckbox() {
+                const newItem = {
+                    id: uuidv4(),
                     type: "checkbox",
-                    question: "Simple Question",
+                    question: "Was hast du für Gewohnheiten?",
+                    possibilities: [
+                        {
+                            id: 1,
+                            text: "Meditieren",
+                        },
+                        {
+                            id: 2,
+                            text: "Sport",
+                        },
+                        {
+                            id: 3,
+                            text: "Programmieren",
+                        }
+                    ]
                 };
                 this.items = [...this.items, newItem];
             },
@@ -274,6 +440,7 @@
 
     .my-row {
         padding: 20px;
+        align-content: center;
     }
 
     .drag-item {
@@ -301,6 +468,7 @@
         font-size: 25px;
         padding: 1px;
     }
+
     .my-head > div {
         vertical-align:top;
         display:inline-block;

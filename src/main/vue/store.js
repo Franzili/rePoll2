@@ -116,7 +116,10 @@ const store = new Vuex.Store({
 
 store.subscribe((mutation, state) => {
     localStorage.setItem('store', JSON.stringify(state));
-    axios.defaults.headers['Authorization'] = state.token
+    axios.defaults.headers.common['Authorization'] = state.token;
+    axios.get('/api/v1/polls/').then((result) => {
+        console.log(result);
+    }).catch((error) => {console.log(error.message)});
 });
 
 export default store;
