@@ -15,6 +15,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.*;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 @EnableAutoConfiguration
@@ -56,8 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-
+        CorsConfiguration corsConfig = new CorsConfiguration().applyPermitDefaultValues();
+        corsConfig.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "PATCH", "DELETE"));
+        source.registerCorsConfiguration("/**", corsConfig);
         return source;
     }
 }
