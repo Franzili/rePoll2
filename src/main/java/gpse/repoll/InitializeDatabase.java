@@ -40,17 +40,9 @@ public class InitializeDatabase implements InitializingBean {
          */
 
         transactionTemplate.execute(status -> {
-            Poll poll = pollService.addPoll("Poll 1");
-            pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?", 1000);
-            return null;
-        });
-
-        transactionTemplate.execute(status -> {
             try {
                 userService.getUser("JamesBond");
-                System.out.println("Found.");
             } catch (UsernameNotFoundException e) {
-                System.out.println("Not  found!!!!!!!");
                 final User user = userService.addUser(
                     "JamesBond",
                     // Passwort: GutenTag
@@ -61,5 +53,13 @@ public class InitializeDatabase implements InitializingBean {
             return null;
 
         });
+
+        transactionTemplate.execute(status -> {
+            User user = userService.getUser("JamesBond");
+            Poll poll = pollService.addPoll("Poll 1", user);
+            pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?", 1000);
+            return null;
+        });
+
     }
 }

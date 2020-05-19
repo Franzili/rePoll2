@@ -51,7 +51,6 @@ const store = new Vuex.Store({
             }
         }
     },
-
 })
 
 store.subscribe((mutation, state) => {

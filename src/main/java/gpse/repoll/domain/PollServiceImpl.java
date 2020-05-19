@@ -76,8 +76,9 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Poll addPoll(String title) {
+    public Poll addPoll(String title, User creator) { // TODO
         final Poll poll = new Poll(null, title);
+        poll.setCreator(creator);
         pollRepository.save(poll);
         return poll;
     }
