@@ -52,7 +52,7 @@ surveyTabelElement als template testen
                             <!--
                             <b-form-input type="text" v-model="survey.name"></b-form-input>
                             -->
-                            <p class="my-name">{{survey.name}}</p>
+                            <p class="my-name">{{survey.title}}</p>
                         </b-form-group>
                         <b-row>
                             <b-col></b-col>
@@ -60,7 +60,7 @@ surveyTabelElement als template testen
                                 <!--
                                 <b-form-textarea type="textarea" rows="10" v-model="survey.item"></b-form-textarea>
                                 -->
-                                <div :key="item.id" v-for="item in survey.items">
+                                <div :key="item.id" v-for="item in items">
                                     <SurveyItem v-bind:item="item" v-bind:edit="edit"/>
                                 </div>
                             </b-form-group>
@@ -70,7 +70,7 @@ surveyTabelElement als template testen
                         template save buttons!!!
                         <b-button variant="primary" type="submit">Speichern</b-button>
                         -->
-                        <button @click="save">Save</button>
+                        <b-button @click="save">Save</b-button>
                         <!--
                         Submit Button for later
                         Final Submit, then answers can't be edited animore
@@ -99,26 +99,16 @@ surveyTabelElement als template testen
         data() {
             return {
                 id: 0,
-                survey: {}
-
-                ,
-                items: []
-
+                items: [],
             }
-        },
-        mounted() {
-            this.id = this.$route.params.id
-            this.survey = this.getSurvey(this.id)
-            this.item = this.getItem(this.id)
         },
         created() {
             this.id = this.$route.params.id
             this.survey = this.getSurvey(this.id)
-            this.item = this.getItem(this.id)
+            this.setQuestion()
         },
         computed: {
-            ...mapGetters(['getSurvey']),
-            ...mapGetters(['getItem'])
+            ...mapGetters(['getSurvey'])
 
     },
     methods: {
@@ -131,6 +121,16 @@ surveyTabelElement als template testen
         save() {
             this.updateSurvey(this.survey)
             this.$router.push('/') //redirect to page '', here start page
+        },
+        //TODO go through whole array to change title to question
+        setQuestion() {
+            const newItem = {
+                id: this.survey.questions[0].id,
+                question: this.survey.questions[0].title,
+                type: 'freetext'
+            }
+            this.items = [...this.items, newItem]
+
         }
     },
     comments: {
@@ -144,8 +144,4 @@ surveyTabelElement als template testen
 </script>
 
 <style scoped>
-    .my-button{
-        margin-left: 10px;
-        margin-right: 10px;
-    }
 </style>

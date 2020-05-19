@@ -56,7 +56,7 @@
     import axios from "axios";
 
     export default {
-        name: "SurveyTable",
+        name: "AnswerSurvey",
         computed: mapState({
             surveys: state => state.surveys
         }),
@@ -85,13 +85,6 @@
 </script>
 
 <style scoped>
-    .my-button {
-        background-color: black;
-        margin-left: 15px;
-        font-size: 140%;
-        width: 50px;
-        height: 50px;
-    }
 
     .my-back {
         min-height: 100vh;
