@@ -80,6 +80,7 @@ public class PollServiceImpl implements PollService {
     public Poll addPoll(String title, User creator) { // TODO
         final Poll poll = new Poll(null, title);
         poll.setCreator(creator);
+        poll.setLastEditor(creator);
         pollRepository.save(poll);
         return poll;
     }
@@ -99,10 +100,11 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public Poll updatePoll(final UUID id, final String title, final PollStatus status,
-                           final Map<UUID, List<Long>> structure) {
+                           final Map<UUID, List<Long>> structure, final User lastEditor) {
         Poll poll = getPoll(id);
         poll.setTitle(title);
         poll.setStatus(status);
+        poll.setLastEditor(lastEditor);
         if (structure != null) {
             poll.setStructure(structure);
         } // todo for every other code section with this unnecessary operation
@@ -129,8 +131,12 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public PollSection addPollSection(final UUID pollId, final String title, final String description) {
+    public PollSection addPollSection(final UUID pollId,
+                                      final String title,
+                                      final String description,
+                                      final User lastEditor) {
         Poll poll = getPoll(pollId);
+        poll.setLastEditor(lastEditor);
         PollSection result = new PollSection(title, description);
 
         pollSectionRepository.save(result);
@@ -168,9 +174,11 @@ public class PollServiceImpl implements PollService {
     public PollSection updatePollSection(final UUID pollId,
                                          final UUID sectionId,
                                          final String title,
-                                         final String description) {
+                                         final String description,
+                                         final User lastEditor) {
         Poll poll = getPoll(pollId);
         PollSection section = findSectionOfPoll(poll, sectionId);
+        poll.setLastEditor(lastEditor);
         if (title != null) {
             section.setTitle(title);
         }
@@ -227,13 +235,17 @@ public class PollServiceImpl implements PollService {
     public TextQuestion addTextQuestion(final UUID pollId,
                                         final String questionTitle,
                                         final int questionOrder,
-                                        final int charLimit) {
+                                        final int charLimit,
+                                        final User lastEditor) {
         Poll poll = getPoll(pollId);
+        poll.setLastEditor(lastEditor);
         TextQuestion question = new TextQuestion();
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
         question.setCharLimit(charLimit);
         textQuestionRepository.save(question);
+        // todo
+        // PollSection der Frage speichern
         poll.getQuestions().add(question);
         pollRepository.save(poll);
         return question;
@@ -248,8 +260,10 @@ public class PollServiceImpl implements PollService {
                                           final int questionOrder,
                                           final String scaleNameLeft,
                                           final String scaleNameRight,
-                                          final int stepCount) {
+                                          final int stepCount,
+                                          final User lastEditor) {
         Poll poll = getPoll(pollId);
+        poll.setLastEditor(lastEditor);
         ScaleQuestion question = new ScaleQuestion();
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
@@ -269,8 +283,10 @@ public class PollServiceImpl implements PollService {
     public RadioButtonQuestion addRadioButtonQuestion(final UUID pollId,
                                                       final String questionTitle,
                                                       final int questionOrder,
-                                                      final List<Choice> choices) {
+                                                      final List<Choice> choices,
+                                                      final User lastEditor) {
         Poll poll = getPoll(pollId);
+        poll.setLastEditor(lastEditor);
         RadioButtonQuestion question = new RadioButtonQuestion();
         for (Choice choice : choices) {
             choiceRepository.save(choice);
@@ -291,8 +307,10 @@ public class PollServiceImpl implements PollService {
     public ChoiceQuestion addChoiceQuestion(final UUID pollId,
                                             final String questionTitle,
                                             final int questionOrder,
-                                            final List<Choice> choices) {
+                                            final List<Choice> choices,
+                                            final User lastEditor) {
         Poll poll = getPoll(pollId);
+        poll.setLastEditor(lastEditor);
         for (Choice choice : choices) {
             choiceRepository.save(choice);
         }
@@ -354,8 +372,10 @@ public class PollServiceImpl implements PollService {
                                            final Long questionId,
                                            final int questionOrder,
                                            final String title,
-                                           final int charLimit) {
+                                           final int charLimit,
+                                           final User lastEditor) {
         Poll poll = getPoll(pollId);
+        poll.setLastEditor(lastEditor);
         TextQuestion question = textQuestionRepository.findById(questionId).orElseThrow(NotFoundException::new);
         testQuestion(poll, question);
         question.setQuestionOrder(questionOrder);
@@ -369,6 +389,7 @@ public class PollServiceImpl implements PollService {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @Override
     public ScaleQuestion updateScaleQuestion(final UUID pollId,
                                              final Long questionId,
@@ -376,8 +397,10 @@ public class PollServiceImpl implements PollService {
                                              final String title,
                                              final String scaleNameLeft,
                                              final String scaleNameRight,
-                                             final int stepCount) {
+                                             final int stepCount,
+                                             final User lastEditor) {
         Poll poll = getPoll(pollId);
+        poll.setLastEditor(lastEditor);
         ScaleQuestion question = scaleQuestionRepository.findById(questionId).orElseThrow(NotFoundException::new);
         testQuestion(poll, question);
         question.setQuestionOrder(questionOrder);
@@ -398,8 +421,10 @@ public class PollServiceImpl implements PollService {
                                                          final Long questionId,
                                                          final int questionOrder,
                                                          final String title,
-                                                         final List<Choice> choices) {
+                                                         final List<Choice> choices,
+                                                         final User lastEditor) {
         Poll poll = getPoll(pollId);
+        poll.setLastEditor(lastEditor);
         RadioButtonQuestion question = radioButtonQuestionRepository.findById(questionId)
             .orElseThrow(NotFoundException::new);
         testQuestion(poll, question);
@@ -419,8 +444,10 @@ public class PollServiceImpl implements PollService {
                                                final Long questionId,
                                                final int questionOrder,
                                                final String title,
-                                               final List<Choice> choices) {
+                                               final List<Choice> choices,
+                                               final User lastEditor) {
         Poll poll = getPoll(pollId);
+        poll.setLastEditor(lastEditor);
         ChoiceQuestion question = choiceQuestionRepository.findById(questionId).orElseThrow(NotFoundException::new);
         testQuestion(poll, question);
         question.setQuestionOrder(questionOrder);

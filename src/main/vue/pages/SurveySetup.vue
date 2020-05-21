@@ -7,7 +7,7 @@
                 <!-- -->
                 <b-row style="text-align: center" class="my-row">
                     <b-col>
-                        <HelloWorld style="text-align:center;" class="ml-auto" :msg="survey.name"/>
+                        <HelloWorld style="text-align:center;" class="ml-auto" :msg="survey.title"/>
                     </b-col>
                 </b-row>
 
@@ -86,7 +86,7 @@
             return {
                 survey: {
                     id: 0,
-                    name: '',
+                    title: '',
                     status: ''
                 },
                 confirm: false,

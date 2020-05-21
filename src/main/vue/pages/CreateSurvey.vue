@@ -243,7 +243,6 @@
     import AddQuestion from "../components/AddQuestion";
     import SurveyItem from "../components/SurveyItem";
     import {v4 as uuidv4} from "uuid";
- //   import {mapActions} from "vuex";
     import axios from 'axios';
 
     export default {
@@ -251,7 +250,7 @@
         data() {
             return {
                 visible:true,
-                id: "7ac99593-e6e7-42810bfaf09d0da069fkj",
+                id: "c4fdc95e-11e7-46ef-9396-83c950e0d482",
                 title: "Moby Dick",
                 status: "IN_PROCESSING",
                 sections: [],

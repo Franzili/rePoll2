@@ -40,14 +40,16 @@
 <script>
     import HelloWorld from '../components/HelloWorld.vue';
     import NavBar from "../components/NavBar";
-
     import {mapActions, mapState} from "vuex";
 
     export default {
         name: "Start",
         components: {
             NavBar,
-            HelloWorld
+            HelloWorld,
+            ...mapState({
+                surveys: state => state.surveys
+            })
         },
         data() {
             return {
@@ -71,6 +73,12 @@
 
                     })
             }
+        },
+        ...mapActions([
+            'requestSurveys'
+        ]),
+        created(){
+        this.requestSurveys()
         },
         computed: {
             ...mapState({

@@ -71,6 +71,7 @@ public class Poll {
      */
     public Poll(User creator, String title) {
         this.creator = creator;
+        this.lastEditor = creator;
         this.title = title;
         this.status = PollStatus.IN_PROCESS;
     }
@@ -250,11 +251,11 @@ public class Poll {
             throw new BadRequestException("No duplicates of questions allowed!");
         }
         for (UUID key : keySet) {
-            List<Long> questionIds = new ArrayList<>(structure.get(key));
             // Checks if there is a section specified which does not belong to this poll
             if (!sectionExists(key)) {
                 throw new BadRequestException("At least one section is not part of the poll!");
             }
+            List<Long> questionIds = new ArrayList<>(structure.get(key));
             List<Question> movedQuestions = listQuestions(questionIds);
             for (Question question : movedQuestions) { // These questions exist in the poll guaranteed by listQuestions
                 PollSection section = findSection(question);

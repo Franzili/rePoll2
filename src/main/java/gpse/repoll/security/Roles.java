@@ -9,7 +9,7 @@ public final class Roles {
     /**
      * The user is allowed to perform all actions.
      */
-    public static final String ALL = "ALL";
+    public static final String ALL = "ROLE_ALL";
 
     private Roles() { }
 

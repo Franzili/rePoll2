@@ -15,9 +15,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Service
 public class InitializeDatabase implements InitializingBean {
 
-    private PollService pollService;
-    private UserService userService;
-    private TransactionTemplate transactionTemplate;
+    private final PollService pollService;
+    private final UserService userService;
+    private final TransactionTemplate transactionTemplate;
 
     @Autowired
     public InitializeDatabase(PollService pollService,
@@ -42,9 +42,7 @@ public class InitializeDatabase implements InitializingBean {
         transactionTemplate.execute(status -> {
             try {
                 userService.getUser("JamesBond");
-                System.out.println("Found.");
             } catch (UsernameNotFoundException e) {
-                System.out.println("Not  found!!!!!!!");
                 final User user = userService.addUser(
                     "JamesBond",
                     // Passwort: GutenTag
@@ -58,9 +56,16 @@ public class InitializeDatabase implements InitializingBean {
 
         transactionTemplate.execute(status -> {
             User user = userService.getUser("JamesBond");
-            Poll poll = pollService.addPoll("Poll 1", user);
+            Poll poll = pollService.addPoll("Gummibaerchen", user);
             pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
-                1000, 255);
+                                        1000, 255, user);
+            pollService.addTextQuestion(poll.getId(), "Warum magst du keine Gummibaerchen?",
+                                        1000, 255, user);
+            Poll poll2 = pollService.addPoll("About this App", user);
+            pollService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
+                                        1000, 255, user);
+            pollService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
+                                        1000, 255, user);
             return null;
         });
 
