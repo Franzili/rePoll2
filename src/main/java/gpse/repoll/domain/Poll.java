@@ -85,7 +85,7 @@ public class Poll {
             return false;
         }
         Poll poll = (Poll) o;
-        return getId().equals(poll.getId());
+        return Objects.equals(id, poll.id);
     }
 
     @Override
