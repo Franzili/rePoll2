@@ -23,17 +23,25 @@
 
     export default {
         name: "SurveyTable",
+        data() {
+            return {
+                tmpPollID: 0,
+            }
+        },
         computed: mapState({
             surveys: state => state.surveys
         }),
         methods: {
             savePoll() {
                 let pollCmd = {title: "new Poll"};
-                return axios.post('/api/v1/polls/', pollCmd);
+                axios.post('/api/v1/polls/', pollCmd)
+                    .then((response) => {
+                        console.log(response.data);
+                        return this.$router.push({name:'create', params: {thisPollID: response.data.id}})
+                    });
             },
-            save: function () {
+            save() {
                 this.savePoll();
-                return this.$router.push('/create/');
             },
             ...mapActions([
                 'requestSurveys'

@@ -2,6 +2,7 @@
     <div>
         <nav-bar></nav-bar>
         <div class="my-head">
+            <p>{{this.id}}</p>
             <div class="my-titel">
                 Titel:
             </div>
@@ -250,14 +251,14 @@
         data() {
             return {
                 visible:true,
-                id: "c4fdc95e-11e7-46ef-9396-83c950e0d482",
-                title: "Moby Dick",
-                status: "IN_PROCESSING",
+                id: '',
+                title: '',
+                status: '',
+                surveyTitle: "hallo",
                 sections: [],
-                surveyTitle: "Moby Dick",
                 editTitle: false,
                 edit: true,
-                items: [{
+                items: [/*{
                     id: uuidv4(),
                     type: "radio",
                     question: "Testquestion with Possibility",
@@ -275,7 +276,7 @@
                             text: "Wie geht es dir Abends?",
                         }
                     ]
-                }
+                }*/
                 ],
                 palette: []
             }
@@ -432,7 +433,10 @@
             NavBar,
             HelloWorld,
             draggable
-        }
+        },
+        created: function () {
+            this.id = this.$route.params.thisPollID;
+        },
     }
 </script>
 
