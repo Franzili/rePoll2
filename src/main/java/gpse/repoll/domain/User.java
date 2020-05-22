@@ -149,6 +149,16 @@ public class User implements UserDetails {
         return true;
     }
 
+    /**
+     * Just gets the username.
+     *
+     * Used if a controller needs to get a user from an authentication token:
+     * The Authentication contains a "principal" that identifies the user. However, the principal
+     * is only specified to be an {@link Object}. Hence it can be either
+     * a {@link UserDetails} subclass (like this User class) or merely a String token.
+     * To make sure we can always at least get the username, this toString() method is provided.
+     * @return The username
+     */
     @Override
     public String toString() {
         return username;
