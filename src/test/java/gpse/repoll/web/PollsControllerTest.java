@@ -3,13 +3,18 @@ package gpse.repoll.web;
 import gpse.repoll.domain.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.testutils.MockTestUsers;
+import gpse.repoll.testutils.TestMockTestUsers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
@@ -37,12 +42,21 @@ public class PollsControllerTest {
     @Mock
     private UserService userService;
 
+    @Autowired
+    private MockTestUsers mockTestUsers;
+
     private PollsController controller;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
         controller = new PollsController(pollService, userService);
+
+        // Tie userService mock method calls to our Test User class.
+        when(userService.getUser(anyString())).thenAnswer((Answer<UserDetails>) invocationOnMock -> {
+            String username = invocationOnMock.getArgument(0);
+            return (User) mockTestUsers.loadUserByUsername(username);
+        });
     }
 
     @Test
