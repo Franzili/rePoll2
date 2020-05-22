@@ -1,11 +1,14 @@
 package gpse.repoll.domain.questions;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * Represents a single question belonging to a poll.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @Entity
 public abstract class Question {
     @Id
