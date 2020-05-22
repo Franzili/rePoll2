@@ -23,14 +23,11 @@
 
     export default {
         name: "SurveyTable",
-        data() {
-            return {
-                tmpPollID: 0,
-            }
+        computed: {
+            ...mapState({
+                surveys: state => state.surveys
+            })
         },
-        computed: mapState({
-            surveys: state => state.surveys
-        }),
         methods: {
             savePoll() {
                 let pollCmd = {title: "new Poll"};
