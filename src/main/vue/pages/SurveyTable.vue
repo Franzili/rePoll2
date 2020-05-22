@@ -3,7 +3,7 @@
         <nav-bar></nav-bar>
         <HelloWorld style="text-align:center;" class="ml-auto" msg="Meine Umfragen"/>
         <b-container class="my-container">
-            <b-button class="my-button" @click="save">+</b-button>
+            <b-button class="my-button" @click="addNewPoll">+</b-button>
             <b-row style="text-align: center" class="my-row">
                 <b-col >
                     <SurveyTableList v-bind:surveys="surveys"/>
@@ -23,23 +23,25 @@
 
     export default {
         name: "SurveyTable",
-        computed: mapState({
-            surveys: state => state.surveys
-        }),
+        computed: {
+            ...mapState({
+                surveys: state => state.surveys
+            })
+        },
         methods: {
-            savePoll() {
+            addNewPoll() {
                 let pollCmd = {title: "new Poll"};
-                return axios.post('/api/v1/polls/', pollCmd);
-            },
-            save: function () {
-                this.savePoll();
-                return this.$router.push('/create/');
+                axios.post('/api/v1/polls/', pollCmd)
+                    .then((response) => {
+                        console.log(response.data);
+                        return this.$router.push({name:'create', params: {tmpPollID: response.data.id}})
+                    });
             },
             ...mapActions([
                 'requestSurveys'
             ])
         },
-        created() {
+        created: function () {
             this.requestSurveys()
         },
         components: {

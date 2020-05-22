@@ -19,6 +19,7 @@ var router = new VueRouter({
         },
         {
             path: '/create/',
+            name: 'create',
             component: CreateSurvey
         },
         {
