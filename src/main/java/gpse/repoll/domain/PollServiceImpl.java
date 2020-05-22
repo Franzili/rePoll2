@@ -1,6 +1,7 @@
 package gpse.repoll.domain;
 
 import gpse.repoll.domain.answers.*;
+import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.questions.*;
 import gpse.repoll.domain.exceptions.NotFoundException;
@@ -89,18 +90,29 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public Poll getPoll(UUID id) {
-        return pollRepository.findById(id).orElseThrow(NotFoundException::new);
+        return pollRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Poll does not exist!");
+        });
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Poll updatePoll(final UUID id, final String title, final PollStatus status, final User lastEditor) {
+    public Poll updatePoll(final UUID id, final String title, final PollStatus status,
+                           final Map<UUID, List<Long>> structure, final User lastEditor) {
         Poll poll = getPoll(id);
         poll.setTitle(title);
         poll.setStatus(status);
         poll.setLastEditor(lastEditor);
+        if (structure != null) {
+            poll.setStructure(structure);
+        } // todo for every other code section with this unnecessary operation
+        // Apparently there is no need to save the sections, because they are saved together with the poll
+        /*for (PollSection section : poll.getSections()) {
+            questionRepository.saveAll(section.getQuestions());
+            pollSectionRepository.save(section);
+        }*/
         pollRepository.save(poll);
         return poll;
     }
@@ -122,11 +134,10 @@ public class PollServiceImpl implements PollService {
     public PollSection addPollSection(final UUID pollId,
                                       final String title,
                                       final String description,
-                                      final List<Question> questions,
                                       final User lastEditor) {
         Poll poll = getPoll(pollId);
         poll.setLastEditor(lastEditor);
-        PollSection result = new PollSection(title, description, questions);
+        PollSection result = new PollSection(title, description);
 
         pollSectionRepository.save(result);
         poll.getSections().add(result);
@@ -139,18 +150,20 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public PollSection getPollSection(final UUID pollId, final Long sectionId) {
+    public PollSection getPollSection(final UUID pollId, final UUID sectionId) {
         Poll poll = getPoll(pollId);
-        PollSection result = null;
-        for (PollSection section : poll.getSections()) {
-            if (section.getId().equals(sectionId)) {
-                result = section;
-            }
+        return findSectionOfPoll(poll, sectionId);
+    }
+
+    private PollSection findSectionOfPoll(final Poll poll, final UUID sectionId) {
+        if (sectionId == null) {
+            throw new BadRequestException("No sectionId defined");
         }
-        if (result == null) {
-            throw new NotFoundException();
+        PollSection section = pollSectionRepository.findById(sectionId).orElseThrow(NotFoundException::new);
+        if (poll.getSections().contains(section)) {
+            return section;
         } else {
-            return result;
+            throw new NotFoundException("The section does not belong to this poll!");
         }
     }
 
@@ -159,24 +172,20 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public PollSection updatePollSection(final UUID pollId,
-                                         final Long sectionId,
+                                         final UUID sectionId,
                                          final String title,
                                          final String description,
-                                         final List<Question> questions,
                                          final User lastEditor) {
-        PollSection section = getPollSection(pollId, sectionId);
+        Poll poll = getPoll(pollId);
+        PollSection section = findSectionOfPoll(poll, sectionId);
+        poll.setLastEditor(lastEditor);
         if (title != null) {
             section.setTitle(title);
         }
         if (description != null) {
             section.setDescription(description);
         }
-        if (questions != null) {
-            section.setQuestions(questions);
-        }
         pollSectionRepository.save(section);
-        Poll poll = getPoll(pollId);
-        poll.setLastEditor(lastEditor);
         pollRepository.save(poll);
         return section;
     }
@@ -223,11 +232,16 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public TextQuestion addTextQuestion(final UUID pollId, final String questionTitle, final int charLimit, final User lastEditor) {
+    public TextQuestion addTextQuestion(final UUID pollId,
+                                        final String questionTitle,
+                                        final int questionOrder,
+                                        final int charLimit,
+                                        final User lastEditor) {
         Poll poll = getPoll(pollId);
         poll.setLastEditor(lastEditor);
         TextQuestion question = new TextQuestion();
         question.setTitle(questionTitle);
+        question.setQuestionOrder(questionOrder);
         question.setCharLimit(charLimit);
         textQuestionRepository.save(question);
         // todo
@@ -243,6 +257,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public ScaleQuestion addScaleQuestion(final UUID pollId,
                                           final String questionTitle,
+                                          final int questionOrder,
                                           final String scaleNameLeft,
                                           final String scaleNameRight,
                                           final int stepCount,
@@ -251,11 +266,11 @@ public class PollServiceImpl implements PollService {
         poll.setLastEditor(lastEditor);
         ScaleQuestion question = new ScaleQuestion();
         question.setTitle(questionTitle);
+        question.setQuestionOrder(questionOrder);
         question.setScaleNameLeft(scaleNameLeft);
         question.setScaleNameRight(scaleNameRight);
         question.setStepCount(stepCount);
         scaleQuestionRepository.save(question);
-
         poll.getQuestions().add(question);
         pollRepository.save(poll);
         return question;
@@ -267,6 +282,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public RadioButtonQuestion addRadioButtonQuestion(final UUID pollId,
                                                       final String questionTitle,
+                                                      final int questionOrder,
                                                       final List<Choice> choices,
                                                       final User lastEditor) {
         Poll poll = getPoll(pollId);
@@ -276,9 +292,9 @@ public class PollServiceImpl implements PollService {
             choiceRepository.save(choice);
         }
         question.setTitle(questionTitle);
+        question.setQuestionOrder(questionOrder);
         question.getChoices().addAll(choices);
         radioButtonQuestionRepository.save(question);
-
         poll.getQuestions().add(question);
         pollRepository.save(poll);
         return question;
@@ -290,6 +306,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public ChoiceQuestion addChoiceQuestion(final UUID pollId,
                                             final String questionTitle,
+                                            final int questionOrder,
                                             final List<Choice> choices,
                                             final User lastEditor) {
         Poll poll = getPoll(pollId);
@@ -299,9 +316,9 @@ public class PollServiceImpl implements PollService {
         }
         ChoiceQuestion question = new ChoiceQuestion();
         question.setTitle(questionTitle);
+        question.setQuestionOrder(questionOrder);
         question.getChoices().addAll(choices);
         choiceQuestionRepository.save(question);
-
         poll.getQuestions().add(question);
         pollRepository.save(poll);
         return question;
@@ -336,62 +353,64 @@ public class PollServiceImpl implements PollService {
     }
 
     /**
-     * {@inheritDoc}
+     * Checks whether the question belongs to the poll.
+     * @param poll The Poll
+     * @param question The Question
+     * @throws BadRequestException if the question does not belong to the poll
      */
-    @Override
-    public TextQuestion updateTextQuestion(final UUID pollId,
-                                           final Long questionId,
-                                           final String title,
-                                           final User lastEditor) {
-        TextQuestion result = null;
-        Poll poll = getPoll(pollId);
-        poll.setLastEditor(lastEditor);
-        for (Question question : poll.getQuestions()) {
-            if (question.getId().equals(questionId) && question instanceof TextQuestion) {
-                question.setTitle(title);
-                textQuestionRepository.save((TextQuestion) question);
-                result = (TextQuestion) question;
-                break;
-            }
+    private void testQuestion(Poll poll, Question question) throws BadRequestException {
+        if (!poll.getQuestions().contains(question)) {
+            throw new BadRequestException("The question does not belong to this poll!");
         }
-        if (result == null) {
-            throw new NotFoundException();
-        }
-        pollRepository.save(poll);
-        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    public TextQuestion updateTextQuestion(final UUID pollId,
+                                           final Long questionId,
+                                           final int questionOrder,
+                                           final String title,
+                                           final int charLimit,
+                                           final User lastEditor) {
+        Poll poll = getPoll(pollId);
+        poll.setLastEditor(lastEditor);
+        TextQuestion question = textQuestionRepository.findById(questionId).orElseThrow(NotFoundException::new);
+        testQuestion(poll, question);
+        question.setQuestionOrder(questionOrder);
+        question.setTitle(title);
+        question.setCharLimit(charLimit);
+        textQuestionRepository.save(question);
+        pollRepository.save(poll);
+        return question;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("checkstyle:ParameterNumber")
+    @Override
     public ScaleQuestion updateScaleQuestion(final UUID pollId,
                                              final Long questionId,
+                                             final int questionOrder,
                                              final String title,
                                              final String scaleNameLeft,
                                              final String scaleNameRight,
                                              final int stepCount,
                                              final User lastEditor) {
-        ScaleQuestion result = null;
         Poll poll = getPoll(pollId);
         poll.setLastEditor(lastEditor);
-        for (Question question : poll.getQuestions()) {
-            if (question.getId().equals(questionId) && question instanceof ScaleQuestion) {
-                ScaleQuestion scaleQuestion = (ScaleQuestion) question;
-                scaleQuestion.setTitle(title);
-                scaleQuestion.setScaleNameLeft(scaleNameLeft);
-                scaleQuestion.setScaleNameRight(scaleNameRight);
-                scaleQuestion.setStepCount(stepCount);
-                scaleQuestionRepository.save(scaleQuestion);
-                result = scaleQuestion;
-                break;
-            }
-        }
-        if (result == null) {
-            throw new NotFoundException();
-        }
+        ScaleQuestion question = scaleQuestionRepository.findById(questionId).orElseThrow(NotFoundException::new);
+        testQuestion(poll, question);
+        question.setQuestionOrder(questionOrder);
+        question.setTitle(title);
+        question.setScaleNameLeft(scaleNameLeft);
+        question.setScaleNameRight(scaleNameRight);
+        question.setStepCount(stepCount);
+        scaleQuestionRepository.save(question);
         pollRepository.save(poll);
-        return result;
+        return question;
     }
 
     /**
@@ -400,27 +419,21 @@ public class PollServiceImpl implements PollService {
     @Override
     public RadioButtonQuestion updateRadioButtonQuestion(final UUID pollId,
                                                          final Long questionId,
+                                                         final int questionOrder,
                                                          final String title,
                                                          final List<Choice> choices,
                                                          final User lastEditor) {
-        RadioButtonQuestion result = null;
         Poll poll = getPoll(pollId);
         poll.setLastEditor(lastEditor);
-        for (Question question : poll.getQuestions()) {
-            if (question.getId().equals(questionId) && question instanceof RadioButtonQuestion) {
-                RadioButtonQuestion radioButtonQuestion = (RadioButtonQuestion) question;
-                radioButtonQuestion.setTitle(title);
-                radioButtonQuestion.setChoices(choices);
-                radioButtonQuestionRepository.save(radioButtonQuestion);
-                result = radioButtonQuestion;
-                break;
-            }
-        }
-        if (result == null) {
-            throw new NotFoundException();
-        }
+        RadioButtonQuestion question = radioButtonQuestionRepository.findById(questionId)
+            .orElseThrow(NotFoundException::new);
+        testQuestion(poll, question);
+        question.setQuestionOrder(questionOrder);
+        question.setTitle(title);
+        question.setChoices(choices);
+        radioButtonQuestionRepository.save(question);
         pollRepository.save(poll);
-        return result;
+        return question;
     }
 
     /**
@@ -429,27 +442,20 @@ public class PollServiceImpl implements PollService {
     @Override
     public ChoiceQuestion updateChoiceQuestion(final UUID pollId,
                                                final Long questionId,
+                                               final int questionOrder,
                                                final String title,
                                                final List<Choice> choices,
                                                final User lastEditor) {
-        ChoiceQuestion result = null;
         Poll poll = getPoll(pollId);
         poll.setLastEditor(lastEditor);
-        for (Question question : poll.getQuestions()) {
-            if (question.getId().equals(questionId) && question instanceof ChoiceQuestion) {
-                ChoiceQuestion choiceQuestion = (ChoiceQuestion) question;
-                choiceQuestion.setTitle(title);
-                choiceQuestion.setChoices(choices);
-                choiceQuestionRepository.save(choiceQuestion);
-                result = choiceQuestion;
-                break;
-            }
-        }
-        if (result == null) {
-            throw new NotFoundException();
-        }
+        ChoiceQuestion question = choiceQuestionRepository.findById(questionId).orElseThrow(NotFoundException::new);
+        testQuestion(poll, question);
+        question.setQuestionOrder(questionOrder);
+        question.setTitle(title);
+        question.setChoices(choices);
+        choiceQuestionRepository.save(question);
         pollRepository.save(poll);
-        return result;
+        return question;
     }
 
     /**
