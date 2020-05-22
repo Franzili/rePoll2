@@ -2,7 +2,6 @@
     <div>
         <nav-bar></nav-bar>
         <div class="my-head">
-            <p>{{this.id}}</p>
             <div class="my-titel">
                 Titel:
             </div>
@@ -245,40 +244,34 @@
     import SurveyItem from "../components/SurveyItem";
     import {v4 as uuidv4} from "uuid";
     import axios from 'axios';
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: "CreateSurvey",
         data() {
             return {
                 visible:true,
-                id: '',
-                title: '',
-                status: '',
-                surveyTitle: "hallo",
+                tmpID: 0,
+                id: "c4fdc95e-11e7-46ef-9396-83c950e0d482",
+                title: "Moby Dick",
+                status: "IN_PROCESS",
                 sections: [],
+                surveyTitle: "Moby Dick",
                 editTitle: false,
                 edit: true,
-                items: [/*{
-                    id: uuidv4(),
-                    type: "radio",
-                    question: "Testquestion with Possibility",
-                    possibilities: [
-                        {
-                            id: 1,
-                            text: "Wie geht es dir Morgens?",
-                        },
-                        {
-                            id: 2,
-                            text: "Wie geht es dir Mittags?",
-                        },
-                        {
-                            id: 3,
-                            text: "Wie geht es dir Abends?",
-                        }
-                    ]
-                }*/
-                ],
+                items: [],
                 palette: []
+            }
+        },
+        created: function () {
+            this.tmpID = this.$route.params.tmpPollID;
+            this.requestSurveys()
+            this.requestSurvey(this.tmpID)
+        },
+        computed: {
+            ...mapGetters(['getSurvey']),
+            survey() {
+                return this.getSurvey(this.tmpID)
             }
         },
         methods: {
@@ -311,7 +304,6 @@
                     )
                 }
             },
-
             deleteItem(id) {
                 this.items = this.items.filter(item => item.id !== id);
             },
@@ -325,19 +317,19 @@
                 const newItem = {
                     id: uuidv4(),
                     type: "radio",
-                    question: "Wie findest du Repoll?",
+                    question: "new question",
                     possibilities: [
                         {
                             id: 1,
-                            text: "perfekt",
+                            text: "choice 1",
                         },
                         {
                             id: 2,
-                            text: "sehr gut",
+                            text: "choice 2",
                         },
                         {
                             id: 3,
-                            text: "gut",
+                            text: "choice 3",
                         }
                     ]
                 };
@@ -351,15 +343,15 @@
                     possibilities: [
                         {
                             id: 1,
-                            text: "Blau",
+                            text: "choice 1",
                         },
                         {
                             id: 2,
-                            text: "Gelb",
+                            text: "choice 2",
                         },
                         {
                             id: 3,
-                            text: "Rosa",
+                            text: "choice 3",
                         }
                     ]
                 };
@@ -369,7 +361,7 @@
                 const newItem = {
                     id: uuidv4(),
                     type: "section",
-                    question: "Was hast du heute geschafft?",
+                    question: "new question",
                 };
                 this.items = [...this.items, newItem];
             },
@@ -377,7 +369,7 @@
                 const newItem = {
                     id: uuidv4(),
                     type: "freetext",
-                    question: "Was ist deine Lieblingsprogrammiersprache?",
+                    question: "new question",
                     possibilities: [
                         {
                             limit: 10
@@ -390,7 +382,7 @@
                 const newItem = {
                     id: uuidv4(),
                     type: "slider",
-                    question: "Wie gerne magst du Brokkoli, von 1 bis 10?",
+                    question: "new question",
                     possibilities: [
                         {
                             min: 1,
@@ -405,19 +397,19 @@
                 const newItem = {
                     id: uuidv4(),
                     type: "checkbox",
-                    question: "Was hast du für Gewohnheiten?",
+                    question: "new question",
                     possibilities: [
                         {
                             id: 1,
-                            text: "Meditieren",
+                            text: "choice 1",
                         },
                         {
                             id: 2,
-                            text: "Sport",
+                            text: "choice 2",
                         },
                         {
                             id: 3,
-                            text: "Programmieren",
+                            text: "choice 3",
                         }
                     ]
                 };
@@ -425,7 +417,8 @@
             },
             log: function (...e) {
                     console.log(...e);
-            }
+            },
+            ...mapActions(['requestSurvey','requestSurveys'])
         },
         components: {
             AddQuestion,
@@ -433,9 +426,6 @@
             NavBar,
             HelloWorld,
             draggable
-        },
-        created: function () {
-            this.id = this.$route.params.thisPollID;
         },
     }
 </script>

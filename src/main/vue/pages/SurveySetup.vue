@@ -90,7 +90,7 @@
                 selected: ''
             }
         },
-        created() {
+        created: function() {
             this.tmpID = this.$route.params.tmpPollID
             this.requestSurvey(this.tmpID)
         },

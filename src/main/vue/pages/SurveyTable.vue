@@ -3,7 +3,7 @@
         <nav-bar></nav-bar>
         <HelloWorld style="text-align:center;" class="ml-auto" msg="Meine Umfragen"/>
         <b-container class="my-container">
-            <b-button class="my-button" @click="save">+</b-button>
+            <b-button class="my-button" @click="addNewPoll">+</b-button>
             <b-row style="text-align: center" class="my-row">
                 <b-col >
                     <SurveyTableList v-bind:surveys="surveys"/>
@@ -29,22 +29,19 @@
             })
         },
         methods: {
-            savePoll() {
+            addNewPoll() {
                 let pollCmd = {title: "new Poll"};
                 axios.post('/api/v1/polls/', pollCmd)
                     .then((response) => {
                         console.log(response.data);
-                        return this.$router.push({name:'create', params: {thisPollID: response.data.id}})
+                        return this.$router.push({name:'create', params: {tmpPollID: response.data.id}})
                     });
-            },
-            save() {
-                this.savePoll();
             },
             ...mapActions([
                 'requestSurveys'
             ])
         },
-        created() {
+        created: function () {
             this.requestSurveys()
         },
         components: {
