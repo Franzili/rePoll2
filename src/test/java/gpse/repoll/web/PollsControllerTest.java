@@ -1,24 +1,35 @@
 package gpse.repoll.web;
 
-
-import gpse.repoll.domain.Poll;
-import gpse.repoll.domain.PollService;
-import gpse.repoll.domain.User;
-import gpse.repoll.domain.UserService;
+import gpse.repoll.domain.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
-import gpse.repoll.security.Roles;
+import gpse.repoll.testutils.MockTestUsers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.web.ServletTestExecutionListener;
 
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration
+@TestExecutionListeners(listeners={
+    ServletTestExecutionListener.class,
+    DependencyInjectionTestExecutionListener.class,
+    WithSecurityContextTestExecutionListener.class})
 public class PollsControllerTest {
     @Mock
     private PollService pollService;
@@ -35,7 +46,7 @@ public class PollsControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user", authorities = { Roles.ALL })
+    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testGetAllNormal() {
         Poll poll1 = new Poll(null, "Poll1");
         Poll poll2 = new Poll(null, "Poll2");
@@ -48,23 +59,23 @@ public class PollsControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user", authorities = { Roles.ALL })
+    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testGetAllEmpty() {
         when(pollService.getAll()).thenReturn(new ArrayList<Poll>());
         assertThat(controller.getAll()).isEmpty();
     }
 
     @Test
-    @WithMockUser(username = "user", authorities = { Roles.ALL })
+    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testAddPollNormal() {
         PollCmd cmd = new PollCmd();
         cmd.setTitle("Poll 1");
         controller.addPoll(cmd);
-        verify(pollService).addPoll("Poll 1", any(User.class));
+        verify(pollService).addPoll(eq("Poll 1"), any(User.class));
     }
 
     @Test
-    @WithMockUser(username = "user", authorities = { Roles.ALL })
+    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testAddPollEmptyTitle() {
         PollCmd cmd = new PollCmd();
         cmd.setTitle("");
@@ -72,5 +83,4 @@ public class PollsControllerTest {
             controller.addPoll(cmd);
         });
     }
-
 }

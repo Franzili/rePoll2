@@ -43,7 +43,7 @@ public class PollsController {
             throw new BadRequestException("Title cannot be empty!");
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User creator = userService.getUser(auth.getName());
+        User creator = (User) auth.getPrincipal();
         return pollService.addPoll(pollCmd.getTitle(), creator);
     }
 
@@ -256,9 +256,6 @@ public class PollsController {
         return  pollService.getPollEntry(pollId, Long.valueOf(entryId));
     }
 
-
-
-
     /* TODO
     @PutMapping("/{pollId}/entries/{entryId:\\d+}")
     public PollEntry updatePollEntry(@PathVariable("pollId") final UUID pollId,
@@ -268,5 +265,4 @@ public class PollsController {
     }
 
      */
-
 }

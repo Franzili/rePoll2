@@ -49,7 +49,6 @@ public class User implements UserDetails {
         roles.add(Roles.ALL);
     }
 
-
     public UUID getId() {
         return id;
     }
