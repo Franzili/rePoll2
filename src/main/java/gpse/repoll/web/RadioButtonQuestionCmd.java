@@ -1,7 +1,6 @@
 package gpse.repoll.web;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import gpse.repoll.domain.Choice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +8,13 @@ import java.util.List;
 @JsonTypeName("RadioButtonQuestion")
 public class RadioButtonQuestionCmd extends QuestionCmd {
 
-    private List<Choice> choices = new ArrayList<>();
+    private List<ChoiceCmd> choices = new ArrayList<>();
 
-    public List<Choice> getChoices() {
+    public List<ChoiceCmd> getChoices() {
         return choices;
     }
 
-    public void setChoices(List<Choice> choices) {
+    public void setChoices(List<ChoiceCmd> choices) {
         this.choices.clear();
         this.choices.addAll(choices);
     }

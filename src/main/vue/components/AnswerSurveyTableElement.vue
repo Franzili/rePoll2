@@ -10,9 +10,12 @@
                 </b-row>
 
                 <b-row>
+                    <!--
+                    status of the survey. not needed for regular user
                     <b-col>
                         <p class="my-status">{{survey.status}}</p>
                     </b-col>
+                    -->
                     <b-col>
                         <p>
                             <b-icon icon="gear" animation="spin" font-scale="2" @click="toConfig"/>
@@ -34,15 +37,19 @@
                 </b-row>
                 <b-row></b-row>
                 <b-row style="text-align: center;" cols="5">
+                    <!--
+                    status of the survey. not needed for regular user
                     <b-col>
                         <p class="my-status">{{survey.status}}</p>
                     </b-col>
+                    -->
                     <b-col></b-col>
                     <b-col></b-col>
                     <b-col></b-col>
                     <b-col>
-                        <router-link class="my-config-link" :to="{ name: 'config', params: {tmpPollID: survey.id}}" @click="toConfig">Konfiguration</router-link>
+                        <router-link class="my-config-link" :to="'/survey/' + survey.id + '/answer/'">Fill Out</router-link>
                     </b-col>
+
                 </b-row>
             </b-container>
         </div>
@@ -53,17 +60,17 @@
 
 <script>
     export default {
-        name: "SurveyListElement",
+        name: "AnswerSurveyListElement",
         props: ["survey"],
         methods: {
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             },
             toConfig() {
-                //mobile link broken!
-                return this.$router.push({name: 'config', params: { tmpPollID: this.survey.id}})
-            },
+               // return this.$router.push('/survey/' + survey.id + '/answer/')
+            }
         }
+
     }
 </script>
 

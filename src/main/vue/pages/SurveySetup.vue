@@ -7,7 +7,7 @@
                 <!-- -->
                 <b-row style="text-align: center" class="my-row">
                     <b-col>
-                        <HelloWorld style="text-align:center;" class="ml-auto" :msg="survey.name"/>
+                        <HelloWorld style="text-align:center;" class="ml-auto" :msg="survey.title"/>
                     </b-col>
                 </b-row>
 
@@ -26,7 +26,7 @@
                 <b-row align-h="center">
                     <b-col>
                         <p>Status</p>
-                        <p>{{ survey. status }}</p>
+                        <p>{{ survey.status }}</p>
                     </b-col>
                     <b-col>
                         <div>
@@ -87,17 +87,24 @@
     import NavBar from "../components/NavBar";
     import HelloWorld from "../components/HelloWorld";
     import axios from "axios";
+    import {mapActions, mapGetters} from "vuex";
+
     export default {
         name: "SurveySetup",
         data() {
             return {
-                survey: {
-                    id: 0,
-                    name: '',
-                    status: ''
-                },
-                confirm: false,
+                tmpID: 0,
                 selected: ''
+            }
+        },
+        created: function() {
+            this.tmpID = this.$route.params.tmpPollID
+            this.requestSurvey(this.tmpID)
+        },
+        computed: {
+            ...mapGetters(['getSurvey']),
+            survey() {
+                return this.getSurvey(this.tmpID)
             }
         },
         methods: {
@@ -115,13 +122,12 @@
                 return axios.delete('/api/v1/polls/' + this.id + '/', pollCmd);
             },
 
+            ...mapActions(['requestSurvey'])
         },
+
         components: {
             NavBar,
             HelloWorld,
-        },
-        created: function () {
-            this.survey = this.$route.params.thisSurvey;
         },
     }
 </script>

@@ -10,7 +10,7 @@ import java.util.UUID;
 class PollCmd {
 
     private String title;
-
+    private PollStructureCmd structure;
     private PollStatus status;
 
     public String getTitle() {
@@ -19,6 +19,14 @@ class PollCmd {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public PollStructureCmd getStructure() {
+        return structure;
+    }
+
+    public void setStructure(PollStructureCmd structure) {
+        this.structure = structure;
     }
 
     public PollStatus getStatus() {
