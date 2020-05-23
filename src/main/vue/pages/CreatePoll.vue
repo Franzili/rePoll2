@@ -223,7 +223,7 @@
         },
         computed: {
             ...mapGetters(['getPoll']),
-            survey() {
+            poll() {
                 return this.getPoll(this.tmpID)
             }
         },
@@ -426,7 +426,7 @@
 
     .section {
         margin-top: 20px;
-        margin-bottom: 0px;
+        margin-bottom: 1px;
         color: #868686;
         font-size: 30px;
         text-align: center;
