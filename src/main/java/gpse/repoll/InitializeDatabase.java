@@ -1,5 +1,7 @@
 package gpse.repoll;
 
+import gpse.repoll.domain.service.PollService;
+import gpse.repoll.domain.service.UserService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

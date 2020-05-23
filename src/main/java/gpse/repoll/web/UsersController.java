@@ -1,7 +1,8 @@
 package gpse.repoll.web;
 
 import gpse.repoll.domain.User;
-import gpse.repoll.domain.UserService;
+import gpse.repoll.domain.service.UserService;
+import gpse.repoll.web.command.UserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
