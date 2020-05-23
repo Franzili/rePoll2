@@ -12,7 +12,7 @@
     import HelloWorld from "../components/HelloWorld";
 
     export default {
-        name: "Survey",
+        name: "Poll",
         data() {
             return {
                 id: 0
@@ -20,7 +20,7 @@
         },
         created() {
             this.id = this.$route.params.id
-            this.requestSurvey(this.id)
+            this.requestPoll(this.id)
         },
         computed: {
             ...mapGetters(['getSurvey']),
