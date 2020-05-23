@@ -166,7 +166,7 @@ public class PollsController {
     }
 
     @Secured(Roles.ALL)
-    @GetMapping("/{pollId+}/questions/")
+    @GetMapping("/{pollId}/questions/")
     public List<Question> listQuestions(@PathVariable("pollId") final UUID pollId) {
         return pollService.getAllQuestions(pollId);
     }
