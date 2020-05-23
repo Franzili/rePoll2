@@ -48,7 +48,7 @@
             NavBar,
             HelloWorld,
             ...mapState({
-                surveys: state => state.surveys
+                polls: state => state.polls
             })
         },
         data() {
@@ -67,7 +67,7 @@
             login() {
                 this.requestToken(this.auth)
                     .then(() => {
-                        this.$router.push("/surveys");
+                        this.$router.push("/polls");
                     })
                     .catch(() => {
 
@@ -75,10 +75,10 @@
             }
         },
         ...mapActions([
-            'requestSurveys'
+            'requestPolls'
         ]),
         created(){
-        this.requestSurveys()
+        this.requestPolls()
         },
         computed: {
             ...mapState({
@@ -88,12 +88,4 @@
     }
 </script>
 <style scoped>
-
-    .my-button {
-        margin: 10px;
-    }
-
-    .my-form {
-        padding: 30px;
-    }
 </style>

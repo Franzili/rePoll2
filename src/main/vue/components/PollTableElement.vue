@@ -5,13 +5,13 @@
             <b-container>
                 <b-row style="text-align: center">
                     <b-col>
-                        <p class="my-name">{{survey.title}}</p>
+                        <p class="my-name">{{poll.title}}</p>
                     </b-col>
                 </b-row>
 
                 <b-row>
                     <b-col>
-                        <p class="my-status">{{survey.status}}</p>
+                        <p class="my-status">{{poll.status}}</p>
                     </b-col>
                     <b-col>
                         <p>
@@ -29,19 +29,19 @@
             <b-container>
                 <b-row style="text-align: center" cols="5">
                     <b-col>
-                        <p class="my-name">{{survey.title}}</p>
+                        <p class="my-name">{{poll.title}}</p>
                     </b-col>
                 </b-row>
                 <b-row></b-row>
                 <b-row style="text-align: center;" cols="5">
                     <b-col>
-                        <p class="my-status">{{survey.status}}</p>
+                        <p class="my-status">{{poll.status}}</p>
                     </b-col>
                     <b-col></b-col>
                     <b-col></b-col>
                     <b-col></b-col>
                     <b-col>
-                        <router-link class="my-config-link" :to="{ name: 'config', params: {tmpPollID: survey.id}}" @click="toConfig">Konfiguration</router-link>
+                        <router-link class="my-config-link" :to="{ name: 'config', params: {tmpPollID: poll.id}}" @click="toConfig">Konfiguration</router-link>
                     </b-col>
                 </b-row>
             </b-container>
@@ -53,15 +53,15 @@
 
 <script>
     export default {
-        name: "SurveyListElement",
-        props: ["survey"],
+        name: "PollListElement",
+        props: ["poll"],
         methods: {
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             },
             toConfig() {
                 //mobile link broken!
-                return this.$router.push({name: 'config', params: { tmpPollID: this.survey.id}})
+                return this.$router.push({name: 'config', params: {tmpPollID: this.poll.id}})
             },
         }
     }
