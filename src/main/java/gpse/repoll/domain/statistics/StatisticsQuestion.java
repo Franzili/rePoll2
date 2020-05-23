@@ -34,7 +34,10 @@ public class StatisticsQuestion {
     private Question question;
 
     @ElementCollection
-    private final Map<Choice, Integer> absoluteFrequency = new HashMap<>();
+    private final Map<Choice, Integer> absoluteFrequencies = new HashMap<>();
+
+    @ElementCollection
+    private final Map<Choice, Double> relativeFrequencies = new HashMap<>();
 
 
     protected StatisticsQuestion() {}
@@ -42,7 +45,8 @@ public class StatisticsQuestion {
     public StatisticsQuestion(Question question, List<PollEntry> pollEntries) {
         this.question = question;
         this.answers.addAll(getAnswersTo(this.question, pollEntries));
-        this.absoluteFrequency.putAll(absoluteFrequencies(question, pollEntries));
+        this.absoluteFrequencies.putAll(absoluteFrequencies(question, pollEntries));
+        this.relativeFrequencies.putAll(relativeFrequencies(this.absoluteFrequencies));
     }
 
     /**
@@ -99,15 +103,30 @@ public class StatisticsQuestion {
     }
 
     /**
+     * Calculate the absolute frequencies for each Choice in a question.
+     *
+     * @param absoluteFrequencies Absolute frequencies.
+     * @return A Map that contains the relative frequencies of all possible answers to a given question.
+     */
+    protected Map<Choice, Double> relativeFrequencies(Map<Choice, Integer> absoluteFrequencies) {
+        Map<Choice, Double> frequencies = new HashMap<>();
+        Integer hundredPercent = sumAnswers(absoluteFrequencies);
+        absoluteFrequencies.forEach(((choice, integer) -> {
+            Double percentage = (integer.doubleValue() / hundredPercent.doubleValue());
+            frequencies.put(choice, percentage);
+        }));
+        return frequencies;
+    }
+
+    /**
      * Calculate the sum of the frequencies of all answers from all participants.
      *
-     * @param question The question you want to know for.
-     * @param pollEntries The list of entries from all participants.
+     * @param absoluteFrequencies Map with the absolute frequencies of each possible choice.
      * @return The number of answers given in total (every ticked checkbox).
      */
-    protected Integer sumAnswers(Question question, List<PollEntry> pollEntries) {
+    protected Integer sumAnswers(Map<Choice, Integer> absoluteFrequencies) {
         final Integer[] frequency = {0};
-        absoluteFrequencies(question, pollEntries).forEach(((choice, integer) -> {
+        absoluteFrequencies.forEach(((choice, integer) -> {
             frequency[0] += integer;
         }));
         return frequency[0];
