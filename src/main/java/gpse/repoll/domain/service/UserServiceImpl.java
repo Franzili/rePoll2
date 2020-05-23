@@ -5,8 +5,6 @@ import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
 import gpse.repoll.domain.repositories.UserRepository;
-import gpse.repoll.domain.service.PollService;
-import gpse.repoll.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;

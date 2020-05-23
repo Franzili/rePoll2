@@ -3,12 +3,12 @@ package gpse.repoll.web.command.questions;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = TextQuestionCmd.class),
-    @JsonSubTypes.Type(value = ScaleQuestionCmd.class),
-    @JsonSubTypes.Type(value = RadioButtonQuestionCmd.class),
-    @JsonSubTypes.Type(value = ChoiceQuestionCmd.class)
+    @JsonSubTypes.Type(TextQuestionCmd.class),
+    @JsonSubTypes.Type(ScaleQuestionCmd.class),
+    @JsonSubTypes.Type(RadioButtonQuestionCmd.class),
+    @JsonSubTypes.Type(ChoiceQuestionCmd.class)
 })
 public abstract class QuestionCmd {
 

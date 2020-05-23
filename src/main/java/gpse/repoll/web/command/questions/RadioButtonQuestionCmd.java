@@ -2,7 +2,6 @@ package gpse.repoll.web.command.questions;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import gpse.repoll.web.command.ChoiceCmd;
-import gpse.repoll.web.command.questions.QuestionCmd;
 
 import java.util.ArrayList;
 import java.util.List;

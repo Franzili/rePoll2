@@ -1,7 +1,6 @@
 package gpse.repoll.web.command.questions;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import gpse.repoll.web.command.questions.QuestionCmd;
 
 @JsonTypeName("TextQuestion")
 public class TextQuestionCmd extends QuestionCmd {
