@@ -30,6 +30,9 @@ public class Poll {
     private PollStatus status;
 
     @Column
+    private String anonymity;
+
+    @Column
     @Lob
     @NotEmpty
     private String title;
@@ -171,6 +174,14 @@ public class Poll {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public String getAnonymity() {
+        return anonymity;
+    }
+
+    public void setAnonymity(String anonymity) {
+        this.anonymity = anonymity;
     }
 
     private PollSection getSection(UUID sectionId) {

@@ -81,6 +81,7 @@ public class PollServiceImpl implements PollService {
         final Poll poll = new Poll(null, title);
         poll.setCreator(creator);
         poll.setLastEditor(creator);
+        poll.setAnonymity(Anonymity.NON_ANONYMOUS); // default: non-anonymous
         pollRepository.save(poll);
         return poll;
     }
@@ -100,11 +101,13 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public Poll updatePoll(final UUID id, final String title, final PollStatus status,
-                           final Map<UUID, List<Long>> structure, final User lastEditor) {
+                           final Map<UUID, List<Long>> structure, final User lastEditor,
+                           final String anonymity) {
         Poll poll = getPoll(id);
         poll.setTitle(title);
         poll.setStatus(status);
         poll.setLastEditor(lastEditor);
+        poll.setAnonymity(anonymity);
         if (structure != null) {
             poll.setStructure(structure);
         } // todo for every other code section with this unnecessary operation

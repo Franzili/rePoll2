@@ -1,5 +1,6 @@
 package gpse.repoll.web;
 
+import gpse.repoll.domain.Anonymity;
 import gpse.repoll.domain.PollStatus;
 
 /**
@@ -10,6 +11,15 @@ class PollCmd {
     private String title;
     private PollStructureCmd structure;
     private PollStatus status;
+    private Anonymity anonymity;
+
+    public Anonymity getAnonymity() {
+        return anonymity;
+    }
+
+    public void setAnonymity(Anonymity anonymity) {
+        this.anonymity = anonymity;
+    }
 
     public String getTitle() {
         return title;

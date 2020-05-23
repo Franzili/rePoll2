@@ -45,7 +45,8 @@ public interface PollService {
      * @return The updated Poll.
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the poll could not be found.
      */
-    Poll updatePoll(UUID id, String title, PollStatus status, Map<UUID, List<Long>> structure, User lastEditor);
+    Poll updatePoll(UUID id, String title, PollStatus status, Map<UUID, List<Long>> structure,
+                    User lastEditor, String anonymity);
 
     /**
      * Get all PollSections of a Poll.
