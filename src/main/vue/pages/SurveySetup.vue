@@ -117,9 +117,16 @@
             handleOk() {
                 this.survey.status = this.selected
             },
+            // changed variable name to survey. and added response catches
             deletePoll() {
-                let pollCmd = {title: this.name, status: this.status};
-                return axios.delete('/api/v1/polls/' + this.id + '/', pollCmd);
+                let pollCmd = {title: this.survey.title, status: this.survey.status};
+                axios.delete('/api/v1/polls/' + this.survey.id + '/', pollCmd)
+                    .then((response) => {
+                        console.log(response.data)
+                        return this.$router.push('/surveys')
+                    }).catch((err) => {
+                        console.log(err.message)
+                    })
             },
 
             ...mapActions(['requestSurvey'])
