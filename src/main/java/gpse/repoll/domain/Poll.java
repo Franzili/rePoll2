@@ -30,7 +30,7 @@ public class Poll {
     private PollStatus status;
 
     @Column
-    private String anonymity;
+    private Anonymity anonymity;
 
     @Column
     @Lob
@@ -177,11 +177,11 @@ public class Poll {
         this.owner = owner;
     }
 
-    public String getAnonymity() {
+    public Anonymity getAnonymity() {
         return anonymity;
     }
 
-    public void setAnonymity(String anonymity) {
+    public void setAnonymity(Anonymity anonymity) {
         this.anonymity = anonymity;
     }
 

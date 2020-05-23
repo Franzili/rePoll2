@@ -101,12 +101,14 @@ public class PollServiceImpl implements PollService {
     @Override
     public Poll updatePoll(final UUID id, final String title, final PollStatus status,
                            final Map<UUID, List<Long>> structure, final User lastEditor,
-                           final String anonymity) {
+                           final Anonymity anonymity) {
         Poll poll = getPoll(id);
         poll.setTitle(title);
-        poll.setStatus(status);
         poll.setLastEditor(lastEditor);
-        poll.setAnonymity(anonymity);
+        poll.setStatus(status);
+        if(status.equals(PollStatus.IN_PROCESS)) {
+            poll.setAnonymity(anonymity);
+        }
         if (structure != null) {
             poll.setStructure(structure);
         } // todo for every other code section with this unnecessary operation
