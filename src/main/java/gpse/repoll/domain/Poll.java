@@ -77,6 +77,7 @@ public class Poll {
         this.lastEditor = creator;
         this.title = title;
         this.status = PollStatus.IN_PROCESS;
+        this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
     }
 
     @Override

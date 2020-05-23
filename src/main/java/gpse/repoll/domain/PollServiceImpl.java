@@ -81,7 +81,6 @@ public class PollServiceImpl implements PollService {
         final Poll poll = new Poll(null, title);
         poll.setCreator(creator);
         poll.setLastEditor(creator);
-        poll.setAnonymity(Anonymity.NON_ANONYMOUS); // default: non-anonymous
         pollRepository.save(poll);
         return poll;
     }
