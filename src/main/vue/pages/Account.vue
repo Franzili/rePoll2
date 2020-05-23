@@ -17,7 +17,7 @@
                 <b-row>
                     <b-col></b-col>
                     <b-col cols="5">
-                        <p>get notification if i get a new survey</p>
+                        <p>get notification if i get a new poll</p>
                     </b-col>
                     <b-col>
                         <b-form-group id="input-group-1">
@@ -32,7 +32,7 @@
                 <b-row>
                     <b-col></b-col>
                     <b-col cols="5">
-                        <p>get notification when a survey expires</p>
+                        <p>get notification when a poll expires</p>
                     </b-col>
                     <b-col>
                         <b-form-group id="input-group-2">
