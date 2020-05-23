@@ -6,10 +6,10 @@
                 Title:
             </div>
             <div v-if="editTitle">
-                <b-form-input  v-model="surveyTitle"></b-form-input>
+                <b-form-input  v-model="pollTitle"></b-form-input>
             </div>
             <div v-else>
-                {{surveyTitle}}
+                {{pollTitle}}
             </div>
 
             <div v-if="editTitle">
@@ -22,11 +22,11 @@
 
         <!-- better for mobile version -->
         <div v-if="isMobile()">
-            <div :key="item.id" v-for="item in items">
-                <SurveyItem v-bind:item="item" v-bind:edit="edit" v-on:del-item="deleteItem(item.id)"/>
+            <div :key="question.id" v-for="question in questions">
+                <PollQuestion v-bind:question="question" v-bind:edit="edit" v-on:del-question="deleteQuestion(question.id)"/>
             </div>
             <HelloWorld style="text-align:center;" class="ml-auto" msg=""/>
-            <AddQuestion v-on:add-item="addItem"/>
+            <AddQuestion v-on:add-question="addQuestion"/>
         </div>
 
         <!-- better for Desktop version -->
@@ -75,7 +75,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updateSurveyItemsText">
+                                            v-on:end="updatePollQuestionsText">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -89,7 +89,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updateSurveyItemsLimChar">
+                                            v-on:end="updatePollQuestionsLimChar">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -104,7 +104,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updateSurveyItemsPossibilities">
+                                            v-on:end="updatePollQuestionsPossibilities">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -119,7 +119,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updateSurveyItemsCheckbox">
+                                            v-on:end="updatePollQuestionsCheckbox">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -134,7 +134,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updateSurveyItemsSelect">
+                                            v-on:end="updatePollQuestionsSelect">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -148,7 +148,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updateSurveyItemsX">
+                                            v-on:end="updatePollQuestionsX">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -168,11 +168,11 @@
                     <b-col class="cols-14">
                             <div>
                                 <draggable
-                                    class="list-group" v-model="items"
+                                    class="list-group" v-model="questions"
                                     group="group"
                                     @change="log">
-                                    <div class="drag-item flex flex-justify-between" :key="item.id" v-for="item in items">
-                                        <SurveyItem v-bind:item="item" v-bind:edit="edit" v-on:del-item="deleteItem(item.id)"/>
+                                    <div class="drag-item flex flex-justify-between" :key="question.id" v-for="question in questions">
+                                        <PollQuestion v-bind:question="question" v-bind:edit="edit" v-on:del-question="deleteQuestion(question.id)"/>
                                     </div>
                                 </draggable>
                                 <b-button @click="updatePoll">save</b-button>
@@ -192,49 +192,43 @@
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
     import AddQuestion from "../components/AddQuestion";
-    import SurveyItem from "../components/SurveyItem";
+    import PollQuestion from "../components/PollQuestion";
     import {v4 as uuidv4} from "uuid";
     import axios from 'axios';
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
-        name: "CreateSurvey",
+        name: "CreatePoll",
         data() {
             return {
                 visible:true,
+                tmpID: 0,
                 id: "c4fdc95e-11e7-46ef-9396-83c950e0d482",
                 title: "Moby Dick",
-                status: "IN_PROCESSING",
+                status: "IN_PROCESS",
                 sections: [],
-                surveyTitle: "Moby Dick",
+                pollTitle: "Moby Dick",
                 sectionTitle: "1. The Society",
                 editTitle: false,
                 editSection: false,
                 edit: true,
-                items: [{
-                    id: 1,
-                    type: "radio",
-                    question: "Wie findest du das RePoll Umfragetool?",
-                    possibilities: [
-                        {
-                            id: 1,
-                            text: "perfekt",
-                        },
-                        {
-                            id: 2,
-                            text: "sehr gut",
-                        },
-                        {
-                            id: 3,
-                            text: "gut",
-                        }
-                    ]
-                }
-                ],
+                questions: [],
                 palette: []
             }
         },
+        created: function () {
+            this.tmpID = this.$route.params.tmpPollID;
+            this.requestPolls()
+            this.requestPoll(this.tmpID)
+        },
+        computed: {
+            ...mapGetters(['getPoll']),
+            survey() {
+                return this.getPoll(this.tmpID)
+            }
+        },
         methods: {
-            changePaletteVisible() {
+            changePaletteVisible(){
                 this.visible = !this.visible;
             },
             changeEditTitle() {
@@ -244,11 +238,6 @@
                 this.editSection = !this.editSection;
             },
             updatePoll() {
-
-                this.$bvToast.toast(`Poll saved`, {
-                    autoHideDelay: 1000
-                });
-
                 // update poll
                 let pollCmd = {
                     title: this.title,
@@ -257,10 +246,10 @@
                 axios.put('/api/v1/polls/'+ this.id + '/', pollCmd);
 
                 // update questions
-                for (var i = 0; i < this.items.length; i++) {
+                for (var i = 0; i < this.questions.length; i++) {
                     axios.put(
-                        '/api/v1/polls/' + this.id + '/questions/' + this.items[i].id + '/',
-                        this.items[i]                    )
+                        '/api/v1/polls/' + this.id + '/questions/' + this.questions[i].id + '/',
+                        this.questions[i]                    )
                 }
 
                 // update sections
@@ -271,86 +260,85 @@
                     )
                 }
             },
-
-            deleteItem(id) {
-                this.items = this.items.filter(item => item.id !== id);
+            deleteQuestion(id) {
+                this.questions = this.questions.filter(question => question.id !== id);
             },
-            addItem(newItem) {
-                this.items = [...this.items, newItem];
+            addQuestion(newQuestion) {
+                this.questions = [...this.questions, newQuestion];
             },
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             },
-            updateSurveyItemsPossibilities() {
-                const newItem = {
+            updatePollQuestionsPossibilities() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "radio",
-                    question: "Wie findest du Repoll?",
+                    title: "new question",
                     possibilities: [
                         {
                             id: 1,
-                            text: "perfekt",
+                            text: "choice 1",
                         },
                         {
                             id: 2,
-                            text: "sehr gut",
+                            text: "choice 2",
                         },
                         {
                             id: 3,
-                            text: "gut",
+                            text: "choice 3",
                         }
                     ]
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
-            updateSurveyItemsSelect() {
-                const newItem = {
+            updatePollQuestionsSelect() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "dropdown",
-                    question: "Was ist deine Lieblingsfarbe?",
+                    title: "Was ist deine Lieblingsfarbe?",
                     possibilities: [
                         {
                             id: 1,
-                            text: "Blau",
+                            text: "choice 1",
                         },
                         {
                             id: 2,
-                            text: "Gelb",
+                            text: "choice 2",
                         },
                         {
                             id: 3,
-                            text: "Rosa",
+                            text: "choice 3",
                         }
                     ]
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
-            updateSurveyItemsText() {
-                const newItem = {
+            updatePollQuestionsText() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "section",
-                    question: "Was hast du heute geschafft?",
+                    title: "new question",
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
-            updateSurveyItemsLimChar() {
-                const newItem = {
+            updatePollQuestionsLimChar() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "freetext",
-                    question: "Was ist deine Lieblingsprogrammiersprache?",
+                    title: "new question",
                     possibilities: [
                         {
                             limit: 10
                         }
                     ]
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
-            updateSurveyItemsX() {
-                const newItem = {
+            updatePollQuestionsX() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "slider",
-                    question: "Wie gerne magst du Brokkoli, von 1 bis 10?",
+                    title: "new question",
                     possibilities: [
                         {
                             min: 1,
@@ -359,37 +347,38 @@
                         }
                     ]
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
-            updateSurveyItemsCheckbox() {
-                const newItem = {
+            updatePollQuestionsCheckbox() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "checkbox",
-                    question: "Was hast du für Gewohnheiten?",
+                    title: "new question",
                     possibilities: [
                         {
                             id: 1,
-                            text: "Meditieren",
+                            text: "choice 1",
                         },
                         {
                             id: 2,
-                            text: "Sport",
+                            text: "choice 2",
                         },
                         {
                             id: 3,
-                            text: "Programmieren",
+                            text: "choice 3",
                         }
                     ]
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
             log: function (...e) {
                     console.log(...e);
-            }
+            },
+            ...mapActions(['requestPoll','requestPolls'])
         },
         components: {
             AddQuestion,
-            SurveyItem,
+            PollQuestion,
             NavBar,
             HelloWorld,
             draggable
