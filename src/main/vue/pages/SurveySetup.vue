@@ -111,9 +111,7 @@
             },
             handleOk() {
                 this.survey.status = this.selected
-                let pollCmd = {
-                    status: this.survey.status
-                }
+                let pollCmd = this.survey
                 console.log(this.survey.id)
                 axios.put('/api/v1/polls/'+ this.survey.id + '/', pollCmd)
                     .then((response) => {

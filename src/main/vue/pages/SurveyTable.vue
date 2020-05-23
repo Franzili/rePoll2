@@ -35,7 +35,9 @@
                     .then((response) => {
                         console.log(response.data);
                         return this.$router.push({name:'create', params: {tmpPollID: response.data.id}})
-                    });
+                    }).catch((err) => {
+                        console.log(err.message)
+                    })
             },
             ...mapActions([
                 'requestSurveys'
