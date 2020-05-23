@@ -1,6 +1,9 @@
 package gpse.repoll.domain;
 
+import gpse.repoll.domain.exceptions.BadRequestException;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * A choice for a question.
@@ -13,13 +16,17 @@ public class Choice {
     private Long id;
 
     @Column
+    @NotEmpty
     private String text;
 
     protected Choice() {
 
     }
 
-    public Choice(String text) {
+    public Choice(String text) throws BadRequestException {
+        if (text == null) {
+            throw new BadRequestException("No empty choice!");
+        }
         this.text = text;
     }
 

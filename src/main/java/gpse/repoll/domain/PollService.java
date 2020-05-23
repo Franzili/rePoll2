@@ -15,7 +15,7 @@ public interface PollService {
      * Get all Polls.
      * @return A List of all polls
      */
-    List<Poll> getAll();
+    Iterable<Poll> getAll();
 
     /**
      * Add a new Poll.

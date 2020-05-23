@@ -15,7 +15,7 @@ public class ScaleQuestion extends Question {
     private String scaleNameRight;
 
     @Column
-    private int stepCount;
+    private int stepCount; // todo > 1
 
     public String getScaleNameLeft() {
         return scaleNameLeft;

@@ -55,7 +55,7 @@ public class Poll {
     private List<PollSection> sections = new ArrayList<>();
 
     @OneToMany
-    private List<Question> questions = new ArrayList<>();
+    private List<Question> questions = new ArrayList<>(); // todo sorting
 
     @ManyToOne
     private User owner;

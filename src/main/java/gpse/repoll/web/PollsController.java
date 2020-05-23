@@ -21,6 +21,9 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/v1/polls")
 public class PollsController {
+
+    private static final String NO_CHOICES = "No choices given for the question!";
+
     private final PollService pollService;
     private final UserService userService;
 
@@ -32,8 +35,10 @@ public class PollsController {
 
     //@Secured(Roles.ALL)   <---this has to be fixed in future, now is Blocking frontend from accesing the database
     @GetMapping("/")
-    public List<Poll> getAll() {
-        return pollService.getAll();
+    public List<Poll> listPolls() {
+        List<Poll> polls = new ArrayList<>();
+        pollService.getAll().forEach(polls::add);
+        return polls;
     }
 
     @Secured(Roles.ALL)
@@ -51,7 +56,6 @@ public class PollsController {
     @Secured(Roles.ALL)
     @GetMapping("/{id}/")
     public Poll getPoll(@PathVariable("id") final UUID id) {
-        // we know that id is a string of regex \d+, so we dont need to check for NumberFormatException.
         return pollService.getPoll(id);
     }
 
@@ -134,6 +138,9 @@ public class PollsController {
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
             List<Choice> choices = new ArrayList<>();
+            if (radioButtonQuestionCmd.getChoices() == null) {
+                throw new BadRequestException(NO_CHOICES);
+            }
             for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
@@ -141,13 +148,15 @@ public class PollsController {
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
             List<Choice> choices = new ArrayList<>();
+            if (choiceQuestionCmd.getChoices() == null) {
+                throw new BadRequestException(NO_CHOICES);
+            }
             for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
             return pollService.addChoiceQuestion(pollId, title, questionOrder, choices, lastEditor);
         }
-
-        // this should never happen.
+        // This should never happen
         throw new InternalServerErrorException();
     }
 
@@ -197,6 +206,9 @@ public class PollsController {
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
             List<Choice> choices = new ArrayList<>();
+            if (radioButtonQuestionCmd.getChoices() == null) {
+                throw new BadRequestException(NO_CHOICES);
+            }
             for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
@@ -204,13 +216,15 @@ public class PollsController {
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
             List<Choice> choices = new ArrayList<>();
+            if (choiceQuestionCmd.getChoices() == null) {
+                throw new BadRequestException(NO_CHOICES);
+            }
             for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
             return pollService.updateChoiceQuestion(pollId, questionId, questionOrder, title, choices, lastEditor);
         }
-
-        // This should not be reached
+        // This should never happen
         throw new InternalServerErrorException();
     }
 
@@ -219,13 +233,16 @@ public class PollsController {
     @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
+        if (pollEntryCmd.getAnswers() == null) {
+            throw new BadRequestException();
+        }
         Map<Long, Answer> answers = new HashMap<>();
         for (Long key : pollEntryCmd.getAnswers().keySet()) {
             AnswerCmd answerCmd = pollEntryCmd.getAnswers().get(key);
             Answer answer;
             if (answerCmd instanceof TextAnswerCmd) {
                 answer = new TextAnswer();
-                String text  = ((TextAnswerCmd) answerCmd).getText();
+                String text = ((TextAnswerCmd) answerCmd).getText();
                 ((TextAnswer) answer).setText(text);
             } else if (answerCmd instanceof ScaleAnswerCmd) {
                 answer = new ScaleAnswer();

@@ -21,11 +21,11 @@ public class PollSection {
 
     @Column
     @Lob
-    private String description;
+    private String title;
 
     @Column
     @Lob
-    private String title;
+    private String description;
 
     @OneToMany
     @JoinColumn

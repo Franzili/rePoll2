@@ -67,14 +67,14 @@ public class PollsControllerTest {
         polls.add(poll2);
 
         when(pollService.getAll()).thenReturn(polls);
-        assertThat(controller.getAll()).containsAll(polls);
+        assertThat(controller.listPolls()).containsAll(polls);
     }
 
     @Test
     @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testGetAllEmpty() {
         when(pollService.getAll()).thenReturn(new ArrayList<Poll>());
-        assertThat(controller.getAll()).isEmpty();
+        assertThat(controller.listPolls()).isEmpty();
     }
 
     @Test
