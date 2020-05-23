@@ -7,7 +7,7 @@
                 <!-- -->
                 <b-row style="text-align: center" class="my-row">
                     <b-col>
-                        <HelloWorld style="text-align:center;" class="ml-auto" :msg="survey.title"/>
+                        <HelloWorld style="text-align:center;" class="ml-auto" :msg="poll.title"/>
                     </b-col>
                 </b-row>
 
@@ -26,7 +26,7 @@
                 <b-row align-h="center">
                     <b-col>
                         <p>Status</p>
-                        <p>{{ survey.status }}</p>
+                        <p>{{ poll.status }}</p>
                     </b-col>
                     <b-col>
                         <div>
@@ -36,14 +36,14 @@
                                 plain
                                 name="plain-inline">
                                     <b-form-radio value="IN_PROCESS"
-                                    :disabled="survey.status === 'READY'
-                                    || survey.status === 'ACTIVATED'
-                                    || survey.status === 'DEACTIVATED'">In Bearbeitung</b-form-radio>
+                                    :disabled="poll.status === 'READY'
+                                    || poll.status === 'ACTIVATED'
+                                    || poll.status === 'DEACTIVATED'">In Bearbeitung</b-form-radio>
                                     <b-form-radio value="READY"
-                                    :disabled="survey.status === 'ACTIVATED'
-                                    || survey.status === 'DEACTIVATED'">Bereit</b-form-radio>
+                                    :disabled="poll.status === 'ACTIVATED'
+                                    || poll.status === 'DEACTIVATED'">Bereit</b-form-radio>
                                     <b-form-radio value="ACTIVATED"
-                                    :disabled="survey.status === 'DEACTIVATED'">Aktiviert</b-form-radio>
+                                    :disabled="poll.status === 'DEACTIVATED'">Aktiviert</b-form-radio>
                                     <b-form-radio value="DEACTIVATED">Deaktiviert</b-form-radio>
                                 </b-form-radio-group>
                             </b-form-group>
@@ -81,11 +81,9 @@
     import NavBar from "../components/NavBar";
     import HelloWorld from "../components/HelloWorld";
     import {mapActions, mapGetters} from "vuex";
-    import axios from 'axios';
-
 
     export default {
-        name: "SurveySetup",
+        name: "PollSetup",
         data() {
             return {
                 tmpID: 0,
@@ -94,12 +92,12 @@
         },
         created: function() {
             this.tmpID = this.$route.params.tmpPollID
-            this.requestSurvey(this.tmpID)
+            this.requestPoll(this.tmpID)
         },
         computed: {
-            ...mapGetters(['getSurvey']),
-            survey() {
-                return this.getSurvey(this.tmpID)
+            ...mapGetters(['getPoll']),
+            poll() {
+                return this.getPoll(this.tmpID)
             }
         },
         methods: {
@@ -107,20 +105,12 @@
                 if (this.selected === '') {
                     return false
                 }
-                return !(this.selected === this.survey.status)
+                return !(this.selected === this.poll.status)
             },
             handleOk() {
-                this.survey.status = this.selected
-                let pollCmd = this.survey
-                console.log(this.survey.id)
-                axios.put('/api/v1/polls/'+ this.survey.id + '/', pollCmd)
-                    .then((response) => {
-                        console.log(response.data)
-                    }).catch((err) => {
-                        console.log(err.message)
-                    })
+                this.poll.status = this.selected
             },
-            ...mapActions(['requestSurvey'])
+            ...mapActions(['requestPoll'])
         },
 
         components: {

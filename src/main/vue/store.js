@@ -9,7 +9,7 @@ const store = new Vuex.Store({
     state: {
         token: null,
         authenticated: null,
-        surveys: []
+        polls: []
     },
     actions: {
         requestToken({commit}, credentials) {
@@ -28,41 +28,41 @@ const store = new Vuex.Store({
                     });
             })
         },
-        requestSurveys({commit}) {
+        requestPolls({commit}) {
             return new Promise((resolve, reject) => {
-                api.survey.list().then(res => {
-                    commit('setSurveys', res.data)
+                api.poll.list().then(res => {
+                    commit('setPolls', res.data)
                     resolve()
                 }).catch(() => {
-                    commit('setSurveys', [])
+                    commit('setPolls', [])
                     reject()
                 })
             })
         },
-        requestSurvey({commit}, id) {
+        requestPoll({commit}, id) {
             return new Promise((resolve, reject) => {
-                api.survey.get(id).then(res => {
-                    commit('updateSurvey', res.data)
-                    resolve()
-                }).catch(() => {
-                    reject()
-                })
-            })
-        },
-        saveSurvey({commit}, survey) {
-            return new Promise((resolve, reject) => {
-                api.survey.save(survey).then(res => {
-                    commit('updateSurvey', res.data)
+                api.poll.get(id).then(res => {
+                    commit('updatePoll', res.data)
                     resolve()
                 }).catch(() => {
                     reject()
                 })
             })
         },
-        updateSurvey({commit}, survey) {
+        savePoll({commit}, poll) {
             return new Promise((resolve, reject) => {
-                api.survey.update(survey).then(res => {
-                    commit('updateSurvey', res.data)
+                api.poll.save(poll).then(res => {
+                    commit('updatePoll', res.data)
+                    resolve()
+                }).catch(() => {
+                    reject()
+                })
+            })
+        },
+        updatePoll({commit}, poll) {
+            return new Promise((resolve, reject) => {
+                api.poll.update(poll).then(res => {
+                    commit('updatePoll', res.data)
                     resolve()
                 }).catch(() => {
                     reject()
@@ -90,22 +90,22 @@ const store = new Vuex.Store({
                 )
             }
         },
-        setSurveys(state, surveys) {
-            this.state.surveys = surveys
+        setPolls(state, polls) {
+            this.state.polls = polls
         },
-        saveSurveys(state, survey) {
-            this.state.surveys.push(survey)
+        savePolls(state, poll) {
+            this.state.polls.push(poll)
         },
-        updateSurvey(state, survey) {
-            let index = this.state.surveys.findIndex(a => a.id === survey.id)
-            this.state.surveys[index] = survey
+        updatePoll(state, poll) {
+            let index = this.state.polls.findIndex(a => a.id === poll.id)
+            this.state.polls[index] = poll
         }
 
     },
     getters: {
-        getSurvey: (state) => {
+        getPoll: (state) => {
             return (id) => {
-                return state.surveys.find(survey => survey.id === id)
+                return state.polls.find(poll => poll.id === id)
             }
         },
         isAuthenticated: (state) => {

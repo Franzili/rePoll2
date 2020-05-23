@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>Dies ist die Surveyseite für die Survey mit der ID {{ id }}</p>
+        <p>Dies ist die Pollseite für den Poll mit der ID {{ id }}</p>
     </div>
 
 </template>
@@ -12,7 +12,7 @@
     import HelloWorld from "../components/HelloWorld";
 
     export default {
-        name: "Survey",
+        name: "Poll",
         data() {
             return {
                 id: 0
@@ -20,29 +20,23 @@
         },
         created() {
             this.id = this.$route.params.id
-            this.requestSurvey(this.id)
+            this.requestPoll(this.id)
         },
         computed: {
-            ...mapGetters(['getSurvey']),
-            survey() {
-                return this.getSurvey(this.id)
+            ...mapGetters(['getPoll']),
+            Poll() {
+                return this.getPoll(this.id)
             }
         },
         methods: {
-            ...mapActions(['requestSurvey'])
+            ...mapActions(['requestPoll'])
         },
         comments: {
             NavBar,
             HelloWorld
-            //,
-            //SurveyItemList
         },
     }
 </script>
 
 <style scoped>
-
-    .my-row {
-        padding: 20px;
-    }
 </style>

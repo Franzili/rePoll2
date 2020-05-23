@@ -1,7 +1,7 @@
-import survey from "./survey";
+import poll from "./poll";
 import auth from "./auth";
 
 export default {
     auth,
-    survey
+    poll
 }
