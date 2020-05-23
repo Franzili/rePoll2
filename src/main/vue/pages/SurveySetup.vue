@@ -81,6 +81,8 @@
     import NavBar from "../components/NavBar";
     import HelloWorld from "../components/HelloWorld";
     import {mapActions, mapGetters} from "vuex";
+    import axios from 'axios';
+
 
     export default {
         name: "SurveySetup",
@@ -109,6 +111,16 @@
             },
             handleOk() {
                 this.survey.status = this.selected
+                let pollCmd = {
+                    status: this.survey.status
+                }
+                console.log(this.survey.id)
+                axios.put('/api/v1/polls/'+ this.survey.id + '/', pollCmd)
+                    .then((response) => {
+                        console.log(response.data)
+                    }).catch((err) => {
+                        console.log(err.message)
+                    })
             },
             ...mapActions(['requestSurvey'])
         },
