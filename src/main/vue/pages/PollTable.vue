@@ -6,7 +6,7 @@
             <b-button class="my-button" @click="addNewPoll">+</b-button>
             <b-row style="text-align: center" class="my-row">
                 <b-col >
-                    <SurveyTableList v-bind:surveys="surveys"/>
+                    <PollTableList v-bind:polls="polls"/>
                 </b-col>
             </b-row>
         </b-container>
@@ -17,15 +17,15 @@
 
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
-    import SurveyTableList from "../components/SurveyTableList";
+    import PollTableList from "../components/PollTableList";
     import {mapState, mapActions} from "vuex";
     import axios from "axios";
 
     export default {
-        name: "SurveyTable",
+        name: "PollTable",
         computed: {
             ...mapState({
-                surveys: state => state.surveys
+                polls: state => state.polls
             })
         },
         methods: {
@@ -40,16 +40,16 @@
                     })
             },
             ...mapActions([
-                'requestSurveys'
+                'requestPolls'
             ])
         },
         created: function () {
-            this.requestSurveys()
+            this.requestPolls()
         },
         components: {
             NavBar,
             HelloWorld,
-            SurveyTableList
+            PollTableList
         },
     }
 </script>
