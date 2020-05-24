@@ -48,6 +48,12 @@ public interface PollService {
     Poll updatePoll(UUID id, String title, PollStatus status, Map<UUID, List<Long>> structure, User lastEditor);
 
     /**
+     * Deletes all connections of a poll.
+     * @param id
+     */
+    void removePoll(UUID id);
+
+    /**
      * Get all PollSections of a Poll.
      * @param id The polls ID
      * @return The PollSections.

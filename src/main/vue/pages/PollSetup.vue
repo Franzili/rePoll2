@@ -56,7 +56,13 @@
                         <p class="my-4">Wenn Sie den Status ändern kann er nicht mehr in einen
                             früheren Status gewechselt werden.</p>
                     </b-modal>
-                </div>
+                <b-button class="my-button2" v-b-modal.modal-1>Delete Poll</b-button>
+                        <b-modal id="modal-1"
+                                 centered
+                                 title="Are you sure you want to delete this poll?"
+                                 @ok="deletePoll">
+                        </b-modal>
+                    </div>
             </b-row>
         </div>
     </div>
@@ -103,6 +109,18 @@
                     console.log(err.message)
                 })
             },
+            // changed variable name to survey. and added response catches
+            deletePoll() {
+                let pollCmd = {title: this.poll.title, status: this.poll.status};
+                axios.delete('/api/v1/polls/' + this.poll.id + '/', pollCmd)
+                    .then((response) => {
+                        console.log(response.data)
+                        return this.$router.push('/polls')
+                    }).catch((err) => {
+                        console.log(err.message)
+                    })
+            },
+
             ...mapActions(['requestPoll'])
         },
 

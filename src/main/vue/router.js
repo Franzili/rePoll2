@@ -21,43 +21,60 @@ var router = new VueRouter({
         {
             path: '/create/',
             name: 'create',
-            component: CreatePoll
+            component: CreatePoll,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/account/',
-            component: Account
+            component: Account,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/polls/',
-            component: PollTable
+            component: PollTable,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/poll/:id(\\d+)',
-            component: Poll
+            component: Poll,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/poll/:id/answer',
             component: Answer,
-            //meta: {
-            //    requiresAuth: true
-            //}
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/config/',
             name: 'config',
-            component: PollSetup
+            component: PollSetup,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/answer/',
-            component: AnswerPoll
+            component: AnswerPoll,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/poll-tabbed/',
-            component: PollTabbed
-            /* meta: {
+            component: PollTabbed,
+            meta: {
                 requiresAuth: true
             }
-             */
         }
     ]
 });
@@ -66,17 +83,21 @@ var router = new VueRouter({
 // Route Guard. Run before each routing.
 router.beforeEach((to, from , next) => {
     // if we are not authenticated, redirect to login page.
-    if (!store.state.authenticated && to.path !== "/") {
-        next("/");
-    }
 
-    if (store.state.authenticated && to.path === "/") {
-        next("/polls");
-    }
-
-    else {
-        // else proceed to the route as planned.
-        next();
+    // if auth is needed
+    if (to.matched.some(route => route.meta.requiresAuth)) {
+        // if auth is correct proceed to destination
+        if (store.getters.isAuthenticated) {
+            next()
+        } else {
+            next("/");
+        }
+    // if auth is not needed but acquired go to polls if '/' is requested
+    } else if (store.getters.isAuthenticated && to.path === "/") {
+        next("/polls/");
+    // base case if nothing is needed and acquired
+    } else {
+        next()
     }
 });
 
