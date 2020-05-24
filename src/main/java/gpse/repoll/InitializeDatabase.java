@@ -1,10 +1,8 @@
 package gpse.repoll;
 
-import gpse.repoll.domain.answers.Answer;
-import gpse.repoll.domain.answers.TextAnswer;
+import gpse.repoll.domain.answers.*;
 import gpse.repoll.domain.questions.Question;
-import gpse.repoll.domain.questions.ScaleQuestion;
-import gpse.repoll.domain.questions.TextQuestion;
+import gpse.repoll.domain.questions.QuestionBaseRepository;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,14 +25,30 @@ public class InitializeDatabase implements InitializingBean {
     private final PollService pollService;
     private final UserService userService;
     private final TransactionTemplate transactionTemplate;
+    private final ChoiceRepository choiceRepository;
+    private final PollEntryRepository pollEntryRepository;
+    private final PollRepository pollRepository;
+    private final PollSectionRepository pollSectionRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public InitializeDatabase(PollService pollService,
                               UserService userService,
-                              PlatformTransactionManager transactionManager) {
+                              PlatformTransactionManager transactionManager,
+                              final ChoiceRepository choiceRepository,
+                              final PollEntryRepository pollEntryRepository,
+                              final PollRepository pollRepository,
+                              final PollSectionRepository pollSectionRepository,
+                              final UserRepository userRepository) {
         this.pollService = pollService;
         this.userService = userService;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
+        this.choiceRepository = choiceRepository;
+        this.pollEntryRepository = pollEntryRepository;
+        this.pollRepository = pollRepository;
+        this.pollSectionRepository = pollSectionRepository;
+        this.userRepository = userRepository;
+
     }
 
     /**
@@ -64,21 +78,19 @@ public class InitializeDatabase implements InitializingBean {
         });
 
         transactionTemplate.execute(status -> {
+            //choiceRepository.deleteAll();
+            //pollEntryRepository.deleteAll();
+            //pollRepository.deleteAll();
+            //pollSectionRepository.deleteAll();
             User user = userService.getUser("JamesBond");
             Poll poll = pollService.addPoll("Gummibaerchen", user);
-            pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
-                                        1, 255, user);
-            pollService.addTextQuestion(poll.getId(), "Warum magst du keine Gummibaerchen?",
+            Question question1 = pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255, user);
             Poll poll2 = pollService.addPoll("About this App", user);
             pollService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
                                         1000, 255, user);
             pollService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
                                         1000, 255, user);
-
-            pollService.addScaleQuestion(poll.getId(),
-                "How satisfied are you with our services?",
-                2, "Not good", "Very good", 1,user);
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
             Choice choice5 = new Choice("0-20");
@@ -89,8 +101,8 @@ public class InitializeDatabase implements InitializingBean {
             choicesRadioButtonList.add(choice6);
             choicesRadioButtonList.add(choice7);
             choicesRadioButtonList.add(choice8);
-            pollService.addRadioButtonQuestion(poll.getId(), "How old are you?", 3,
-                choicesRadioButtonList, user);
+            Question question2 = pollService.addRadioButtonQuestion(poll.getId(), "How old are you?",
+                3, choicesRadioButtonList, user);
 
             List<Choice> choicesChoiceQuestionList = new ArrayList<>();
             Choice choice1 = new Choice("Avicii");
@@ -101,16 +113,187 @@ public class InitializeDatabase implements InitializingBean {
             choicesChoiceQuestionList.add(choice2);
             choicesChoiceQuestionList.add(choice3);
             choicesChoiceQuestionList.add(choice4);
-            pollService.addChoiceQuestion(poll.getId(), "Which musician do yo like the most?",
+            Question question3 = pollService.addChoiceQuestion(poll.getId(),
+                "Which artist do yo like the most?",
                 4, choicesChoiceQuestionList, user);
+
+            Question question4 = pollService.addScaleQuestion(poll.getId(),
+                "How satisfied are you with our services?",
+                2, "Not good", "Very good", 1,user);
+
+            // Create 10 TextAnswers
             TextAnswer textAnswer1 = new TextAnswer();
-            textAnswer1.setText("Weil sie schön bunt sind.");
+            textAnswer1.setText("Because they're sweet.");
+            TextAnswer textAnswer2 = new TextAnswer();
+            textAnswer2.setText("Because they're colourful.");
+            TextAnswer textAnswer3 = new TextAnswer();
+            textAnswer3.setText("Because they're great.");
+            TextAnswer textAnswer4 = new TextAnswer();
+            textAnswer4.setText("Colourful");
+            TextAnswer textAnswer5 = new TextAnswer();
+            textAnswer5.setText("Yummy");
+            TextAnswer textAnswer6 = new TextAnswer();
+            textAnswer6.setText("Sweet");
+            TextAnswer textAnswer7 = new TextAnswer();
+            textAnswer7.setText("Delicious");
+            TextAnswer textAnswer8 = new TextAnswer();
+            textAnswer8.setText("Because they're delicious.");
+            TextAnswer textAnswer9 = new TextAnswer();
+            textAnswer9.setText("Tasty");
+            TextAnswer textAnswer10 = new TextAnswer();
+            textAnswer10.setText("Yummy.");
 
-            PollEntry entry = new PollEntry();
+            // Create 10 RadioButtonAnswers
+            RadioButtonAnswer radioButtonAnswer1 = new RadioButtonAnswer();
+            radioButtonAnswer1.setChoiceId(choicesRadioButtonList.get(0).getId());
+            RadioButtonAnswer radioButtonAnswer2 = new RadioButtonAnswer();
+            radioButtonAnswer2.setChoiceId(choicesRadioButtonList.get(1).getId());
+            RadioButtonAnswer radioButtonAnswer3 = new RadioButtonAnswer();
+            radioButtonAnswer3.setChoiceId(choicesRadioButtonList.get(3).getId());
+            RadioButtonAnswer radioButtonAnswer4 = new RadioButtonAnswer();
+            radioButtonAnswer4.setChoiceId(choicesRadioButtonList.get(0).getId());
+            RadioButtonAnswer radioButtonAnswer5 = new RadioButtonAnswer();
+            radioButtonAnswer5.setChoiceId(choicesRadioButtonList.get(2).getId());
+            RadioButtonAnswer radioButtonAnswer6 = new RadioButtonAnswer();
+            radioButtonAnswer6.setChoiceId(choicesRadioButtonList.get(0).getId());
+            RadioButtonAnswer radioButtonAnswer7 = new RadioButtonAnswer();
+            radioButtonAnswer7.setChoiceId(choicesRadioButtonList.get(1).getId());
+            RadioButtonAnswer radioButtonAnswer8 = new RadioButtonAnswer();
+            radioButtonAnswer8.setChoiceId(choicesRadioButtonList.get(1).getId());
+            RadioButtonAnswer radioButtonAnswer9 = new RadioButtonAnswer();
+            radioButtonAnswer9.setChoiceId(choicesRadioButtonList.get(1).getId());
+            RadioButtonAnswer radioButtonAnswer10 = new RadioButtonAnswer();
+            radioButtonAnswer10.setChoiceId(choicesRadioButtonList.get(1).getId());
 
-            //entry.setAssociations((Question)question1,(Answer)textAnswer1);
+            // Create 10 ChoiceAnswers
+            ChoiceAnswer choiceAnswer1 = new ChoiceAnswer();
+            ChoiceAnswer choiceAnswer2 = new ChoiceAnswer();
+            ChoiceAnswer choiceAnswer3 = new ChoiceAnswer();
+            ChoiceAnswer choiceAnswer4 = new ChoiceAnswer();
+            ChoiceAnswer choiceAnswer5 = new ChoiceAnswer();
+            ChoiceAnswer choiceAnswer6 = new ChoiceAnswer();
+            ChoiceAnswer choiceAnswer7 = new ChoiceAnswer();
+            ChoiceAnswer choiceAnswer8 = new ChoiceAnswer();
+            ChoiceAnswer choiceAnswer9 = new ChoiceAnswer();
+            ChoiceAnswer choiceAnswer10 = new ChoiceAnswer();
 
-            //pollService.addPollEntry(poll.getId(), entry);
+            List<Long> listChoices = new ArrayList<>();
+            listChoices.add(choicesChoiceQuestionList.get(1).getId());
+            listChoices.add(choicesChoiceQuestionList.get(0).getId());
+            choiceAnswer1.setChoiceIds(listChoices);
+            choiceAnswer3.setChoiceIds(listChoices);
+            choiceAnswer4.setChoiceIds(listChoices);
+            choiceAnswer9.setChoiceIds(listChoices);
+            choiceAnswer10.setChoiceIds(listChoices);
+            listChoices.remove(0);
+            choiceAnswer2.setChoiceIds(listChoices);
+            choiceAnswer5.setChoiceIds(listChoices);
+            listChoices.remove(0);
+            listChoices.add(choicesChoiceQuestionList.get(2).getId());
+            choiceAnswer6.setChoiceIds(listChoices);
+            listChoices.add(choicesChoiceQuestionList.get(3).getId());
+            choiceAnswer7.setChoiceIds(listChoices);
+            choiceAnswer8.setChoiceIds(listChoices);
+
+            //Create 10 ScaleAnswers
+
+            ScaleAnswer scaleAnswer1 = new ScaleAnswer();
+            scaleAnswer1.setScaleNumber(10);
+            ScaleAnswer scaleAnswer2 = new ScaleAnswer();
+            scaleAnswer2.setScaleNumber(1);
+            ScaleAnswer scaleAnswer3 = new ScaleAnswer();
+            scaleAnswer3.setScaleNumber(2);
+            ScaleAnswer scaleAnswer4 = new ScaleAnswer();
+            scaleAnswer4.setScaleNumber(1);
+            ScaleAnswer scaleAnswer5 = new ScaleAnswer();
+            scaleAnswer5.setScaleNumber(4);
+            ScaleAnswer scaleAnswer6 = new ScaleAnswer();
+            scaleAnswer6.setScaleNumber(5);
+            ScaleAnswer scaleAnswer7 = new ScaleAnswer();
+            scaleAnswer7.setScaleNumber(10);
+            ScaleAnswer scaleAnswer8 = new ScaleAnswer();
+            scaleAnswer8.setScaleNumber(4);
+            ScaleAnswer scaleAnswer9 = new ScaleAnswer();
+            scaleAnswer9.setScaleNumber(1);
+            ScaleAnswer scaleAnswer10 = new ScaleAnswer();
+            scaleAnswer10.setScaleNumber(5);
+
+
+
+
+            HashMap<Long,Answer> textMap1 = new HashMap<>();
+            HashMap<Long,Answer> textMap2 = new HashMap<>();
+            HashMap<Long,Answer> textMap3 = new HashMap<>();
+            HashMap<Long,Answer> textMap4 = new HashMap<>();
+            HashMap<Long,Answer> textMap5 = new HashMap<>();
+            HashMap<Long,Answer> textMap6 = new HashMap<>();
+            HashMap<Long,Answer> textMap7 = new HashMap<>();
+            HashMap<Long,Answer> textMap8 = new HashMap<>();
+            HashMap<Long,Answer> textMap9 = new HashMap<>();
+            HashMap<Long,Answer> textMap10 = new HashMap<>();
+
+            //Add all Questions to the 10 Hashmaps
+            textMap1.put(question1.getId(), textAnswer1);
+            textMap1.put(question2.getId(), radioButtonAnswer1);
+            textMap1.put(question3.getId(), choiceAnswer1);
+            textMap1.put(question4.getId(), scaleAnswer1);
+
+            textMap2.put(question1.getId(), textAnswer2);
+            textMap2.put(question2.getId(), radioButtonAnswer2);
+            textMap2.put(question3.getId(), choiceAnswer2);
+            textMap2.put(question4.getId(), scaleAnswer2);
+
+            textMap3.put(question1.getId(), textAnswer3);
+            textMap3.put(question2.getId(), radioButtonAnswer3);
+            textMap3.put(question3.getId(), choiceAnswer3);
+            textMap3.put(question4.getId(), scaleAnswer3);
+
+            textMap4.put(question1.getId(), textAnswer4);
+            textMap4.put(question2.getId(), radioButtonAnswer4);
+            textMap4.put(question3.getId(), choiceAnswer4);
+            textMap4.put(question4.getId(), scaleAnswer4);
+
+            textMap5.put(question1.getId(), textAnswer5);
+            textMap5.put(question2.getId(), radioButtonAnswer5);
+            textMap5.put(question3.getId(), choiceAnswer5);
+            textMap5.put(question4.getId(), scaleAnswer5);
+
+            textMap6.put(question1.getId(), textAnswer6);
+            textMap6.put(question2.getId(), radioButtonAnswer6);
+            textMap6.put(question3.getId(), choiceAnswer6);
+            textMap6.put(question4.getId(), scaleAnswer6);
+
+            textMap7.put(question1.getId(), textAnswer7);
+            textMap7.put(question2.getId(), radioButtonAnswer7);
+            textMap7.put(question3.getId(), choiceAnswer7);
+            textMap7.put(question4.getId(), scaleAnswer7);
+
+            textMap8.put(question1.getId(), textAnswer8);
+            textMap8.put(question2.getId(), radioButtonAnswer8);
+            textMap8.put(question3.getId(), choiceAnswer8);
+            textMap8.put(question4.getId(), scaleAnswer8);
+
+            textMap9.put(question1.getId(), textAnswer9);
+            textMap9.put(question2.getId(), radioButtonAnswer9);
+            textMap9.put(question3.getId(), choiceAnswer9);
+            textMap9.put(question4.getId(), scaleAnswer9);
+
+            textMap10.put(question1.getId(), textAnswer10);
+            textMap10.put(question2.getId(), radioButtonAnswer10);
+            textMap10.put(question3.getId(), choiceAnswer10);
+            textMap10.put(question4.getId(), scaleAnswer10);
+
+
+            pollService.addPollEntry(poll.getId(), textMap1);
+            pollService.addPollEntry(poll.getId(), textMap2);
+            pollService.addPollEntry(poll.getId(), textMap3);
+            pollService.addPollEntry(poll.getId(), textMap4);
+            pollService.addPollEntry(poll.getId(), textMap5);
+            pollService.addPollEntry(poll.getId(), textMap6);
+            pollService.addPollEntry(poll.getId(), textMap7);
+            pollService.addPollEntry(poll.getId(), textMap8);
+            pollService.addPollEntry(poll.getId(), textMap9);
+            pollService.addPollEntry(poll.getId(), textMap10);
 
             return null;
         });
