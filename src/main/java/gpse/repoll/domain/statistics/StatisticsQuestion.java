@@ -1,17 +1,13 @@
 package gpse.repoll.domain.statistics;
 
 import gpse.repoll.domain.Choice;
-import gpse.repoll.domain.Poll;
 import gpse.repoll.domain.PollEntry;
-import gpse.repoll.domain.User;
 import gpse.repoll.domain.answers.Answer;
 import gpse.repoll.domain.answers.ChoiceAnswer;
 import gpse.repoll.domain.answers.RadioButtonAnswer;
 import gpse.repoll.domain.questions.ChoiceQuestion;
 import gpse.repoll.domain.questions.Question;
 import gpse.repoll.domain.questions.RadioButtonQuestion;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.util.Pair;
 
 import javax.persistence.*;
 import java.util.*;
@@ -40,14 +36,20 @@ public class StatisticsQuestion {
     @ElementCollection
     private final Map<Choice, Double> relativeFrequencies = new HashMap<>();
 
+    @OneToOne
+    private Choice modalValue;
 
-    protected StatisticsQuestion() {}
+
+    protected StatisticsQuestion() {
+
+    }
 
     public StatisticsQuestion(Question question, List<PollEntry> pollEntries) {
         this.question = question;
         this.answers.addAll(getAnswersTo(this.question, pollEntries));
         this.absoluteFrequencies.putAll(absoluteFrequencies(question, pollEntries));
         this.relativeFrequencies.putAll(relativeFrequencies(this.absoluteFrequencies));
+        this.modalValue = modalValue(this.absoluteFrequencies);
     }
 
     /**
@@ -70,6 +72,7 @@ public class StatisticsQuestion {
      * Absolute Frequencies of the answers to a specific question (Not for text questions!).
      *
      * @param question The question that you want the frequencies of.
+     * @param pollEntries List with the PollEntries of participants.
      * @return The absolute frequency of every answer.
      */
     protected Map<Choice, Integer> absoluteFrequencies(Question question, List<PollEntry> pollEntries) {
@@ -83,20 +86,19 @@ public class StatisticsQuestion {
         if (question instanceof ChoiceQuestion) {
             // Initialize the list of all possible answers
             List<Choice> choices = ((ChoiceQuestion) question).getChoices();
+            if (choices.isEmpty()) {
+                return frequencies;
+            }
             for (Choice choice : choices) {
                 frequencies.put(choice, 0);
             }
-
             countAnswers(frequencies, choices, pollEntries);
-        }
-
-        else if (question instanceof RadioButtonQuestion) {
+        } else if (question instanceof RadioButtonQuestion) {
             // Initialize the list of all possible answers
             List<Choice> choices = ((RadioButtonQuestion) question).getChoices();
             for (Choice choice : choices) {
                 frequencies.put(choice, 0);
             }
-
             countAnswers(frequencies, choices, pollEntries);
         }
 
