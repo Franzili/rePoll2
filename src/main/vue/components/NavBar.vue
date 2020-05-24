@@ -17,13 +17,13 @@
                         <router-link class="link" :to="'/account/'">Account</router-link>
                     </b-nav-item>
                     <b-nav-item>
-                        <router-link class="link" :to="'/surveys'">Surveys</router-link>
+                        <router-link class="link" :to="'/polls/'">Polls</router-link>
                     </b-nav-item>
                     <b-nav-item>
-                        <router-link class="link" :to="'/create/'">Create Survey</router-link>
+                        <router-link class="link" :to="'/create/'">Create Poll</router-link>
                     </b-nav-item>
                     <b-nav-item>
-                        <router-link class="link" :to="'/answer/'">Answer Survey</router-link>
+                        <router-link class="link" :to="'/answer/'">Answer Poll</router-link>
                     </b-nav-item>
                 </b-navbar-nav>
             </b-collapse>

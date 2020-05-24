@@ -1,12 +1,12 @@
 import VueRouter from "vue-router";
-import CreateSurvey from "./pages/CreateSurvey";
+import CreatePoll from "./pages/CreatePoll";
 import Start from "./pages/Start";
 import Account from "./pages/Account";
-import Survey from "./pages/Survey";
+import Poll from "./pages/Poll";
 import Answer from "./pages/Answer";
-import SurveyTable from "./pages/SurveyTable";
-import SurveySetup from "./pages/SurveySetup";
-import AnswerSurvey from "./pages/AnswerSurvey";
+import PollTable from "./pages/PollTable";
+import PollSetup from "./pages/PollSetup";
+import AnswerPoll from "./pages/AnswerPoll";
 
 import store from "./store";
 
@@ -20,35 +20,53 @@ var router = new VueRouter({
         {
             path: '/create/',
             name: 'create',
-            component: CreateSurvey
+            component: CreatePoll,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/account/',
-            component: Account
+            component: Account,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
-            path: '/surveys/',
-            component: SurveyTable
+            path: '/polls/',
+            component: PollTable,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
-            path: '/survey/:id(\\d+)',
-            component: Survey
+            path: '/poll/:id(\\d+)',
+            component: Poll,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
-            path: '/survey/:id/answer',
+            path: '/poll/:id/answer',
             component: Answer,
-            //meta: {
-            //    requiresAuth: true
-            //}
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/config/',
             name: 'config',
-            component: SurveySetup
+            component: PollSetup,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/answer/',
-            component: AnswerSurvey
+            component: AnswerPoll,
+            meta: {
+                requiresAuth: true
+            }
         }
     ]
 });
@@ -57,17 +75,21 @@ var router = new VueRouter({
 // Route Guard. Run before each routing.
 router.beforeEach((to, from , next) => {
     // if we are not authenticated, redirect to login page.
-    if (!store.state.authenticated && to.path !== "/") {
-        next("/");
-    }
 
-    if (store.state.authenticated && to.path === "/") {
-        next("/surveys");
-    }
-
-    else {
-        // else proceed to the route as planned.
-        next();
+    // if auth is needed
+    if (to.matched.some(route => route.meta.requiresAuth)) {
+        // if auth is correct proceed to destination
+        if (store.getters.isAuthenticated) {
+            next()
+        } else {
+            next("/");
+        }
+    // if auth is not needed but acquired go to polls if '/' is requested
+    } else if (store.getters.isAuthenticated && to.path === "/") {
+        next("/polls/");
+    // base case if nothing is needed and acquired
+    } else {
+        next()
     }
 });
 

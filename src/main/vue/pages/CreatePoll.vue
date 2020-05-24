@@ -3,13 +3,13 @@
         <nav-bar></nav-bar>
         <div class="my-head">
             <div class="my-titel">
-                Titel:
+                Title:
             </div>
             <div v-if="editTitle">
-                <b-form-input  v-model="surveyTitle"></b-form-input>
+                <b-form-input  v-model="pollTitle"></b-form-input>
             </div>
             <div v-else>
-                {{surveyTitle}}
+                {{pollTitle}}
             </div>
 
             <div v-if="editTitle">
@@ -17,218 +17,169 @@
             </div>
             <div v-else>
                 <b-icon-pencil class="my-icon" scale="1.2" @click="changeEditTitle"></b-icon-pencil>
-
             </div>
         </div>
 
         <!-- better for mobile version -->
         <div v-if="isMobile()">
-            <div :key="item.id" v-for="item in items">
-                <SurveyItem v-bind:item="item" v-bind:edit="edit" v-on:del-item="deleteItem(item.id)"/>
+            <div :key="question.id" v-for="question in questions">
+                <PollQuestion v-bind:question="question" v-bind:edit="edit" v-on:del-question="deleteQuestion(question.id)"/>
             </div>
             <HelloWorld style="text-align:center;" class="ml-auto" msg=""/>
-            <AddQuestion v-on:add-item="addItem"/>
+            <AddQuestion v-on:add-question="addQuestion"/>
         </div>
 
         <!-- better for Desktop version -->
+        <!-- TODO dont drop the items back to the palette !!!-->
         <div v-else>
-            <p class="section">2. Die Gesellschaft</p>
             <b-container>
-                <b-row style="text-align: center">
-                    <b-col>Palette</b-col>
-                    <b-col>Umfrage</b-col>
-                    <b-col>Gliederung</b-col>
+                <b-row>
+                    <b-col></b-col>
+                    <b-col>
+                        <div class="my-section">
+                            <div v-if="editSection">
+                                <b-form-input style="text-align: center" class="my-section-input" v-model="sectionTitle"></b-form-input>
+                                <b-icon-check-all class="my-icon" scale="1.8" animation="fade" @click="changeEditSection"></b-icon-check-all>
+                            </div>
+
+                            <div v-else>
+                                <p class="section">{{sectionTitle}}</p>
+                                <b-icon-pencil class="my-icon" scale="1.2" @click="changeEditSection"></b-icon-pencil>
+                            </div>
+                        </div>
+                    </b-col>
+                    <b-col></b-col>
                 </b-row>
+            </b-container>
+
+
+
+            <b-container>
 
                 <!-- draggable palette items -->
                 <b-row style="text-align:center;" class="my-row">
                     <b-col>
                         <div>
                             <b-button v-if="!visible" v-b-toggle.sidebar-1-footer @click="changePaletteVisible" >Add Question</b-button>
-                            <b-sidebar v-model="visible" id="sidebar-1" bg-variant="light" localShow=true title="Add Questions" shadow>
+                            <b-sidebar v-model="visible" id="sidebar-1" bg-variant="gray-900" localShow=true>
                                 <div class="px-3 py-2">
 
-                                    <p>
-                                        Add a Question into your Survey via Drag and Drop!
+                                    <p class="margin-top-side">
+                                        Add a Question into your Poll via Drag and Drop!
                                     </p>
+
+
+
                                     <div class="col-4">
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsText"
-
-                                        >
+                                            v-on:end="updatePollQuestionsText">
 
                                             <div class="drag-item flex flex-justify-between">
-
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
 
                                                 <b-icon-pen></b-icon-pen>
-
-                                                <b-text> Text-Question</b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Text-Question
 
                                             </div>
 
                                         </draggable>
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsLimChar"
-
-                                        >
+                                            v-on:end="updatePollQuestionsLimChar">
 
                                             <div class="drag-item flex flex-justify-between">
-
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
 
                                                 <b-icon-pencil-square></b-icon-pencil-square>
-
-                                                <b-text> Limited Character Question</b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Limited Character Question
 
                                             </div>
 
                                         </draggable>
 
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsPossibilities"
-
-                                        >
+                                            v-on:end="updatePollQuestionsPossibilities">
 
                                             <div class="drag-item flex flex-justify-between">
-
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
 
                                                 <b-icon-list-task></b-icon-list-task>
-
-                                                <b-text> Single Choice Question</b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Single Choice Question
 
                                             </div>
 
                                         </draggable>
 
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsCheckbox"
-
-                                        >
+                                            v-on:end="updatePollQuestionsCheckbox">
 
                                             <div class="drag-item flex flex-justify-between">
-
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
 
                                                 <b-icon-list-task></b-icon-list-task>
-
-                                                <b-text> Multiple Choice Question </b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Multiple Choice Question
 
                                             </div>
 
                                         </draggable>
 
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsSelect"
-
-                                        >
+                                            v-on:end="updatePollQuestionsSelect">
 
                                             <div class="drag-item flex flex-justify-between">
-
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
 
                                                 <b-icon-caret-down-fill></b-icon-caret-down-fill>
-
-                                                <b-text> Select Answer Question</b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Select Answer Question
 
                                             </div>
-
                                         </draggable>
 
                                         <draggable
-
                                             class="list-group" v-model="palette"
-
                                             group="group"
-
                                             @change="log"
-
-                                            v-on:end="updateSurveyItemsX"
-
-                                        >
+                                            v-on:end="updatePollQuestionsX">
 
                                             <div class="drag-item flex flex-justify-between">
 
-                                                <!-- <b-form-input v-model="items[0].question"></b-form-input> -->
-
                                                 <b-icon-question-square></b-icon-question-square>
-
-                                                <b-text> Slider Question</b-text>
-
-                                                <!-- <AddQuestion v-on:add-item="addItem"/> -->
+                                                Slider Question
 
                                             </div>
-
                                         </draggable>
+
+
 
                                     </div>
                                 </div>
                             </b-sidebar>
-
                         </div>
                     </b-col>
                     <b-col class="cols-14">
                             <div>
                                 <draggable
-                                    class="list-group" v-model="items"
+                                    class="list-group" v-model="questions"
                                     group="group"
                                     @change="log">
-                                    <div class="drag-item flex flex-justify-between" :key="item.id" v-for="item in items">
-                                        <SurveyItem v-bind:item="item" v-bind:edit="edit" v-on:del-item="deleteItem(item.id)"/>
+                                    <div class="drag-item flex flex-justify-between" :key="question.id" v-for="question in questions">
+                                        <PollQuestion v-bind:question="question" v-bind:edit="edit" v-on:del-question="deleteQuestion(question.id)"/>
                                     </div>
                                 </draggable>
                                 <b-button @click="updatePoll">save</b-button>
                             </div>
                         <HelloWorld class="ml-auto" msg=""/>
                     </b-col>
-                    <b-col>
-                    </b-col>
+                    <b-col></b-col>
                 </b-row>
             </b-container>
         </div>
@@ -241,13 +192,13 @@
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
     import AddQuestion from "../components/AddQuestion";
-    import SurveyItem from "../components/SurveyItem";
+    import PollQuestion from "../components/PollQuestion";
     import {v4 as uuidv4} from "uuid";
     import axios from 'axios';
     import {mapActions, mapGetters} from "vuex";
 
     export default {
-        name: "CreateSurvey",
+        name: "CreatePoll",
         data() {
             return {
                 visible:true,
@@ -256,22 +207,24 @@
                 title: "Moby Dick",
                 status: "IN_PROCESS",
                 sections: [],
-                surveyTitle: "Moby Dick",
+                pollTitle: "Moby Dick",
+                sectionTitle: "1. The Society",
                 editTitle: false,
+                editSection: false,
                 edit: true,
-                items: [],
+                questions: [],
                 palette: []
             }
         },
         created: function () {
             this.tmpID = this.$route.params.tmpPollID;
-            this.requestSurveys()
-            this.requestSurvey(this.tmpID)
+            this.requestPolls()
+            this.requestPoll(this.tmpID)
         },
         computed: {
-            ...mapGetters(['getSurvey']),
-            survey() {
-                return this.getSurvey(this.tmpID)
+            ...mapGetters(['getPoll']),
+            poll() {
+                return this.getPoll(this.tmpID)
             }
         },
         methods: {
@@ -280,6 +233,9 @@
             },
             changeEditTitle() {
                 this.editTitle = !this.editTitle;
+            },
+            changeEditSection() {
+                this.editSection = !this.editSection;
             },
             updatePoll() {
                 // update poll
@@ -290,10 +246,10 @@
                 axios.put('/api/v1/polls/'+ this.id + '/', pollCmd);
 
                 // update questions
-                for (var i = 0; i < this.items.length; i++) {
+                for (var i = 0; i < this.questions.length; i++) {
                     axios.put(
-                        '/api/v1/polls/' + this.id + '/questions/' + this.items[i].id + '/',
-                        this.items[i]                    )
+                        '/api/v1/polls/' + this.id + '/questions/' + this.questions[i].id + '/',
+                        this.questions[i]                    )
                 }
 
                 // update sections
@@ -304,20 +260,20 @@
                     )
                 }
             },
-            deleteItem(id) {
-                this.items = this.items.filter(item => item.id !== id);
+            deleteQuestion(id) {
+                this.questions = this.questions.filter(question => question.id !== id);
             },
-            addItem(newItem) {
-                this.items = [...this.items, newItem];
+            addQuestion(newQuestion) {
+                this.questions = [...this.questions, newQuestion];
             },
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             },
-            updateSurveyItemsPossibilities() {
-                const newItem = {
+            updatePollQuestionsPossibilities() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "radio",
-                    question: "new question",
+                    title: "new question",
                     possibilities: [
                         {
                             id: 1,
@@ -333,13 +289,13 @@
                         }
                     ]
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
-            updateSurveyItemsSelect() {
-                const newItem = {
+            updatePollQuestionsSelect() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "dropdown",
-                    question: "Was ist deine Lieblingsfarbe?",
+                    title: "Was ist deine Lieblingsfarbe?",
                     possibilities: [
                         {
                             id: 1,
@@ -355,34 +311,34 @@
                         }
                     ]
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
-            updateSurveyItemsText() {
-                const newItem = {
+            updatePollQuestionsText() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "section",
-                    question: "new question",
+                    title: "new question",
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
-            updateSurveyItemsLimChar() {
-                const newItem = {
+            updatePollQuestionsLimChar() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "freetext",
-                    question: "new question",
+                    title: "new question",
                     possibilities: [
                         {
                             limit: 10
                         }
                     ]
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
-            updateSurveyItemsX() {
-                const newItem = {
+            updatePollQuestionsX() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "slider",
-                    question: "new question",
+                    title: "new question",
                     possibilities: [
                         {
                             min: 1,
@@ -391,13 +347,13 @@
                         }
                     ]
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
-            updateSurveyItemsCheckbox() {
-                const newItem = {
+            updatePollQuestionsCheckbox() {
+                const newQuestion = {
                     id: uuidv4(),
                     type: "checkbox",
-                    question: "new question",
+                    title: "new question",
                     possibilities: [
                         {
                             id: 1,
@@ -413,20 +369,20 @@
                         }
                     ]
                 };
-                this.items = [...this.items, newItem];
+                this.questions = [...this.questions, newQuestion];
             },
             log: function (...e) {
                     console.log(...e);
             },
-            ...mapActions(['requestSurvey','requestSurveys'])
+            ...mapActions(['requestPoll','requestPolls'])
         },
         components: {
             AddQuestion,
-            SurveyItem,
+            PollQuestion,
             NavBar,
             HelloWorld,
             draggable
-        },
+        }
     }
 </script>
 
@@ -434,7 +390,6 @@
 
     .my-row {
         padding: 20px;
-        align-content: center;
     }
 
     .drag-item {
@@ -450,6 +405,7 @@
 
     .my-titel {
         color: #868686;
+        margin-right: 5px;
     }
 
     .my-icon {
@@ -470,8 +426,24 @@
 
     .section {
         margin-top: 20px;
+        margin-bottom: 1px;
         color: #868686;
         font-size: 30px;
         text-align: center;
+    }
+
+    .my-section {
+        text-align:center;
+        font-size: 30px;
+        padding: 1px;
+    }
+
+    .margin-top-side {
+        margin-top: 70px;
+    }
+
+    .my-section-input {
+        margin-top: 20px;
+        margin-bottom: 10px;
     }
 </style>

@@ -43,8 +43,9 @@ public class PollsController {
             throw new BadRequestException("Title cannot be empty!");
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User creator = (User) auth.getPrincipal();
-        return pollService.addPoll(pollCmd.getTitle(), creator);
+        String username = auth.getPrincipal().toString();
+        User user = userService.getUser(username);
+        return pollService.addPoll(pollCmd.getTitle(), user);
     }
 
     @Secured(Roles.ALL)
