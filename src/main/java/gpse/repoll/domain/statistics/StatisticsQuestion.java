@@ -54,8 +54,8 @@ public class StatisticsQuestion {
     public StatisticsQuestion(Question question, List<PollEntry> pollEntries) {
         this.question = question;
         this.answers.addAll(getAnswersTo(this.question, pollEntries));
-        this.absoluteFrequencies.putAll(absoluteFrequencies(question, pollEntries));
-        this.relativeFrequencies.putAll(relativeFrequencies(this.absoluteFrequencies));
+        this.absoluteFrequencies.putAll(absoluteFrequencies(question, pollEntries)); //NOPMD
+        this.relativeFrequencies.putAll(relativeFrequencies(this.absoluteFrequencies)); //NOPMD
         this.modalValue = modalValue(this.absoluteFrequencies);
     }
 
