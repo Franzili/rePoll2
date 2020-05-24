@@ -6,6 +6,7 @@ import gpse.repoll.domain.json.SerializePollEntry;
 import gpse.repoll.domain.questions.Question;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,12 +28,12 @@ public class PollEntry {
     private User user;
 
     public Map<Question, Answer> getAssociations() {
-        return associations;
+        return Collections.unmodifiableMap(associations);
     }
 
     void setAssociations(Map<Question, Answer> associations) {
-        associations.clear();
-        associations.putAll(associations);
+        this.associations.clear();
+        this.associations.putAll(associations);
     }
 
     public Long getId() {
@@ -57,5 +58,13 @@ public class PollEntry {
      */
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void put(Question question, Answer answer) throws RuntimeException {
+        if (question != null && answer != null) {
+            associations.put(question, answer);
+        } else {
+            throw new RuntimeException(); // todo create exception
+        }
     }
 }

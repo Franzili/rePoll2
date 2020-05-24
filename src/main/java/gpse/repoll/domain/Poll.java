@@ -49,13 +49,13 @@ public class Poll {
     private LocalDateTime lastEditTime;
 
     @OneToMany
-    private List<PollEntry> entries = new ArrayList<>();
+    private final List<PollEntry> pollEntries = new ArrayList<>();
 
     @OneToMany
-    private List<PollSection> sections = new ArrayList<>();
+    private final List<PollSection> pollSections = new ArrayList<>();
 
     @OneToMany
-    private List<Question> questions = new ArrayList<>(); // todo sorting
+    private final List<Question> questions = new ArrayList<>(); // todo sorting
 
     @ManyToOne
     private User owner;
@@ -125,28 +125,31 @@ public class Poll {
         this.lastEditTime = lastEditTime;
     }
 
-    public List<PollEntry> getEntries() {
-        return entries;
+    public List<PollEntry> getPollEntries() {
+        return Collections.unmodifiableList(pollEntries);
     }
 
-    public void setEntries(List<PollEntry> entries) {
-        this.entries = entries;
+    public void setPollEntries(List<PollEntry> pollEntries) {
+        this.pollEntries.clear();
+        this.pollEntries.addAll(pollEntries);
     }
 
-    public List<PollSection> getSections() {
-        return sections;
+    public List<PollSection> getPollSections() {
+        return Collections.unmodifiableList(pollSections);
     }
 
-    public void setSections(List<PollSection> sections) {
-        this.sections = sections;
+    public void setPollSections(List<PollSection> pollSections) {
+        this.pollSections.clear();
+        this.pollSections.addAll(pollSections);
     }
 
     public List<Question> getQuestions() {
-        return questions;
+        return Collections.unmodifiableList(questions);
     }
 
     public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+        this.questions.clear();
+        this.questions.addAll(questions);
     }
 
     public void setTitle(String title) {
@@ -173,8 +176,44 @@ public class Poll {
         this.owner = owner;
     }
 
+    public void add(PollSection pollSection) {
+        pollSections.add(pollSection); // todo create exceptions here
+    }
+
+    public void addAllSections(Collection<PollSection> pollSections) {
+        this.pollSections.addAll(pollSections);
+    }
+
+    public boolean contains(PollSection pollSection) {
+        return pollSections.contains(pollSection);
+    }
+
+    public void add(Question question) {
+        questions.add(question);
+    }
+
+    public void addAllQuestions(Collection<Question> questions) {
+        this.questions.addAll(questions);
+    }
+
+    public boolean contains(Question question) {
+        return questions.contains(question);
+    }
+
+    public void add(PollEntry pollEntry) {
+        pollEntries.add(pollEntry);
+    }
+
+    public void addAllPollEntries(Collection<PollEntry> pollEntries) {
+        this.pollEntries.addAll(pollEntries);
+    }
+
+    public boolean contains(PollEntry pollEntry) {
+        return pollEntries.contains(pollEntry);
+    }
+
     private PollSection getSection(UUID sectionId) {
-        for (PollSection section : sections) {
+        for (PollSection section : pollSections) {
             if (section.getId().equals(sectionId)) {
                 return section;
             }
@@ -183,7 +222,7 @@ public class Poll {
     }
 
     private boolean sectionExists(UUID sectionId) {
-        for (PollSection section : sections) {
+        for (PollSection section : pollSections) {
             if (section.getId().equals(sectionId)) {
                 return true;
             }
@@ -223,9 +262,9 @@ public class Poll {
     }
 
     private PollSection findSection(Question question) {
-        for (PollSection section : sections) {
-            if (section.getQuestions().contains(question)) {
-                return section;
+        for (PollSection pollSection : pollSections) {
+            if (pollSection.contains(question)) {
+                return pollSection;
             }
         }
         return null;
@@ -260,14 +299,14 @@ public class Poll {
             for (Question question : movedQuestions) { // These questions exist in the poll guaranteed by listQuestions
                 PollSection section = findSection(question);
                 if (section != null) {
-                    section.getQuestions().remove(question); // Every moved question is removed in the old section
+                    section.remove(question); // Every moved question is removed in the old section
                 }
             }
-            PollSection section = getSection(key);
-            if (section == null) {
+            PollSection pollSection = getSection(key);
+            if (pollSection == null) {
                 throw new InternalServerErrorException(); // Server error because this should never happen
             }
-            section.getQuestions().addAll(movedQuestions); // The questions are moved in the correct section
+            pollSection.addAll(movedQuestions); // The questions are moved in the correct section
         }
     }
 }

@@ -3,10 +3,7 @@ package gpse.repoll.domain;
 import gpse.repoll.domain.questions.Question;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -29,7 +26,7 @@ public class PollSection {
 
     @OneToMany
     @JoinColumn
-    private List<Question> questions = new ArrayList<>();
+    private final List<Question> questions = new ArrayList<>();
 
     public PollSection() {
 
@@ -66,12 +63,36 @@ public class PollSection {
     }
 
     public List<Question> getQuestions() {
-        return questions;
+        return Collections.unmodifiableList(questions);
     }
 
     void setQuestions(List<Question> questions) {
         this.questions.clear();
         this.questions.addAll(questions);
+    }
+
+    public void add(Question question) {
+        questions.add(question);
+    }
+
+    public void addAll(Collection<Question> questions) {
+        this.questions.addAll(questions);
+    }
+
+    public void remove(Question question) {
+        questions.remove(question);
+    }
+
+    public void removeAll(Collection<Question> questions) {
+        this.questions.removeAll(questions);
+    }
+
+    public boolean contains(Question question) {
+        return questions.contains(question);
+    }
+
+    public boolean containsAll(Collection<Question> questions) {
+        return this.questions.containsAll(questions);
     }
 
     @Override

@@ -4,6 +4,7 @@ import gpse.repoll.domain.Choice;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,13 +14,22 @@ import java.util.List;
 public class RadioButtonQuestion extends Question {
 
     @OneToMany
-    List<Choice> choices = new ArrayList<>();
+    private final List<Choice> choices = new ArrayList<>();
 
     public List<Choice> getChoices() {
-        return choices;
+        return Collections.unmodifiableList(choices);
     }
 
     public void setChoices(List<Choice> choices) {
-        this.choices = choices;
+        this.choices.clear();
+        this.choices.addAll(choices);
+    }
+
+    public void add(Choice choice) {
+        this.choices.add(choice);
+    }
+
+    public void addAll(List<Choice> choices) {
+        this.choices.addAll(choices);
     }
 }

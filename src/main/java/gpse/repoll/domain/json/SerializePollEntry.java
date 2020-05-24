@@ -18,7 +18,6 @@ public class SerializePollEntry extends JsonSerializer<Question> {
             Question question,
             JsonGenerator jsonGenerator,
             SerializerProvider serializerProvider) throws IOException {
-
         StringWriter writer = new StringWriter();
         mapper.writeValue(writer, question.getId());
         jsonGenerator.writeFieldName(writer.toString());

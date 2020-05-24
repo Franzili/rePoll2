@@ -130,7 +130,7 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public List<PollSection> getAllSections(final UUID pollId) {
-        return getPoll(pollId).getSections();
+        return getPoll(pollId).getPollSections();
     }
 
     /**
@@ -147,7 +147,7 @@ public class PollServiceImpl implements PollService {
         Poll poll = getPoll(pollId);
         poll.setLastEditor(lastEditor);
         PollSection pollSection = new PollSection(title, description);
-        poll.getSections().add(pollSection);
+        poll.add(pollSection);
         pollRepository.save(poll);
         return pollSection;
     }
@@ -169,7 +169,7 @@ public class PollServiceImpl implements PollService {
         PollSection section = pollSectionRepository.findById(sectionId).orElseThrow(() -> {
             throw new NotFoundException("The section does not exist!");
         });
-        if (poll.getSections().contains(section)) {
+        if (poll.contains(section)) {
             return section;
         } else {
             throw new BadRequestException("The section does not belong to this poll!");
@@ -228,11 +228,11 @@ public class PollServiceImpl implements PollService {
             } else {
                 throw new InternalServerErrorException();
             }
-            pollEntry.getAssociations().put(question, answer);
+            pollEntry.put(question, answer);
         }
         Poll poll = getPoll(pollId);
         pollEntryRepository.save(pollEntry);
-        poll.getEntries().add(pollEntry);
+        poll.add(pollEntry);
         pollRepository.save(poll);
         return pollEntry;
     }
@@ -256,7 +256,7 @@ public class PollServiceImpl implements PollService {
         question.setQuestionOrder(questionOrder);
         question.setCharLimit(charLimit);
         textQuestionRepository.save(question);
-        poll.getQuestions().add(question);
+        poll.add(question);
         pollRepository.save(poll);
         return question;
     }
@@ -284,7 +284,7 @@ public class PollServiceImpl implements PollService {
         question.setScaleNameRight(scaleNameRight);
         question.setStepCount(stepCount);
         scaleQuestionRepository.save(question);
-        poll.getQuestions().add(question);
+        poll.add(question);
         pollRepository.save(poll);
         return question;
     }
@@ -309,9 +309,9 @@ public class PollServiceImpl implements PollService {
         }
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
-        question.getChoices().addAll(choices);
+        question.addAll(choices);
         radioButtonQuestionRepository.save(question);
-        poll.getQuestions().add(question);
+        poll.add(question);
         pollRepository.save(poll);
         return question;
     }
@@ -336,9 +336,9 @@ public class PollServiceImpl implements PollService {
         ChoiceQuestion question = new ChoiceQuestion();
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
-        question.getChoices().addAll(choices);
+        question.addAll(choices);
         choiceQuestionRepository.save(question);
-        poll.getQuestions().add(question);
+        poll.add(question);
         pollRepository.save(poll);
         return question;
     }
@@ -372,7 +372,7 @@ public class PollServiceImpl implements PollService {
      * @throws BadRequestException if the question does not belong to the poll
      */
     private void testQuestion(Poll poll, Question question) throws BadRequestException {
-        if (!poll.getQuestions().contains(question)) {
+        if (!poll.contains(question)) {
             throw new BadRequestException("The question does not belong to this poll!");
         }
     }
@@ -518,7 +518,7 @@ public class PollServiceImpl implements PollService {
         PollEntry pollEntry = pollEntryRepository.findById(pollEntryId).orElseThrow(() -> {
            throw new NotFoundException("The entry does not exist!");
         });
-        if (!poll.getEntries().contains(pollEntry)) {
+        if (!poll.contains(pollEntry)) {
             throw new BadRequestException("The entry does not belong to this poll!");
         }
         return pollEntry;
