@@ -2,7 +2,6 @@ package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.*;
 import gpse.repoll.domain.exceptions.UnauthorizedException;
-import gpse.repoll.domain.questions.*;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
