@@ -36,7 +36,9 @@
             </b-form-group>
         </div>
         <div v-if="question.type === 'section'">
-            <textarea></textarea>
+            <label>
+                <textarea></textarea>
+            </label>
         </div>
 
         <div v-if="question.type === 'freetext'">
@@ -51,7 +53,7 @@
 
             <div v-if="edit && editCharLimit">
                 character limit:
-                <b-form-input v-model="question.possibilities[0].limit" placeholder="Set chracter limit..." class="text-box"/>
+                <b-form-input v-model="question.possibilities[0].limit" placeholder="Set character limit..." class="text-box"/>
                 <b-icon-check-all class="my-icon" scale="2" animation="fade" @click="changeEditCharLimit"></b-icon-check-all>
             </div>
         </div>
@@ -63,6 +65,19 @@
                     <b-dropdown-item v-model="selected" :value="pos.text">{{pos.text}}</b-dropdown-item>
                 </div>
             </b-dropdown>
+            <b-icon-x-circle-fill class="dropdown-icon" scale="2" v-if="edit && !editDropdown" variant="secondary" @click="changeEditDropdown">delete possibilities</b-icon-x-circle-fill>
+            <b-icon-check-all class="dropdown-icon" scale="2" animation="fade" v-if="edit && editDropdown" @click="changeEditDropdown"></b-icon-check-all>
+
+            <div v-if="editDropdown">
+                <div v-bind:key="pos.id" v-for="pos in question.possibilities">
+                    <b-container>
+                        <b-row>
+                            <b-col class="text-left" cols="8">{{pos.text}}</b-col>
+                            <b-col><b-button class="del-pos-btn" variant="outline-secondary" pill v-if="edit === true" @click="delPos(pos.id)">x</b-button></b-col>
+                        </b-row>
+                    </b-container>
+                </div>
+            </div>
         </div>
 
         <div v-if="question.type === 'slider'">
@@ -117,6 +132,7 @@
                 editQuestion: false,
                 editSlider: false,
                 editCharLimit: false,
+                editDropdown: false,
                 val: this.question.possibilities[0].min,
                 selected: []
             }
@@ -131,6 +147,9 @@
             },
             changeEditCharLimit() {
                 this.editCharLimit = !this.editCharLimit;
+            },
+            changeEditDropdown() {
+                this.editDropdown = !this.editDropdown;
             },
             addPos(newPos){
                 this.question.possibilities = [...this.question.possibilities, newPos];
@@ -159,6 +178,10 @@
 
     .freetext-pen {
         margin-left: 10px;
+    }
+
+    .dropdown-icon {
+        margin-left: 20px;
     }
 
     .my-btn {
