@@ -52,9 +52,6 @@ var router = new VueRouter({
             meta: {
                 requiresAuth: true
             }
-            //meta: {
-            //    requiresAuth: true
-            //}
         },
         {
             path: '/config/',
@@ -94,14 +91,6 @@ router.beforeEach((to, from , next) => {
     } else {
         next()
     }
-    /*if (!store.state.authenticated && to.path !== "/") {
-        next("/");
-    }*/
-
-    /*else {
-        // else proceed to the route as planned.
-        next();
-    }*/
 });
 
 export default router;
