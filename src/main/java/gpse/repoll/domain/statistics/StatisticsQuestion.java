@@ -1,7 +1,10 @@
 package gpse.repoll.domain.statistics;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.repoll.domain.Choice;
 import gpse.repoll.domain.PollEntry;
+import gpse.repoll.domain.SerializeChoice;
 import gpse.repoll.domain.answers.Answer;
 import gpse.repoll.domain.answers.ChoiceAnswer;
 import gpse.repoll.domain.answers.RadioButtonAnswer;
@@ -25,14 +28,18 @@ public class StatisticsQuestion {
 
     @Column
     @OneToMany
+    @JsonIgnore
     private final List<Answer> answers = new ArrayList<>();
 
     @OneToOne
+    @JsonIgnore
     private Question question;
 
+    @JsonSerialize(keyUsing = SerializeChoice.class)
     @ElementCollection
     private final Map<Choice, Integer> absoluteFrequencies = new HashMap<>();
 
+    @JsonSerialize(keyUsing = SerializeChoice.class)
     @ElementCollection
     private final Map<Choice, Double> relativeFrequencies = new HashMap<>();
 
@@ -188,5 +195,41 @@ public class StatisticsQuestion {
                 }
             }));
         }
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public Map<Choice, Integer> getAbsoluteFrequencies() {
+        return absoluteFrequencies;
+    }
+
+    public Map<Choice, Double> getRelativeFrequencies() {
+        return relativeFrequencies;
+    }
+
+    public Choice getModalValue() {
+        return modalValue;
+    }
+
+    public void setModalValue(Choice modalValue) {
+        this.modalValue = modalValue;
     }
 }

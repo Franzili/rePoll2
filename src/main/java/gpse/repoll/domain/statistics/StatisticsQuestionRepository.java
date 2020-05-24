@@ -1,8 +1,13 @@
 package gpse.repoll.domain.statistics;
 
-import org.springframework.context.annotation.Primary;
+import gpse.repoll.domain.questions.Question;
 import org.springframework.data.repository.CrudRepository;
 
-@Primary
+import java.util.Optional;
+
 public interface StatisticsQuestionRepository extends CrudRepository<StatisticsQuestion, Long> {
+
+    Optional<StatisticsQuestion> findByQuestion(Question question);
+
+    boolean existsByQuestion(Question question);
 }
