@@ -1,6 +1,5 @@
 <template>
     <div>
-        <nav-bar></nav-bar>
         <div class="my-head">
             <div class="my-titel">
                 Title:
@@ -190,7 +189,6 @@
 
     import draggable from "vuedraggable"
     import HelloWorld from '../components/HelloWorld.vue'
-    import NavBar from "../components/NavBar";
     import AddQuestion from "../components/AddQuestion";
     import PollQuestion from "../components/PollQuestion";
     import {v4 as uuidv4} from "uuid";
@@ -379,7 +377,6 @@
         components: {
             AddQuestion,
             PollQuestion,
-            NavBar,
             HelloWorld,
             draggable
         }

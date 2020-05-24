@@ -1,7 +1,11 @@
 <template>
     <div class="my-back">
-        <nav-bar></nav-bar>
-        <HelloWorld style="text-align:center;" class="ml-auto" msg="Meine Umfragen"/>
+        <h1 style="text-align:center;" class="ml-auto">
+            My Polls
+        </h1>
+        <h1>
+            sldkfjsldfjk
+        </h1>
         <b-container class="my-container">
             <b-button class="my-button" @click="addNewPoll">+</b-button>
             <b-row style="text-align: center" class="my-row">
@@ -15,8 +19,6 @@
 
 <script>
 
-    import HelloWorld from '../components/HelloWorld.vue'
-    import NavBar from "../components/NavBar";
     import PollTableList from "../components/PollTableList";
     import {mapState, mapActions} from "vuex";
     import axios from "axios";
@@ -47,8 +49,6 @@
             this.requestPolls()
         },
         components: {
-            NavBar,
-            HelloWorld,
             PollTableList
         },
     }

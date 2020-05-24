@@ -1,0 +1,48 @@
+/*
+Main Stylesheet.
+Put global variables, settings, etc. here.
+ */
+
+
+/*
+    Adapted version of the solarized color scheme
+ */
+$yellow:    #b58900;
+$orange:    #cb4b16;
+$red:       #dc322f;
+$magenta:   #d33682;
+$violet:    #6c71c4;
+$blue:      #268bd2;
+$teal:      #02a097;
+$green:     #56a137;
+
+$primary: $green;
+
+$theme-colors: (
+    "primary": #56a137,
+);
+
+/* ------ Put Bootstrap variable customizations above ---- */
+
+// Include Bootstrap and BootstrapVue SCSS files
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
+
+/* ------ Put all other stuff below -----------------------*/
+
+h6 {
+    font-weight: bold;
+}
+h5 {
+    font-weight: bold;
+}
+
+/*
+Used for navbars and other stuff that is supposed to stick to the viewport
+ */
+.sticky {
+    position: sticky;
+    top: 0;
+    z-index: $zindex-sticky
+}
+

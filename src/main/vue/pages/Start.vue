@@ -1,10 +1,8 @@
 <template>
-    <div>
-        <nav-bar></nav-bar>
+    <b-container>
         <HelloWorld style="text-align:center;" class="ml-auto" msg="Welcome to the best Poll App!"/>
 
 
-        <!-- this is better for desktop version -->
         <b-row align-h="center" class="login" fluid="md">
             <b-col md="4">
                 <b-card>
@@ -34,18 +32,16 @@
                 </b-card>
             </b-col>
         </b-row>
-    </div>
+    </b-container>
 </template>
 
 <script>
     import HelloWorld from '../components/HelloWorld.vue';
-    import NavBar from "../components/NavBar";
     import {mapActions, mapState} from "vuex";
 
     export default {
         name: "Start",
         components: {
-            NavBar,
             HelloWorld,
             ...mapState({
                 polls: state => state.polls

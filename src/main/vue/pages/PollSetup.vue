@@ -1,85 +1,69 @@
 <template>
     <div class="my-back">
-        <nav-bar></nav-bar>
         <div class="my-sh">
-            <b-container class="my-container">
 
-                <!-- -->
-                <b-row style="text-align: center" class="my-row">
-                    <b-col>
-                        <HelloWorld style="text-align:center;" class="ml-auto" :msg="poll.title"/>
-                    </b-col>
-                </b-row>
+            <div>
+                <b-button class="my-button" variant="secondary-outline">Bearbeiten</b-button>
+                <b-button class="my-button">Analyse</b-button>
+            </div>
 
-                <b-row align-h="center">
-                    <b-form>
-                        <b-button class="my-button">Bearbeiten</b-button>
-                        <b-button class="my-button">Analyse</b-button>
-                    </b-form>
-                </b-row>
+            <b-row>
+                <p style="margin-left: 20vw; margin-top: 2vh">Design</p>
+            </b-row>
 
-                <b-row>
-                    <p style="margin-left: 20vw; margin-top: 2vh">Design</p>
-                </b-row>
-
-                <!-- Freaking Cool Radio Buttons -->
-                <b-row align-h="center">
-                    <b-col>
-                        <p>Status</p>
-                        <p>{{ poll.status }}</p>
-                    </b-col>
-                    <b-col>
-                        <div>
-                            <b-form-group label="Raido v6.7">
-                                <b-form-radio-group
-                                v-model="selected"
-                                plain
-                                name="plain-inline">
-                                    <b-form-radio value="IN_PROCESS"
-                                    :disabled="poll.status === 'READY'
-                                    || poll.status === 'ACTIVATED'
-                                    || poll.status === 'DEACTIVATED'">In Bearbeitung</b-form-radio>
-                                    <b-form-radio value="READY"
-                                    :disabled="poll.status === 'ACTIVATED'
-                                    || poll.status === 'DEACTIVATED'">Bereit</b-form-radio>
-                                    <b-form-radio value="ACTIVATED"
-                                    :disabled="poll.status === 'DEACTIVATED'">Aktiviert</b-form-radio>
-                                    <b-form-radio value="DEACTIVATED">Deaktiviert</b-form-radio>
-                                </b-form-radio-group>
-                            </b-form-group>
-                        </div>
-                    </b-col>
-                </b-row>
-
-                <b-row>
-                    <p>{{selected}}</p>
-                </b-row>
-
-                <!-- Warning Modal Component -->
-                <b-row align-h="center">
+            <!-- Freaking Cool Radio Buttons -->
+            <b-row align-h="center">
+                <b-col>
+                    <p>Status</p>
+                    <p>{{ poll.status }}</p>
+                </b-col>
+                <b-col>
                     <div>
-                        <b-button class="my-button2" v-b-modal.modal-center>Anwenden</b-button>
-                        <b-modal v-if="isStatusChange()"
-                                 id="modal-center"
-                                 centered
-                                 title="Warnung: Status wurde geändert!"
-                                 header-bg-variant="danger"
-                                 @ok="handleOk">
-                            <p class="my-4">Wenn Sie den Status ändern kann er nicht mehr in einen
-                                früheren Status gewechselt werden.</p>
-                        </b-modal>
+                        <b-form-group label="Raido v6.7">
+                            <b-form-radio-group
+                            v-model="selected"
+                            name="plain-inline">
+                                <b-form-radio value="IN_PROCESS"
+                                :disabled="poll.status === 'READY'
+                                || poll.status === 'ACTIVATED'
+                                || poll.status === 'DEACTIVATED'">In Bearbeitung</b-form-radio>
+                                <b-form-radio value="READY"
+                                :disabled="poll.status === 'ACTIVATED'
+                                || poll.status === 'DEACTIVATED'">Bereit</b-form-radio>
+                                <b-form-radio value="ACTIVATED"
+                                :disabled="poll.status === 'DEACTIVATED'">Aktiviert</b-form-radio>
+                                <b-form-radio value="DEACTIVATED">Deaktiviert</b-form-radio>
+                            </b-form-radio-group>
+                        </b-form-group>
                     </div>
-                </b-row>
+                </b-col>
+            </b-row>
 
-            </b-container>
+            <b-row>
+                <p>{{selected}}</p>
+            </b-row>
+
+            <!-- Warning Modal Component -->
+            <b-row align-h="center">
+                <div>
+                    <b-button class="my-button2" v-b-modal.modal-center variant="primary">Anwenden</b-button>
+                    <b-modal v-if="isStatusChange()"
+                             id="modal-center"
+                             centered
+                             title="Warnung: Status wurde geändert!"
+                             header-bg-variant="danger"
+                             @ok="handleOk">
+                        <p class="my-4">Wenn Sie den Status ändern kann er nicht mehr in einen
+                            früheren Status gewechselt werden.</p>
+                    </b-modal>
+                </div>
+            </b-row>
         </div>
     </div>
 </template>
 
 <script>
 
-    import NavBar from "../components/NavBar";
-    import HelloWorld from "../components/HelloWorld";
     import {mapActions, mapGetters} from "vuex";
     import axios from 'axios';
 
@@ -123,13 +107,12 @@
         },
 
         components: {
-            NavBar,
-            HelloWorld,
         },
     }
 </script>
 
 <style scoped>
+    /*
     .my-back {
         min-height: 100vh;
         background-color: lightgray
@@ -149,13 +132,8 @@
         color: #ACABAB;
         margin-left: 2vw;
         margin-right: 2vw;
+
     }
 
-    .my-button2 {
-        background-color: lightgray;
-        font-size: 100%;
-        color: black;
-        margin-left: 2vw;
-        margin-right: 2vw;
-    }
+     */
 </style>
