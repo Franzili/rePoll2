@@ -84,13 +84,12 @@ router.beforeEach((to, from , next) => {
         // if auth is correct proceed to destination
         if (store.getters.isAuthenticated) {
             next()
-            return
+        } else {
+            next("/");
         }
-        // not auth, get to login
-        next('/')
     // if auth is not needed but acquired go to polls if '/' is requested
     } else if (store.getters.isAuthenticated && to.path === "/") {
-        next("/polls");
+        next("/polls/");
     // base case if nothing is needed and acquired
     } else {
         next()
