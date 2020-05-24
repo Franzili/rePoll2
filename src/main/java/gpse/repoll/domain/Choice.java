@@ -19,7 +19,7 @@ public class Choice {
     @NotEmpty
     private String text;
 
-    protected Choice() {
+    public Choice() {
 
     }
 

@@ -1,6 +1,7 @@
 package gpse.repoll;
 
 import gpse.repoll.domain.service.PollService;
+import gpse.repoll.domain.service.QuestionService;
 import gpse.repoll.domain.service.UserService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,17 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class InitializeDatabase implements InitializingBean {
 
     private final PollService pollService;
+    private final QuestionService questionService;
     private final UserService userService;
     private final TransactionTemplate transactionTemplate;
 
     @Autowired
     public InitializeDatabase(PollService pollService,
+                              QuestionService questionService,
                               UserService userService,
                               PlatformTransactionManager transactionManager) {
         this.pollService = pollService;
+        this.questionService = questionService;
         this.userService = userService;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
     }
@@ -59,14 +63,14 @@ public class InitializeDatabase implements InitializingBean {
         transactionTemplate.execute(status -> {
             User user = userService.getUser("JamesBond");
             Poll poll = pollService.addPoll("Gummibaerchen", user);
-            pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
+            questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1000, 255, user);
-            pollService.addTextQuestion(poll.getId(), "Warum magst du keine Gummibaerchen?",
+            questionService.addTextQuestion(poll.getId(), "Warum magst du keine Gummibaerchen?",
                                         1000, 255, user);
             Poll poll2 = pollService.addPoll("About this App", user);
-            pollService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
+            questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
                                         1000, 255, user);
-            pollService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
+            questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
                                         1000, 255, user);
             return null;
         });

@@ -31,7 +31,7 @@ public class PollEntry {
         return Collections.unmodifiableMap(associations);
     }
 
-    void setAssociations(Map<Question, Answer> associations) {
+    public void setAssociations(Map<Question, Answer> associations) {
         this.associations.clear();
         this.associations.putAll(associations);
     }
