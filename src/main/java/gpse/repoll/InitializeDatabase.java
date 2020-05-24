@@ -1,7 +1,13 @@
 package gpse.repoll;
 
+import gpse.repoll.domain.answers.Answer;
+import gpse.repoll.domain.answers.TextAnswer;
+import gpse.repoll.domain.questions.Question;
+import gpse.repoll.domain.questions.ScaleQuestion;
+import gpse.repoll.domain.questions.TextQuestion;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ansi.Ansi8BitColor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -45,9 +52,11 @@ public class InitializeDatabase implements InitializingBean {
         transactionTemplate.execute(status -> {
             Poll poll = pollService.addPoll("Poll 1");
 
-            pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?", 1000);
+            TextQuestion question1 = pollService.addTextQuestion(poll.getId(),
+                "Warum magst du Gummibaerchen?", 1000);
 
-            pollService.addScaleQuestion(poll.getId(), "How satisfied are you with our services?",
+            ScaleQuestion question2 = pollService.addScaleQuestion(poll.getId(),
+                "How satisfied are you with our services?",
                 "Very Unsatisfied", "Very Satisfied", 1);
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
@@ -73,8 +82,14 @@ public class InitializeDatabase implements InitializingBean {
             choicesChoiceQuestionList.add(choice4);
             pollService.addChoiceQuestion(poll.getId(), "Which musician do yo like the most?",
                 choicesChoiceQuestionList);
+            TextAnswer textAnswer1 = new TextAnswer();
+            textAnswer1.setText("Weil sie schön bunt sind.");
 
+            PollEntry entry = new PollEntry();
 
+            //entry.setAssociations((Question)question1,(Answer)textAnswer1);
+
+            //pollService.addPollEntry(poll.getId(), entry);
 
             return null;
         });

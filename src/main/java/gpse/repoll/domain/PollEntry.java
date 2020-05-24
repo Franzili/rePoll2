@@ -28,7 +28,7 @@ public class PollEntry {
         return associations;
     }
 
-    void setAssociations(Map<Question, Answer> associations) {
+    public void setAssociations(Map<Question, Answer> associations) {
         this.associations = associations;
     }
 
