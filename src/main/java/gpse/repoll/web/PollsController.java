@@ -8,6 +8,8 @@ import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -20,13 +22,15 @@ import java.util.*;
 @RequestMapping("/api/v1/polls")
 public class PollsController {
     private final PollService pollService;
+    private final UserService userService;
 
     @Autowired
-    public PollsController(PollService service) {
-        this.pollService = service;
+    public PollsController(PollService pollService, UserService userService) {
+        this.pollService = pollService;
+        this.userService = userService;
     }
 
-    @Secured(Roles.ALL)
+    //@Secured(Roles.ALL)   <---this has to be fixed in future, now is Blocking frontend from accesing the database
     @GetMapping("/")
     public List<Poll> getAll() {
         return pollService.getAll();
@@ -38,7 +42,10 @@ public class PollsController {
         if (pollCmd.getTitle() == null || pollCmd.getTitle().equals("")) {
             throw new BadRequestException("Title cannot be empty!");
         }
-        return pollService.addPoll(pollCmd.getTitle());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getPrincipal().toString();
+        User user = userService.getUser(username);
+        return pollService.addPoll(pollCmd.getTitle(), user);
     }
 
     @Secured(Roles.ALL)
@@ -51,7 +58,13 @@ public class PollsController {
     @Secured(Roles.ALL)
     @PutMapping("/{id}/")
     public Poll updatePoll(@PathVariable("id") final UUID id, @RequestBody PollCmd pollCmd) {
-        return pollService.updatePoll(id, pollCmd.getTitle(), pollCmd.getStatus());
+        Map<UUID, List<Long>> structure = null;
+        if (pollCmd.getStructure() != null) {
+            structure = pollCmd.getStructure().getSectionToQuestions();
+        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User lastEditor = userService.getUser(auth.getName());
+        return pollService.updatePoll(id, pollCmd.getTitle(), pollCmd.getStatus(), structure, lastEditor);
     }
 
     @Secured(Roles.ALL)
@@ -64,32 +77,36 @@ public class PollsController {
     @PostMapping("/{pollId}/sections/")
     public PollSection addPollSection(@PathVariable("pollId") final UUID pollId,
                                       @RequestBody PollSectionCmd pollSectionCmd) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User lastEditor = userService.getUser(auth.getName());
         return pollService.addPollSection(
             pollId,
             pollSectionCmd.getTitle(),
             pollSectionCmd.getDescription(),
-            pollSectionCmd.getQuestions()
+            lastEditor
         );
     }
 
     @Secured(Roles.ALL)
-    @GetMapping("/{pollId}/sections/{sectionId:\\d+}/")
+    @GetMapping("/{pollId}/sections/{sectionId}/")
     public PollSection getPollSection(@PathVariable("pollId") final UUID pollId,
-                                      @PathVariable("sectionId") final String sectionId) {
-        return pollService.getPollSection(pollId, Long.valueOf(sectionId));
+                                      @PathVariable("sectionId") final UUID sectionId) {
+        return pollService.getPollSection(pollId, sectionId);
     }
 
     @Secured(Roles.ALL)
-    @PutMapping("/{pollId}/sections/{sectionId:\\d+}/")
+    @PutMapping("/{pollId}/sections/{sectionId}/")
     public PollSection updatePollSection(@PathVariable("pollId") final UUID pollId,
-                                         @PathVariable("sectionId") final String sectionId,
+                                         @PathVariable("sectionId") final UUID sectionId,
                                          @RequestBody PollSectionCmd pollSectionCmd) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User lastEditor = userService.getUser(auth.getName());
         return pollService.updatePollSection(
             pollId,
-            Long.valueOf(sectionId),
+            sectionId,
             pollSectionCmd.getTitle(),
             pollSectionCmd.getDescription(),
-            pollSectionCmd.getQuestions()
+            lastEditor
         );
     }
 
@@ -98,25 +115,36 @@ public class PollsController {
     public Question addQuestion(@PathVariable("pollId") final UUID pollId,
                                 @RequestBody QuestionCmd questionCmd) {
         String title = questionCmd.getTitle();
+        int questionOrder = questionCmd.getQuestionOrder();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User lastEditor = userService.getUser(auth.getName());
         if (questionCmd instanceof TextQuestionCmd) {
             TextQuestionCmd textQuestionCmd = (TextQuestionCmd) questionCmd;
-            return pollService.addTextQuestion(pollId, title, textQuestionCmd.getCharLimit());
+            return pollService.addTextQuestion(pollId, title, questionOrder, textQuestionCmd.getCharLimit(),
+                                               lastEditor);
         } else if (questionCmd instanceof ScaleQuestionCmd) {
             ScaleQuestionCmd scaleQuestionCmd = (ScaleQuestionCmd) questionCmd;
-            return pollService.addScaleQuestion(pollId, title,
+            return pollService.addScaleQuestion(pollId,
+                                                title,
+                                                questionOrder,
                                                 scaleQuestionCmd.getScaleNameLeft(),
                                                 scaleQuestionCmd.getScaleNameRight(),
-                                                scaleQuestionCmd.getStepCount());
+                                                scaleQuestionCmd.getStepCount(),
+                                                lastEditor);
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            return pollService.addRadioButtonQuestion(pollId, title, radioButtonQuestionCmd.getChoices());
+            List<Choice> choices = new ArrayList<>();
+            for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
+                choices.add(new Choice(choiceCmd.getText()));
+            }
+            return pollService.addRadioButtonQuestion(pollId, title, questionOrder, choices, lastEditor);
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
             List<Choice> choices = new ArrayList<>();
             for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return pollService.addChoiceQuestion(pollId, title, choices);
+            return pollService.addChoiceQuestion(pollId, title, questionOrder, choices, lastEditor);
         }
 
         // this should never happen.
@@ -142,32 +170,44 @@ public class PollsController {
     @Secured(Roles.ALL)
     @PutMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question updateQuestion(@PathVariable("pollId") final UUID pollId,
-                                   @PathVariable("questionId") final String questionId,
+                                   @PathVariable("questionId") final String qId,
                                    @RequestBody QuestionCmd questionCmd) {
+        Long questionId = Long.valueOf(qId);
         String title = questionCmd.getTitle();
+        int questionOrder = questionCmd.getQuestionOrder();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User lastEditor = userService.getUser(auth.getName());
         if (questionCmd instanceof TextQuestionCmd) {
-            return pollService.updateTextQuestion(pollId, Long.valueOf(questionId), title);
+            return pollService.updateTextQuestion(pollId,
+                                                  questionId,
+                                                  questionOrder,
+                                                  title,
+                                                  ((TextQuestionCmd) questionCmd).getCharLimit(),
+                                                  lastEditor);
         } else if (questionCmd instanceof ScaleQuestionCmd) {
             ScaleQuestionCmd scaleQuestionCmd = (ScaleQuestionCmd) questionCmd;
             return pollService.updateScaleQuestion(pollId,
-                                                   Long.valueOf(questionId),
+                                                   questionId,
+                                                   questionOrder,
                                                    title,
                                                    scaleQuestionCmd.getScaleNameLeft(),
                                                    scaleQuestionCmd.getScaleNameRight(),
-                                                   scaleQuestionCmd.getStepCount());
+                                                   scaleQuestionCmd.getStepCount(),
+                                                   lastEditor);
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            return pollService.updateRadioButtonQuestion(pollId,
-                                                         Long.valueOf(questionId),
-                                                         title,
-                                                         radioButtonQuestionCmd.getChoices());
+            List<Choice> choices = new ArrayList<>();
+            for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
+                choices.add(new Choice(choiceCmd.getText()));
+            }
+            return pollService.updateRadioButtonQuestion(pollId, questionId, questionOrder, title, choices, lastEditor);
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
             List<Choice> choices = new ArrayList<>();
             for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return pollService.updateChoiceQuestion(pollId, Long.valueOf(questionId), title, choices);
+            return pollService.updateChoiceQuestion(pollId, questionId, questionOrder, title, choices, lastEditor);
         }
 
         // This should not be reached
@@ -217,9 +257,6 @@ public class PollsController {
         return  pollService.getPollEntry(pollId, Long.valueOf(entryId));
     }
 
-
-
-
     /* TODO
     @PutMapping("/{pollId}/entries/{entryId:\\d+}")
     public PollEntry updatePollEntry(@PathVariable("pollId") final UUID pollId,
@@ -229,5 +266,4 @@ public class PollsController {
     }
 
      */
-
 }

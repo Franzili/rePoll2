@@ -1,5 +1,7 @@
+import poll from "./poll";
 import auth from "./auth";
 
 export default {
-    auth
+    auth,
+    poll
 }

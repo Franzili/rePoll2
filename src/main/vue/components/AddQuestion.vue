@@ -1,5 +1,5 @@
 <template>
-    <b-form style="text-align: center" @submit="addItem">
+    <b-form style="text-align: center" @submit="addQuestion">
         <div style="text-align:left;">
             <b-form-group
                 label="Enter new question:">
@@ -7,7 +7,7 @@
                     id="input-1"
                     required
                     placeholder="Question"
-                    v-model="question"
+                    v-model="title"
                 ></b-form-input>
             </b-form-group>
 
@@ -30,22 +30,22 @@
         name: "AddQuestion",
         data() {
             return {
-                question: '',
+                title: '',
                 type: 'freetext'
             }
         },
         methods: {
-            addItem(e) {
+            addQuestion(e) {
                 e.preventDefault();
-                const newItem = {
+                const newQuestion = {
                     id: uuidv4(),
                     type: this.type,
-                    question: this.question,
+                    title: this.title,
                     possibilities: []
                 };
-                this.$emit('add-item', newItem);
+                this.$emit('add-question', newQuestion);
 
-                this.question = '';
+                this.title = '';
             }
         }
     }

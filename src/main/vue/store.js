@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-
 import api from "./api";
 
 Vue.use(Vuex)
@@ -9,9 +8,9 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         token: null,
-        authenticated: null
+        authenticated: null,
+        polls: []
     },
-
     actions: {
         requestToken({commit}, credentials) {
             return new Promise((resolve, reject) => {
@@ -29,6 +28,47 @@ const store = new Vuex.Store({
                     });
             })
         },
+        requestPolls({commit}) {
+            return new Promise((resolve, reject) => {
+                api.poll.list().then(res => {
+                    commit('setPolls', res.data)
+                    resolve()
+                }).catch(() => {
+                    commit('setPolls', [])
+                    reject()
+                })
+            })
+        },
+        requestPoll({commit}, id) {
+            return new Promise((resolve, reject) => {
+                api.poll.get(id).then(res => {
+                    commit('updatePoll', res.data)
+                    resolve()
+                }).catch(() => {
+                    reject()
+                })
+            })
+        },
+        savePoll({commit}, poll) {
+            return new Promise((resolve, reject) => {
+                api.poll.save(poll).then(res => {
+                    commit('updatePoll', res.data)
+                    resolve()
+                }).catch(() => {
+                    reject()
+                })
+            })
+        },
+        updatePoll({commit}, poll) {
+            return new Promise((resolve, reject) => {
+                api.poll.update(poll).then(res => {
+                    commit('updatePoll', res.data)
+                    resolve()
+                }).catch(() => {
+                    reject()
+                })
+            })
+        }
     },
 
     mutations: {
@@ -49,14 +89,37 @@ const store = new Vuex.Store({
                     Object.assign(state, JSON.parse(localStorage.getItem('store')) )
                 )
             }
+        },
+        setPolls(state, polls) {
+            this.state.polls = polls
+        },
+        savePolls(state, poll) {
+            this.state.polls.push(poll)
+        },
+        updatePoll(state, poll) {
+            let index = this.state.polls.findIndex(a => a.id === poll.id)
+            this.state.polls[index] = poll
         }
-    },
 
+    },
+    getters: {
+        getPoll: (state) => {
+            return (id) => {
+                return state.polls.find(poll => poll.id === id)
+            }
+        },
+        isAuthenticated: (state) => {
+            return state.authenticated
+        }
+    }
 })
 
 store.subscribe((mutation, state) => {
     localStorage.setItem('store', JSON.stringify(state));
-    axios.defaults.headers['Authorization'] = state.token
+    axios.defaults.headers.common['Authorization'] = state.token;
+    axios.get('/api/v1/polls/').then((result) => {
+        console.log(result);
+    }).catch((error) => {console.log(error.message)});
 });
 
 export default store;

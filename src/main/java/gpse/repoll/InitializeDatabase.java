@@ -7,7 +7,6 @@ import gpse.repoll.domain.questions.ScaleQuestion;
 import gpse.repoll.domain.questions.TextQuestion;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ansi.Ansi8BitColor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +24,9 @@ import java.util.List;
 @Service
 public class InitializeDatabase implements InitializingBean {
 
-    private PollService pollService;
-    private UserService userService;
-    private TransactionTemplate transactionTemplate;
+    private final PollService pollService;
+    private final UserService userService;
+    private final TransactionTemplate transactionTemplate;
 
     @Autowired
     public InitializeDatabase(PollService pollService,
@@ -50,14 +49,36 @@ public class InitializeDatabase implements InitializingBean {
          */
 
         transactionTemplate.execute(status -> {
-            Poll poll = pollService.addPoll("Poll 1");
+            try {
+                userService.getUser("JamesBond");
+            } catch (UsernameNotFoundException e) {
+                final User user = userService.addUser(
+                    "JamesBond",
+                    // Passwort: GutenTag
+                    "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                    "Bob", "jbond@mi6.com"
+                );
+            }
+            return null;
 
-            TextQuestion question1 = pollService.addTextQuestion(poll.getId(),
-                "Warum magst du Gummibaerchen?", 1000);
+        });
 
-            ScaleQuestion question2 = pollService.addScaleQuestion(poll.getId(),
+        transactionTemplate.execute(status -> {
+            User user = userService.getUser("JamesBond");
+            Poll poll = pollService.addPoll("Gummibaerchen", user);
+            pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
+                                        1, 255, user);
+            pollService.addTextQuestion(poll.getId(), "Warum magst du keine Gummibaerchen?",
+                                        1, 255, user);
+            Poll poll2 = pollService.addPoll("About this App", user);
+            pollService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
+                                        1000, 255, user);
+            pollService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
+                                        1000, 255, user);
+
+            pollService.addScaleQuestion(poll.getId(),
                 "How satisfied are you with our services?",
-                "Very Unsatisfied", "Very Satisfied", 1);
+                2, "Not good", "Very good", 1,user);
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
             Choice choice5 = new Choice("0-20");
@@ -68,8 +89,8 @@ public class InitializeDatabase implements InitializingBean {
             choicesRadioButtonList.add(choice6);
             choicesRadioButtonList.add(choice7);
             choicesRadioButtonList.add(choice8);
-            pollService.addRadioButtonQuestion(poll.getId(), "How old are you?",
-                choicesRadioButtonList);
+            pollService.addRadioButtonQuestion(poll.getId(), "How old are you?", 3,
+                choicesRadioButtonList, user);
 
             List<Choice> choicesChoiceQuestionList = new ArrayList<>();
             Choice choice1 = new Choice("Avicii");
@@ -81,7 +102,7 @@ public class InitializeDatabase implements InitializingBean {
             choicesChoiceQuestionList.add(choice3);
             choicesChoiceQuestionList.add(choice4);
             pollService.addChoiceQuestion(poll.getId(), "Which musician do yo like the most?",
-                choicesChoiceQuestionList);
+                4, choicesChoiceQuestionList, user);
             TextAnswer textAnswer1 = new TextAnswer();
             textAnswer1.setText("Weil sie schön bunt sind.");
 
@@ -94,21 +115,5 @@ public class InitializeDatabase implements InitializingBean {
             return null;
         });
 
-        transactionTemplate.execute(status -> {
-            try {
-                userService.getUser("JamesBond");
-                System.out.println("Found.");
-            } catch (UsernameNotFoundException e) {
-                System.out.println("Not  found!!!!!!!");
-                final User user = userService.addUser(
-                    "JamesBond",
-                    // Passwort: GutenTag
-                    "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
-                    "Bob", "jbond@mi6.com"
-                );
-            }
-            return null;
-
-        });
     }
 }

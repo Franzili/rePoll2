@@ -1,14 +1,16 @@
 package gpse.repoll.domain;
 
+import gpse.repoll.domain.exceptions.BadRequestException;
+import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.questions.Question;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Main Poll object.
@@ -16,7 +18,9 @@ import java.util.UUID;
  * Poll objects are assumed to be equal if they have equal IDs.
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Poll {
+
     @Id
     @GeneratedValue(generator = "uuid2")
     @Column
@@ -33,12 +37,14 @@ public class Poll {
     @ManyToOne
     private User creator;
 
+    @CreatedDate
     @Column
     private LocalDateTime creationTime;
 
     @ManyToOne
     private User lastEditor;
 
+    @LastModifiedDate
     @Column
     private LocalDateTime lastEditTime;
 
@@ -65,10 +71,9 @@ public class Poll {
      */
     public Poll(User creator, String title) {
         this.creator = creator;
+        this.lastEditor = creator;
         this.title = title;
         this.status = PollStatus.IN_PROCESS;
-        creationTime = LocalDateTime.now();
-        lastEditTime = LocalDateTime.now();
     }
 
     @Override
@@ -80,7 +85,7 @@ public class Poll {
             return false;
         }
         Poll poll = (Poll) o;
-        return getId().equals(poll.getId());
+        return Objects.equals(id, poll.id);
     }
 
     @Override
@@ -166,5 +171,103 @@ public class Poll {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    private PollSection getSection(UUID sectionId) {
+        for (PollSection section : sections) {
+            if (section.getId().equals(sectionId)) {
+                return section;
+            }
+        }
+        return null;
+    }
+
+    private boolean sectionExists(UUID sectionId) {
+        for (PollSection section : sections) {
+            if (section.getId().equals(sectionId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean questionsExist(Collection<Long> questionIds) {
+        List<Long> pollQuestionIds = new ArrayList<>();
+        for (Question question : questions) {
+            pollQuestionIds.add(question.getId());
+        }
+        return pollQuestionIds.containsAll(questionIds);
+    }
+
+    /**
+     Creates a list of questions of the poll.
+     * @param questionIds The ID's of the questions
+     * @return The list of the questions
+     * @throws BadRequestException if one question is not found in the poll
+     */
+    private List<Question> listQuestions(Collection<Long> questionIds) throws BadRequestException {
+        // Checks if there is a question specified which does not belong to this poll
+        if (!questionsExist(questionIds)) {
+            throw new BadRequestException("At least one question is not part of this poll!");
+        }
+        List<Question> listedQuestions = new ArrayList<>();
+        for (Long id : questionIds) {
+            for (Question question : questions) {
+                if (question.getId().equals(id)) {
+                    listedQuestions.add(question);
+                    break;
+                }
+            }
+        }
+        return listedQuestions;
+    }
+
+    private PollSection findSection(Question question) {
+        for (PollSection section : sections) {
+            if (section.getQuestions().contains(question)) {
+                return section;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * This method assigns the questions of the poll to the sections defined in the parameter.
+     * The objects are referenced by their IDs.
+     * @param structure the defined assignments
+     * @throws BadRequestException if the structure object is not well defined
+     * @throws InternalServerErrorException if the algorithm has a bug
+     */
+    public void setStructure(Map<UUID, List<Long>> structure) throws BadRequestException, InternalServerErrorException {
+        Set<UUID> keySet = structure.keySet();
+        List<Long> allIds = new ArrayList<>();
+        Set<Long> setIds = new HashSet<>();
+        for (UUID key : keySet) {
+            allIds.addAll(structure.get(key));
+            setIds.addAll(structure.get(key));
+        }
+        // Checks if there is a duplicated question ID
+        if (allIds.size() != setIds.size()) {
+            throw new BadRequestException("No duplicates of questions allowed!");
+        }
+        for (UUID key : keySet) {
+            // Checks if there is a section specified which does not belong to this poll
+            if (!sectionExists(key)) {
+                throw new BadRequestException("At least one section is not part of the poll!");
+            }
+            List<Long> questionIds = new ArrayList<>(structure.get(key));
+            List<Question> movedQuestions = listQuestions(questionIds);
+            for (Question question : movedQuestions) { // These questions exist in the poll guaranteed by listQuestions
+                PollSection section = findSection(question);
+                if (section != null) {
+                    section.getQuestions().remove(question); // Every moved question is removed in the old section
+                }
+            }
+            PollSection section = getSection(key);
+            if (section == null) {
+                throw new InternalServerErrorException(); // Server error because this should never happen
+            }
+            section.getQuestions().addAll(movedQuestions); // The questions are moved in the correct section
+        }
     }
 }

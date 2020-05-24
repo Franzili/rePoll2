@@ -1,10 +1,12 @@
 import VueRouter from "vue-router";
-import CreateSurvey from "./pages/CreateSurvey";
+import CreatePoll from "./pages/CreatePoll";
 import Start from "./pages/Start";
 import Account from "./pages/Account";
-import SurveyTable from "./pages/SurveyTable";
-import SurveySetup from "./pages/SurveySetup";
-import AnswerSurvey from "./pages/AnswerSurvey";
+import Poll from "./pages/Poll";
+import Answer from "./pages/Answer";
+import PollTable from "./pages/PollTable";
+import PollSetup from "./pages/PollSetup";
+import AnswerPoll from "./pages/AnswerPoll";
 
 import store from "./store";
 
@@ -17,24 +19,36 @@ var router = new VueRouter({
         },
         {
             path: '/create/',
-            component: CreateSurvey
+            name: 'create',
+            component: CreatePoll
         },
         {
             path: '/account/',
             component: Account
         },
         {
-            path: '/surveys/',
-            component: SurveyTable
+            path: '/polls/',
+            component: PollTable
+        },
+        {
+            path: '/poll/:id(\\d+)',
+            component: Poll
+        },
+        {
+            path: '/poll/:id/answer',
+            component: Answer,
+            //meta: {
+            //    requiresAuth: true
+            //}
         },
         {
             path: '/config/',
             name: 'config',
-            component: SurveySetup
+            component: PollSetup
         },
         {
             path: '/answer/',
-            component: AnswerSurvey
+            component: AnswerPoll
         }
     ]
 });
@@ -48,7 +62,7 @@ router.beforeEach((to, from , next) => {
     }
 
     if (store.state.authenticated && to.path === "/") {
-        next("/surveys");
+        next("/polls");
     }
 
     else {
