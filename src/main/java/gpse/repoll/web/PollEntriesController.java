@@ -5,7 +5,6 @@ import gpse.repoll.domain.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.service.PollEntryService;
-import gpse.repoll.domain.service.PollService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.PollEntryCmd;
 import gpse.repoll.web.command.answers.*;

@@ -1,8 +1,6 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.*;
-import gpse.repoll.domain.answers.Answer;
-import gpse.repoll.domain.questions.*;
 
 import java.util.List;
 import java.util.Map;

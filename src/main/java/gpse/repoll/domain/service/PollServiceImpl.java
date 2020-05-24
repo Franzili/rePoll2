@@ -1,9 +1,6 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.*;
-import gpse.repoll.domain.answers.*;
-import gpse.repoll.domain.exceptions.BadRequestException;
-import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.exceptions.UnauthorizedException;
 import gpse.repoll.domain.questions.*;
 import gpse.repoll.domain.exceptions.NotFoundException;

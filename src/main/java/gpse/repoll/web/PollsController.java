@@ -1,14 +1,11 @@
 package gpse.repoll.web;
 
 import gpse.repoll.domain.*;
-import gpse.repoll.domain.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
-import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.*;
-import gpse.repoll.web.command.answers.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
