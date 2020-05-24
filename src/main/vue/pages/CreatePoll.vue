@@ -75,7 +75,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updatePollQuestionsText">
+                                            v-on:end="updatePollQuestions('section')">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -89,7 +89,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updatePollQuestionsLimChar">
+                                            v-on:end="updatePollQuestions('freetext')">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -104,7 +104,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updatePollQuestionsPossibilities">
+                                            v-on:end="updatePollQuestions('radio')">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -119,7 +119,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updatePollQuestionsCheckbox">
+                                            v-on:end="updatePollQuestions('checkbox')">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -134,7 +134,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updatePollQuestionsSelect">
+                                            v-on:end="updatePollQuestions('dropdown')">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -148,7 +148,7 @@
                                             class="list-group" v-model="palette"
                                             group="group"
                                             @change="log"
-                                            v-on:end="updatePollQuestionsX">
+                                            v-on:end="updatePollQuestions('slider')">
 
                                             <div class="drag-item flex flex-justify-between">
 
@@ -269,108 +269,72 @@
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
             },
-            updatePollQuestionsPossibilities() {
-                const newQuestion = {
+            updatePollQuestions(type) {
+
+                let newQuestion = {
                     id: uuidv4(),
-                    type: "radio",
+                    type: "test",
                     title: "new question",
-                    possibilities: [
-                        {
-                            id: 1,
-                            text: "choice 1",
-                        },
-                        {
-                            id: 2,
-                            text: "choice 2",
-                        },
-                        {
-                            id: 3,
-                            text: "choice 3",
-                        }
-                    ]
+                    possibilities: [],
+
                 };
+
+                const testPossibilities = [
+                    {
+                        id: 1,
+                        text: "choice 1",
+                    },
+                    {
+                        id: 2,
+                        text: "choice 2",
+                    },
+                    {
+                        id: 3,
+                        text: "choice 3",
+                    }];
+
+                switch (type) {
+                    case "checkbox":
+                        newQuestion.type = "checkbox";
+                        newQuestion.possibilities = testPossibilities;
+                        break;
+
+                    case "radio":
+                        newQuestion.type = "radio";
+                        newQuestion.possibilities = testPossibilities;
+                        break;
+
+                    case "dropdown":
+                        newQuestion.type = "dropdown";
+                        newQuestion.possibilities = testPossibilities;
+                        break;
+
+                    case "section":
+                        newQuestion.type = "section";
+                        break;
+
+                    case "slider":
+                        newQuestion.type = "slider";
+                        newQuestion.possibilities =  [
+                            {
+                                min: 1,
+                                max: 10,
+                                step: 1
+                            }];
+                        break;
+
+                    case "freetext":
+                        newQuestion.type = "freetext";
+                        newQuestion.possibilities = [
+                            {
+                                limit: 10
+                            }];
+                        break;
+                }
+
                 this.questions = [...this.questions, newQuestion];
             },
-            updatePollQuestionsSelect() {
-                const newQuestion = {
-                    id: uuidv4(),
-                    type: "dropdown",
-                    title: "Was ist deine Lieblingsfarbe?",
-                    possibilities: [
-                        {
-                            id: 1,
-                            text: "choice 1",
-                        },
-                        {
-                            id: 2,
-                            text: "choice 2",
-                        },
-                        {
-                            id: 3,
-                            text: "choice 3",
-                        }
-                    ]
-                };
-                this.questions = [...this.questions, newQuestion];
-            },
-            updatePollQuestionsText() {
-                const newQuestion = {
-                    id: uuidv4(),
-                    type: "section",
-                    title: "new question",
-                };
-                this.questions = [...this.questions, newQuestion];
-            },
-            updatePollQuestionsLimChar() {
-                const newQuestion = {
-                    id: uuidv4(),
-                    type: "freetext",
-                    title: "new question",
-                    possibilities: [
-                        {
-                            limit: 10
-                        }
-                    ]
-                };
-                this.questions = [...this.questions, newQuestion];
-            },
-            updatePollQuestionsX() {
-                const newQuestion = {
-                    id: uuidv4(),
-                    type: "slider",
-                    title: "new question",
-                    possibilities: [
-                        {
-                            min: 1,
-                            max: 10,
-                            step: 1
-                        }
-                    ]
-                };
-                this.questions = [...this.questions, newQuestion];
-            },
-            updatePollQuestionsCheckbox() {
-                const newQuestion = {
-                    id: uuidv4(),
-                    type: "checkbox",
-                    title: "new question",
-                    possibilities: [
-                        {
-                            id: 1,
-                            text: "choice 1",
-                        },
-                        {
-                            id: 2,
-                            text: "choice 2",
-                        },
-                        {
-                            id: 3,
-                            text: "choice 3",
-                        }
-                    ]
-                };
-                this.questions = [...this.questions, newQuestion];
-            },
+
             log: function (...e) {
                     console.log(...e);
             },
