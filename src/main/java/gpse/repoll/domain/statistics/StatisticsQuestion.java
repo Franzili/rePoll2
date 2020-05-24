@@ -11,6 +11,7 @@ import gpse.repoll.domain.questions.ChoiceQuestion;
 import gpse.repoll.domain.questions.Question;
 import gpse.repoll.domain.questions.RadioButtonQuestion;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.util.Pair;
 
 import javax.persistence.*;
 import java.util.*;
@@ -116,6 +117,24 @@ public class StatisticsQuestion {
             frequencies.put(choice, percentage);
         }));
         return frequencies;
+    }
+
+    /**
+     * Calculates the modalValue (Choice that was chosen most frequently).
+     *
+     * @param absoluteFrequencies Map of absolute frequencies to a given choice.
+     * @return The choice that was chosen most frequently.
+     */
+    protected Choice modalValue(Map<Choice, Integer> absoluteFrequencies) {
+        final Integer[] modus = {0};
+        final Choice[] choices = {null};
+        absoluteFrequencies.forEach(((choice, integer) -> {
+            if (integer > modus[0]) {
+                modus[0] = integer;
+                choices[0] = choice;
+            }
+        }));
+        return choices[0];
     }
 
     /**
