@@ -1,5 +1,5 @@
 <template>
-        <b-navbar style="text-align:center;" toggleable="" type="dark" class="nav-background">
+        <b-navbar style="text-align:center;" toggleable="" type="dark" class="nav-background" fixed="top">
             <b-navbar-brand href="#">
                 <img @click="toStart" src="../assets/logo.png" width="123" height="27">
             </b-navbar-brand>
