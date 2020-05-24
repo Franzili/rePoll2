@@ -150,6 +150,11 @@ public class Poll {
     public void setQuestions(List<Question> questions) {
         this.questions.clear();
         this.questions.addAll(questions);
+        sortQuestions();
+    }
+
+    private void sortQuestions() {
+        questions.sort(Comparator.comparingInt(Question::getQuestionOrder));
     }
 
     public void setTitle(String title) {
@@ -190,10 +195,12 @@ public class Poll {
 
     public void add(Question question) {
         questions.add(question);
+        sortQuestions();
     }
 
     public void addAllQuestions(Collection<Question> questions) {
         this.questions.addAll(questions);
+        sortQuestions();
     }
 
     public boolean contains(Question question) {
@@ -308,5 +315,6 @@ public class Poll {
             }
             pollSection.addAll(movedQuestions); // The questions are moved in the correct section
         }
+        sortQuestions();
     }
 }

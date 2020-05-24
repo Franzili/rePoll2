@@ -18,51 +18,11 @@ import java.util.UUID;
 @Service
 public class PollServiceImpl implements PollService {
 
-    private static final String NO_QUESTION_FOUND = "The question does not exist!";
-
-
     private final PollRepository pollRepository;
-    private final PollSectionRepository pollSectionRepository;
-    private final QuestionBaseRepository<Question> questionRepository;
-    private final ChoiceRepository choiceRepository;
-    private final PollEntryRepository pollEntryRepository;
-    private final TextQuestionRepository textQuestionRepository;
-    private final TextAnswerRepository textAnswerRepository;
-    private final ScaleQuestionRepository scaleQuestionRepository;
-    private final ScaleAnswerRepository scaleAnswerRepository;
-    private final RadioButtonQuestionRepository radioButtonQuestionRepository;
-    private final RadioButtonAnswerRepository radioButtonAnswerRepository;
-    private final ChoiceQuestionRepository choiceQuestionRepository;
-    private final ChoiceAnswerRepository choiceAnswerRepository;
 
-    @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
-    public PollServiceImpl(final PollRepository pollRepository,
-                           final PollSectionRepository pollSectionRepository,
-                           final QuestionBaseRepository<Question> questionRepository,
-                           final ChoiceRepository choiceRepository,
-                           final PollEntryRepository pollEntryRepository,
-                           final TextQuestionRepository textQuestionRepository,
-                           final TextAnswerRepository textAnswerRepository,
-                           final ScaleQuestionRepository scaleQuestionRepository,
-                           final ScaleAnswerRepository scaleAnswerRepository,
-                           final RadioButtonQuestionRepository radioButtonQuestionRepository,
-                           final RadioButtonAnswerRepository radioButtonAnswerRepository,
-                           final ChoiceQuestionRepository choiceQuestionRepository,
-                           final ChoiceAnswerRepository choiceAnswerRepository) {
+    public PollServiceImpl(final PollRepository pollRepository) {
         this.pollRepository = pollRepository;
-        this.pollSectionRepository = pollSectionRepository;
-        this.questionRepository = questionRepository;
-        this.choiceRepository = choiceRepository;
-        this.pollEntryRepository = pollEntryRepository;
-        this.textQuestionRepository = textQuestionRepository;
-        this.textAnswerRepository = textAnswerRepository;
-        this.scaleQuestionRepository = scaleQuestionRepository;
-        this.scaleAnswerRepository = scaleAnswerRepository;
-        this.radioButtonQuestionRepository = radioButtonQuestionRepository;
-        this.radioButtonAnswerRepository = radioButtonAnswerRepository;
-        this.choiceQuestionRepository = choiceQuestionRepository;
-        this.choiceAnswerRepository = choiceAnswerRepository;
     }
 
     /**

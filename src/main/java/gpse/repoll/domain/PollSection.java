@@ -69,14 +69,17 @@ public class PollSection {
     void setQuestions(List<Question> questions) {
         this.questions.clear();
         this.questions.addAll(questions);
+        sortQuestions();
     }
 
     public void add(Question question) {
         questions.add(question);
+        sortQuestions();
     }
 
     public void addAll(Collection<Question> questions) {
         this.questions.addAll(questions);
+        sortQuestions();
     }
 
     public void remove(Question question) {
@@ -110,5 +113,9 @@ public class PollSection {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    private void sortQuestions() {
+        questions.sort(Comparator.comparingInt(Question::getQuestionOrder));
     }
 }

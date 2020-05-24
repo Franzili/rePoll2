@@ -60,11 +60,7 @@ public class PollEntry {
         this.user = user;
     }
 
-    public void put(Question question, Answer answer) throws RuntimeException {
-        if (question != null && answer != null) {
-            associations.put(question, answer);
-        } else {
-            throw new RuntimeException(); // todo create exception
-        }
+    public void put(Question question, Answer answer) {
+        associations.put(question, answer);
     }
 }
