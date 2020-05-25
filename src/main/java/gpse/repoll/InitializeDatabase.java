@@ -91,6 +91,17 @@ public class InitializeDatabase implements InitializingBean {
                                         1000, 255, user);
             pollService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
                                         1000, 255, user);
+            //dummy user for US34 Task 14846
+            User nobody = userService.addUser(
+                "Nemo",
+                // Passwort: GutenTag
+                "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                "Cpt Nemo",
+                "x@404.com");
+            //dummy Poll for Nemo
+            Poll poll3 = pollService.addPoll("Nothing to see here", nobody);
+            pollService.addTextQuestion(poll3.getId(), "This sentence is false",
+                                                        100,255, nobody);
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
             Choice choice5 = new Choice("0-20");

@@ -9,6 +9,7 @@ import PollSetup from "./pages/PollSetup";
 import AnswerPoll from "./pages/AnswerPoll";
 
 import store from "./store";
+import MyPolls from "./pages/MyPolls";
 
 var router = new VueRouter({
     mode: 'history',
@@ -64,6 +65,13 @@ var router = new VueRouter({
         {
             path: '/answer/',
             component: AnswerPoll,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/myPolls/',
+            component: MyPolls,
             meta: {
                 requiresAuth: true
             }
