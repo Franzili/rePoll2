@@ -2,7 +2,9 @@ package gpse.repoll.web;
 
 import gpse.repoll.domain.User;
 import gpse.repoll.domain.UserService;
+import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class UsersController {
     }
 
     @GetMapping("/")
+    @Secured(Roles.ALL)
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         userService.getAll().forEach(users::add);
@@ -28,6 +31,7 @@ public class UsersController {
     }
 
     @PostMapping("/")
+    @Secured(Roles.ALL)
     public User addUser(@RequestBody UserCmd userCmd) {
         return userService.addUser(
             userCmd.getUsername(),
@@ -38,6 +42,7 @@ public class UsersController {
     }
 
     @PutMapping("/{userId}/")
+    @Secured(Roles.ALL)
     public User updateUser(@PathVariable UUID userId, @RequestBody UserCmd userCmd) {
         return userService.updateUser(
             userId,
