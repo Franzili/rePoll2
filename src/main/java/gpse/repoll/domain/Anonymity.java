@@ -2,6 +2,6 @@ package gpse.repoll.domain;
 
 public enum  Anonymity {
     ANONYMOUS,
-    PARTIALLY_ANONYMOUS,
+    PSEUDONYMOUS,
     NON_ANONYMOUS
 }

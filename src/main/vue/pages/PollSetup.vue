@@ -19,8 +19,9 @@
                 </b-row>
 
                 <!-- Anonymity -->
-                <Anonymity v-bind:poll="poll" v-bind:selected="selected"></Anonymity>
-
+                <b-container class="my-container2">
+                    <Anonymity v-bind:poll="poll"></Anonymity>
+                </b-container>
 
                 <b-row>
                     <p style="margin-left: 20vw; margin-top: 2vh">Design</p>
@@ -166,6 +167,12 @@
         background-color: #EEEDEE;
         margin-top: 30px;
         height: 100vh;
+    }
+    .my-container2 {
+        alignment: center;
+        background-color: #EEEDEE;
+        margin-top: 30px;
+        height: auto;
     }
     .my-button {
         background-color: black;
