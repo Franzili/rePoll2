@@ -1,4 +1,4 @@
-package gpse.repoll.domain.answers;
+package gpse.repoll.domain.poll.answers;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 

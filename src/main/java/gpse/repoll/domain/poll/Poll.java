@@ -1,8 +1,9 @@
-package gpse.repoll.domain;
+package gpse.repoll.domain.poll;
 
+import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
-import gpse.repoll.domain.questions.Question;
+import gpse.repoll.domain.poll.questions.Question;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

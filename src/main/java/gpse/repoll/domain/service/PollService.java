@@ -1,6 +1,8 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.*;
+import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.poll.PollStatus;
+import gpse.repoll.domain.User;
 
 import java.util.List;
 import java.util.Map;

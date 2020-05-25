@@ -1,7 +1,7 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.PollEntry;
-import gpse.repoll.domain.answers.Answer;
+import gpse.repoll.domain.poll.PollEntry;
+import gpse.repoll.domain.poll.answers.Answer;
 
 import java.util.Map;
 import java.util.UUID;

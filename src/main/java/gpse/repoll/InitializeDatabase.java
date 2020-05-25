@@ -1,14 +1,15 @@
 package gpse.repoll;
 
+import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.QuestionService;
 import gpse.repoll.domain.service.UserService;
+import gpse.repoll.domain.User;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import gpse.repoll.domain.*;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 

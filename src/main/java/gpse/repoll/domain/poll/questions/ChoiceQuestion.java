@@ -1,6 +1,6 @@
-package gpse.repoll.domain.questions;
+package gpse.repoll.domain.poll.questions;
 
-import gpse.repoll.domain.Choice;
+import gpse.repoll.domain.poll.Choice;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;

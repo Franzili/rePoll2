@@ -1,6 +1,6 @@
-package gpse.repoll.domain;
+package gpse.repoll.domain.poll;
 
-import gpse.repoll.domain.questions.Question;
+import gpse.repoll.domain.poll.questions.Question;
 
 import javax.persistence.*;
 import java.util.*;

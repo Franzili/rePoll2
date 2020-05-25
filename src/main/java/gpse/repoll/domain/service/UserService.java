@@ -1,6 +1,6 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.Poll;
+import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

@@ -1,6 +1,6 @@
 package gpse.repoll.web.command;
 
-import gpse.repoll.domain.PollStatus;
+import gpse.repoll.domain.poll.PollStatus;
 
 /**
  * Poll helper object used for JSON serialisation.

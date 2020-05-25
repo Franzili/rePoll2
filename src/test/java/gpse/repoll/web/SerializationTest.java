@@ -2,7 +2,7 @@ package gpse.repoll.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gpse.repoll.domain.questions.TextQuestion;
+import gpse.repoll.domain.poll.questions.TextQuestion;
 import gpse.repoll.web.command.questions.QuestionCmd;
 import gpse.repoll.web.command.questions.TextQuestionCmd;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package gpse.repoll.domain.repositories;
 
-import gpse.repoll.domain.questions.Question;
+import gpse.repoll.domain.poll.questions.Question;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.repository.CrudRepository;
 

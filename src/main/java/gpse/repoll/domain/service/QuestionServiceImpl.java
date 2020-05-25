@@ -1,12 +1,12 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.Choice;
-import gpse.repoll.domain.Poll;
+import gpse.repoll.domain.poll.Choice;
+import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UnauthorizedException;
-import gpse.repoll.domain.questions.*;
+import gpse.repoll.domain.poll.questions.*;
 import gpse.repoll.domain.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

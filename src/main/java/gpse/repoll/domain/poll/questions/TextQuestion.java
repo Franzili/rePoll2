@@ -1,4 +1,4 @@
-package gpse.repoll.domain.questions;
+package gpse.repoll.domain.poll.questions;
 
 import javax.persistence.Entity;
 

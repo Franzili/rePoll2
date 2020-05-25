@@ -1,10 +1,10 @@
-package gpse.repoll.domain.json;
+package gpse.repoll.domain.serialization;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import gpse.repoll.domain.questions.Question;
+import gpse.repoll.domain.poll.questions.Question;
 
 import java.io.IOException;
 import java.io.StringWriter;

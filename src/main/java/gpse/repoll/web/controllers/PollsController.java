@@ -1,9 +1,10 @@
-package gpse.repoll.web;
+package gpse.repoll.web.controllers;
 
-import gpse.repoll.domain.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
+import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
+import gpse.repoll.domain.User;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.*;
 import org.springframework.beans.factory.annotation.Autowired;

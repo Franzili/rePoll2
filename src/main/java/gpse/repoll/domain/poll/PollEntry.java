@@ -1,9 +1,10 @@
-package gpse.repoll.domain;
+package gpse.repoll.domain.poll;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import gpse.repoll.domain.answers.Answer;
-import gpse.repoll.domain.json.SerializePollEntry;
-import gpse.repoll.domain.questions.Question;
+import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.answers.Answer;
+import gpse.repoll.domain.serialization.SerializePollEntry;
+import gpse.repoll.domain.poll.questions.Question;
 
 import javax.persistence.*;
 import java.util.Collections;

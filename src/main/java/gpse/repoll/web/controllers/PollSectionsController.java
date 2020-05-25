@@ -1,7 +1,7 @@
-package gpse.repoll.web;
+package gpse.repoll.web.controllers;
 
 
-import gpse.repoll.domain.PollSection;
+import gpse.repoll.domain.poll.PollSection;
 import gpse.repoll.domain.User;
 import gpse.repoll.domain.service.PollSectionService;
 import gpse.repoll.domain.service.UserService;

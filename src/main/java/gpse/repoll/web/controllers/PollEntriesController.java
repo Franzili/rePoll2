@@ -1,7 +1,7 @@
-package gpse.repoll.web;
+package gpse.repoll.web.controllers;
 
-import gpse.repoll.domain.PollEntry;
-import gpse.repoll.domain.answers.*;
+import gpse.repoll.domain.poll.PollEntry;
+import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.service.PollEntryService;

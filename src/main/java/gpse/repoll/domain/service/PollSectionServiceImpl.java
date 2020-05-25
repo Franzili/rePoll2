@@ -1,7 +1,7 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.Poll;
-import gpse.repoll.domain.PollSection;
+import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.poll.PollSection;
 import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
