@@ -1,6 +1,6 @@
 <template>
     <div style="text-align:center;">
-        <b-card border-variant="dark">
+        <b-card border-variant="primary">
         <b-form-input v-if="editQuestion" class="question" v-model="question.title"></b-form-input>
         <p v-else class="question">{{question.title}}</p>
         <b-icon-check-all class="my-icon" scale="2" animation="fade" v-if="editQuestion" @click="changeEditQuestion"></b-icon-check-all>
@@ -36,6 +36,7 @@
             </b-form-group>
         </div>
         <div v-if="question.type === 'section'">
+            <!-- What is dis???!!!!!!!!!!!!!!!!!!!!!!!!!!-->
             <textarea></textarea>
         </div>
 
@@ -57,7 +58,7 @@
         </div>
 
         <div v-if="question.type === 'dropdown'">
-            <b-dropdown class="drop-down" text="select answer">
+            <b-dropdown variant="primary" class="drop-down" text="select answer">
                 <div class="text-left" v-bind:key="pos.id" v-for="pos in question.possibilities">
                     <!-- TODO how to set value -->
                     <b-dropdown-item v-model="selected" :value="pos.text">{{pos.text}}</b-dropdown-item>
@@ -111,7 +112,7 @@
 
     export default {
         name: "PollQuestion",
-        components: {QuestionEditor},
+        props: ["question", "edit"],
         data() {
             return {
                 editQuestion: false,
@@ -121,7 +122,6 @@
                 selected: []
             }
         },
-        props: ["question", "edit"],
         methods:{
             changeEditQuestion() {
                 this.editQuestion = !this.editQuestion;
@@ -138,7 +138,8 @@
             delPos(id){
                 this.question.possibilities = this.question.possibilities.filter(possibility => possibility.id !== id);
             }
-        }
+        },
+        components: {QuestionEditor},
     }
 </script>
 

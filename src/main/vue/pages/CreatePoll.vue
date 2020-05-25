@@ -24,7 +24,6 @@
             <div :key="question.id" v-for="question in questions">
                 <PollQuestion v-bind:question="question" v-bind:edit="edit" v-on:del-question="deleteQuestion(question.id)"/>
             </div>
-            <HelloWorld style="text-align:center;" class="ml-auto" msg=""/>
             <AddQuestion v-on:add-question="addQuestion"/>
         </div>
 
@@ -59,7 +58,7 @@
                 <b-row style="text-align:center;" class="my-row">
                     <b-col>
                         <div>
-                            <b-button v-if="!visible" v-b-toggle.sidebar-1-footer @click="changePaletteVisible" >Add Question</b-button>
+                            <b-button v-if="!visible" v-b-toggle.sidebar-1-footer variant="primary" v-on:click="changePaletteVisible" >Add Question</b-button>
                             <b-sidebar v-model="visible" id="sidebar-1" bg-variant="gray-900" localShow=true>
                                 <div class="px-3 py-2">
 
@@ -174,9 +173,8 @@
                                         <PollQuestion v-bind:question="question" v-bind:edit="edit" v-on:del-question="deleteQuestion(question.id)"/>
                                     </div>
                                 </draggable>
-                                <b-button @click="updatePoll">save</b-button>
+                                <b-button variant="primary" v-on:click="updatePoll">save</b-button>
                             </div>
-                        <HelloWorld class="ml-auto" msg=""/>
                     </b-col>
                     <b-col></b-col>
                 </b-row>
@@ -188,7 +186,6 @@
 <script>
 
     import draggable from "vuedraggable"
-    import HelloWorld from '../components/HelloWorld.vue'
     import AddQuestion from "../components/AddQuestion";
     import PollQuestion from "../components/PollQuestion";
     import {v4 as uuidv4} from "uuid";
@@ -226,6 +223,7 @@
             }
         },
         methods: {
+            ...mapActions(['requestPoll','requestPolls']),
             changePaletteVisible(){
                 this.visible = !this.visible;
             },
@@ -372,12 +370,10 @@
             log: function (...e) {
                     console.log(...e);
             },
-            ...mapActions(['requestPoll','requestPolls'])
         },
         components: {
             AddQuestion,
             PollQuestion,
-            HelloWorld,
             draggable
         }
     }

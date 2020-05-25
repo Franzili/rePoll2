@@ -65,7 +65,7 @@
         },
         created() {
             this.tmpID = this.$route.params.tmpPollID
-            this.activeTab = this.$route.params.conf
+            //this.activeTab = this.$route.params.tabWish
             this.requestPoll(this.tmpID)
 
         },

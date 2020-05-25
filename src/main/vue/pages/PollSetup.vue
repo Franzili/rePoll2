@@ -92,6 +92,7 @@
             }
         },
         methods: {
+            ...mapActions(['requestPoll']),
             isStatusChange() {
                 if (this.selected === '') {
                     return false
@@ -120,8 +121,6 @@
                         console.log(err.message)
                     })
             },
-
-            ...mapActions(['requestPoll'])
         },
 
         components: {
