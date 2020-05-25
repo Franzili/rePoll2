@@ -63,20 +63,20 @@ public class QuestionsController {
                     lastEditor);
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            List<Choice> choices = new ArrayList<>();
             if (radioButtonQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
+            List<Choice> choices = new ArrayList<>();
             for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
             return questionService.addRadioButtonQuestion(pollId, title, questionOrder, choices, lastEditor);
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
-            List<Choice> choices = new ArrayList<>();
             if (choiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
+            List<Choice> choices = new ArrayList<>();
             for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
@@ -131,10 +131,10 @@ public class QuestionsController {
                     lastEditor);
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            List<Choice> choices = new ArrayList<>();
             if (radioButtonQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
+            List<Choice> choices = new ArrayList<>();
             for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
@@ -142,10 +142,10 @@ public class QuestionsController {
                     pollId, questionId, questionOrder, title, choices, lastEditor);
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
-            List<Choice> choices = new ArrayList<>();
             if (choiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
+            List<Choice> choices = new ArrayList<>();
             for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
