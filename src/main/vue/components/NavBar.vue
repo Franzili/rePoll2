@@ -1,5 +1,5 @@
 <template>
-    <b-container class="sticky">
+    <b-container class="sticky nav-container">
         <b-navbar toggleable="" type="dark" class="nav">
             <b-navbar-brand href="#">
                 <img @click="toStart" src="../assets/logo.png" width="123" height="27">
@@ -51,11 +51,15 @@
 
     .nav {
         text-align:center;
-        background-color: #ffffff;
         border-bottom: 3px solid $border-color;
-        margin-bottom: 20px;
         padding-left: 0;
         padding-right: 0;
+    }
+
+    .nav-container {
+        top: 0px;
+        padding-bottom: 20px;
+        background-color: $floating-background-color;
     }
 
     .my-icon {

@@ -39,10 +39,16 @@ h5 {
 
 /*
 Used for navbars and other stuff that is supposed to stick to the viewport
+!! Important: Users must still set the top: XYZpx; property to make sure they stay at the appropriate height.
  */
 .sticky {
     position: sticky;
-    top: 0;
     z-index: $zindex-sticky
 }
+
+/*
+Used as semi-transparent background color for floating elements like the navbar
+ */
+$floating-background-color: white;
+//$floating-background-color: rgba(256, 256, 256, 0.8);
 

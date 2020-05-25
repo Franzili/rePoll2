@@ -6,7 +6,7 @@
              and one to actually show the contents. they are coupled
              using v-bind. -->
 
-        <b-row class="sticky align-items-baseline" id="primary-tab-bar">
+        <b-row class="primary-tab-bar sticky align-items-baseline">
             <b-col>
                 <h3>Titel: Moby Dick</h3>
             </b-col>
@@ -36,7 +36,7 @@
                         <CreatePoll></CreatePoll>
                     </b-tab>
                     <b-tab>
-                        Stat me!
+                        <PollStats></PollStats>
                     </b-tab>
 
                 </b-tabs>
@@ -50,6 +50,7 @@
 <script>
     import ConfigurePoll from "../components/poll-tabs/configure/ConfigurePoll";
     import CreatePoll from "./CreatePoll";
+    import PollStats from "../components/poll-tabs/stats/PollStats";
     export default {
         name: "PollTabbed",
         data() {
@@ -60,16 +61,16 @@
                 TAB_STATISTICS: 2
             }
         },
-        components: {ConfigurePoll, CreatePoll}
+        components: {ConfigurePoll, CreatePoll, PollStats}
     }
 </script>
 
 <style lang="scss" scoped>
     @import "../assets/stylesheet.scss";
 
-    #primary-tab-bar {
-        position: sticky;
-        top:50;
+    .primary-tab-bar {
+        top: 65px;
+        background-color: $floating-background-color;
     }
 
     .invisible {
