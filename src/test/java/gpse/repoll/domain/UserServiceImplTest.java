@@ -1,6 +1,5 @@
-package gpse.repoll.domain.statistics;
+package gpse.repoll.domain;
 
-import gpse.repoll.domain.*;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,12 +43,11 @@ public class UserServiceImplTest {
 
     @Test
     public void testAddUserAlreadyExists() {
-        assertThatThrownBy(() -> {
-            String username = "BertBohne";
-            User user = new User();
-            when(userRepository.findByUsername(eq(username)))
-                .thenReturn(Optional.of(user));
+        String username = "BertBohne";
+        User user = new User();
+        when(userRepository.findByUsername(eq(username))).thenReturn(Optional.of(user));
 
+        assertThatThrownBy(() -> {
             userService.addUser(username, null, null, null);
         }).isInstanceOf(UserNameAlreadyTakenException.class);
     }

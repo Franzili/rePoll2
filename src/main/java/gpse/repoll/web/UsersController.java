@@ -43,6 +43,8 @@ public class UsersController {
 
     /**
      * Get a user by their username or their UUID identifier.
+     * @param userId a username or UUID identifier
+     * @return The user
      */
     @GetMapping("/{userId}/")
     @Secured(Roles.ALL)
@@ -93,7 +95,7 @@ public class UsersController {
 
 
     /**
-     * Checks if a String can be parsed into a UUID
+     * Checks if a String can be parsed into a UUID.
      * @param str the String to try.
      * @return True if the String is a valid UUID, false otherwise.
      */
@@ -101,7 +103,7 @@ public class UsersController {
         try {
             UUID.fromString(str);
             return true;
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }
