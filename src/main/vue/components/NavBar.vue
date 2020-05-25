@@ -2,7 +2,7 @@
     <b-container class="sticky nav-container">
         <b-navbar toggleable="" type="dark" class="nav">
             <b-navbar-brand href="#">
-                <img @click="toStart" src="../assets/logo.png" width="123" height="27">
+                <img @click="toStart" src="../assets/logo.png" width="123" height="27" alt>
             </b-navbar-brand>
 
             <b-navbar-toggle target="navbar-toggle-collapse">
@@ -57,7 +57,8 @@
     }
 
     .nav-container {
-        top: 0px;
+        z-index: $zindex-sticky;
+        top: 0;
         padding-bottom: 20px;
         background-color: $floating-background-color;
     }

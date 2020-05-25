@@ -41,7 +41,7 @@
     @import "../../../assets/stylesheet.scss";
 
     .stats-tab-bar {
-        top: 90px;
+        top: 105px;
         background-color: $floating-background-color;
     }
 

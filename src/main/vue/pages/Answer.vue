@@ -1,7 +1,6 @@
 <template>
     <div style="text-align:center;">
     <b-container class="mt-3">
-        <nav-bar></nav-bar>
         <HelloWorld></HelloWorld>
         <b-row>
             <b-col>
@@ -42,14 +41,12 @@
 
 
 <script>
-    import NavBar from "../components/NavBar";
     import HelloWorld from "../components/HelloWorld";
     import {mapGetters, mapMutations} from "vuex";
     import PollQuestion from "../components/PollQuestion"; //mapMutations
 
     export default {
         name: "Answer",
-        components: {PollQuestion, HelloWorld, NavBar},
         data() {
             return {
                 id: 0,
@@ -77,9 +74,9 @@
             this.$router.push('/') //redirect to page '', here start page
         }
     },
-    comments: {
-        NavBar,
-        HelloWorld
+    components: {
+        HelloWorld,
+        PollQuestion
         //,
         //SurveyItemList
     },

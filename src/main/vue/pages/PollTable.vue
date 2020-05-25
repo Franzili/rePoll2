@@ -3,9 +3,6 @@
         <h1 style="text-align:center;" class="ml-auto">
             My Polls
         </h1>
-        <h1>
-            sldkfjsldfjk
-        </h1>
         <b-container class="my-container">
             <b-button class="my-button" @click="addNewPoll">+</b-button>
             <b-row style="text-align: center" class="my-row">

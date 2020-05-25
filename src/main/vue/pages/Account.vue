@@ -1,7 +1,5 @@
 <template>
     <div>
-        <nav-bar></nav-bar>
-
         <div style="text-align:center;">
             <HelloWorld class="ml-auto" msg="Configure your Account!"/>
 
@@ -57,12 +55,10 @@
 <script>
 
     import HelloWorld from '../components/HelloWorld.vue'
-    import NavBar from "../components/NavBar";
 
     export default {
         name: "Account",
         components: {
-            NavBar,
             HelloWorld
         },
     }
