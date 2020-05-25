@@ -14,7 +14,9 @@ public interface UserService extends UserDetailsService {
 
     public User getUser(String username);
 
+
     public User updateUser(UUID userId, String userName, String fullName, String email);
+    public User updateUser(String oldUsername, String userName, String fullName, String email);
 
     public List<Poll> getOwnedPolls(UUID userId);
 }

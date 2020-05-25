@@ -41,14 +41,44 @@ public class UsersController {
         );
     }
 
+    /**
+     * Update User parameters.
+     * The user can be referred to either by their username, or by their UUID identifier.
+     * @param userId a username or UUID identifier
+     * @param userCmd The Command object.
+     * @return The modified user.
+     */
     @PutMapping("/{userId}/")
     @Secured(Roles.ALL)
-    public User updateUser(@PathVariable UUID userId, @RequestBody UserCmd userCmd) {
-        return userService.updateUser(
-            userId,
-            userCmd.getUsername(),
-            userCmd.getFullName(),
-            userCmd.getEmail()
-        );
+    public User updateUser(@PathVariable String userId, @RequestBody UserCmd userCmd) {
+        if (isValidUuid(userId)) {
+            return userService.updateUser(
+                UUID.fromString(userId),
+                userCmd.getUsername(),
+                userCmd.getFullName(),
+                userCmd.getEmail()
+            );
+        } else {    // if the string is not a valid uuid, assume it is a username
+            return userService.updateUser(
+                userId,
+                userCmd.getUsername(),
+                userCmd.getFullName(),
+                userCmd.getEmail()
+            );
+        }
+    }
+
+    /**
+     * Checks if a String can be parsed into a UUID
+     * @param str the String to try.
+     * @return True if the String is a valid UUID, false otherwise.
+     */
+    private boolean isValidUuid(String str) {
+        try {
+            UUID.fromString(str);
+            return true;
+        } catch(IllegalArgumentException e) {
+            return false;
+        }
     }
 }
