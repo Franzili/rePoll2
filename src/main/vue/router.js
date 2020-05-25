@@ -72,6 +72,7 @@ var router = new VueRouter({
         {
             path: '/poll-tabbed/',
             component: PollTabbed,
+            name: 'poll-tabbed',
             meta: {
                 requiresAuth: true
             }

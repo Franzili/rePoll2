@@ -2,7 +2,7 @@
     <b-container class="sticky nav-container">
         <b-navbar toggleable="" type="dark" class="nav">
             <b-navbar-brand href="#">
-                <img @click="toStart" src="../assets/logo.png" width="123" height="27" alt>
+                <img v-on:click="toStart" src="../assets/logo.png" width="123" height="27" alt>
             </b-navbar-brand>
 
             <b-navbar-toggle target="navbar-toggle-collapse">

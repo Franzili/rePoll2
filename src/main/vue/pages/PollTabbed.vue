@@ -51,15 +51,33 @@
     import ConfigurePoll from "../components/poll-tabs/configure/ConfigurePoll";
     import CreatePoll from "./CreatePoll";
     import PollStats from "../components/poll-tabs/stats/PollStats";
+    import {mapActions, mapGetters} from "vuex";
     export default {
         name: "PollTabbed",
         data() {
             return {
-                activeTab: "Configure",
+                tmpID: 0,
+                activeTab: '',
                 TAB_CONFIGURE: 0,
                 TAB_EDIT: 1,
-                TAB_STATISTICS: 2
+                TAB_STATISTICS: 2,
             }
+        },
+        created() {
+            this.tmpID = this.$route.params.tmpPollID
+            this.activeTab = this.$route.params.conf
+            this.requestPoll(this.tmpID)
+
+        },
+        computed: {
+            ...mapGetters(['getPoll']),
+            poll() {
+                return this.getPoll(this.tmpID)
+            }
+        },
+        methods: {
+            ...mapActions(['requestPoll'])
+
         },
         components: {ConfigurePoll, CreatePoll, PollStats}
     }
