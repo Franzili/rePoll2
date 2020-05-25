@@ -11,9 +11,7 @@ public interface UserService extends UserDetailsService {
     public User addUser(String userName, String password, String fullName, String email);
 
     public User getUser(UUID id);
-
     public User getUser(String username);
-
 
     public User updateUser(UUID userId, String userName, String fullName, String email);
     public User updateUser(String oldUsername, String userName, String fullName, String email);

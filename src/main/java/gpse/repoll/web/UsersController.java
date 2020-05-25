@@ -42,6 +42,19 @@ public class UsersController {
     }
 
     /**
+     * Get a user by their username or their UUID identifier.
+     */
+    @GetMapping("/{userId}/")
+    @Secured(Roles.ALL)
+    public User getUser(@PathVariable String userId) {
+        if (isValidUuid(userId)) {
+            return userService.getUser(UUID.fromString(userId));
+        } else {
+            return userService.getUser(userId);
+        }
+    }
+
+    /**
      * Update User parameters.
      * The user can be referred to either by their username, or by their UUID identifier.
      * @param userId a username or UUID identifier
