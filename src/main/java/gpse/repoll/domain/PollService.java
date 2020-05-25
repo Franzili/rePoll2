@@ -49,6 +49,12 @@ public interface PollService {
                     User lastEditor, Anonymity anonymity);
 
     /**
+     * Deletes all connections of a poll.
+     * @param id
+     */
+    void removePoll(UUID id);
+
+    /**
      * Get all PollSections of a Poll.
      * @param id The polls ID
      * @return The PollSections.

@@ -23,6 +23,11 @@ public class Choice {
         this.text = text;
     }
 
+    public Choice(String text, Long id) {
+        this.text = text;
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

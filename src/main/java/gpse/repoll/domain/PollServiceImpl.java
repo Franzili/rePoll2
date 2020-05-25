@@ -120,6 +120,13 @@ public class PollServiceImpl implements PollService {
         pollRepository.save(poll);
         return poll;
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removePoll(final UUID id) {
+        pollRepository.deleteById(id);
+    }
 
     /* ----------------------- */
 
@@ -193,6 +200,7 @@ public class PollServiceImpl implements PollService {
         pollRepository.save(poll);
         return section;
     }
+
 
     /* ---------- */
 
