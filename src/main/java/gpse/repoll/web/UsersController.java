@@ -1,5 +1,6 @@
 package gpse.repoll.web;
 
+import gpse.repoll.domain.Poll;
 import gpse.repoll.domain.User;
 import gpse.repoll.domain.UserService;
 import gpse.repoll.security.Roles;
@@ -81,6 +82,19 @@ public class UsersController {
                 userCmd.getEmail()
             );
         }
+    }
+
+
+    /**
+     * Gets Polls associated with the given user
+     * The user can be referred to either by their username, or by their UUID identifier.
+     * @param userId UUID identifier
+     * @return List of polls associated with the user.
+     */
+    @GetMapping("/{userId}/")
+    @Secured(Roles.ALL)
+    public List<Poll> getOwnedPolls(@PathVariable UUID userId) {
+        return  userService.getOwnedPolls(userId);
     }
 
     @DeleteMapping("/{userId}/")
