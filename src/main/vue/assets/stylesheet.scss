@@ -52,3 +52,10 @@ Used as semi-transparent background color for floating elements like the navbar
 $floating-background-color: white;
 //$floating-background-color: rgba(256, 256, 256, 0.8);
 
+/*
+Use to fully hide a component. The component will not take up any space.
+ */
+.invisible {
+    display: none;
+}
+

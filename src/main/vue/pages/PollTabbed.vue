@@ -73,8 +73,4 @@
         background-color: $floating-background-color;
     }
 
-    .invisible {
-        visibility: hidden;
-    }
-
 </style>
