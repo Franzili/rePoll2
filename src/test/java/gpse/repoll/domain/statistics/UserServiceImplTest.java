@@ -114,4 +114,46 @@ public class UserServiceImplTest {
             userService.updateUser(uuidMyUser, "Username2", null, null);
         }).isInstanceOf(UserNameAlreadyTakenException.class);
     }
+
+    @Test
+    public void testRemoveUserByUUIDNormal() {
+        UUID uuid = UUID.randomUUID();
+        User user = new User();
+        user.setUsername("Username");
+        user.setId(uuid);
+        when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
+        userService.removeUser(uuid);
+        verify(userRepository).delete(eq(user));
+    }
+
+    @Test
+    public void testRemoveUserByUsernameNormal() {
+        UUID uuid = UUID.randomUUID();
+        String username = "Username";
+        User user = new User();
+        user.setUsername(username);
+        user.setId(uuid);
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+        userService.removeUser(username);
+        verify(userRepository).delete(eq(user));
+    }
+
+    @Test
+    public void testRemoveUserByUUIDNotFound() {
+        UUID uuid = UUID.randomUUID();
+        when(userRepository.findById(uuid)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> {
+            userService.removeUser(uuid);
+        }).isInstanceOf(NotFoundException.class);
+    }
+
+    @Test
+    public void testRemoveUserByUsernameNotFound() {
+        String username = "Username";
+        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> {
+            userService.removeUser(username);
+        }).isInstanceOf(NotFoundException.class);
+    }
+
 }

@@ -94,6 +94,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User removeUser(UUID id) {
+        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        userRepository.delete(user);
+        return user;
+    }
+
+    @Override
+    public User removeUser(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
+        userRepository.delete(user);
+        return user;
+    }
+
+    @Override
     public List<Poll> getOwnedPolls(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
         return user.getOwnPolls();

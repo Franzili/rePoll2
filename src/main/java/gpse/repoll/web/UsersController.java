@@ -81,6 +81,17 @@ public class UsersController {
         }
     }
 
+    @DeleteMapping("/{userId}/")
+    @Secured(Roles.ALL)
+    public User removeUser(@PathVariable String userId) {
+        if (isValidUuid(userId)) {
+            return userService.removeUser(UUID.fromString(userId));
+        } else {
+            return userService.removeUser(userId);
+        }
+    }
+
+
     /**
      * Checks if a String can be parsed into a UUID
      * @param str the String to try.
