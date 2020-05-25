@@ -153,6 +153,27 @@
             }
         },
         methods: {
+            changeAnonymityQuestion: function () {
+                console.log("Hallo!")
+                this.sureToChangeAnonymity = true
+            },
+            changeAnonymity() {
+                this.sureToChangeAnonymity = false
+                this.poll.anonymity = this.anonymityChecked
+                let pollCmd = this.poll
+                console.log("change")
+                console.log(this.poll.id)
+                axios.put('/api/v1/polls/'+ this.poll.id + '/', pollCmd)
+                    .then((response) => {
+                        console.log(response.data)
+                    }).catch((err) => {
+                    console.log(err.message)
+                })
+            },
+            dontChangeAnonymity() {
+                this.sureToChangeAnonymity = false
+                this.anonymityChecked = this.poll.anonymity
+            },
             isStatusChange() {
                 if (this.selected === '') {
                     return false
