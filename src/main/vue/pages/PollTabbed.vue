@@ -48,6 +48,42 @@
 </template>
 
 <script>
+    /*
+    how backend polls are provided here:
+    poll() <- poll object
+    easy access:
+    poll.title (in js with this. ..)
+    poll.id    (in js with this. ..)
+    where can i see poll objects?
+    in your browser with vue plugin, an empty poll could look like this:
+    (in your vue dev plugin)
+    computed
+        poll:
+            creationTime:
+            creator:
+                email:
+                fullName:
+                id:
+                ownPolls: []
+                username:
+            entries: []
+            id:
+            lastEditTime:
+            lastEditor:
+            owner:
+            questions: [
+                0:
+                    charLimit:
+                    id:
+                    questionOrder:
+                    title:
+                    type:
+            ]
+            sections: []
+            status:
+            title:
+    */
+
     import ConfigurePoll from "../components/poll-tabs/configure/ConfigurePoll";
     import CreatePoll from "./CreatePoll";
     import PollStats from "../components/poll-tabs/stats/PollStats";
