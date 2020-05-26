@@ -1,8 +1,6 @@
 <template>
     <div style="text-align:center;">
     <b-container class="mt-3">
-        <nav-bar></nav-bar>
-        <HelloWorld></HelloWorld>
         <b-row>
             <b-col>
                     <b-form @submit.prevent="savePollEntry">
@@ -27,7 +25,7 @@
                         template save buttons!!!
                         <b-button variant="primary" type="submit">Speichern</b-button>
                         -->
-                        <b-button @click="savePollEntry">Save</b-button>
+                        <b-button variant="primary" v-on:click="savePollEntry">Save</b-button>
                         <!--
                         Submit Button for later
                         Final Submit, then answers can't be edited animore
@@ -42,14 +40,11 @@
 
 
 <script>
-    import NavBar from "../components/NavBar";
-    import HelloWorld from "../components/HelloWorld";
     import {mapGetters, mapMutations} from "vuex";
     import PollQuestion from "../components/PollQuestion"; //mapMutations
 
     export default {
         name: "Answer",
-        components: {PollQuestion, HelloWorld, NavBar},
         data() {
             return {
                 id: 0,
@@ -59,30 +54,21 @@
         created() {
             this.id = this.$route.params.id
             this.poll = this.getPoll(this.id)
-            //this.setQuestion()
         },
         computed: {
             ...mapGetters(['getPoll'])
 
-    },
-    methods: {
-        isMobile() {
-            return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
         },
-        ...mapMutations([
-            'updatePoll'
-        ]),
-        savePollEntry() {
-            this.updatePoll(this.poll)
-            this.$router.push('/') //redirect to page '', here start page
-        }
-    },
-    comments: {
-        NavBar,
-        HelloWorld
-        //,
-        //SurveyItemList
-    },
+        methods: {
+            ...mapMutations(['updatePoll']),
+            savePollEntry() {
+                this.updatePoll(this.poll)
+                this.$router.push('/') //redirect to page '', here start page
+            }
+        },
+        components: {
+            PollQuestion
+        },
     }
 
 </script>

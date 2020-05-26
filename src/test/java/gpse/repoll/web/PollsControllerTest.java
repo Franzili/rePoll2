@@ -27,6 +27,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.ServletTestExecutionListener;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -99,5 +100,17 @@ public class PollsControllerTest {
         Assertions.assertThrows(BadRequestException.class, () -> {
             controller.addPoll(cmd);
         });
+    }
+
+    @Test
+    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
+    void testRemovePollNormal() {
+        PollCmd cmd = new PollCmd();
+        UUID uuid = UUID.randomUUID();
+        cmd.setTitle("Poll 1");
+        controller.addPoll(cmd);
+        verify(pollService).addPoll(eq("Poll 1"), any(User.class));
+        controller.removePoll(uuid);
+        verify(pollService).removePoll(uuid);
     }
 }

@@ -63,21 +63,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(UUID userId, String newUserName, String fullName, String email) {
+    public User updateUser(UUID userId, String newUsername, String fullName, String email) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
 
         /* If we want to change the username */
         String oldUserName = user.getUsername();
-        if (newUserName != null && !oldUserName.equals(newUserName)) {
+        if (newUsername != null && !oldUserName.equals(newUsername)) {
             /* Check if Username is already taken */
-            Optional<User> otherUser = userRepository.findByUsername(newUserName);
+            Optional<User> otherUser = userRepository.findByUsername(newUsername);
             if (otherUser.isPresent()) {
                 throw new UserNameAlreadyTakenException();
             }
         }
 
-        if (newUserName != null) {
-            user.setUsername(newUserName);
+        if (newUsername != null) {
+            user.setUsername(newUsername);
         }
         if (email != null) {
             user.setEmail(email);
@@ -87,6 +87,26 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.save(user);
+        return user;
+    }
+
+    @Override
+    public User updateUser(String oldUsername, String newUsername, String fullName, String email) {
+        User user = userRepository.findByUsername(oldUsername).orElseThrow(NotFoundException::new);
+        return updateUser(user.getId(), newUsername, fullName, email);
+    }
+
+    @Override
+    public User removeUser(UUID id) {
+        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        userRepository.delete(user);
+        return user;
+    }
+
+    @Override
+    public User removeUser(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
+        userRepository.delete(user);
         return user;
     }
 

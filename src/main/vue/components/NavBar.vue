@@ -1,7 +1,8 @@
 <template>
-        <b-navbar style="text-align:center;" toggleable="" type="dark" class="nav-background">
+    <b-container class="sticky nav-container">
+        <b-navbar toggleable="" type="dark" class="nav">
             <b-navbar-brand href="#">
-                <img @click="toStart" src="../assets/logo.png" width="123" height="27">
+                <img v-on:click="toStart" src="../assets/logo.png" width="123" height="27" alt>
             </b-navbar-brand>
 
             <b-navbar-toggle target="navbar-toggle-collapse">
@@ -17,7 +18,7 @@
                         <router-link class="link" :to="'/account/'">Account</router-link>
                     </b-nav-item>
                     <b-nav-item>
-                        <router-link class="link" :to="'/polls'">Polls</router-link>
+                        <router-link class="link" :to="'/polls/'">Polls</router-link>
                     </b-nav-item>
                     <b-nav-item>
                         <router-link class="link" :to="'/create/'">Create Poll</router-link>
@@ -25,9 +26,13 @@
                     <b-nav-item>
                         <router-link class="link" :to="'/answer/'">Answer Poll</router-link>
                     </b-nav-item>
+                    <b-nav-item>
+                        <router-link class="link" :to="'/myPolls/'">My Polls</router-link>
+                    </b-nav-item>
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
+    </b-container>
 </template>
 
 <script>
@@ -41,9 +46,21 @@
     }
 </script>
 
-<style scoped>
-    .nav-background {
-        background-color: #ffffff;
+<style lang="scss" scoped>
+    @import "../assets/stylesheet.scss";
+
+    .nav {
+        text-align:center;
+        border-bottom: 3px solid $border-color;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .nav-container {
+        z-index: $zindex-sticky;
+        top: 0;
+        padding-bottom: 20px;
+        background-color: $floating-background-color;
     }
 
     .my-icon {

@@ -54,6 +54,10 @@ public class User implements UserDetails {
         return id;
     }
 
+    public void setId(UUID uuid) {
+        this.id = uuid;
+    }
+
     /**
      * Gets the user's full name.
      * (e.g. John Doe)

@@ -1,18 +1,22 @@
 <template>
   <div id="app">
+
+      <NavBar v-if="this.$router.currentRoute.path !== '/'"></NavBar>
       <router-view></router-view>
   </div>
 </template>
 
 <script>
+    import './assets/stylesheet.scss';
+    import NavBar from "./components/NavBar";
     export default {
         name: 'App',
         components: {
+            NavBar
         }
     }
 </script>
 
 
-<style>
-
+<style lang="scss">
 </style>
