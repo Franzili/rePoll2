@@ -7,6 +7,7 @@ import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
 import PollSetup from "./pages/PollSetup";
 import AnswerPoll from "./pages/AnswerPoll";
+import PollTabbed from "./pages/PollTabbed";
 
 import store from "./store";
 
@@ -64,6 +65,14 @@ var router = new VueRouter({
         {
             path: '/answer/',
             component: AnswerPoll,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/poll-tabbed/',
+            component: PollTabbed,
+            name: 'poll-tabbed',
             meta: {
                 requiresAuth: true
             }

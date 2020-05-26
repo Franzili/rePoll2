@@ -11,10 +11,10 @@
 
     export default {
         name: "AnswerPollTableList",
+        props: ["polls"],
         components: {
             AnswerPollTableElement
-        },
-        props: ["polls"]
+        }
     }
 </script>
 
