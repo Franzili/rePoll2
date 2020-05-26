@@ -1,7 +1,9 @@
 package gpse.repoll.web;
 
-import gpse.repoll.domain.UserService;
+import gpse.repoll.domain.service.UserService;
 import gpse.repoll.testutils.MockTestUsers;
+import gpse.repoll.web.command.UserCmd;
+import gpse.repoll.web.controllers.UsersController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -54,4 +54,10 @@ public interface PollService {
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the poll could not be found.
      */
     Poll updatePoll(UUID id, String title, PollStatus status, Map<UUID, List<Long>> structure, User lastEditor);
+
+    /**
+     * Deletes the poll from the database.
+     * @param id the ID of the poll
+     */
+    void removePoll(UUID id);
 }

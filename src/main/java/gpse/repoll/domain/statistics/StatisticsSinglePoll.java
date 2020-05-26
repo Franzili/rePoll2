@@ -1,9 +1,9 @@
 package gpse.repoll.domain.statistics;
 
-import gpse.repoll.domain.PollEntry;
 import gpse.repoll.domain.User;
-import gpse.repoll.domain.answers.Answer;
-import gpse.repoll.domain.questions.Question;
+import gpse.repoll.domain.poll.PollEntry;
+import gpse.repoll.domain.poll.answers.Answer;
+import gpse.repoll.domain.poll.questions.Question;
 
 import javax.persistence.*;
 import java.util.HashMap;

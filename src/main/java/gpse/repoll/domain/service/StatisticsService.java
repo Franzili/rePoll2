@@ -1,4 +1,4 @@
-package gpse.repoll.domain;
+package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.statistics.StatisticsQuestion;
 

@@ -1,7 +1,16 @@
 package gpse.repoll;
 
-import gpse.repoll.domain.answers.*;
-import gpse.repoll.domain.questions.Question;
+
+import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.Choice;
+import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.poll.answers.*;
+import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.repositories.*;
+import gpse.repoll.domain.service.PollEntryService;
+import gpse.repoll.domain.service.PollService;
+import gpse.repoll.domain.service.QuestionService;
+import gpse.repoll.domain.service.UserService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,9 +31,9 @@ public class InitializeDatabase implements InitializingBean {
 
     private final PollService pollService;
     private final QuestionService questionService;
+    private final PollEntryService pollEntryService;
     private final UserService userService;
     private final TransactionTemplate transactionTemplate;
-    private final ChoiceRepository choiceRepository;
     private final PollEntryRepository pollEntryRepository;
     private final PollRepository pollRepository;
     private final PollSectionRepository pollSectionRepository;
@@ -34,18 +43,18 @@ public class InitializeDatabase implements InitializingBean {
     @Autowired
     public InitializeDatabase(PollService pollService,
                               QuestionService questionService,
+                              PollEntryService pollEntryService,
                               UserService userService,
                               PlatformTransactionManager transactionManager,
-                              final ChoiceRepository choiceRepository,
                               final PollEntryRepository pollEntryRepository,
                               final PollRepository pollRepository,
                               final PollSectionRepository pollSectionRepository,
                               final UserRepository userRepository) {
         this.pollService = pollService;
         this.questionService = questionService;
+        this.pollEntryService = pollEntryService;
         this.userService = userService;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
-        this.choiceRepository = choiceRepository;
         this.pollEntryRepository = pollEntryRepository;
         this.pollRepository = pollRepository;
         this.pollSectionRepository = pollSectionRepository;
@@ -81,12 +90,12 @@ public class InitializeDatabase implements InitializingBean {
 
         transactionTemplate.execute(status -> {
             //choiceRepository.deleteAll();
-            pollEntryRepository.deleteAll();
-            pollRepository.deleteAll();
+            //pollEntryRepository.deleteAll();
+            //pollRepository.deleteAll();
             //pollSectionRepository.deleteAll();
             User user = userService.getUser("JamesBond");
             Poll poll = pollService.addPoll("Gummibaerchen", user);
-            Question question1 = pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
+            Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255, user);
             Poll poll2 = pollService.addPoll("About this App", user);
             questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
@@ -107,7 +116,7 @@ public class InitializeDatabase implements InitializingBean {
             }
             //dummy Poll for Nemo
             Poll poll3 = pollService.addPoll("Nothing to see here", nobody);
-            pollService.addTextQuestion(poll3.getId(), "This sentence is false",
+            questionService.addTextQuestion(poll3.getId(), "This sentence is false",
                                                         100, 255, nobody);
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
@@ -119,7 +128,7 @@ public class InitializeDatabase implements InitializingBean {
             choicesRadioButtonList.add(choice6);
             choicesRadioButtonList.add(choice7);
             choicesRadioButtonList.add(choice8);
-            Question question2 = pollService.addRadioButtonQuestion(poll.getId(), "How old are you?",
+            Question question2 = questionService.addRadioButtonQuestion(poll.getId(), "How old are you?",
                 3, choicesRadioButtonList, user);
 
             List<Choice> choicesChoiceQuestionList = new ArrayList<>();
@@ -131,11 +140,11 @@ public class InitializeDatabase implements InitializingBean {
             choicesChoiceQuestionList.add(choice2);
             choicesChoiceQuestionList.add(choice3);
             choicesChoiceQuestionList.add(choice4);
-            Question question3 = pollService.addChoiceQuestion(poll.getId(),
+            Question question3 = questionService.addChoiceQuestion(poll.getId(),
                 "Which artist do yo like the most?",
                 4, choicesChoiceQuestionList, user);
 
-            Question question4 = pollService.addScaleQuestion(poll.getId(),
+            Question question4 = questionService.addScaleQuestion(poll.getId(),
                 "How satisfied are you with our services?",
                 2, "Not good", "Very good", 1, user);
 
@@ -302,16 +311,16 @@ public class InitializeDatabase implements InitializingBean {
             textMap10.put(question4.getId(), scaleAnswer10);
 
 
-            pollService.addPollEntry(poll.getId(), textMap1);
-            pollService.addPollEntry(poll.getId(), textMap2);
-            pollService.addPollEntry(poll.getId(), textMap3);
-            pollService.addPollEntry(poll.getId(), textMap4);
-            pollService.addPollEntry(poll.getId(), textMap5);
-            pollService.addPollEntry(poll.getId(), textMap6);
-            pollService.addPollEntry(poll.getId(), textMap7);
-            pollService.addPollEntry(poll.getId(), textMap8);
-            pollService.addPollEntry(poll.getId(), textMap9);
-            pollService.addPollEntry(poll.getId(), textMap10);
+            pollEntryService.addPollEntry(poll.getId(), textMap1);
+            pollEntryService.addPollEntry(poll.getId(), textMap2);
+            pollEntryService.addPollEntry(poll.getId(), textMap3);
+            pollEntryService.addPollEntry(poll.getId(), textMap4);
+            pollEntryService.addPollEntry(poll.getId(), textMap5);
+            pollEntryService.addPollEntry(poll.getId(), textMap6);
+            pollEntryService.addPollEntry(poll.getId(), textMap7);
+            pollEntryService.addPollEntry(poll.getId(), textMap8);
+            pollEntryService.addPollEntry(poll.getId(), textMap9);
+            pollEntryService.addPollEntry(poll.getId(), textMap10);
 
             return null;
         });

@@ -69,4 +69,10 @@ public class PollsController {
         User lastEditor = userService.getUser(auth.getName());
         return pollService.updatePoll(id, pollCmd.getTitle(), pollCmd.getStatus(), structure, lastEditor);
     }
+
+    @Secured(Roles.ALL)
+    @DeleteMapping(value = "/{id}/")
+    public void removePoll(@PathVariable("id") final UUID id) {
+        pollService.removePoll(id);
+    }
 }

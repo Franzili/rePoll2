@@ -85,7 +85,11 @@ public class PollServiceImpl implements PollService {
         return poll;
     }
 
-    /* ----------------------- */
-
-    /* ---------- */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removePoll(final UUID id) {
+        pollRepository.deleteById(id);
+    }
 }
