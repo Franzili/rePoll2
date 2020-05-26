@@ -44,13 +44,7 @@ public class PollEntryServiceImpl implements PollEntryService {
         this.choiceAnswerRepository = choiceAnswerRepository;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public PollEntry addPollEntry(final UUID pollId, final Map<Long, Answer> associations) {
-        Poll poll = pollService.getPoll(pollId);
-        PollEntry pollEntry = new PollEntry();
+    private void createAnswers(Poll poll, PollEntry pollEntry, Map<Long, Answer> associations) {
         for (Long questionId : associations.keySet()) {
             Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
             if (poll.contains(question)) {
@@ -67,8 +61,20 @@ public class PollEntryServiceImpl implements PollEntryService {
                     throw new InternalServerErrorException();
                 }
                 pollEntry.put(question, answer);
+            } else {
+                throw new BadRequestException("A question does not belong to this poll!");
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PollEntry addPollEntry(final UUID pollId, final Map<Long, Answer> associations) {
+        Poll poll = pollService.getPoll(pollId);
+        PollEntry pollEntry = new PollEntry();
+        createAnswers(poll, pollEntry, associations);
         pollEntryRepository.save(pollEntry);
         poll.add(pollEntry);
         pollService.save(poll);
@@ -97,30 +103,11 @@ public class PollEntryServiceImpl implements PollEntryService {
     /**
      * {@inheritDoc}
      */
-    @Override
+    @Override // Todo delete old answers
     public PollEntry updatePollEntry(UUID pollId, Long entryId, Map<Long, Answer> associations) {
         Poll poll = pollService.getPoll(pollId);
         PollEntry pollEntry = findEntryOfPoll(poll, entryId);
-        for (Long questionId : associations.keySet()) {
-            Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
-            if (poll.contains(question)) {
-                Answer answer = associations.get(questionId);
-                if (answer instanceof TextAnswer) {
-                    textAnswerRepository.save((TextAnswer) answer);
-                } else if (answer instanceof ScaleAnswer) {
-                    scaleAnswerRepository.save((ScaleAnswer) answer);
-                } else if (answer instanceof RadioButtonAnswer) {
-                    radioButtonAnswerRepository.save((RadioButtonAnswer) answer);
-                } else if (answer instanceof ChoiceAnswer) {
-                    choiceAnswerRepository.save((ChoiceAnswer) answer);
-                } else {
-                    throw new InternalServerErrorException();
-                }
-                pollEntry.put(question, answer);
-            } else {
-                throw new BadRequestException("A question does not belong to this poll!");
-            }
-        }
+        createAnswers(poll, pollEntry, associations);
         pollEntryRepository.save(pollEntry);
         return pollEntry;
     }
