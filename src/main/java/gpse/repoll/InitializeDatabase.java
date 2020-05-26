@@ -2,7 +2,6 @@ package gpse.repoll;
 
 import gpse.repoll.domain.answers.*;
 import gpse.repoll.domain.questions.Question;
-import gpse.repoll.domain.questions.QuestionBaseRepository;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,6 +30,7 @@ public class InitializeDatabase implements InitializingBean {
     private final PollSectionRepository pollSectionRepository;
     private final UserRepository userRepository;
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
     public InitializeDatabase(PollService pollService,
                               UserService userService,
@@ -79,8 +79,8 @@ public class InitializeDatabase implements InitializingBean {
 
         transactionTemplate.execute(status -> {
             //choiceRepository.deleteAll();
-            //pollEntryRepository.deleteAll();
-            //pollRepository.deleteAll();
+            pollEntryRepository.deleteAll();
+            pollRepository.deleteAll();
             //pollSectionRepository.deleteAll();
             User user = userService.getUser("JamesBond");
             Poll poll = pollService.addPoll("Gummibaerchen", user);
@@ -92,16 +92,21 @@ public class InitializeDatabase implements InitializingBean {
             pollService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
                                         1000, 255, user);
             //dummy user for US34 Task 14846
-            User nobody = userService.addUser(
-                "Nemo",
-                // Passwort: GutenTag
-                "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
-                "Cpt Nemo",
-                "x@404.com");
+            User nobody;
+            try {
+                nobody = userService.getUser("Nemo");
+            } catch (UsernameNotFoundException e) {
+                nobody = userService.addUser(
+                        "Nemo",
+                        // Passwort: GutenTag
+                        "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                        "Cpt Nemo",
+                        "x@404.com");
+            }
             //dummy Poll for Nemo
             Poll poll3 = pollService.addPoll("Nothing to see here", nobody);
             pollService.addTextQuestion(poll3.getId(), "This sentence is false",
-                                                        100,255, nobody);
+                                                        100, 255, nobody);
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
             Choice choice5 = new Choice("0-20");
@@ -130,7 +135,7 @@ public class InitializeDatabase implements InitializingBean {
 
             Question question4 = pollService.addScaleQuestion(poll.getId(),
                 "How satisfied are you with our services?",
-                2, "Not good", "Very good", 1,user);
+                2, "Not good", "Very good", 1, user);
 
             // Create 10 TextAnswers
             TextAnswer textAnswer1 = new TextAnswer();
@@ -232,16 +237,16 @@ public class InitializeDatabase implements InitializingBean {
 
 
 
-            HashMap<Long,Answer> textMap1 = new HashMap<>();
-            HashMap<Long,Answer> textMap2 = new HashMap<>();
-            HashMap<Long,Answer> textMap3 = new HashMap<>();
-            HashMap<Long,Answer> textMap4 = new HashMap<>();
-            HashMap<Long,Answer> textMap5 = new HashMap<>();
-            HashMap<Long,Answer> textMap6 = new HashMap<>();
-            HashMap<Long,Answer> textMap7 = new HashMap<>();
-            HashMap<Long,Answer> textMap8 = new HashMap<>();
-            HashMap<Long,Answer> textMap9 = new HashMap<>();
-            HashMap<Long,Answer> textMap10 = new HashMap<>();
+            HashMap<Long, Answer> textMap1 = new HashMap<>();
+            HashMap<Long, Answer> textMap2 = new HashMap<>();
+            HashMap<Long, Answer> textMap3 = new HashMap<>();
+            HashMap<Long, Answer> textMap4 = new HashMap<>();
+            HashMap<Long, Answer> textMap5 = new HashMap<>();
+            HashMap<Long, Answer> textMap6 = new HashMap<>();
+            HashMap<Long, Answer> textMap7 = new HashMap<>();
+            HashMap<Long, Answer> textMap8 = new HashMap<>();
+            HashMap<Long, Answer> textMap9 = new HashMap<>();
+            HashMap<Long, Answer> textMap10 = new HashMap<>();
 
             //Add all Questions to the 10 Hashmaps
             textMap1.put(question1.getId(), textAnswer1);

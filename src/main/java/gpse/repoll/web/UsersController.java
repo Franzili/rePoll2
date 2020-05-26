@@ -91,7 +91,7 @@ public class UsersController {
      * @param userId UUID identifier
      * @return List of polls associated with the user.
      */
-    @GetMapping("/{userId}/")
+    @GetMapping("/{userId}/own-polls/")
     @Secured(Roles.ALL)
     public List<Poll> getOwnedPolls(@PathVariable UUID userId) {
         return  userService.getOwnedPolls(userId);
