@@ -26,6 +26,10 @@ public class PollServiceImpl implements PollService {
         this.pollRepository = pollRepository;
     }
 
+    public void save(Poll poll) {
+        pollRepository.save(poll);
+    }
+
     /**
      * {@inheritDoc}
      */

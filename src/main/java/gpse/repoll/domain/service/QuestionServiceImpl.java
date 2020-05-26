@@ -21,7 +21,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final PollService pollService;
 
-    private final PollRepository pollRepository;
     private final TextQuestionRepository textQuestionRepository;
     private final ScaleQuestionRepository scaleQuestionRepository;
     private final RadioButtonQuestionRepository radioButtonQuestionRepository;
@@ -37,7 +36,6 @@ public class QuestionServiceImpl implements QuestionService {
             RadioButtonQuestionRepository radioButtonQuestionRepository,
             ChoiceQuestionRepository choiceQuestionRepository,
             ChoiceRepository choiceRepository) {
-        this.pollRepository = pollRepository;
         this.pollService = pollService;
         this.textQuestionRepository = textQuestionRepository;
         this.scaleQuestionRepository = scaleQuestionRepository;
@@ -66,7 +64,7 @@ public class QuestionServiceImpl implements QuestionService {
         question.setCharLimit(charLimit);
         textQuestionRepository.save(question);
         poll.add(question);
-        pollRepository.save(poll);
+        pollService.save(poll);
         return question;
     }
 
@@ -94,7 +92,7 @@ public class QuestionServiceImpl implements QuestionService {
         question.setStepCount(stepCount);
         scaleQuestionRepository.save(question);
         poll.add(question);
-        pollRepository.save(poll);
+        pollService.save(poll);
         return question;
     }
 
@@ -121,7 +119,7 @@ public class QuestionServiceImpl implements QuestionService {
         question.addAll(choices);
         radioButtonQuestionRepository.save(question);
         poll.add(question);
-        pollRepository.save(poll);
+        pollService.save(poll);
         return question;
     }
 
@@ -148,7 +146,7 @@ public class QuestionServiceImpl implements QuestionService {
         question.addAll(choices);
         choiceQuestionRepository.save(question);
         poll.add(question);
-        pollRepository.save(poll);
+        pollService.save(poll);
         return question;
     }
 

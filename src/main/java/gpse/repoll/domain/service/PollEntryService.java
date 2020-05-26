@@ -27,4 +27,15 @@ public interface PollEntryService {
      * not be found.
      */
     PollEntry getPollEntry(UUID pollId, Long entryId);
+
+    /**
+     Updates a PollEntry of a Poll.
+     * @param pollId The Poll's ID
+     * @param entryId The Entry's ID
+     * @param associations A map of question IDs to Answers
+     * @return The newly created PollEntry
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll or any of the Questions
+     * could not be found
+     */
+    PollEntry updatePollEntry(UUID pollId, Long entryId, Map<Long, Answer> associations);
 }

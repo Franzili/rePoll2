@@ -12,6 +12,13 @@ import java.util.UUID;
  * Provides operations on polls to Controllers.
  */
 public interface PollService {
+
+    /**
+     * Saves the Poll in the repository.
+     * @param poll the Poll
+     */
+    void save(Poll poll);
+
     /**
      * Get all Polls.
      * @return A List of all polls

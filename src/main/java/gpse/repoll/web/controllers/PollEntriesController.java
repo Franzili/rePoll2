@@ -37,6 +37,26 @@ public class PollEntriesController {
     @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
+        Map<Long, Answer> answers = createAnswers(pollEntryCmd);
+        return pollEntryService.addPollEntry(pollId, answers);
+    }
+
+    @Secured(Roles.ALL)
+    @GetMapping("/{pollId}/entries/{entryId:\\d+}/")
+    public PollEntry getPollEntry(@PathVariable("pollId") final UUID pollId,
+                                  @PathVariable("entryId") final String entryId) {
+        return  pollEntryService.getPollEntry(pollId, Long.valueOf(entryId));
+    }
+
+    @PutMapping("/{pollId}/entries/{entryId:\\d+}")
+    public PollEntry updatePollEntry(@PathVariable("pollId") final UUID pollId,
+                                     @PathVariable("entryId") final String entryId,
+                                     @RequestBody PollEntryCmd pollEntryCmd) {
+        Map<Long, Answer> answers = createAnswers(pollEntryCmd);
+        return pollEntryService.updatePollEntry(pollId, Long.valueOf(entryId), answers);
+    }
+
+    private Map<Long, Answer> createAnswers(PollEntryCmd pollEntryCmd) {
         if (pollEntryCmd.getAnswers() == null) {
             throw new BadRequestException();
         }
@@ -65,26 +85,6 @@ public class PollEntriesController {
             }
             answers.put(key, answer);
         }
-        return pollEntryService.addPollEntry(
-                pollId,
-                answers
-        );
+        return answers;
     }
-
-    @Secured(Roles.ALL)
-    @GetMapping("/{pollId}/entries/{entryId:\\d+}/")
-    public PollEntry getPollEntry(@PathVariable("pollId") final UUID pollId,
-                                  @PathVariable("entryId") final String entryId) {
-        return  pollEntryService.getPollEntry(pollId, Long.valueOf(entryId));
-    }
-
-    /* TODO
-    @PutMapping("/{pollId}/entries/{entryId:\\d+}")
-    public PollEntry updatePollEntry(@PathVariable("pollId") final UUID pollId,
-                                     @PathVariable("entryId") final String entryId,
-                                     @RequestBody PollEntryCmd pollEntryCmd) {
-
-    }
-
-     */
 }

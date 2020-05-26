@@ -6,7 +6,6 @@ import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UnauthorizedException;
-import gpse.repoll.domain.repositories.PollRepository;
 import gpse.repoll.domain.repositories.PollSectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,15 +18,12 @@ public class PollSectionServiceImpl implements PollSectionService {
 
     private final PollService pollService;
 
-    private final PollRepository pollRepository;
     private final PollSectionRepository pollSectionRepository;
 
     @Autowired
     public PollSectionServiceImpl(
             PollService pollService,
-            PollRepository pollRepository,
             PollSectionRepository pollSectionRepository) {
-        this.pollRepository = pollRepository;
         this.pollSectionRepository = pollSectionRepository;
         this.pollService = pollService;
     }
@@ -55,7 +51,7 @@ public class PollSectionServiceImpl implements PollSectionService {
         poll.setLastEditor(lastEditor);
         PollSection pollSection = new PollSection(title, description);
         poll.add(pollSection);
-        pollRepository.save(poll);
+        pollService.save(poll);
         return pollSection;
     }
 
@@ -104,7 +100,7 @@ public class PollSectionServiceImpl implements PollSectionService {
         if (description != null) {
             section.setDescription(description);
         }
-        pollRepository.save(poll);
+        pollService.save(poll);
         return section;
     }
 }
