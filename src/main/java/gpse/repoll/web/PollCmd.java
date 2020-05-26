@@ -34,4 +34,5 @@ class PollCmd {
     public void setStatus(PollStatus status) {
         this.status = status;
     }
+
 }

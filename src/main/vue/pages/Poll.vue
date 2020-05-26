@@ -9,7 +9,6 @@
 
     import {mapActions, mapGetters} from "vuex";
     import NavBar from "../components/NavBar";
-    import HelloWorld from "../components/HelloWorld";
 
     export default {
         name: "Poll",
@@ -33,7 +32,6 @@
         },
         comments: {
             NavBar,
-            HelloWorld
         },
     }
 </script>

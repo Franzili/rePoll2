@@ -68,6 +68,12 @@ public class PollsController {
     }
 
     @Secured(Roles.ALL)
+    @DeleteMapping(value = "/{id}/")
+    public void removePoll(@PathVariable("id") final UUID id) {
+        pollService.removePoll(id);
+    }
+
+    @Secured(Roles.ALL)
     @GetMapping("/{pollId}/sections/")
     public List<PollSection> listPollSections(@PathVariable("pollId") final UUID pollId) {
         return pollService.getAllSections(pollId);

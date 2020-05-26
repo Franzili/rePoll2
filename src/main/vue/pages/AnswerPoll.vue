@@ -1,7 +1,8 @@
 <template>
     <div class="my-back">
-        <nav-bar></nav-bar>
-        <HelloWorld style="text-align:center;" class="ml-auto" msg="Fill yout our polls"/>
+        <b-row align-h="center">
+            <h1>Fill yout our polls</h1>
+        </b-row>
         <b-container class="my-container">
             <b-row style="text-align: center" class="my-row">
                 <b-col >
@@ -15,34 +16,27 @@
 
 <script>
 
-    import HelloWorld from '../components/HelloWorld.vue'
-    import NavBar from "../components/NavBar";
     import AnswerPollTableList from "../components/AnswerPollTableList";
     import {mapState, mapActions} from "vuex";
 
     export default {
         name: "AnswerPoll",
+        created() {
+            this.requestPolls()
+        },
         computed: mapState({
             polls: state => state.polls
         }),
         methods: {
-            ...mapActions([
-                'requestPolls'
-            ])
-        },
-        created() {
-            this.requestPolls()
+            ...mapActions(['requestPolls'])
         },
         components: {
-            NavBar,
-            HelloWorld,
             AnswerPollTableList
         },
     }
 </script>
 
 <style scoped>
-
     .my-back {
         min-height: 100vh;
         background-color: lightgray
