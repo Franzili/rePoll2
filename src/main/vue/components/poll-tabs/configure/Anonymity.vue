@@ -1,6 +1,5 @@
 <template>
     <div>
-        <p>{{this.poll.anonymity}}</p>
         <p class="poll-mode-indicator">
             <i v-if="this.poll.anonymity === 'NON_ANONYMOUS'">
                 Poll for known participants.</i>
@@ -16,7 +15,8 @@
 
             <b-form-radio-group
                 v-on:input="changeAnonymityConfirmation"
-                v-model="anonymityChecked">
+                v-model="anonymityChecked"
+                initial-anonymity-checked=this.poll.anonymity>
 
                 <b-form-radio value="ANONYMOUS" :disabled="waitingForConfirmation">
                     anonymous<br>
@@ -58,14 +58,15 @@
 
 <script>
     import axios from "axios";
-    import {mapActions, mapGetters} from "vuex";
+    import {mapGetters} from "vuex";
 
     export default {
         name: "Anonymity",
+        props: ["initialAnonoymityChecked"],
         data() {
             return {
                 tmpID: 0,
-                anonymityChecked: this.poll.anonymity,
+                anonymityChecked: this.initialAnonymityChecked,
                 sureToChangeAnonymity: false,
                 waitingForConfirmation: false
             }
@@ -78,12 +79,8 @@
         },
         created: function () {
             this.tmpID = this.$route.params.tmpPollID;
-            this.requestPolls()
-            this.requestPoll(this.tmpID)
-            this.anonymityChecked = this.poll.anonymity
         },
         methods: {
-            ...mapActions(['requestPoll,requestPolls']),
             changeAnonymityConfirmation: function () {
                 if (this.poll.anonymity !== this.anonymityChecked) {
                     this.sureToChangeAnonymity = true
