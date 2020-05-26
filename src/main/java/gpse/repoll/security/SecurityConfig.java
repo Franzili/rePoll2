@@ -1,5 +1,6 @@
 package gpse.repoll.security;
 
+import gpse.repoll.domain.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,9 +26,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SecurityConstants securityConstants;
 
+    private final UserRepository userRepository;
+
     @Autowired
-    public SecurityConfig(SecurityConstants securityConstants) {
+    public SecurityConfig(SecurityConstants securityConstants, UserRepository userRepository) {
         this.securityConstants = securityConstants;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/**").permitAll()
             .and()
             .addFilter(new JwtAuthenticationFilter(authenticationManager(), securityConstants))
-            .addFilter(new JwtAuthorizationFilter(authenticationManager(), securityConstants))
+            .addFilter(new JwtAuthorizationFilter(authenticationManager(), securityConstants, userRepository))
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

@@ -26,11 +26,9 @@ public class PollEntryServiceImpl implements PollEntryService {
     private final RadioButtonAnswerRepository radioButtonAnswerRepository;
     private final ChoiceAnswerRepository choiceAnswerRepository;
 
-    @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
     public PollEntryServiceImpl(
             PollService pollService,
-            PollRepository pollRepository,
             PollEntryRepository pollEntryRepository,
             QuestionBaseRepository<Question> questionRepository,
             TextAnswerRepository textAnswerRepository,
