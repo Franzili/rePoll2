@@ -121,6 +121,9 @@ public class StatisticsQuestion {
     protected Map<Choice, Double> relativeFrequencies(Map<Choice, Integer> absoluteFrequencies) {
         Map<Choice, Double> frequencies = new HashMap<>();
         Integer hundredPercent = sumAnswers(absoluteFrequencies);
+        if (hundredPercent == 0) {
+            return frequencies;
+        }
         absoluteFrequencies.forEach(((choice, integer) -> {
             Double percentage = (integer.doubleValue() / hundredPercent.doubleValue());
             frequencies.put(choice, percentage);
