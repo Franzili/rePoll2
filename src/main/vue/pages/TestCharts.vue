@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-card class="chart-card">
-            <BarChart :chart-data="barDatasets" :options="options" :label="barLabels"></BarChart>
+            <BarChart :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></BarChart>
         </b-card>
         <b-card class="chart-card">
             <DoughnutChart :chart-data="doughnutDatasets" :options="options" :label="doughnutLabels"></DoughnutChart>
@@ -17,20 +17,12 @@
         name: "TestCharts",
         data () {
             return {
-                //here could be the answer possibilities
-                barLabels: ['sehr gut', 'gut', 'mittel', 'schlecht', 'sehr schlecht'],
-                barDatasets: [
-                    {
-                        label: 'Wie gut findest du Repoll',
-                        backgroundColor: '#3eab37 ', //02a097
-                        data: [80, 100, 50, 20, 0]
-                    },
-                    {
-                        label: 'Wie gut findest du die anderen Umfragetools',
-                        backgroundColor: '#f87979',
-                        data: [0, 10, 20, 50, 100]
-                    }
-                ],
+                questTitle: 'Wie findest du Repoll?',
+                //here could be the answer choices
+                choices: ['sehr gut', 'gut', 'mittel', 'schlecht', 'sehr schlecht'],
+                absoluteFrequencies: [80, 100, 50, 20, 0],
+
+
                 doughnutLabels: ['sehr gut', 'gut', 'mittel', 'schlecht', 'sehr schlecht'],
                 doughnutDatasets: [
                     {
@@ -43,6 +35,18 @@
                     responsive: true,
                     maintainAspectRatio: false
                 }
+                /*barDatasets: [
+                    {
+                        label: 'Wie gut findest du Repoll',
+                        backgroundColor: '#3eab37 ', //02a097
+                        data: [80, 100, 50, 20, 0]
+                    },
+                    {
+                        label: 'Wie gut findest du die anderen Umfragetools',
+                        backgroundColor: '#f87979',
+                        data: [0, 10, 20, 50, 100]
+                    }
+                ],*/
             }
     },
         components: {

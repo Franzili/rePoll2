@@ -3,26 +3,54 @@
     import {Bar} from 'vue-chartjs';
 
     export default {
+        name: "BarChart",
         extends: Bar,
         props: {
-            label: {
+            title: {
+                type: String
+            },
+            choices: {
                 type: Array
             },
-            chartData: {
+            absFreq: {
                 type: Array
-            },
-            options: {
-                type: Object
             }
         },
+        data() {
+            return {
+                datasets: [
+                    {
+                        label: '',
+                        backgroundColor: '#3eab37', //02a097
+                        data: [80, 100, 50, 20, 0]
+                    },
+                    {
+                        label: 'Wie gut findest du die anderen Umfragetools',
+                        backgroundColor: '#f87979',
+                        data: [0, 10, 20, 50, 100]
+                    }
+                ],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            }
+        },
+
         mounted() {
-            const myData = this.chartData;
+            this.fillData();
             this.renderChart({
-                labels: this.label,
-                datasets: myData},
+                labels: this.choices,
+                datasets: this.datasets},
             this.options);
         },
-        name: "BarChart"
+
+        methods: {
+            fillData() {
+                this.datasets[0].label = this.title;
+                this.datasets[0].data = this.absFreq;
+            }
+        }
     }
 </script>
 
