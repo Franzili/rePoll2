@@ -3,26 +3,54 @@
     import {Doughnut} from 'vue-chartjs';
 
     export default {
+        name: "DoughnutChart",
         extends: Doughnut,
         props: {
-            label: {
+            title: {
+                type: String
+            },
+            choices: {
                 type: Array
             },
-            chartData: {
+            absFreq: {
                 type: Array
-            },
-            options: {
-                type: Object
             }
         },
+        data() {
+            return {
+                datasets: [
+                    {
+                        label: '',
+                        backgroundColor: [],
+                        data: []
+                    }
+                ],
+                backgroundColors: ['#3eab37', '#02a097', '#FFED36', '#6546F8', '#70E1F8'],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            }
+        },
+
         mounted() {
-            const myData = this.chartData;
+            this.fillData();
             this.renderChart({
-                    labels: this.label,
-                    datasets: myData},
+                    labels: this.choices,
+                    datasets: this.datasets},
                 this.options);
         },
-        name: "DoughnutChart"
+
+        methods: {
+            fillData() {
+                this.datasets[0].label = this.title;
+                this.datasets[0].data = this.absFreq;
+
+                for(let i = 0; i < this.datasets[0].data.length; i++) {
+                    this.datasets[0].backgroundColor[i] = this.backgroundColors[i];
+                }
+            }
+        }
     }
 </script>
 

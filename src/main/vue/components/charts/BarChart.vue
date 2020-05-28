@@ -22,7 +22,7 @@
                     {
                         label: '',
                         backgroundColor: '#3eab37', //02a097
-                        data: [80, 100, 50, 20, 0]
+                        data: []
                     },
                     {
                         label: 'Wie gut findest du die anderen Umfragetools',
