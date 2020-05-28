@@ -29,6 +29,11 @@ public class StatisticsServiceImpl implements StatisticsService {
         if (statisticsQuestionRepository.existsByQuestion(question)) {
             Optional<StatisticsQuestion> stats = statisticsQuestionRepository.findByQuestion(question);
             if (stats.isPresent()) {
+                List<PollEntry> pollEntries = pollService.getPoll(pollId).getEntries();
+                StatisticsQuestion statistics = new StatisticsQuestion(question, pollEntries);
+                UUID statsID = stats.get().getId();
+                statisticsQuestionRepository.updateAbsoluteFrequencies(statsID, statistics.getAbsoluteFrequencies());
+                statisticsQuestionRepository.updateRelativeFrequencies(statsID, statistics.getRelativeFrequencies());
                 return stats.get();
             } else {
                 throw new InternalServerErrorException();
