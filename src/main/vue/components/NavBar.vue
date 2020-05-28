@@ -26,6 +26,9 @@
                     <b-nav-item>
                         <router-link class="link" :to="'/answer/'">Answer Poll</router-link>
                     </b-nav-item>
+                    <b-nav-item>
+                        <router-link class="link" :to="'/myPolls/'">My Polls</router-link>
+                    </b-nav-item>
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>

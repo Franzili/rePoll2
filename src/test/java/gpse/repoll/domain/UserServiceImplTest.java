@@ -2,6 +2,10 @@ package gpse.repoll.domain;
 
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
+import gpse.repoll.domain.repositories.UserRepository;
+import gpse.repoll.domain.service.PollService;
+import gpse.repoll.domain.service.UserService;
+import gpse.repoll.domain.service.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
