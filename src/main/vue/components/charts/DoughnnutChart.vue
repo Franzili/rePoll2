@@ -28,7 +28,11 @@
                 backgroundColors: ['#3eab37', '#02a097', '#FFED36', '#6546F8', '#70E1F8'],
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: ''
+                    }
                 }
             }
         },
@@ -43,7 +47,7 @@
 
         methods: {
             fillData() {
-                this.datasets[0].label = this.title;
+                this.options.title.text = this.title;
                 this.datasets[0].data = this.absFreq;
 
                 for(let i = 0; i < this.datasets[0].data.length; i++) {

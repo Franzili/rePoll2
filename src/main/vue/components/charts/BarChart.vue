@@ -52,6 +52,7 @@
         methods: {
 
             fillData() {
+                this.datasets[0].label = this.title;
                 for(let i = 0; i < this.choiceFreqPairs.length; i++) {
                     this.myChoices[i] = this.choiceFreqPairs[i].choice;
                     this.datasets[0].data[i] = this.choiceFreqPairs[i].absFreq;
