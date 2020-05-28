@@ -70,7 +70,9 @@ public class StatisticsQuestion {
         List<Answer> answers = new ArrayList<>();
         for (PollEntry entry : pollEntries) {
             Answer answer = entry.getAssociations().get(question);
-            answers.add(answer);
+            if (answer != null) {
+                answers.add(answer);
+            }
         }
         return answers;
     }
