@@ -27,16 +27,16 @@
                 <b-form-radio value="PSEUDONYMOUS" :disabled="waitingForConfirmation">
                     pseudonymous<br>
                     <small class="text-muted">
-                        Es sind nur minimal Daten (i.d.R. ein technischer Schlüssel) vom
-                        Teilnehmer bekannt. Außer dem technischen Schlüssel werden keine
-                        Teilnehmerdaten persistiert.
+                        There is minimal data transfer.
+                        Except for a technical key, that acts as a pseudonym, no data of the participants get saved.
+                        They get different links, but you cannot track the singular participant.
                     </small>
                 </b-form-radio>
                 <b-form-radio value="NON_ANONYMOUS" :disabled="waitingForConfirmation">
                     non-anonymous<br>
                     <small class="text-muted">
-                        Der Teilnehmer ist bekannt. Es liegen Daten vor. Jeder Teilnehmer
-                        erhält einen personalisierten Link.
+                        The participants are known. Each of them gets a personalized link to
+                        take part in the poll.
                     </small>
                 </b-form-radio>
             </b-form-radio-group>
