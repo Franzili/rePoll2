@@ -67,7 +67,7 @@ public class PollsController {
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User lastEditor = userService.getUser(auth.getName());
-        return pollService.updatePoll(id, pollCmd.getTitle(), pollCmd.getStatus(), structure, lastEditor);
+        return pollService.updatePoll(id, pollCmd.getTitle(), pollCmd.getStatus(), structure, lastEditor, pollCmd.getAnonymity());
     }
 
     @Secured(Roles.ALL)
