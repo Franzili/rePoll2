@@ -14,10 +14,14 @@
             },
             absFreq: {
                 type: Array
+            },
+            choiceFreqPairs: {
+                type: Array
             }
         },
         data() {
             return {
+                myChoices: [],
                 datasets: [
                     {
                         label: '',
@@ -40,13 +44,21 @@
         mounted() {
             this.fillData();
             this.renderChart({
-                labels: this.choices,
+                labels: this.myChoices, //myChoices
                 datasets: this.datasets},
             this.options);
         },
 
         methods: {
+
             fillData() {
+                for(let i = 0; i < this.choiceFreqPairs.length; i++) {
+                    this.myChoices[i] = this.choiceFreqPairs[i].choice;
+                    this.datasets[0].data[i] = this.choiceFreqPairs[i].absFreq;
+                }
+            },
+
+            fillData2() {
                 this.datasets[0].label = this.title;
                 this.datasets[0].data = this.absFreq;
             }
