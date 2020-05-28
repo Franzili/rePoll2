@@ -1,11 +1,18 @@
 <template>
     <div>
-        <b-card class="chart-card">
-            <BarChart :choiceFreqPairs="choiceFreqPairs" :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></BarChart>
-        </b-card>
-        <b-card class="chart-card">
-            <DoughnutChart :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></DoughnutChart>
-        </b-card>
+        <div v-if="isMobile()">
+            <BarChart class="mt-5" :choiceFreqPairs="choiceFreqPairs" :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></BarChart>
+            <DoughnutChart class="mt-5" :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></DoughnutChart>
+        </div>
+
+        <div v-else>
+            <b-card class="chart-card">
+                <BarChart :choiceFreqPairs="choiceFreqPairs" :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></BarChart>
+            </b-card>
+            <b-card class="chart-card">
+                <DoughnutChart :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></DoughnutChart>
+            </b-card>
+        </div>
     </div>
 </template>
 
@@ -44,7 +51,12 @@
                     }
                 ]
             }
-    },
+        },
+        methods: {
+            isMobile() {
+                return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+            },
+        },
         components: {
             DoughnutChart,
             BarChart
