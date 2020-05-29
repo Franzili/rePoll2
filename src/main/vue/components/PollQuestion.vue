@@ -7,15 +7,15 @@
         <b-icon-pencil class="my-icon" scale="1.5" v-else-if="edit" @click="changeEditQuestion"></b-icon-pencil>
 
         <!-- all possible answers possibilities -->
-        <div v-if="question.type === 'checkbox'">
-
+        <div v-if="question.type === 'ChoiceQuestion'">
+            <!-- changed variables -->
             <b-form-group>
                 <b-form-checkbox-group v-model="selected">
-                    <div v-bind:key="pos.id" v-for="pos in question.possibilities">
+                    <div v-bind:key="choice.id" v-for="choice in question.choices">
                         <b-container>
                             <b-row>
-                                <b-col class="text-left" cols="8"><b-form-checkbox :value="pos.text">{{pos.text}}</b-form-checkbox></b-col>
-                                <b-col><b-button class="del-pos-btn" variant="outline-secondary" pill v-if="edit === true" @click="delPos(pos.id)">x</b-button></b-col>
+                                <b-col class="text-left" cols="8"><b-form-checkbox :value="choice.text">{{choice.text}}</b-form-checkbox></b-col>
+                                <b-col><b-button class="del-pos-btn" variant="outline-secondary" pill v-if="edit === true" @click="delPos(choice.id)">x</b-button></b-col>
                             </b-row>
                         </b-container>
                     </div>
@@ -23,27 +23,31 @@
             </b-form-group>
         </div>
 
-        <div v-if="question.type === 'radio'">
+        <div v-if="question.type === 'RadioButtonQuestion'">
+            <!-- michaels variant with changes variables, works this way but is not a radio component in answer-->
             <b-form-group>
-                <div v-bind:key="pos.id" v-for="pos in question.possibilities">
+                <div v-bind:key="choice.id" v-for="choice in question.choices">
                     <b-container>
                         <b-row>
-                            <b-col class="text-left" cols="8"><b-form-radio v-model="selected" :value="pos.text">{{pos.text}}</b-form-radio></b-col>
-                            <b-col><b-button class="del-pos-btn" variant="outline-secondary" pill v-if="edit === true" @click="delPos(pos.id)">x</b-button></b-col>
+                            <b-col class="text-left" cols="8"><b-form-radio v-model="selected" :value="choice.text">{{choice.text}}</b-form-radio></b-col>
+                            <b-col><b-button class="del-pos-btn" variant="outline-secondary" pill v-if="edit === true" @click="delPos(choice.id)">x</b-button></b-col>
                         </b-row>
                     </b-container>
                 </div>
             </b-form-group>
         </div>
+
+
         <div v-if="question.type === 'section'">
             <label>
                 <textarea></textarea>
             </label>
         </div>
 
-        <div v-if="question.type === 'freetext'">
+        <div v-if="question.type === 'TextQuestion'">
             <!-- TODO enter new variable for text instead of array (v-model)? -->
-            <b-form-input :maxlength="question.possibilities[0].limit" v-model="selected" class="text-box"/>
+            <!-- changed variable, it works, but inteliji cant resolve charLimit idk why xD -->
+            <b-form-input :maxlength="question.charLimit" v-model="selected" class="text-box"/>
 
             <div v-if="edit && !editCharLimit">
                 character limit:
