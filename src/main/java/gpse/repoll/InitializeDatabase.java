@@ -11,6 +11,7 @@ import gpse.repoll.domain.service.PollEntryService;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.QuestionService;
 import gpse.repoll.domain.service.UserService;
+import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -81,7 +82,8 @@ public class InitializeDatabase implements InitializingBean {
                     "JamesBond",
                     // Passwort: GutenTag
                     "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
-                    "Bob", "jbond@mi6.com"
+                    "Bob", "jbond@mi6.com",
+                        Roles.ADMIN
                 );
             }
             return null;
@@ -112,7 +114,8 @@ public class InitializeDatabase implements InitializingBean {
                         // Passwort: GutenTag
                         "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
                         "Cpt Nemo",
-                        "x@404.com");
+                        "x@404.com",
+                        Roles.ADMIN);
             }
             //dummy Poll for Nemo
             Poll poll3 = pollService.addPoll("Nothing to see here", nobody);

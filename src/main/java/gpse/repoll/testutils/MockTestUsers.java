@@ -1,6 +1,7 @@
 package gpse.repoll.testutils;
 
 import gpse.repoll.domain.User;
+import gpse.repoll.security.Roles;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +28,7 @@ public class MockTestUsers implements UserDetailsService {
                 user.setUsername(TEST_USER);
                 user.setFullName("Test User");
                 user.setEmail("testUser@mail.com");
+                user.setRoles(Roles.NO_ROLE);
                 return user;
 
             default:

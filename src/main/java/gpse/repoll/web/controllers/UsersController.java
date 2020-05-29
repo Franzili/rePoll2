@@ -16,8 +16,9 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/users")
+@Secured(Roles.ADMIN)
 public class UsersController {
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UsersController(UserService userService) {
@@ -25,7 +26,6 @@ public class UsersController {
     }
 
     @GetMapping("/")
-    @Secured(Roles.ALL)
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         userService.getAll().forEach(users::add);
@@ -33,13 +33,13 @@ public class UsersController {
     }
 
     @PostMapping("/")
-    @Secured(Roles.ALL)
     public User addUser(@RequestBody UserCmd userCmd) {
         return userService.addUser(
             userCmd.getUsername(),
             userCmd.getPassword(),
             userCmd.getFullName(),
-            userCmd.getEmail()
+            userCmd.getEmail(),
+            userCmd.getRole()
         );
     }
 
@@ -49,7 +49,6 @@ public class UsersController {
      * @return The user
      */
     @GetMapping("/{userId}/")
-    @Secured(Roles.ALL)
     public User getUser(@PathVariable String userId) {
         if (isValidUuid(userId)) {
             return userService.getUser(UUID.fromString(userId));
@@ -66,40 +65,27 @@ public class UsersController {
      * @return The modified user.
      */
     @PutMapping("/{userId}/")
-    @Secured(Roles.ALL)
     public User updateUser(@PathVariable String userId, @RequestBody UserCmd userCmd) {
         if (isValidUuid(userId)) {
             return userService.updateUser(
                 UUID.fromString(userId),
                 userCmd.getUsername(),
                 userCmd.getFullName(),
-                userCmd.getEmail()
+                userCmd.getEmail(),
+                userCmd.getRole()
             );
         } else {    // if the string is not a valid uuid, assume it is a username
             return userService.updateUser(
                 userId,
                 userCmd.getUsername(),
                 userCmd.getFullName(),
-                userCmd.getEmail()
+                userCmd.getEmail(),
+                userCmd.getRole()
             );
         }
     }
 
-
-    /**
-     * Gets Polls associated with the given user
-     * The user can be referred to either by their username, or by their UUID identifier.
-     * @param userId UUID identifier
-     * @return List of polls associated with the user.
-     */
-    @GetMapping("/{userId}/own-polls/")
-    @Secured(Roles.ALL)
-    public List<Poll> getOwnedPolls(@PathVariable UUID userId) {
-        return  userService.getOwnedPolls(userId);
-    }
-
     @DeleteMapping("/{userId}/")
-    @Secured(Roles.ALL)
     public User removeUser(@PathVariable String userId) {
         if (isValidUuid(userId)) {
             return userService.removeUser(UUID.fromString(userId));
@@ -108,6 +94,25 @@ public class UsersController {
         }
     }
 
+    @GetMapping("/{userId}/profile")
+    public String getRole(@PathVariable String userId) {
+        if (isValidUuid(userId)) {
+            return userService.getRole(UUID.fromString(userId));
+        } else {
+            return userService.getRole(userId);
+        }
+    }
+
+    /**
+     * Gets Polls associated with the given user
+     * The user can be referred to either by their username, or by their UUID identifier.
+     * @param userId UUID identifier
+     * @return List of polls associated with the user.
+     */
+    @GetMapping("/{userId}/own-polls/")
+    public List<Poll> getOwnedPolls(@PathVariable UUID userId) {
+        return  userService.getOwnedPolls(userId);
+    }
 
     /**
      * Checks if a String can be parsed into a UUID.

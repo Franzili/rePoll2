@@ -23,6 +23,7 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
+@Secured(Roles.PARTICIPANT)
 public class PollEntriesController {
 
     private final PollEntryService pollEntryService;
@@ -33,7 +34,6 @@ public class PollEntriesController {
     }
 
     //todo handling wrong answer type
-    @Secured(Roles.ALL)
     @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
@@ -41,7 +41,6 @@ public class PollEntriesController {
         return pollEntryService.addPollEntry(pollId, answers);
     }
 
-    @Secured(Roles.ALL)
     @GetMapping("/{pollId}/entries/{entryId:\\d+}/")
     public PollEntry getPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @PathVariable("entryId") final String entryId) {
