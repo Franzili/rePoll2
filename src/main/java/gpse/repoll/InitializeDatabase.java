@@ -121,7 +121,7 @@ public class InitializeDatabase implements InitializingBean {
             for (int i = 0; i < 10; i++) {
                 User tmpUser;
                 try {
-                    tmpUser = userService.getUser("Patti"+ i);
+                    tmpUser = userService.getUser("Patti" + i);
                 } catch (UsernameNotFoundException e) {
                     tmpUser = userService.addUser(
                             "Patti" + i,
