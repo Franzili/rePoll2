@@ -45,7 +45,12 @@
 
 <script>
     export default {
-        name: "Overview"
+        name: "Overview",
+        data() {
+            return {
+                tmpID: 0
+            }
+        }
     }
 </script>
 

@@ -9,7 +9,8 @@ const store = new Vuex.Store({
     state: {
         token: null,
         authenticated: null,
-        polls: []
+        polls: [],
+        statistics: []
     },
     actions: {
         requestToken({commit}, credentials) {
@@ -68,6 +69,16 @@ const store = new Vuex.Store({
                     reject()
                 })
             })
+        },
+        getStatisticQuestion({commit}, pollID, questionID) {
+            return new Promise((resolve, reject) => {
+                api.statistics.getQuestion(pollID, questionID).then(res => {
+                    commit('updateStatisticsMeta', res.data)
+                    resolve()
+                }).catch(() => {
+                    reject()
+                })
+            })
         }
     },
 
@@ -99,6 +110,10 @@ const store = new Vuex.Store({
         updatePoll(state, poll) {
             let index = this.state.polls.findIndex(a => a.id === poll.id)
             this.state.polls[index] = poll
+        },
+        updateStatisticsMeta(state, statistics) {
+            let index = this.state.polls.findIndex(a => a.id === statistics.id)
+            this.state.statistics[index] = statistics
         }
 
     },
@@ -110,6 +125,11 @@ const store = new Vuex.Store({
         },
         isAuthenticated: (state) => {
             return state.authenticated
+        },
+        getStatistics: (state) => {
+            return (id) => {
+                return state.statistics.find(poll => poll.id === id)
+            }
         }
     }
 })
