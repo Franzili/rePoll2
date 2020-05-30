@@ -13,6 +13,7 @@ public final class Roles {
     public static final String POLL_CREATOR = "ROLE_POLL_CREATOR";
     public static final String POLL_EDITOR = "ROLE_POLL_EDITOR";
     public static final String PARTICIPANT = "ROLE_PARTICIPANT";
+
     public static final String NO_ROLE = "ROLE_NO_ROLE";
 
     private Roles() { }
