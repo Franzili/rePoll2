@@ -17,24 +17,17 @@ public class MailController {
     @RequestMapping("/api/v1/polls/mail/")
     public String sendSimpleEmail() {
 
-        // Create a Simple MailMessage.
         SimpleMailMessage message = new SimpleMailMessage();
+        MailConfigData data = new MailConfigData
+            ("smtp.gmail.com", 587,"zizimeyer4@gmail.com", "qwertz24", "zizimeyer4@gmail.com");
 
-        message.setTo("zizimeyer3@gmail.com");
+        message.setTo(data.sendTo);
         message.setSubject("Test Simple Email");
         message.setText("Hello, Im testing Simple Email");
 
         // Send Message!
-        this.getEmailSender().send(message);
+        this.emailSender.send(message);
 
         return "Email Sent!";
-    }
-
-    public JavaMailSender getEmailSender() {
-        return emailSender;
-    }
-
-    public void setEmailSender(JavaMailSender emailSender) {
-        this.emailSender = emailSender;
     }
 }
