@@ -23,7 +23,7 @@ public class QuestionsAnswersController {
     }
 
     @JsonSerialize(keyUsing = SerializeUser.class)
-    @GetMapping("/{pollID}/statistics/questions/{questionID:\\d+}/")
+    @GetMapping("/{pollID}/statistics/questions/{questionID:\\d+}/answers/")
     public Map<User, Answer> listEntriesAnswers(@PathVariable UUID pollID, @PathVariable String questionID) {
         return questionsAnswersService.getAnswers(pollID, Long.valueOf(questionID));
     }

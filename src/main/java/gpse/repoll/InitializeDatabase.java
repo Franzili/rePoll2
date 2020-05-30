@@ -117,6 +117,7 @@ public class InitializeDatabase implements InitializingBean {
                         "x@404.com",
                         Roles.POLL_CREATOR);
             }
+
             //dummy Poll for Nemo
             Poll poll3 = pollService.addPoll("Nothing to see here", nobody);
             questionService.addTextQuestion(poll3.getId(), "This sentence is false",

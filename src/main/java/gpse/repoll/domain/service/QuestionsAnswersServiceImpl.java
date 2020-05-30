@@ -4,7 +4,6 @@ import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.Answer;
 import gpse.repoll.domain.poll.questions.Question;
-import gpse.repoll.domain.repositories.PollEntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,17 +11,17 @@ import java.util.*;
 
 @Service
 public class QuestionsAnswersServiceImpl implements QuestionsAnswersService {
-    private final PollEntryRepository pollEntryRepository;
+    private final PollService pollService;
 
     @Autowired
-    public QuestionsAnswersServiceImpl(PollEntryRepository pollEntryRepository) {
-        this.pollEntryRepository = pollEntryRepository;
+    public QuestionsAnswersServiceImpl(PollService pollService) {
+        this.pollService = pollService;
     }
 
     @Override
     public Map<User, Answer> getAnswers(UUID pollID, Long questionID) {
         // TODO for anonymous polls
-        List<PollEntry> entries = new ArrayList<>(pollEntryRepository.getAllEntriesByPollID(pollID));
+        List<PollEntry> entries = new ArrayList<>(pollService.getPoll(pollID).getPollEntries());
         Map<User, Answer> userAnswerMap = new HashMap<>();
         for (PollEntry entry : entries) {
             User key = entry.getUser();
