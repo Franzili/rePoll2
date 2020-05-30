@@ -1,5 +1,6 @@
 package gpse.repoll.web.controllers;
 
+import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
@@ -10,6 +11,7 @@ import gpse.repoll.web.command.PollEntryCmd;
 import gpse.repoll.web.command.answers.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -38,7 +40,8 @@ public class PollEntriesController {
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
         Map<Long, Answer> answers = createAnswers(pollEntryCmd);
-        return pollEntryService.addPollEntry(pollId, answers);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return pollEntryService.addPollEntry(pollId, answers, user);
     }
 
     @GetMapping("/{pollId}/entries/{entryId:\\d+}/")
