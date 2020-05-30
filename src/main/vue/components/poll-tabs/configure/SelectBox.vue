@@ -2,7 +2,7 @@
     <div>
         <b-form-select
             v-model="selected"
-            v-on:change="$emit('doStuff', selected)"
+            v-on:change="$emit('getSelected', selected)"
             :options="comboChoice"></b-form-select>
     </div>
 </template>
@@ -12,11 +12,12 @@
 
     export default {
         name: "SelectBox",
+        porps: ['first'],
         data() {
             return {
                 tmpID: 0,
                 selected: null,
-                comboChoice: [{value: null, text: 'Select your question'}],
+                comboChoice: []
             }
         },
         computed: {
@@ -27,6 +28,7 @@
         },
         created: function () {
             this.tmpID = this.$route.params.tmpPollID;
+            this.comboChoice = [... this.comboChoice, this.first]
             this.fillComboChoice()
         },
         methods: {

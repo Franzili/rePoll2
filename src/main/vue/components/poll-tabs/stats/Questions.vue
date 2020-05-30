@@ -1,6 +1,17 @@
 <template>
     <div>
-        <SelectBox v-on:doStuff="selected = $event"></SelectBox>
+        <p>
+            <b-row style="margin-top: 2vh">
+                <b-col cols="4">
+                    <SelectBox :first="questionHeader" v-on:getSelected="selected = $event"></SelectBox>
+                </b-col>
+                <b-col cols="4">
+                    <SelectBox v-on:getSelected="selected = $event"></SelectBox>
+                </b-col>
+                <b-col cols="4"></b-col>
+            </b-row>
+        </p>
+
 
         <p> Hallo ich bin ausgewählt: {{selected}}</p>
 
@@ -49,8 +60,8 @@
         data() {
             return {
                 tmpID: 0,
-                selected: '',
-                data: ['hallo', 'test']
+                selected: null,
+                questionHeader: {value: null, text: 'Select your question'}
             }
         },
         computed: {
