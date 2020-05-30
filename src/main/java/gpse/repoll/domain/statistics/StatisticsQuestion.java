@@ -18,32 +18,19 @@ import java.util.*;
 /**
  * Statistics for a specific Question.
  */
-@Entity
 public class StatisticsQuestion {
 
-    @Id
     @GeneratedValue(generator = "uuid2")
-    @Column
     private UUID id;
 
-    @Column
-    @OneToMany
-    @JsonIgnore
     private final List<Answer> answers = new ArrayList<>();
 
-    @OneToOne
-    @JsonIgnore
     private Question question;
 
-    @JsonSerialize(keyUsing = SerializeChoice.class)
-    @ElementCollection
     private final Map<Choice, Integer> absoluteFrequencies = new HashMap<>();
 
-    @JsonSerialize(keyUsing = SerializeChoice.class)
-    @ElementCollection
     private final Map<Choice, Double> relativeFrequencies = new HashMap<>();
 
-    @OneToOne
     private Choice modalValue;
 
 

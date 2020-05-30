@@ -1,5 +1,6 @@
 package gpse.repoll.domain;
 
+import gpse.repoll.domain.statistics.StatisticsChoice;
 import gpse.repoll.domain.statistics.StatisticsQuestion;
 
 import java.util.UUID;
@@ -13,5 +14,5 @@ public interface StatisticsService {
      * @param questionId
      * @return Absolute Frequency.
      */
-    StatisticsQuestion getStatistics(UUID pollId, Long questionId);
+    StatisticsChoice getStatistics(UUID pollId, Long questionId);
 }

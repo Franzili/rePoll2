@@ -14,22 +14,22 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface StatisticsQuestionRepository extends CrudRepository<StatisticsQuestion, Long> {
+public interface StatisticsChoiceRepository extends CrudRepository<StatisticsQuestion, Long> {
 
-    Optional<StatisticsQuestion> findByQuestion(Question question);
+    Optional<StatisticsChoice> findByQuestion(Question question);
 
     boolean existsByQuestion(Question question);
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query("update StatisticsQuestion stats set stats.absoluteFrequencies = :absolute where stats.id = :statsID")
+    @Query("update Statistics stats set stats.absoluteFrequencies =:absolute where stats.id =:statsID")
     void updateAbsoluteFrequencies(
         @Param("statsID") UUID statsID,
         @Param("absolute") Map<Choice, Integer> absoluteFrequencies);
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query("update StatisticsQuestion stats set stats.relativeFrequencies = :relative where stats.id = :statsID")
+    @Query("update Statistics stats set stats.relativeFrequencies =:relative where stats.id =:statsID")
     void updateRelativeFrequencies(
         @Param("statsID") UUID statsID,
         @Param("relative") Map<Choice, Double> relativeFrequencies);

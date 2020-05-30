@@ -2,8 +2,9 @@ package gpse.repoll.domain;
 
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.questions.Question;
+import gpse.repoll.domain.statistics.StatisticsChoice;
 import gpse.repoll.domain.statistics.StatisticsQuestion;
-import gpse.repoll.domain.statistics.StatisticsQuestionRepository;
+import gpse.repoll.domain.statistics.StatisticsChoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,34 +15,44 @@ import java.util.UUID;
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
 
-    private final StatisticsQuestionRepository statisticsQuestionRepository;
+    private final StatisticsChoiceRepository statisticsChoiceRepository;
     private final PollService pollService;
 
     @Autowired
-    public StatisticsServiceImpl(StatisticsQuestionRepository statisticsQuestionRepository, PollService pollService) {
-        this.statisticsQuestionRepository = statisticsQuestionRepository;
+    public StatisticsServiceImpl(StatisticsChoiceRepository statisticsChoiceRepository, PollService pollService) {
+        this.statisticsChoiceRepository = statisticsChoiceRepository;
         this.pollService = pollService;
     }
 
     @Override
-    public StatisticsQuestion getStatistics(UUID pollId, Long questionId) {
+    public StatisticsChoice getStatistics(UUID pollId, Long questionId) {
+
+        statisticsChoiceRepository.updateAbsoluteFrequencies(statsID, statistics.getAbsoluteFrequencies());
+        statisticsChoiceRepository.updateRelativeFrequencies(statsID, statistics.getRelativeFrequencies());
+
+
+        for (Choice choice : choices) {
+            StatisticsChoice stats = new StatisticsChoice(questionID, choice.getId());
+            stats.setAbsoluteFrequency(frequencies.get(choice));
+        }
+
         Question question = pollService.getQuestion(pollId, questionId);
-        if (statisticsQuestionRepository.existsByQuestion(question)) {
-            Optional<StatisticsQuestion> stats = statisticsQuestionRepository.findByQuestion(question);
+        if (statisticsChoiceRepository.existsByQuestion(question)) {
+            Optional<StatisticsChoice> stats = statisticsChoiceRepository.findByQuestion(question);
             if (stats.isPresent()) {
                 List<PollEntry> pollEntries = pollService.getPoll(pollId).getEntries();
                 StatisticsQuestion statistics = new StatisticsQuestion(question, pollEntries);
                 UUID statsID = stats.get().getId();
-                statisticsQuestionRepository.updateAbsoluteFrequencies(statsID, statistics.getAbsoluteFrequencies());
-                statisticsQuestionRepository.updateRelativeFrequencies(statsID, statistics.getRelativeFrequencies());
+                statisticsChoiceRepository.updateAbsoluteFrequencies(statsID, statistics.getAbsoluteFrequencies());
+                statisticsChoiceRepository.updateRelativeFrequencies(statsID, statistics.getRelativeFrequencies());
                 return stats.get();
             } else {
                 throw new InternalServerErrorException();
             }
         } else {
             List<PollEntry> pollEntries = pollService.getPoll(pollId).getEntries();
-            StatisticsQuestion statistics = new StatisticsQuestion(question, pollEntries);
-            statisticsQuestionRepository.save(statistics);
+            StatisticsChoice statistics = new StatisticsChoice(question, pollEntries);
+            statisticsChoiceRepository.save(statistics);
             return statistics;
         }
     }
