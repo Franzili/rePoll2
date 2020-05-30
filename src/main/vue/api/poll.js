@@ -14,14 +14,19 @@ export default {
     update(poll) {
         let pollCmd = {title: poll.title, user: poll.user};
         return axios.put('/api/v1/polls/' + poll.id, pollCmd);
-    }
-    /*,
-    answerFirst(poll) { //first time answering the poll
+    },
+    listQuestions(pollID) { //list of questions in a given poll
+        return axios.get('api/v1/polls/' + pollID + '/entries/')
+    },
+    getQuestion(pollID, id) { //from a given poll a specific question
+        return axios.get('api/v1/polls/' + pollID + '/entries/' + id)
+    },
+    answerFirst(poll) { //saving first time answering the poll
         let pollEntryCmd = {pollID: poll.id , user: poll.user};
         return axios.post('api/v1/polls/' + poll.id + '/entries/', pollEntryCmd);
     },
-    answerAgain(poll) { //every following time changing the answers
-        let pollEntryCmd = {x , user: poll.user};
+    answerAgain(poll) { //saving every following time changing the answers
+        let pollEntryCmd = {pollID: poll.id , user: poll.user};
         return axios.put('api/v1/polls/' + poll.id + '/entries/' + poll.id.entry.id , pollEntryCmd);
-    }*/
+    }
 }

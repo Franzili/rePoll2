@@ -54,6 +54,7 @@
         data() {
             return {
                 id: 0,
+                sections: [],
                 questions: [],
             }
         },
@@ -66,10 +67,6 @@
 
 
         },
-    /*
-        ...mapMutations([
-            'updatePoll'
-        ]),
         answerPoll() {
             //TODO is this the first time answering this poll, then "answerFirst(poll)" else "answerAgain(poll) in polls.js"
 
@@ -89,14 +86,7 @@
                         this.entries[j])
                 }
             }
-        }
-    },
-    comments: {
-        NavBar,
-        HelloWorld
-        //,
-        //SurveyItemList
-    },*/
+        },
         methods: {
             ...mapMutations(['updatePoll']),
             savePollEntry() {
@@ -106,6 +96,7 @@
         },
         components: {
             PollQuestion
+            //,HelloWorld
         },
     }
 
