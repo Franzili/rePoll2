@@ -1,20 +1,11 @@
 <template>
     <b-container>
 
-        <b-row align-h="center">
-            <h1>My Polls</h1>
-        </b-row>
-
-        <!-- users own Polls -->
-        <b-container class="my-container">
-            <b-row style="text-align: center" class="my-row">
-                <b-col >
-                    <PollTableList v-bind:polls="polls"/>
-                </b-col>
-            </b-row>
-        </b-container>
         <!-- users Polls  to fill out-->
         <b-container class="my-container">
+            <b-row align-h="center">
+                <h2>Your polls to fill out</h2>
+            </b-row>
             <b-row style="text-align: center" class="my-row">
                 <b-col >
                     <AnswerPollTableList v-bind:polls="polls"/>
@@ -22,6 +13,17 @@
             </b-row>
         </b-container>
 
+        <!-- users own Polls -->
+        <b-container class="my-container">
+            <b-row align-h="center">
+                <h2>Your own Polls</h2>
+            </b-row>
+            <b-row style="text-align: center" class="my-row">
+                <b-col >
+                    <PollTableList v-bind:polls="polls"/>
+                </b-col>
+            </b-row>
+        </b-container>
 
     </b-container>
 </template>

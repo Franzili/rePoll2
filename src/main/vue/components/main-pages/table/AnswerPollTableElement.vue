@@ -1,33 +1,30 @@
 <template>
-    <div>
-        <!-- better for mobile version -->
-        <div v-if="isMobile()" class="my-ste">
-        </div>
+    <b-card
+        border-variant="primary"
+        :title="poll.title"
+        align="left"
+        bg-variant="light"
+    >
+        <b-row>
 
-        <!-- better for Desktop version -->
-        <div v-else class="my-ste">
-            <b-container>
-                <b-row style="text-align: center" cols="5">
-                    <b-col>
-                        <p class="my-name">{{poll.title}}</p>
-                    </b-col>
-                </b-row>
-                <b-row></b-row>
-                <b-row style="text-align: center;" cols="5">
-                    <b-col></b-col>
-                    <b-col></b-col>
-                    <b-col></b-col>
-                    <b-col>
-                        <router-link class="my-config-link" :to="'/poll/' + poll.id + '/answer/'">Fill Out</router-link>
-                    </b-col>
+            <b-col cols="8">
+                <p class="status">{{poll.status}}</p>
+            </b-col>
 
-                </b-row>
-            </b-container>
-        </div>
-    </div>
+            <b-col cols="4" style="text-align: center">
 
+                <router-link class="configLink"
+                             :to="'/poll/' + poll.id + '/answer/'"
+                >Fill Out
+                </router-link>
 
+            </b-col>
+        </b-row>
+
+    </b-card>
 </template>
+
+
 
 <script>
     export default {
