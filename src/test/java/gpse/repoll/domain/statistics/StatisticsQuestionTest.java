@@ -1,12 +1,11 @@
 package gpse.repoll.domain.statistics;
 
-import gpse.repoll.domain.Choice;
-import gpse.repoll.domain.Poll;
-import gpse.repoll.domain.PollEntry;
-import gpse.repoll.domain.answers.Answer;
-import gpse.repoll.domain.answers.ChoiceAnswer;
-import gpse.repoll.domain.questions.ChoiceQuestion;
-import gpse.repoll.domain.questions.Question;
+import gpse.repoll.domain.poll.Choice;
+import gpse.repoll.domain.poll.PollEntry;
+import gpse.repoll.domain.poll.answers.Answer;
+import gpse.repoll.domain.poll.answers.ChoiceAnswer;
+import gpse.repoll.domain.poll.questions.ChoiceQuestion;
+import gpse.repoll.domain.poll.questions.Question;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

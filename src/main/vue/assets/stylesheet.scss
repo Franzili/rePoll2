@@ -1,0 +1,61 @@
+/*
+Main Stylesheet.
+Put global variables, settings, etc. here.
+ */
+
+
+/*
+    Adapted version of the solarized color scheme
+ */
+$yellow:    #b58900;
+$orange:    #cb4b16;
+$red:       #dc322f;
+$magenta:   #d33682;
+$violet:    #6c71c4;
+$blue:      #268bd2;
+$teal:      #02a097;
+$green:     #56a137;
+
+$primary: $green;
+
+$theme-colors: (
+    "primary": #56a137,
+);
+
+/* ------ Put Bootstrap variable customizations above ---- */
+
+// Include Bootstrap and BootstrapVue SCSS files
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
+
+/* ------ Put all other stuff below -----------------------*/
+
+h6 {
+    font-weight: bold;
+}
+h5 {
+    font-weight: bold;
+}
+
+/*
+Used for navbars and other stuff that is supposed to stick to the viewport
+!! Important: Users must still set the top: XYZpx; property to make sure they stay at the appropriate height.
+ */
+.sticky {
+    position: sticky;
+    z-index: $zindex-sticky
+}
+
+/*
+Used as semi-transparent background color for floating elements like the navbar
+ */
+$floating-background-color: white;
+//$floating-background-color: rgba(256, 256, 256, 0.8);
+
+/*
+Use to fully hide a component. The component will not take up any space.
+ */
+.invisible {
+    display: none;
+}
+

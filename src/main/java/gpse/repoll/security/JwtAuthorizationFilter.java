@@ -1,5 +1,8 @@
 package gpse.repoll.security;
 
+import gpse.repoll.domain.User;
+import gpse.repoll.domain.exceptions.UnauthorizedException;
+import gpse.repoll.domain.repositories.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
@@ -27,10 +30,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private static final Logger LOG = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
     private final  SecurityConstants securityConstants;
 
+    private final UserRepository userRepository;
+
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager,
-                                  final SecurityConstants securityConstants) {
+                                  final SecurityConstants securityConstants,
+                                  UserRepository userRepository) {
         super(authenticationManager);
         this.securityConstants = securityConstants;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -71,13 +78,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
                 String username = parsedToken.getBody().getSubject();
 
+                // Todo get authorities from user object instead of the token
                 List<SimpleGrantedAuthority> authorities = ((List<?>) parsedToken.getBody()
                     .get("rol")).stream()
                     .map(authority -> new SimpleGrantedAuthority((String) authority))
                     .collect(Collectors.toList());
 
                 if (username != null && !username.equals("")) {
-                    return new UsernamePasswordAuthenticationToken(username, null, authorities);
+                    User user = userRepository.findByUsername(username).orElseThrow(UnauthorizedException::new);
+                    return new UsernamePasswordAuthenticationToken(user, null, authorities);
                 }
             } catch (ExpiredJwtException exception) {
                 LOG.warn("Request to parse expired JWT : {} failed : {}", token, exception.getMessage());

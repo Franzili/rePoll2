@@ -1,8 +1,13 @@
 package gpse.repoll.web;
 
-import gpse.repoll.domain.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
+import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.service.PollService;
+import gpse.repoll.domain.service.UserService;
+import gpse.repoll.domain.User;
 import gpse.repoll.testutils.MockTestUsers;
+import gpse.repoll.web.command.PollCmd;
+import gpse.repoll.web.controllers.PollsController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,14 +73,14 @@ public class PollsControllerTest {
         polls.add(poll2);
 
         when(pollService.getAll()).thenReturn(polls);
-        assertThat(controller.getAll()).containsAll(polls);
+        assertThat(controller.listPolls()).containsAll(polls);
     }
 
     @Test
     @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testGetAllEmpty() {
         when(pollService.getAll()).thenReturn(new ArrayList<Poll>());
-        assertThat(controller.getAll()).isEmpty();
+        assertThat(controller.listPolls()).isEmpty();
     }
 
     @Test

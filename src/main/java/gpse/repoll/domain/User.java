@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.security.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -51,6 +52,10 @@ public class User implements UserDetails {
 
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID uuid) {
+        this.id = uuid;
     }
 
     /**
