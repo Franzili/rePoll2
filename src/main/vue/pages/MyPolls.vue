@@ -26,7 +26,7 @@
 
     import HelloWorld from '../components/HelloWorld.vue'
     import NavBar from "../components/NavBar";
-    import AnswerPollTableList from "../components/AnswerPollTableList";
+    import AnswerPollTableList from "../components/main-pages/table/AnswerPollTableList";
     import PollTableList from "../components/PollTableList";
     import {mapState, mapActions} from "vuex";
 

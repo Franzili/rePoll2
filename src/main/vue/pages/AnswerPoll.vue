@@ -16,7 +16,7 @@
 
 <script>
 
-    import AnswerPollTableList from "../components/AnswerPollTableList";
+    import AnswerPollTableList from "../components/main-pages/table/AnswerPollTableList";
     import {mapState, mapActions} from "vuex";
 
     export default {
