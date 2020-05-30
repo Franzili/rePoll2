@@ -115,7 +115,7 @@ public class InitializeDatabase implements InitializingBean {
                         "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
                         "Cpt Nemo",
                         "x@404.com",
-                        Roles.POLL_CREATOR);
+                        Roles.PARTICIPANT);
             }
             //dummy Poll for Nemo
             Poll poll3 = pollService.addPoll("Nothing to see here", nobody);

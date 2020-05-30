@@ -37,7 +37,23 @@ public class PollsController {
     @GetMapping("/")
     public List<Poll> listPolls() {
         List<Poll> polls = new ArrayList<>();
-        pollService.getAll().forEach(polls::add);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        /*if (user.getRoles().contains(Roles.POLL_CREATOR)) {
+            pollService.getAll().forEach(polls::add);
+        } else {
+            userService.getOwnedPolls(user.getId());
+        }*/
+        if (user.getRoles().contains(Roles.ADMIN)) {
+            pollService.getAll().forEach(polls::add);
+        } else if (user.getRoles().contains(Roles.POLL_CREATOR)) {
+            pollService.getAll().forEach(polls::add);
+        } else if (user.getRoles().contains(Roles.POLL_EDITOR)) {
+            userService.getOwnedPolls(user.getId());
+        } else if (user.getRoles().contains(Roles.PARTICIPANT)) {
+            userService.getOwnedPolls(user.getId());
+        } /*else if (user.getRoles().contains(Roles.NO_ROLE)) {
+            userService.getOwnedPolls(user.getId());
+        }*/
         return polls;
     }
 
