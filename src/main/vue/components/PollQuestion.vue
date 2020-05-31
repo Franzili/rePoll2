@@ -64,7 +64,7 @@
 
         <div v-if="question.type === 'dropdown'">
             <b-dropdown variant="primary" class="drop-down" text="select answer">
-                <div class="text-left" v-bind:key="pos.id" v-for="pos in question.possibilities">
+                <div class="text-left" v-bind:key="pos.id" v-for="pos in question.choices">
                     <!-- TODO how to set value -->
                     <b-dropdown-item v-model="selected" :value="pos.text">{{pos.text}}</b-dropdown-item>
                 </div>
@@ -73,7 +73,7 @@
             <b-icon-check-all class="dropdown-icon" scale="2" animation="fade" v-if="edit && editDropdown" @click="changeEditDropdown"></b-icon-check-all>
 
             <div v-if="editDropdown">
-                <div v-bind:key="pos.id" v-for="pos in question.possibilities">
+                <div v-bind:key="pos.id" v-for="pos in question.choices">
                     <b-container>
                         <b-row>
                             <b-col class="text-left" cols="8">{{pos.text}}</b-col>
@@ -137,7 +137,7 @@
                 editSlider: false,
                 editCharLimit: false,
                 editDropdown: false,
-                val: this.question.possibilities[0].min,
+                //val: this.question.possibilities[0].min,
                 selected: []
             }
         },
@@ -155,10 +155,10 @@
                 this.editDropdown = !this.editDropdown;
             },
             addPos(newPos){
-                this.question.possibilities = [...this.question.possibilities, newPos];
+                this.question.choices = [...this.question.choices, newPos];
             },
             delPos(id){
-                this.question.possibilities = this.question.possibilities.filter(possibility => possibility.id !== id);
+                this.question.choices = this.question.choices.filter(choice => choice.id !== id);
             }
         },
         components: {QuestionEditor},

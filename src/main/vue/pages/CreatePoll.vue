@@ -307,7 +307,7 @@
                     id: uuidv4(),
                     type: "test",
                     title: "new question",
-                    possibilities: [],
+                    choices: [],
 
                 };
 
@@ -327,18 +327,18 @@
 
                 switch (type) {
                     case "checkbox":
-                        newQuestion.type = "checkbox";
-                        newQuestion.possibilities = testPossibilities;
+                        newQuestion.type = "ChoiceQuestion";
+                        newQuestion.choices = testPossibilities;
                         break;
 
                     case "radio":
-                        newQuestion.type = "radio";
-                        newQuestion.possibilities = testPossibilities;
+                        newQuestion.type = "RadioButtonQuestion";
+                        newQuestion.choices = testPossibilities;
                         break;
 
                     case "dropdown":
                         newQuestion.type = "dropdown";
-                        newQuestion.possibilities = testPossibilities;
+                        newQuestion.choices = testPossibilities;
                         break;
 
                     case "section":
@@ -347,7 +347,7 @@
 
                     case "slider":
                         newQuestion.type = "slider";
-                        newQuestion.possibilities =  [
+                        newQuestion.choices =  [
                             {
                                 min: 1,
                                 max: 10,
@@ -356,8 +356,8 @@
                         break;
 
                     case "freetext":
-                        newQuestion.type = "freetext";
-                        newQuestion.possibilities = [
+                        newQuestion.type = "TextQuestion";
+                        newQuestion.choices = [
                             {
                                 limit: 10
                             }];
