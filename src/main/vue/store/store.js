@@ -6,20 +6,7 @@ import Vue from "vue";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-    state: {
-        polls: [],
-    },
-
-    mutations: {
-        setPolls(state, polls) {
-            this.state.polls = polls
-        },
-        savePolls(state, poll) {
-            this.state.polls.push(poll)
-        },
-    },
-
+let store = new Vuex.Store({
     modules: {
         currentPoll: currentPoll,
         myPolls: myPolls,
@@ -27,3 +14,6 @@ export default new Vuex.Store({
     }
 })
 
+store.dispatch('auth/loadFromStorage');
+
+export default store;
