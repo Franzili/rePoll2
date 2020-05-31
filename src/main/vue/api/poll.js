@@ -5,7 +5,7 @@ export default {
         return axios.get('/api/v1/polls/');
     },
     get(id) {
-        return axios.get('/api/v1/polls/' + id);
+        return axios.get('/api/v1/polls/' + id + '/');
     },
     create(poll) {
         let pollCmd = {
