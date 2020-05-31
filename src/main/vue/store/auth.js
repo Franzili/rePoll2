@@ -27,6 +27,17 @@ const auth = {
                     });
             })
         },
+
+        logout({commit}) {
+            /* todo
+            commit('authenticate', null);
+             */
+        },
+
+        loadFromStorage({commit}) {
+            let token = localStorage.getItem('authToken');
+            commit('authenticate', token);
+        }
     },
 
     mutations: {
@@ -43,14 +54,6 @@ const auth = {
             localStorage.setItem('authToken', token);
         },
 
-        logout({commit}) {
-            commit('authenticate', null);
-        },
-
-        loadFromStorage({commit}) {
-            let token = localStorage.getItem('authToken');
-            commit('authenticate', token);
-        }
     },
 
     namespaced: true
