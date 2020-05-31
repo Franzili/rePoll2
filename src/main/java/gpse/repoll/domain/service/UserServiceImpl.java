@@ -120,6 +120,13 @@ public class UserServiceImpl implements UserService {
         return user.getOwnPolls();
     }
 
+
+    public Poll addOwnedPoll(Poll poll, UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
+        Poll newPoll = poll;
+        return user.addOwnPoll(newPoll);
+    }
+
     @Override
     public UserDetails loadUserByUsername(final String username) {
         return getUser(username);

@@ -9,6 +9,7 @@ import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,11 @@ public class PollsController {
     @GetMapping("/")
     public List<Poll> listPolls() {
         List<Poll> polls = new ArrayList<>();
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getPrincipal().toString();
+        User user = userService.getUser(username);
+
         /*if (user.getRoles().contains(Roles.POLL_CREATOR)) {
             pollService.getAll().forEach(polls::add);
         } else {
@@ -50,7 +55,25 @@ public class PollsController {
         } else if (user.getRoles().contains(Roles.POLL_EDITOR)) {
             userService.getOwnedPolls(user.getId());
         } else if (user.getRoles().contains(Roles.PARTICIPANT)) {
-            userService.getOwnedPolls(user.getId());
+
+            //TODO following returns only empty list of owned polls workaround below
+            /*polls.addAll(userService.getOwnedPolls(user.getId()));
+            System.out.println("Wer ist das");
+            System.out.println(user.getUsername());
+            System.out.println(user.getId());
+            System.out.println(userService.getOwnedPolls(user.getId()).size());
+            System.out.println("Noch mal");
+            polls.addAll(user.getOwnPolls());
+            System.out.println(user.getOwnPolls().size());*/
+
+            //TODO this iterates over the polls to get all polls from a given user, but has to iterate over user to get their polls as above commented out
+            Iterable<Poll> tmpPolls = pollService.getAll();
+            for (Poll poll:tmpPolls
+                 ) {
+                if (poll.getCreator().equals(user)) {
+                    polls.add(poll);
+                }
+            }
         } /*else if (user.getRoles().contains(Roles.NO_ROLE)) {
             userService.getOwnedPolls(user.getId());
         }*/

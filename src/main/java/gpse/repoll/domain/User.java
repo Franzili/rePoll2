@@ -84,8 +84,9 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public void addOwnPoll(Poll poll) {
+    public Poll addOwnPoll(Poll poll) {
         ownPolls.add(poll);
+        return poll;
     }
 
     public void removeOwnPoll(Poll poll) {

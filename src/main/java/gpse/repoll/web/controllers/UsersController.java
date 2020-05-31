@@ -119,6 +119,19 @@ public class UsersController {
     }
 
     /**
+     * Adds polls to the repository of a given user
+     * @param poll
+     * @param userId
+     * @return
+     */
+    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    @PutMapping("/{userId}/own-polls/")
+    public Poll addOwnedPoll(@RequestBody Poll poll, @PathVariable UUID userId) {
+        return userService.addOwnedPoll(poll, userId);
+    }
+
+
+    /**
      * Checks if a String can be parsed into a UUID.
      * @param str the String to try.
      * @return True if the String is a valid UUID, false otherwise.
