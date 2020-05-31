@@ -22,20 +22,25 @@
 
     export default {
         name: "PollTable",
-        created: function () {
-            this.requestPolls()
+
+        mounted() {
+            this.loadPolls()
         },
+
         computed: {
             ...mapState({
-                polls: state => state.polls
+                polls: state => state.myPolls.polls
             })
         },
         methods: {
-            ...mapActions(['requestPolls'])
+            ...mapActions('myPolls', {
+                loadPolls: 'load'
+            })
         },
         components: {
             PollTableList
         },
+
     }
 </script>
 

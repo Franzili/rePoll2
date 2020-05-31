@@ -1,5 +1,6 @@
 import Vuex from "vuex";
 import currentPoll from "./currentPoll";
+import myPolls from "./myPolls";
 import auth from "./auth";
 import Vue from "vue";
 
@@ -21,6 +22,7 @@ export default new Vuex.Store({
 
     modules: {
         currentPoll: currentPoll,
+        myPolls: myPolls,
         auth: auth
     }
 })
