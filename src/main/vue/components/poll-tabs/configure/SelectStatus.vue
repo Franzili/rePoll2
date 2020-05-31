@@ -5,7 +5,7 @@
         <b-row class="align-items-center">
             <b-col>
                 <b-form-radio-group
-                    v-model="selected"
+                    v-model="status"
                     name="plain-inline">
                     <b-form-radio value="IN_PROCESS" >In Bearbeitung</b-form-radio>
                     <b-form-radio value="READY">Bereit</b-form-radio>
@@ -23,7 +23,12 @@
 
 <script>
     export default {
-        name: "SelectStatus"
+        name: "SelectStatus",
+        data() {
+            return {
+                status: ""
+            }
+        }
     }
 </script>
 
