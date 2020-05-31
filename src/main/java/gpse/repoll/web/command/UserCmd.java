@@ -8,6 +8,7 @@ public class UserCmd {
     private String password;
     private String fullName;
     private String email;
+    private String role;
 
     public String getUsername() {
         return username;
@@ -39,5 +40,13 @@ public class UserCmd {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

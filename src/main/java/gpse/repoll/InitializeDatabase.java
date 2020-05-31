@@ -1,6 +1,5 @@
 package gpse.repoll;
 
-
 import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.Poll;
@@ -11,6 +10,7 @@ import gpse.repoll.domain.service.PollEntryService;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.QuestionService;
 import gpse.repoll.domain.service.UserService;
+import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -81,7 +81,8 @@ public class InitializeDatabase implements InitializingBean {
                     "JamesBond",
                     // Passwort: GutenTag
                     "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
-                    "Bob", "jbond@mi6.com"
+                    "Bob", "jbond@mi6.com",
+                        Roles.ADMIN
                 );
             }
             return null;
@@ -112,8 +113,27 @@ public class InitializeDatabase implements InitializingBean {
                         // Passwort: GutenTag
                         "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
                         "Cpt Nemo",
-                        "x@404.com");
+                        "x@404.com",
+                        Roles.POLL_CREATOR);
             }
+
+            List<User> participants = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                User tmpUser;
+                try {
+                    tmpUser = userService.getUser("Patti" + i);
+                } catch (UsernameNotFoundException e) {
+                    tmpUser = userService.addUser(
+                            "Patti" + i,
+                            // Passwort: GutenTag
+                            "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                            "Privat Patti" + i,
+                            "x@404.com",
+                            Roles.PARTICIPANT);
+                }
+                participants.add(tmpUser);
+            }
+
             //dummy Poll for Nemo
             Poll poll3 = pollService.addPoll("Nothing to see here", nobody);
             questionService.addTextQuestion(poll3.getId(), "This sentence is false",
@@ -311,16 +331,16 @@ public class InitializeDatabase implements InitializingBean {
             textMap10.put(question4.getId(), scaleAnswer10);
 
 
-            pollEntryService.addPollEntry(poll.getId(), textMap1);
-            pollEntryService.addPollEntry(poll.getId(), textMap2);
-            pollEntryService.addPollEntry(poll.getId(), textMap3);
-            pollEntryService.addPollEntry(poll.getId(), textMap4);
-            pollEntryService.addPollEntry(poll.getId(), textMap5);
-            pollEntryService.addPollEntry(poll.getId(), textMap6);
-            pollEntryService.addPollEntry(poll.getId(), textMap7);
-            pollEntryService.addPollEntry(poll.getId(), textMap8);
-            pollEntryService.addPollEntry(poll.getId(), textMap9);
-            pollEntryService.addPollEntry(poll.getId(), textMap10);
+            pollEntryService.addPollEntry(poll.getId(), textMap1, participants.get(0));
+            pollEntryService.addPollEntry(poll.getId(), textMap2, participants.get(1));
+            pollEntryService.addPollEntry(poll.getId(), textMap3, participants.get(2));
+            pollEntryService.addPollEntry(poll.getId(), textMap4, participants.get(3));
+            pollEntryService.addPollEntry(poll.getId(), textMap5, participants.get(4));
+            pollEntryService.addPollEntry(poll.getId(), textMap6, participants.get(5));
+            pollEntryService.addPollEntry(poll.getId(), textMap7, participants.get(6));
+            pollEntryService.addPollEntry(poll.getId(), textMap8, participants.get(7));
+            pollEntryService.addPollEntry(poll.getId(), textMap9, participants.get(8));
+            pollEntryService.addPollEntry(poll.getId(), textMap10, participants.get(9));
 
             return null;
         });

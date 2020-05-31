@@ -1,5 +1,7 @@
 package gpse.repoll.domain.service;
 
+import gpse.repoll.domain.Anonymity;
+import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.*;
@@ -71,14 +73,19 @@ public class PollEntryServiceImpl implements PollEntryService {
      * {@inheritDoc}
      */
     @Override
-    public PollEntry addPollEntry(final UUID pollId, final Map<Long, Answer> associations) {
+    public PollEntry addPollEntry(final UUID pollId, final Map<Long, Answer> associations, final User user) {
         Poll poll = pollService.getPoll(pollId);
         PollEntry pollEntry = new PollEntry();
-        createAnswers(poll, pollEntry, associations);
-        pollEntryRepository.save(pollEntry);
-        poll.add(pollEntry);
-        pollService.save(poll);
-        return pollEntry;
+        if (poll.getAnonymity().equals(Anonymity.NON_ANONYMOUS)) {
+            pollEntry.setUser(user);
+            createAnswers(poll, pollEntry, associations);
+            pollEntryRepository.save(pollEntry);
+            poll.add(pollEntry);
+            pollService.save(poll);
+            return pollEntry;
+        } else {
+            return null; // todo for other degrees of anonymity
+        }
     }
 
     /**

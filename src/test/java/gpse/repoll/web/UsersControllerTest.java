@@ -1,6 +1,7 @@
 package gpse.repoll.web;
 
 import gpse.repoll.domain.service.UserService;
+import gpse.repoll.security.Roles;
 import gpse.repoll.testutils.MockTestUsers;
 import gpse.repoll.web.command.UserCmd;
 import gpse.repoll.web.controllers.UsersController;
@@ -50,7 +51,7 @@ public class UsersControllerTest {
         UserCmd userCmd = makeUserCmd();
 
         usersController.updateUser(uuid, userCmd);
-        verify(userService).updateUser(any(UUID.class), anyString(), anyString(), anyString());
+        verify(userService).updateUser(any(UUID.class), anyString(), anyString(), anyString(), anyString());
     }
 
     @Test
@@ -60,7 +61,7 @@ public class UsersControllerTest {
         UserCmd userCmd = makeUserCmd();
 
         usersController.updateUser(uuid, userCmd);
-        verify(userService).updateUser(anyString(), anyString(), anyString(), anyString());
+        verify(userService).updateUser(anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
     private UserCmd makeUserCmd() {
@@ -68,6 +69,7 @@ public class UsersControllerTest {
         userCmd.setUsername("abc");
         userCmd.setFullName("def");
         userCmd.setEmail("abc@def.de");
+        userCmd.setRole(Roles.NO_ROLE);
         return userCmd;
     }
 }

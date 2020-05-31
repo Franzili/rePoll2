@@ -32,7 +32,8 @@ public class PollsController {
         this.userService = userService;
     }
 
-    //@Secured(Roles.ALL) <--- todo this has to be fixed in future, now is Blocking frontend from accesing the database
+    // todo this has to be fixed in future, now is blocking frontend from accessing the database
+    //@Secured(Roles.POLL_CREATOR)
     @GetMapping("/")
     public List<Poll> listPolls() {
         List<Poll> polls = new ArrayList<>();
@@ -40,7 +41,7 @@ public class PollsController {
         return polls;
     }
 
-    @Secured(Roles.ALL)
+    @Secured(Roles.POLL_CREATOR)
     @PostMapping("/")
     public Poll addPoll(@RequestBody PollCmd pollCmd) {
         if (pollCmd.getTitle() == null || pollCmd.getTitle().equals("")) {
@@ -52,13 +53,13 @@ public class PollsController {
         return pollService.addPoll(pollCmd.getTitle(), user);
     }
 
-    @Secured(Roles.ALL)
+    @Secured(Roles.POLL_EDITOR)
     @GetMapping("/{id}/")
     public Poll getPoll(@PathVariable("id") final UUID id) {
         return pollService.getPoll(id);
     }
 
-    @Secured(Roles.ALL)
+    @Secured(Roles.POLL_EDITOR)
     @PutMapping("/{id}/")
     public Poll updatePoll(@PathVariable("id") final UUID id, @RequestBody PollCmd pollCmd) {
         Map<UUID, List<Long>> structure = null;
@@ -67,10 +68,16 @@ public class PollsController {
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User lastEditor = userService.getUser(auth.getName());
-        return pollService.updatePoll(id, pollCmd.getTitle(), pollCmd.getStatus(), structure, lastEditor, pollCmd.getAnonymity());
+        return pollService.updatePoll(
+                id,
+                pollCmd.getTitle(),
+                pollCmd.getStatus(),
+                structure, lastEditor,
+                pollCmd.getAnonymity());
     }
 
-    @Secured(Roles.ALL)
+    // todo creator cannot delete polls he didn't create
+    @Secured(Roles.POLL_CREATOR)
     @DeleteMapping(value = "/{id}/")
     public void removePoll(@PathVariable("id") final UUID id) {
         pollService.removePoll(id);
