@@ -124,12 +124,13 @@ public class InitializeDatabase implements InitializingBean {
             Choice choice6 = new Choice("21-40");
             Choice choice7 = new Choice("41-60");
             Choice choice8 = new Choice("60+");
+            String displayVariant = "dropdown";
             choicesRadioButtonList.add(choice5);
             choicesRadioButtonList.add(choice6);
             choicesRadioButtonList.add(choice7);
             choicesRadioButtonList.add(choice8);
             Question question2 = questionService.addRadioButtonQuestion(poll.getId(), "How old are you?",
-                3, choicesRadioButtonList, user);
+                3, choicesRadioButtonList, user, displayVariant);
 
             List<Choice> choicesChoiceQuestionList = new ArrayList<>();
             Choice choice1 = new Choice("Avicii");

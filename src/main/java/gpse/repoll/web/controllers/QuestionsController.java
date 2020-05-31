@@ -63,6 +63,7 @@ public class QuestionsController {
                     lastEditor);
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
+            String displayVariant = ((RadioButtonQuestionCmd) questionCmd).getDisplayVariant();
             if (radioButtonQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
@@ -70,7 +71,10 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.addRadioButtonQuestion(pollId, title, questionOrder, choices, lastEditor);
+            if (radioButtonQuestionCmd.getDisplayVariant() == null || (!radioButtonQuestionCmd.getDisplayVariant().equals("radio") && !radioButtonQuestionCmd.getDisplayVariant().equals("dropdown"))) {
+                throw new BadRequestException("No display variant given for the question!");
+            }
+            return questionService.addRadioButtonQuestion(pollId, title, questionOrder, choices, lastEditor, displayVariant);
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
             if (choiceQuestionCmd.getChoices() == null) {

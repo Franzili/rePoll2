@@ -25,7 +25,7 @@
 
         <div v-if="question.type === 'RadioButtonQuestion'">
             <!-- michaels variant with changes variables, works this way but is not a radio component in answer-->
-            <b-form-group>
+            <b-form-group v-if="question.displayVariant === 'radio'">
                 <div v-bind:key="choice.id" v-for="choice in question.choices">
                     <b-container>
                         <b-row>
@@ -35,6 +35,30 @@
                     </b-container>
                 </div>
             </b-form-group>
+
+
+
+            <div v-if="question.displayVariant === 'dropdown'">
+                <b-dropdown variant="primary" class="drop-down" text="select answer">
+                    <div class="text-left" v-bind:key="pos.id" v-for="pos in question.choices">
+                        <!-- TODO how to set value -->
+                        <b-dropdown-item v-model="selected" :value="pos.text">{{pos.text}}</b-dropdown-item>
+                    </div>
+                </b-dropdown>
+                <b-icon-x-circle-fill class="dropdown-icon" scale="2" v-if="edit && !editDropdown" variant="secondary" @click="changeEditDropdown">delete possibilities</b-icon-x-circle-fill>
+                <b-icon-check-all class="dropdown-icon" scale="2" animation="fade" v-if="edit && editDropdown" @click="changeEditDropdown"></b-icon-check-all>
+
+                <div v-if="editDropdown">
+                    <div v-bind:key="pos.id" v-for="pos in question.choices">
+                        <b-container>
+                            <b-row>
+                                <b-col class="text-left" cols="8">{{pos.text}}</b-col>
+                                <b-col><b-button class="del-pos-btn" variant="outline-secondary" pill v-if="edit === true" @click="delPos(pos.id)">x</b-button></b-col>
+                            </b-row>
+                        </b-container>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
@@ -59,28 +83,6 @@
                 character limit:
                 <b-form-input v-model="question.choices[0].limit" placeholder="Set character limit..." class="text-box"/>
                 <b-icon-check-all class="my-icon" scale="2" animation="fade" @click="changeEditCharLimit"></b-icon-check-all>
-            </div>
-        </div>
-
-        <div v-if="question.type === 'dropdown'">
-            <b-dropdown variant="primary" class="drop-down" text="select answer">
-                <div class="text-left" v-bind:key="pos.id" v-for="pos in question.choices">
-                    <!-- TODO how to set value -->
-                    <b-dropdown-item v-model="selected" :value="pos.text">{{pos.text}}</b-dropdown-item>
-                </div>
-            </b-dropdown>
-            <b-icon-x-circle-fill class="dropdown-icon" scale="2" v-if="edit && !editDropdown" variant="secondary" @click="changeEditDropdown">delete possibilities</b-icon-x-circle-fill>
-            <b-icon-check-all class="dropdown-icon" scale="2" animation="fade" v-if="edit && editDropdown" @click="changeEditDropdown"></b-icon-check-all>
-
-            <div v-if="editDropdown">
-                <div v-bind:key="pos.id" v-for="pos in question.choices">
-                    <b-container>
-                        <b-row>
-                            <b-col class="text-left" cols="8">{{pos.text}}</b-col>
-                            <b-col><b-button class="del-pos-btn" variant="outline-secondary" pill v-if="edit === true" @click="delPos(pos.id)">x</b-button></b-col>
-                        </b-row>
-                    </b-container>
-                </div>
             </div>
         </div>
 

@@ -306,6 +306,7 @@
                 let newQuestion = {
                     id: uuidv4(),
                     type: "test",
+                    displayVariant: "radio",
                     title: "new question",
                     choices: [],
 
@@ -333,11 +334,13 @@
 
                     case "radio":
                         newQuestion.type = "RadioButtonQuestion";
+                        newQuestion.displayVariant = "radio";
                         newQuestion.choices = testPossibilities;
                         break;
 
                     case "dropdown":
-                        newQuestion.type = "dropdown";
+                        newQuestion.type = "RadioButtonQuestion";
+                        newQuestion.displayVariant = "dropdown";
                         newQuestion.choices = testPossibilities;
                         break;
 
