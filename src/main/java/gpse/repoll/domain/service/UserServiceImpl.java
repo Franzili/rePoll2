@@ -120,11 +120,26 @@ public class UserServiceImpl implements UserService {
         return user.getOwnPolls();
     }
 
+    @Override
+    public List<Poll> getOwnedPolls(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
+        return user.getOwnPolls();
+    }
 
-    public Poll addOwnedPoll(Poll poll, UUID userId) {
+    @Override
+    public User addOwnedPoll(Poll poll, UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
-        Poll newPoll = poll;
-        return user.addOwnPoll(newPoll);
+        user.addOwnPoll(poll);
+        userRepository.save(user);
+        return user;
+    }
+
+    @Override
+    public User addOwnedPoll(Poll poll, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
+        user.addOwnPoll(poll);
+        userRepository.save(user);
+        return user;
     }
 
     @Override

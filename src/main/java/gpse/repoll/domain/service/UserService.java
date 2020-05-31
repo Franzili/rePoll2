@@ -22,7 +22,10 @@ public interface UserService extends UserDetailsService {
     User removeUser(String username);
 
     List<Poll> getOwnedPolls(UUID userId);
-    Poll addOwnedPoll(Poll poll, UUID userId);
+    List<Poll> getOwnedPolls(String username);
+
+    User addOwnedPoll(Poll poll, UUID userId);
+    User addOwnedPoll(Poll poll, String username);
 
     List<String> getRoles(UUID userId);
     List<String> getRoles(String username);

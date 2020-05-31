@@ -120,13 +120,13 @@ public class UsersController {
 
     /**
      * Adds polls to the repository of a given user
-     * @param poll
-     * @param userId
-     * @return
+     * @param poll poll to be added
+     * @param userId UUID identifier
+     * @return modified user
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @PutMapping("/{userId}/own-polls/")
-    public Poll addOwnedPoll(@RequestBody Poll poll, @PathVariable UUID userId) {
+    public User addOwnedPoll(@RequestBody Poll poll, @PathVariable UUID userId) {
         return userService.addOwnedPoll(poll, userId);
     }
 

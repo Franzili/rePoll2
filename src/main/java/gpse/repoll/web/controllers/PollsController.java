@@ -51,29 +51,25 @@ public class PollsController {
         if (user.getRoles().contains(Roles.ADMIN)) {
             pollService.getAll().forEach(polls::add);
         } else if (user.getRoles().contains(Roles.POLL_CREATOR)) {
-            pollService.getAll().forEach(polls::add);
+            //pollService.getAll().forEach(polls::add);
+            polls.addAll(userService.getOwnedPolls(user.getId()));
+            //polls.addAll(user.getOwnPolls());
         } else if (user.getRoles().contains(Roles.POLL_EDITOR)) {
             userService.getOwnedPolls(user.getId());
         } else if (user.getRoles().contains(Roles.PARTICIPANT)) {
 
             //TODO following returns only empty list of owned polls workaround below
-            /*polls.addAll(userService.getOwnedPolls(user.getId()));
-            System.out.println("Wer ist das");
-            System.out.println(user.getUsername());
-            System.out.println(user.getId());
-            System.out.println(userService.getOwnedPolls(user.getId()).size());
-            System.out.println("Noch mal");
-            polls.addAll(user.getOwnPolls());
-            System.out.println(user.getOwnPolls().size());*/
+            polls.addAll(userService.getOwnedPolls(user.getId()));
+            //polls.addAll(user.getOwnPolls());
 
             //TODO this iterates over the polls to get all polls from a given user, but has to iterate over user to get their polls as above commented out
-            Iterable<Poll> tmpPolls = pollService.getAll();
+            /*Iterable<Poll> tmpPolls = pollService.getAll();
             for (Poll poll:tmpPolls
                  ) {
                 if (poll.getCreator().equals(user)) {
                     polls.add(poll);
                 }
-            }
+            }*/
         } /*else if (user.getRoles().contains(Roles.NO_ROLE)) {
             userService.getOwnedPolls(user.getId());
         }*/

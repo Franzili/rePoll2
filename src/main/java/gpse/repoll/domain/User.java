@@ -84,10 +84,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public Poll addOwnPoll(Poll poll) {
-        ownPolls.add(poll);
-        return poll;
-    }
+    public void addOwnPoll(Poll poll) { ownPolls.add(poll); }
 
     public void removeOwnPoll(Poll poll) {
         ownPolls.remove(poll);
@@ -97,9 +94,7 @@ public class User implements UserDetails {
         return Collections.unmodifiableList(ownPolls);
     }
 
-    public List<String> getRoles() {
-        return Collections.unmodifiableList(roles);
-    }
+    public List<String> getRoles() { return Collections.unmodifiableList(roles); }
 
     public void setRoles(String role) throws NoValidRoleException {
         roles.clear();
