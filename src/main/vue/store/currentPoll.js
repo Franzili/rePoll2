@@ -14,7 +14,7 @@ const currentPoll = {
     actions: {
         load({commit}, id) {
             api.poll.get(id).then(function (res) {
-                commit('setCurrentPoll', res);
+                commit('setCurrentPoll', res.data);
             }).catch(function (error) {
                 console.log(error);
             });
