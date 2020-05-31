@@ -86,7 +86,7 @@ public class QuestionsController {
         throw new InternalServerErrorException();
     }
 
-    @Secured(Roles.PARTICIPANT)
+    @Secured(Roles.ADMIN)
     @GetMapping("/{pollId}/questions/")
     public List<Question> listQuestions(@PathVariable("pollId") final UUID pollId) {
         return questionService.getAllQuestions(pollId);
