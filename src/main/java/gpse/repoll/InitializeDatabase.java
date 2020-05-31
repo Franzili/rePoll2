@@ -122,9 +122,9 @@ public class InitializeDatabase implements InitializingBean {
             questionService.addTextQuestion(poll3.getId(), "This sentence is false",
                                                         100, 255, nobody);
             //add poll3 to nobody's owned Polls
-            //TODO works here, but can later not accesed from elsewere -> ownPolls is empty
+            //TODO :works here localy, but can later not accesed from elsewere -> ownPolls is empty
             userService.addOwnedPoll(poll3, nobody.getId());
-            user.addOwnPoll(poll3);
+            //user.addOwnPoll(poll3);
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
             Choice choice5 = new Choice("0-20");
