@@ -47,7 +47,7 @@
         <div v-if="question.type === 'TextQuestion'">
             <!-- TODO enter new variable for text instead of array (v-model)? -->
             <!-- changed variable, it works, but inteliji cant resolve charLimit idk why xD -->
-            <b-form-input :maxlength="question.charLimit" v-model="selected" class="text-box"/>
+            <b-form-input :maxlength="question.limit" v-model="selected" class="text-box"/>
 
             <div v-if="edit && !editCharLimit">
                 character limit:
@@ -94,9 +94,9 @@
                 v-model="val"
                 type="range"
                 number
-                :min="question.possibilities[0].min"
-                :max="question.possibilities[0].max"
-                :step="question.possibilities[0].step"
+                :min="question.choices[0].min"
+                :max="question.choices[0].max"
+                :step="question.choices[0].step"
             ></b-form-input>
 
             <b-icon-pencil class="my-icon" scale="1.5" v-if="edit && !editSlider" @click="changeEditSlider"></b-icon-pencil>
@@ -104,11 +104,11 @@
             <div v-if="edit && editSlider">
 
                 min-value:
-                <b-form-input v-model="question.possibilities[0].min"></b-form-input>
+                <b-form-input v-model="question.choices[0].min"></b-form-input>
                 max-value:
-                <b-form-input v-model="question.possibilities[0].max"></b-form-input>
+                <b-form-input v-model="question.choices[0].max"></b-form-input>
                 stepsize:
-                <b-form-input class="my-form" v-model="question.possibilities[0].step"></b-form-input>
+                <b-form-input class="my-form" v-model="question.choices[0].step"></b-form-input>
 
                 <b-icon-check-all class="my-icon" scale="2" animation="fade" @click="changeEditSlider"></b-icon-check-all>
             </div>
@@ -137,7 +137,7 @@
                 editSlider: false,
                 editCharLimit: false,
                 editDropdown: false,
-                //val: this.question.possibilities[0].min,
+                val: this.question.choices[0].min,
                 selected: []
             }
         },
