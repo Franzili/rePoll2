@@ -51,13 +51,13 @@
 
             <div v-if="edit && !editCharLimit">
                 character limit:
-                {{ question.possibilities[0].limit }}
+                {{ question.choices[0].limit }}
                 <b-icon-pencil class="freetext-pen" scale="1.5"  @click="changeEditCharLimit"></b-icon-pencil>
             </div>
 
             <div v-if="edit && editCharLimit">
                 character limit:
-                <b-form-input v-model="question.possibilities[0].limit" placeholder="Set character limit..." class="text-box"/>
+                <b-form-input v-model="question.choices[0].limit" placeholder="Set character limit..." class="text-box"/>
                 <b-icon-check-all class="my-icon" scale="2" animation="fade" @click="changeEditCharLimit"></b-icon-check-all>
             </div>
         </div>
@@ -114,7 +114,7 @@
             </div>
         </div>
 
-        <QuestionEditor v-if="edit === true && question.type !== 'freetext' && question.type !== 'slider' && question.type !== 'section'" ref="editor" v-on:add-pos="addPos"/>
+        <QuestionEditor v-if="edit === true && question.type !== 'TextQuestion' && question.type !== 'slider' && question.type !== 'section'" ref="editor" v-on:add-pos="addPos"/>
 
         <b-button class="my-btn" v-if="edit === true" @click="$emit('del-question', question.id)" pill variant="outline-secondary">delete question</b-button>
             </b-card>
