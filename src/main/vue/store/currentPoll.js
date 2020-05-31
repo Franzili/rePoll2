@@ -13,10 +13,14 @@ const currentPoll = {
 
     actions: {
         load({commit}, id) {
-            api.poll.get(id).then(function (res) {
-                commit('setCurrentPoll', res.data);
-            }).catch(function (error) {
-                console.log(error);
+            return new Promise((resolve, reject) => {
+                api.poll.get(id).then(function (res) {
+                    commit('setCurrentPoll', res.data);
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                });
             });
         }
     },

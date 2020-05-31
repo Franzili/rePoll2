@@ -17,9 +17,7 @@ const auth = {
                 api.auth.login(credentials.username, credentials.password)
                     .then(function (res) {
                         let token = res.headers.authorization
-                        console.log("Davor!");
                         commit('authenticate', token)
-                        console.log("Danach!");
                         resolve()
                     })
                     .catch(function () {

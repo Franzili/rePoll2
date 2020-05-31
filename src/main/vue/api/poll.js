@@ -7,12 +7,16 @@ export default {
     get(id) {
         return axios.get('/api/v1/polls/' + id);
     },
-    save(poll) {
-        let pollCmd = {title: poll.title, user: poll.user};
+    create(poll) {
+        let pollCmd = {
+            title: poll.title
+        };
         return axios.post('/api/v1/polls/', pollCmd);
     },
     update(poll) {
-        let pollCmd = {title: poll.title, user: poll.user};
+        let pollCmd = {
+            title: poll.title
+        };
         return axios.put('/api/v1/polls/' + poll.id, pollCmd);
-    }
+    },
 }
