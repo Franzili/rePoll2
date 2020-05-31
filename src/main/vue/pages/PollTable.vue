@@ -34,7 +34,7 @@
         },
         methods: {
             ...mapActions('myPolls', {
-                loadPolls: 'load'
+                loadPolls: 'load',
             })
         },
         components: {
