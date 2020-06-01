@@ -67,6 +67,7 @@
         computed: {
             ...mapState('currentPoll', {
                 poll: 'poll',
+                answ: 'answers'
             }),
         },
         methods: {
