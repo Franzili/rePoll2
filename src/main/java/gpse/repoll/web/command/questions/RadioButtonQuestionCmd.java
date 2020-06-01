@@ -9,6 +9,16 @@ import java.util.List;
 @JsonTypeName("RadioButtonQuestion")
 public class RadioButtonQuestionCmd extends QuestionCmd {
 
+    private String displayVariant;
+
+    public String getDisplayVariant() {
+        return displayVariant;
+    }
+
+    public void setDisplayVariant(String displayVariant) {
+        this.displayVariant = displayVariant;
+    }
+
     private List<ChoiceCmd> choices = new ArrayList<>();
 
     public List<ChoiceCmd> getChoices() {

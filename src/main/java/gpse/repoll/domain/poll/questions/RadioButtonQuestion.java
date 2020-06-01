@@ -16,6 +16,17 @@ public class RadioButtonQuestion extends Question {
     @OneToMany
     private final List<Choice> choices = new ArrayList<>();
 
+    @Column
+    private String displayVariant = "radio";
+
+    public String getDisplayVariant() {
+        return displayVariant;
+    }
+
+    public void setDisplayVariant(String variant) {
+        this.displayVariant = variant;
+    }
+
     public List<Choice> getChoices() {
         return Collections.unmodifiableList(choices);
     }

@@ -60,7 +60,8 @@ public interface QuestionService {
             String questionTitle,
             int questionOrder,
             List<Choice> choices,
-            User lastEditor);
+            User lastEditor,
+            String displayVariant);
 
     /**
      * Add a new ChoiceQuestion to a Poll.

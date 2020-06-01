@@ -8,18 +8,24 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService extends UserDetailsService {
-    public Iterable<User> getAll();
+    Iterable<User> getAll();
 
-    public User addUser(String userName, String password, String fullName, String email);
+    User addUser(String userName, String password, String fullName, String email, String role);
 
-    public User getUser(UUID id);
-    public User getUser(String username);
+    User getUser(UUID id);
+    User getUser(String username);
 
-    public User updateUser(UUID userId, String userName, String fullName, String email);
-    public User updateUser(String oldUsername, String userName, String fullName, String email);
+    User updateUser(UUID userId, String userName, String fullName, String email, String role);
+    User updateUser(String oldUsername, String userName, String fullName, String email, String role);
 
-    public User removeUser(UUID id);
-    public User removeUser(String username);
+    User removeUser(UUID id);
+    User removeUser(String username);
 
-    public List<Poll> getOwnedPolls(UUID userId);
+    List<Poll> getOwnedPolls(UUID userId);
+
+    List<String> getRoles(UUID userId);
+    List<String> getRoles(String username);
+
+    String getRole(UUID userId);
+    String getRole(String username);
 }

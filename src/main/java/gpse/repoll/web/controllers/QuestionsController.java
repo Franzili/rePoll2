@@ -40,7 +40,7 @@ public class QuestionsController {
         this.userService = userService;
     }
 
-    @Secured(Roles.ALL)
+    @Secured(Roles.POLL_EDITOR)
     @PostMapping("/{pollId}/questions/")
     public Question addQuestion(@PathVariable("pollId") final UUID pollId,
                                 @RequestBody QuestionCmd questionCmd) {
@@ -70,7 +70,10 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.addRadioButtonQuestion(pollId, title, questionOrder, choices, lastEditor);
+            if (radioButtonQuestionCmd.getDisplayVariant() == null || (!radioButtonQuestionCmd.getDisplayVariant().equals("radio") && !radioButtonQuestionCmd.getDisplayVariant().equals("dropdown"))) {
+                throw new BadRequestException("No display variant given for the question!");
+            }
+            return questionService.addRadioButtonQuestion(pollId, title, questionOrder, choices, lastEditor, radioButtonQuestionCmd.getDisplayVariant());
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
             if (choiceQuestionCmd.getChoices() == null) {
@@ -86,13 +89,13 @@ public class QuestionsController {
         throw new InternalServerErrorException();
     }
 
-    @Secured(Roles.ALL)
+    @Secured(Roles.ADMIN)
     @GetMapping("/{pollId}/questions/")
     public List<Question> listQuestions(@PathVariable("pollId") final UUID pollId) {
         return questionService.getAllQuestions(pollId);
     }
 
-    @Secured(Roles.ALL)
+    @Secured(Roles.PARTICIPANT)
     @GetMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question getQuestion(@PathVariable("pollId") final UUID pollId,
                                 @PathVariable("questionId") final String questionId) {
@@ -102,7 +105,7 @@ public class QuestionsController {
         );
     }
 
-    @Secured(Roles.ALL)
+    @Secured(Roles.POLL_EDITOR)
     @PutMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question updateQuestion(@PathVariable("pollId") final UUID pollId,
                                    @PathVariable("questionId") final String qId,
