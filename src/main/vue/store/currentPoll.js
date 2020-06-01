@@ -1,14 +1,44 @@
 import api from "../api";
 
+import {makeQuestion, SectionHeader} from "./poll-items/index"
+
+/**
+ * currentPoll holds the state of the Poll that is currently open, or otherwise in focus.
+ * Can be used for PollTabbed pages (Config, Edit, Stats), and other pages that focus on
+ * exactly one poll.
+ *
+ * currentPoll does some model mapping to make sure that the interface stays constant
+ * even if the backend interface changes. The Backend's response is saved in currentPoll.state.poll.
+ * However, users of currentPoll should use the mapped attributes on currentPoll instead of
+ * currentPoll.state.poll.
+ */
 const currentPoll = {
     state: {
-        poll: {}
+        poll: {},
+    },
+
+    getters: {
+        pollStructureFlat: state => {
+            let res = [];
+            state.poll.pollSections.forEach(section => {
+                res.push(new SectionHeader(section.title, section.description));
+                section.questions.forEach(q => {
+                    let questionObject = state.poll.questions.find(item => item.id === q.id);
+                    res.push(makeQuestion(questionObject));
+                });
+            });
+            return res;
+        }
     },
 
     mutations: {
+        /**
+         * Sets the new current poll.
+         */
         set(state, newPoll) {
             state.poll = newPoll
         },
+
         update(state, pollCmd) {
             Object.assign(state.poll, pollCmd)
         }
