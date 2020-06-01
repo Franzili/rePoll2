@@ -70,7 +70,10 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.addRadioButtonQuestion(pollId, title, questionOrder, choices, lastEditor);
+            if (radioButtonQuestionCmd.getDisplayVariant() == null || (!radioButtonQuestionCmd.getDisplayVariant().equals("radio") && !radioButtonQuestionCmd.getDisplayVariant().equals("dropdown"))) {
+                throw new BadRequestException("No display variant given for the question!");
+            }
+            return questionService.addRadioButtonQuestion(pollId, title, questionOrder, choices, lastEditor, radioButtonQuestionCmd.getDisplayVariant());
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
             if (choiceQuestionCmd.getChoices() == null) {
