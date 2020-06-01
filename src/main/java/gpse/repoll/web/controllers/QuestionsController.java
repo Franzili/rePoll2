@@ -63,7 +63,7 @@ public class QuestionsController {
                     lastEditor);
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            String displayVariant = ((RadioButtonQuestionCmd) questionCmd).getDisplayVariant();
+            String displayVariant = radioButtonQuestionCmd.getDisplayVariant();
             if (radioButtonQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
