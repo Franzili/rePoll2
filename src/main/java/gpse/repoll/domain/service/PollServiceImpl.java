@@ -79,12 +79,12 @@ public class PollServiceImpl implements PollService {
         }
         if (status != null) {
             poll.setStatus(status);
+            if (status.equals(PollStatus.IN_PROCESS) && anonymity != null) {
+                poll.setAnonymity(anonymity);
+            }
         }
         if (structure != null) {
             poll.setStructure(structure);
-        }
-        if(status.equals(PollStatus.IN_PROCESS) && anonymity != null) {
-            poll.setAnonymity(anonymity);
         }
         pollRepository.save(poll);
         return poll;

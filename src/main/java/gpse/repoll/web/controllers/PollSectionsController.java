@@ -1,6 +1,5 @@
 package gpse.repoll.web.controllers;
 
-
 import gpse.repoll.domain.poll.PollSection;
 import gpse.repoll.domain.User;
 import gpse.repoll.domain.service.PollSectionService;
@@ -33,15 +32,13 @@ public class PollSectionsController {
         this.userService = userService;
     }
 
-
-
-    @Secured(Roles.ALL)
+    @Secured(Roles.PARTICIPANT)
     @GetMapping("/{pollId}/sections/")
     public List<PollSection> listPollSections(@PathVariable("pollId") final UUID pollId) {
         return pollSectionService.getAllSections(pollId);
     }
 
-    @Secured(Roles.ALL)
+    @Secured(Roles.POLL_EDITOR)
     @PostMapping("/{pollId}/sections/")
     public PollSection addPollSection(@PathVariable("pollId") final UUID pollId,
                                       @RequestBody PollSectionCmd pollSectionCmd) {
@@ -55,14 +52,14 @@ public class PollSectionsController {
         );
     }
 
-    @Secured(Roles.ALL)
+    @Secured(Roles.PARTICIPANT)
     @GetMapping("/{pollId}/sections/{sectionId}/")
     public PollSection getPollSection(@PathVariable("pollId") final UUID pollId,
                                       @PathVariable("sectionId") final UUID sectionId) {
         return pollSectionService.getPollSection(pollId, sectionId);
     }
 
-    @Secured(Roles.ALL)
+    @Secured(Roles.POLL_EDITOR)
     @PutMapping("/{pollId}/sections/{sectionId}/")
     public PollSection updatePollSection(@PathVariable("pollId") final UUID pollId,
                                          @PathVariable("sectionId") final UUID sectionId,
