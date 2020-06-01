@@ -53,7 +53,7 @@ public class PollsController {
         } else if (user.getRoles().contains(Roles.POLL_CREATOR)) {
             //pollService.getAll().forEach(polls::add);
 
-            System.out.println("Creator");
+            System.out.println("Creator: " + username);
 
             System.out.println("Roles" + userService.getRoles(username));
             System.out.println("TheSize " + userService.getOwnedPolls(username).size());
