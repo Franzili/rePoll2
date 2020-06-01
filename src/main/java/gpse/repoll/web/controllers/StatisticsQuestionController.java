@@ -25,6 +25,11 @@ public class StatisticsQuestionController {
         this.statisticsService = statisticsService;
     }
 
+    @GetMapping("{pollId}/statistics/questions/")
+    public List<StatisticsQuestion> listStatistics(@PathVariable UUID pollId) {
+        return statisticsService.getAll(pollId);
+    }
+
     @GetMapping("{pollId}/statistics/questions/{questionId:\\d+}/")
     public StatisticsQuestion getStatistics(@PathVariable UUID pollId, @PathVariable String questionId) {
         return statisticsService.getStatistics(pollId, Long.valueOf(questionId));
