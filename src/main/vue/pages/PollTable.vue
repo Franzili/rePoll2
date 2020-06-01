@@ -28,8 +28,8 @@
         },
 
         computed: {
-            ...mapState({
-                polls: state => state.myPolls.polls
+            ...mapState('myPolls', {
+                polls: 'polls'
             })
         },
         methods: {
