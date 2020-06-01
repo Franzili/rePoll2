@@ -3,13 +3,11 @@ package gpse.repoll;
 import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.poll.PollSection;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.repositories.*;
-import gpse.repoll.domain.service.PollEntryService;
-import gpse.repoll.domain.service.PollService;
-import gpse.repoll.domain.service.QuestionService;
-import gpse.repoll.domain.service.UserService;
+import gpse.repoll.domain.service.*;
 import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Fills the Database with example Data used for development purposes.
@@ -30,6 +26,7 @@ import java.util.List;
 public class InitializeDatabase implements InitializingBean {
 
     private final PollService pollService;
+    private final PollSectionService pollSectionService;
     private final QuestionService questionService;
     private final PollEntryService pollEntryService;
     private final UserService userService;
@@ -47,10 +44,12 @@ public class InitializeDatabase implements InitializingBean {
                               UserService userService,
                               PlatformTransactionManager transactionManager,
                               final PollEntryRepository pollEntryRepository,
+                              final PollSectionService pollSectionService,
                               final PollRepository pollRepository,
                               final PollSectionRepository pollSectionRepository,
                               final UserRepository userRepository) {
         this.pollService = pollService;
+        this.pollSectionService = pollSectionService;
         this.questionService = questionService;
         this.pollEntryService = pollEntryService;
         this.userService = userService;
@@ -98,11 +97,41 @@ public class InitializeDatabase implements InitializingBean {
             Poll poll = pollService.addPoll("Gummibaerchen", user);
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255, user);
+
+            UUID sectionId = pollSectionService.addPollSection(
+                poll.getId(),
+                "Gummibaerchen",
+                "Some Questions about Gummibaerchen",
+                user
+            ).getId();
+            Map<UUID, List<Long>> structure = new HashMap<>();
+            structure.put(sectionId, List.of(question1.getId()));
+            pollService.updatePoll(poll.getId(), null, null, structure, user, null);
+
+
             Poll poll2 = pollService.addPoll("About this App", user);
-            questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
+            Question question10 = questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
                                         1000, 255, user);
-            questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
+            Question question11 = questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
                                         1000, 255, user);
+
+            structure = new HashMap<>();
+            PollSection section1 = pollSectionService.addPollSection(
+                poll2.getId(),
+                "What is love?",
+                "Baby don't hurt me, no more",
+                user
+            );
+            PollSection section2 = pollSectionService.addPollSection(
+                poll2.getId(),
+                "Never gonna give you up!",
+                "Never gonna let you down. Lorem ipsum dolor sit amet.",
+                user
+            );
+            structure.put(section1.getId(), List.of(question10.getId()));
+            structure.put(section2.getId(), List.of(question11.getId()));
+            pollService.updatePoll(poll2.getId(), null, null, structure, user, null);
+
             //dummy user for US34 Task 14846
             User nobody;
             try {
@@ -168,6 +197,22 @@ public class InitializeDatabase implements InitializingBean {
             Question question4 = questionService.addScaleQuestion(poll.getId(),
                 "How satisfied are you with our services?",
                 2, "Not good", "Very good", 1, user);
+
+            structure = new HashMap<>();
+            PollSection section = pollSectionService.addPollSection(
+                poll3.getId(),
+                "Neunundneunzig Luftballons",
+                "Ich bin eine tolle Beschreibung. Ich mag gerne Elefanten, aber Tiger sind auch super.",
+                user
+            );
+            structure.put(section.getId(), List.of(question2.getId(), question3.getId()));
+            section = pollSectionService.addPollSection(
+                poll3.getId(),
+                "Ueber sieben Bruecken musst du gehn",
+                "Sieben dunkle Jahre ueberstehn. Siebenmal wirst du die Asche sein. Aber einmal auch der helle Schein",
+                user
+            );
+            structure.put(section.getId(), List.of(question4.getId()));
 
             // Create 10 TextAnswers
             TextAnswer textAnswer1 = new TextAnswer();
@@ -345,6 +390,5 @@ public class InitializeDatabase implements InitializingBean {
 
             return null;
         });
-
     }
 }
