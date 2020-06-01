@@ -18,8 +18,8 @@ import java.util.UUID;
 @Service
 @Primary
 public class UserServiceImpl implements UserService {
-    private PollService pollService;
-    private UserRepository userRepository;
+    private final PollService pollService;
+    private final UserRepository userRepository;
 
 
     @Autowired
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User addUser(String username, String password, String fullName, String email) {
+    public User addUser(String username, String password, String fullName, String email, String role) {
         Optional<User> existingUser = userRepository.findByUsername(username);
         if (existingUser.isPresent()) {
             throw new UserNameAlreadyTakenException();
@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(password);
         user.setFullName(fullName);
         user.setEmail(email);
+        user.setRoles(role);
         userRepository.save(user);
         return user;
     }
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(UUID userId, String newUsername, String fullName, String email) {
+    public User updateUser(UUID userId, String newUsername, String fullName, String email, String role) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
 
         /* If we want to change the username */
@@ -79,11 +80,14 @@ public class UserServiceImpl implements UserService {
         if (newUsername != null) {
             user.setUsername(newUsername);
         }
+        if (fullName != null) {
+            user.setFullName(fullName);
+        }
         if (email != null) {
             user.setEmail(email);
         }
-        if (fullName != null) {
-            user.setFullName(fullName);
+        if (role != null) {
+            user.setRoles(role);
         }
 
         userRepository.save(user);
@@ -91,9 +95,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(String oldUsername, String newUsername, String fullName, String email) {
+    public User updateUser(String oldUsername, String newUsername, String fullName, String email, String role) {
         User user = userRepository.findByUsername(oldUsername).orElseThrow(NotFoundException::new);
-        return updateUser(user.getId(), newUsername, fullName, email);
+        return updateUser(user.getId(), newUsername, fullName, email, role);
     }
 
     @Override
@@ -119,5 +123,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(final String username) {
         return getUser(username);
+    }
+
+    @Override
+    public List<String> getRoles(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
+        return user.getRoles();
+    }
+
+    @Override
+    public List<String> getRoles(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
+        return user.getRoles();
+    }
+
+    @Override
+    public String getRole(UUID userId) {
+        List<String> roles = getRoles(userId);
+        return roles.get(0); // roles is always not empty and 0 is the highest role
+    }
+
+    @Override
+    public String getRole(String username) {
+        List<String> roles = getRoles(username);
+        return roles.get(0); // roles is always not empty and 0 is the highest role
     }
 }
