@@ -28,11 +28,11 @@ const auth = {
             })
         },
 
+        /* todo
         logout({commit}) {
-            /* todo
             commit('authenticate', null);
-             */
         },
+         */
 
         loadFromStorage({commit}) {
             let token = localStorage.getItem('authToken');

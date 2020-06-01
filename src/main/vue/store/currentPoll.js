@@ -30,7 +30,9 @@ const currentPoll = {
             return new Promise((resolve, reject) => {
                 commit('update', pollCmd)
                 api.poll.update(pollCmd)
-                    .then((res) => res.data)
+                    .then((res) => {
+                        resolve(res.data);
+                    })
                     .catch((error) => {
                         console.log(error);
                         reject(error);
