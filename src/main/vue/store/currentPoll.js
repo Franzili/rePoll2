@@ -1,6 +1,6 @@
 import api from "../api";
 
-import {makeQuestion, SectionHeader} from "./poll-items/index"
+import {makeQuestion, SectionHeader} from "./poll-item-models/index"
 
 /**
  * currentPoll holds the state of the Poll that is currently open, or otherwise in focus.

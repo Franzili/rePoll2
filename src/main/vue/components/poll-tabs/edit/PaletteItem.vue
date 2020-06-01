@@ -1,6 +1,6 @@
 <template>
     <span>
-        <b-icon-pen v-if="questionType.name === 'TextQuestion'"></b-icon-pen>
+        <b-icon-pen v-if="questionType.name === 'TextQuestionModel'"></b-icon-pen>
         {{ questionType.getDisplayType() }}
     </span>
 </template>

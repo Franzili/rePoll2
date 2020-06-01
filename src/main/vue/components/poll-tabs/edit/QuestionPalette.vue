@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import { questionTypes} from "../../../store/poll-items";
+    import { questionTypes} from "../../../store/poll-item-models";
     import PaletteItem from "./PaletteItem";
 
     //import draggable from "vuedraggable";
