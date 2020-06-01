@@ -26,22 +26,24 @@ public class QuestionServiceImpl implements QuestionService {
     private final RadioButtonQuestionRepository radioButtonQuestionRepository;
     private final ChoiceQuestionRepository choiceQuestionRepository;
     private final ChoiceRepository choiceRepository;
+    private final QuestionBaseRepository<Question> questionBaseRepository;
 
     @Autowired
     public QuestionServiceImpl(
             PollService pollService,
-            PollRepository pollRepository,
             TextQuestionRepository textQuestionRepository,
             ScaleQuestionRepository scaleQuestionRepository,
             RadioButtonQuestionRepository radioButtonQuestionRepository,
             ChoiceQuestionRepository choiceQuestionRepository,
-            ChoiceRepository choiceRepository) {
+            ChoiceRepository choiceRepository,
+            QuestionBaseRepository<Question> questionBaseRepository) {
         this.pollService = pollService;
         this.textQuestionRepository = textQuestionRepository;
         this.scaleQuestionRepository = scaleQuestionRepository;
         this.radioButtonQuestionRepository = radioButtonQuestionRepository;
         this.choiceQuestionRepository = choiceQuestionRepository;
         this.choiceRepository = choiceRepository;
+        this.questionBaseRepository = questionBaseRepository;
     }
 
     /**
@@ -167,7 +169,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Question getQuestion(final UUID pollId, final Long questionId) {
         Poll poll = pollService.getPoll(pollId);
-        Question question = textQuestionRepository.findById(questionId).orElseThrow(() -> {
+        Question question = questionBaseRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
         });
         testQuestion(poll, question);

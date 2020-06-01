@@ -1,5 +1,6 @@
 package gpse.repoll.domain.service;
 
+import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.Answer;
 
@@ -12,11 +13,12 @@ public interface PollEntryService {
      * Add a new PollEntry to a Poll.
      * @param pollId The Poll's ID
      * @param associations A map of question IDs to Answers
+     * @param user The user that filled out the poll
      * @return The newly created PollEntry
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll or any of the Questions
      * could not be found
      */
-    PollEntry addPollEntry(UUID pollId, Map<Long, Answer> associations);
+    PollEntry addPollEntry(UUID pollId, Map<Long, Answer> associations, User user);
 
     /**
      * Gets a PollEntry.
