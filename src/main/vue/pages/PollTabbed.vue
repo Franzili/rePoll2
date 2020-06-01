@@ -83,7 +83,7 @@
     */
 
     import ConfigurePoll from "../components/poll-tabs/configure/ConfigurePoll";
-    import CreatePoll from "./CreatePoll";
+    import CreatePoll from "../components/poll-tabs/edit/EditPoll";
     import PollStats from "../components/poll-tabs/stats/PollStats";
     import {mapState, mapActions} from "vuex";
     export default {
