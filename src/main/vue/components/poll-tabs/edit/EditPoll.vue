@@ -5,7 +5,7 @@
         </b-col>
 
         <b-col cols="6">
-            {{ pollStructure }}
+            <PollMainView></PollMainView>
         </b-col>
 
         <b-col cols="3">
@@ -17,6 +17,7 @@
 <script>
     import {mapGetters} from "vuex";
     import QuestionPalette from "./QuestionPalette";
+    import PollMainView from "./PollMainView";
     export default {
         name: "EditPoll",
         computed: {
@@ -24,7 +25,7 @@
                 pollStructure: 'pollStructureFlat'
             })
         },
-        components: {QuestionPalette},
+        components: {PollMainView, QuestionPalette},
     }
 </script>
 
