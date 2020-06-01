@@ -65,6 +65,9 @@ public class Poll {
     @ManyToOne
     private User owner;
 
+    /*@ManyToMany
+    private User assigned;*/
+
     protected Poll() {
 
     }
@@ -186,6 +189,10 @@ public class Poll {
     public void setOwner(User owner) {
         this.owner = owner;
     }
+
+    /*public User getAssigned() {return assigned; }
+
+    public void setAssigned(User assigned) {this.assigned = assigned; }*/
 
     public Anonymity getAnonymity() {
         return anonymity;

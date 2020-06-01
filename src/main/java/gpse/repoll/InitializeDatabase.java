@@ -114,8 +114,17 @@ public class InitializeDatabase implements InitializingBean {
                         "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
                         "Cpt Nemo",
                         "x@404.com",
-                        Roles.POLL_CREATOR); //PARTICIPANT
+                        Roles.POLL_CREATOR);
             }
+            //dummy Poll for Nemo
+            Poll poll3 = pollService.addPoll("Nothing to see here", nobody);
+            questionService.addTextQuestion(poll3.getId(), "This sentence is false",
+                100, 255, nobody);
+            //add poll3 to nobody's owned Polls
+            //TODO :works here localy, but can later not accesed from elsewere -> ownPolls is empty
+            userService.addOwnedPoll(poll3, nobody.getUsername());
+            nobody.addOwnPoll(poll3);
+
 
             List<User> participants = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
@@ -133,15 +142,6 @@ public class InitializeDatabase implements InitializingBean {
                 }
                 participants.add(tmpUser);
             }
-
-            //dummy Poll for Nemo
-            Poll poll3 = pollService.addPoll("Nothing to see here", nobody);
-            questionService.addTextQuestion(poll3.getId(), "This sentence is false",
-                                                        100, 255, nobody);
-            //add poll3 to nobody's owned Polls
-            //TODO :works here localy, but can later not accesed from elsewere -> ownPolls is empty
-            userService.addOwnedPoll(poll3, nobody.getId());
-            //user.addOwnPoll(poll3);
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
             Choice choice5 = new Choice("0-20");

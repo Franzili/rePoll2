@@ -43,8 +43,12 @@ public class User implements UserDetails {
     private List<String> roles = new ArrayList<>();
 
     @Column
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner") //users own created polls
     private List<Poll> ownPolls = new ArrayList<>();
+
+    @Column
+    @OneToMany(mappedBy = "owner") //users assigned polls to fill out
+    private List<Poll> assignedPolls = new ArrayList<>();
 
     public User() {
         roles.add(Roles.NO_ROLE);
