@@ -2,51 +2,62 @@
     <!-- USE ONE OF THOSE TO YOU MEANS AS MOTHER -->
 
     <div class="my-back">
+        <div class="my-sh">
+            <b-row>
+                <p style="margin-left: 20vw; margin-top: 2vh"></p>
+            </b-row>
         <b-row align-h="center" style="margin-top: 5vh; margin-bottom: 5vh">
             <h1>User-Configuration</h1>
+        </b-row>
             <b-col >
                 <b-button class="addButton" v-b-modal.modal-1>+</b-button>
             </b-col>
-            <b-modal id="modal-1"
-                     role="dialog"
+            <b-modal @ok="addNewUser"
                      centered
-                     title="Add a new User"
-                     @ok="addNewUser">
+                     id="modal-1"
+                     role="dialog"
+                     title="Add a new User">
                 <div class="modal-content">
                     <div class="modal-body" style="padding:40px 50px;">
                         <form role="form">
                             <div class="form-group">
                                 <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
-                                <input type="text" class="form-control" id="usrname" placeholder="Enter Username">
+                                <input class="form-control" id="usrname" placeholder="Enter Username" type="text">
                             </div>
                             <div class="form-group">
                                 <label for="password"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
-                                <input type="text" class="form-control" id="password" placeholder="Enter Password">
+                                <input class="form-control" id="password" placeholder="Enter Password" type="text">
                             </div>
                             <div class="form-group">
                                 <label for="fullname"><span class="glyphicon glyphicon-eye-open"></span> Fullname</label>
-                                <input type="text" class="form-control" id="fullname" placeholder="Enter Fullname">
+                                <input class="form-control" id="fullname" placeholder="Enter Fullname" type="text">
                             </div>
                             <div class="form-group">
                                 <label for="mail"><span class="glyphicon glyphicon-eye-open"></span> E-Mail-Adress</label>
-                                <input type="text" class="form-control" id="mail" placeholder="Enter Mail">
+                                <input class="form-control" id="mail" placeholder="Enter Mail" type="text">
                             </div>
                             <div class="dropdown show">
-                                <div class="dropdown-menu" aria-labelledby="role">
+                                <div aria-labelledby="role" class="dropdown-menu">
                                    <a class="dropdown-item" href="#">Admin</a>
                                     <a class="dropdown-item" href="#">Creator</a>
                                     <a class="dropdown-item" href="#">Editor</a>
                                 </div>
                             </div>
+                            <b-dropdown>
+                                <b-dropdown-item>Admin</b-dropdown-item>
+                                <b-dropdown-item>Creator</b-dropdown-item>
+                            </b-dropdown>
                         </form>
                     </div>
                 </div>
             </b-modal>
-        </b-row>
 
-        <b-table :items="items" :fields="fields" caption-top>
+
+        <b-table :fields="fields" :items="items" caption-top>
             <template v-slot:table-caption>User</template>
+
         </b-table>
+        </div>
     </div>
 
 </template>
@@ -67,7 +78,8 @@
             return {
                 fields: ['Username', 'E_Mail_Adress', 'Role'],
                 items: [
-                    {Username: 'JamesBond', E_Mail_Adress: 'jbond@mi6.com', Role: 'Admin'}
+                    {Username: 'JamesBond', E_Mail_Adress: 'jbond@mi6.com', Role: 'Admin'},
+                    {Username: 'JamesMartin', E_Mail_Adress: 'jmartin@web.com', Role: 'Creator'}
                 ]
             }
         },
@@ -90,6 +102,9 @@
             ...mapActions([]),
             // write methods to your means
             addNewUser() {
+
+            },
+            deleteUser() {
 
             }
 
