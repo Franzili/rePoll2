@@ -106,7 +106,8 @@ public class QuestionServiceImpl implements QuestionService {
                                                       final String questionTitle,
                                                       final int questionOrder,
                                                       final List<Choice> choices,
-                                                      final User lastEditor) {
+                                                      final User lastEditor,
+                                                      final String displayVariant) {
         if (lastEditor == null) {
             throw new UnauthorizedException();
         }
@@ -119,6 +120,7 @@ public class QuestionServiceImpl implements QuestionService {
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
         question.addAll(choices);
+        question.setDisplayVariant(displayVariant);
         radioButtonQuestionRepository.save(question);
         poll.add(question);
         pollService.save(poll);
