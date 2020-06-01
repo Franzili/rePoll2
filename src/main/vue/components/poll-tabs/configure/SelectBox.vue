@@ -8,33 +8,29 @@
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
+    import {mapState} from "vuex";
 
     export default {
         name: "SelectBox",
-        porps: ['first'],
         data() {
             return {
-                tmpID: 0,
                 selected: null,
                 comboChoice: []
             }
         },
         computed: {
-            ...mapGetters(['getPoll']),
-            poll() {
-                return this.getPoll(this.tmpID)
-            }
+            ...mapState('currentPoll', {
+                pollQuestions: state => state.poll.questions
+            }),
         },
         created: function () {
-            this.tmpID = this.$route.params.tmpPollID;
             this.comboChoice = [... this.comboChoice, this.first]
             this.fillComboChoice()
         },
         methods: {
             fillComboChoice() {
-                for (var i = 0; i < this.poll.questions.length; i++) {
-                    let choice = {text: this.poll.questions[i].title, value: this.poll.questions[i].id}
+                for (var i = 0; i < this.pollQuestions.length; i++) {
+                    let choice = {text: this.pollQuestions[i].title, value: this.pollQuestions[i].id}
                     this.comboChoice = [... this.comboChoice, choice]
                 }
             }

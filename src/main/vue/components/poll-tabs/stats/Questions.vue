@@ -53,7 +53,7 @@
 <script>
 
     import SelectBox from "../configure/SelectBox";
-    import {mapGetters} from "vuex";
+    import {mapState} from "vuex";
 
     export default {
         name: "Questions",
@@ -61,18 +61,13 @@
             return {
                 tmpID: 0,
                 selected: null,
-                questionHeader: {value: null, text: 'Select your question'}
+                questionHeader: {value: null, text: 'Select your question'},
             }
         },
         computed: {
-            ...mapGetters(['getPoll']),
-            poll() {
-                return this.getPoll(this.tmpID)
-            }
-        },
-        created: function () {
-            this.tmpID = this.$route.params.tmpPollID;
-            this.fillComboChoice()
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            }),
         },
         methods: {
         },

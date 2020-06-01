@@ -2,7 +2,8 @@ import api from "../api";
 
 const currentPoll = {
     state: {
-        poll: {}
+        poll: {},
+        answers: {}
     },
 
     mutations: {
@@ -11,6 +12,9 @@ const currentPoll = {
         },
         update(state, pollCmd) {
             Object.assign(state.poll, pollCmd)
+        },
+        setAnswers(state, answers) {
+            state.answers = answers
         }
     },
 
@@ -38,6 +42,17 @@ const currentPoll = {
                         reject(error);
                     })
             });
+        },
+        loadAnswers({commit}, pollId, questionId) {
+            return new Promise((resolve, reject) => {
+                api.statistics.getAnswers(pollId, questionId).then(function (res) {
+                    commit('setAnswers', res.data);
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
         }
     },
 
