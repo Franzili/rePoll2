@@ -2,7 +2,8 @@ import api from "../api";
 
 const currentPoll = {
     state: {
-        poll: {}
+        poll: {},
+        statistics: {}
     },
 
     mutations: {
@@ -11,6 +12,9 @@ const currentPoll = {
         },
         update(state, pollCmd) {
             Object.assign(state.poll, pollCmd)
+        },
+        setMetaStats(state, newMetaStats) {
+            state.statistics = newMetaStats
         }
     },
 
@@ -38,6 +42,17 @@ const currentPoll = {
                         reject(error);
                     })
             });
+        },
+        loadMetaStats({commit}, id) {
+            return new Promise((resolve, reject) => {
+                api.statistics.get(id).then(function (res) {
+                    commit('setMetaStats', res.data);
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
         }
     },
 
