@@ -1,10 +1,8 @@
 <template>
-    <b-row>
-        <div>
-            <h2>{{ model.title }}</h2>
-            <p class="text-muted">{{ model.description }}</p>
-        </div>
-    </b-row>
+    <b-card class="header-card">
+        <h2>{{ model.title }}</h2>
+        <span class="text-muted">{{ model.description }}</span>
+    </b-card>
 </template>
 
 <script>
@@ -22,5 +20,8 @@
 </script>
 
 <style scoped>
-
+    .header-card {
+        margin-top: 20px;
+        border: none;
+    }
 </style>

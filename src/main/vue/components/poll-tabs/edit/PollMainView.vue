@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <ul class="poll-main-view">
         <PollItem v-for="item in pollStructure" v-bind:key="item.abc" :model="item"></PollItem>
-    </div>
+    </ul>
 </template>
 
 <script>
@@ -19,6 +19,10 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+    .poll-main-view {
+        // turn off default list styling
+        list-style-type: none;
+        padding-left: 0;
+    }
 </style>

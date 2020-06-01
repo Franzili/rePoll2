@@ -1,11 +1,9 @@
 <template>
-    <div>
-        <ul class="palette-list">
-            <li v-for="questionType in questionTypes" v-bind:key="questionType.index">
-                <PaletteItem v-bind:question-type="questionType"></PaletteItem>
-            </li>
-        </ul>
-    </div>
+    <ul class="palette-list">
+        <li v-for="questionType in questionTypes" v-bind:key="questionType.index">
+            <PaletteItem v-bind:question-type="questionType"></PaletteItem>
+        </li>
+    </ul>
 </template>
 
 <script>
