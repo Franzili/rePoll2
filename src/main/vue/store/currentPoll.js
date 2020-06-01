@@ -3,7 +3,7 @@ import api from "../api";
 const currentPoll = {
     state: {
         poll: {},
-        answers: {}
+        answers: []
     },
 
     mutations: {
@@ -13,8 +13,8 @@ const currentPoll = {
         update(state, pollCmd) {
             Object.assign(state.poll, pollCmd)
         },
-        setAnswers(state, answers) {
-            state.answers = answers
+        setAnswers(state, newAnswers) {
+            state.answers = newAnswers
         }
     },
 
@@ -43,10 +43,11 @@ const currentPoll = {
                     })
             });
         },
-        loadAnswers({commit}, pollId, questionId) {
+        loadAnswers({commit}, answerCmd) {
             return new Promise((resolve, reject) => {
-                api.statistics.getAnswers(pollId, questionId).then(function (res) {
+                api.statistics.getAnswers(answerCmd.poll, answerCmd.quest).then(function (res) {
                     commit('setAnswers', res.data);
+                    console.log(res.data)
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);
