@@ -22,6 +22,8 @@
         data() {
             return {
                 myChoices: [],
+                //here only the first ArrayEntry (datasets[0]) is relevant.
+                //the second is only for testing
                 datasets: [
                     {
                         label: '',
@@ -50,18 +52,12 @@
         },
 
         methods: {
-
             fillData() {
                 this.datasets[0].label = this.title;
                 for(let i = 0; i < this.choiceFreqPairs.length; i++) {
                     this.myChoices[i] = this.choiceFreqPairs[i].choice;
                     this.datasets[0].data[i] = this.choiceFreqPairs[i].absFreq;
                 }
-            },
-
-            fillData2() {
-                this.datasets[0].label = this.title;
-                this.datasets[0].data = this.absFreq;
             }
         }
     }

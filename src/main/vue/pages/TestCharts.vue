@@ -1,16 +1,16 @@
 <template>
     <div>
         <div v-if="isMobile()">
-            <BarChart class="mt-5" :choiceFreqPairs="choiceFreqPairs" :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></BarChart>
+            <BarChart class="mt-5" :choiceFreqPairs="choiceFreqPairs" :title="questTitle"></BarChart>
             <DoughnutChart class="mt-5" :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></DoughnutChart>
         </div>
 
         <div v-else>
             <b-card class="chart-card">
-                <BarChart :choiceFreqPairs="choiceFreqPairs" :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></BarChart>
+                <BarChart :choiceFreqPairs="choiceFreqPairs" :title="questTitle"></BarChart>
             </b-card>
             <b-card class="chart-card">
-                <DoughnutChart :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></DoughnutChart>
+                <DoughnutChart :choiceFreqPairs="choiceFreqPairs" :title="questTitle"></DoughnutChart>
             </b-card>
         </div>
     </div>
@@ -24,10 +24,9 @@
         name: "TestCharts",
         data () {
             return {
+                //title of chart (questionTitle)
                 questTitle: 'Wie findest du Repoll?',
-                //here could be the answer choices
-                choices: ['sehr gut', 'gut', 'mittel', 'schlecht', 'sehr schlecht'],
-                absoluteFrequencies: [80, 100, 50, 20, 0],
+                //Pairs of choice and absoluteFrequency
                 choiceFreqPairs: [
                     {
                         choice: 'sehr gut',

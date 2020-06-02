@@ -9,15 +9,13 @@
             title: {
                 type: String
             },
-            choices: {
-                type: Array
-            },
-            absFreq: {
+            choiceFreqPairs: {
                 type: Array
             }
         },
         data() {
             return {
+                myChoices: [],
                 datasets: [
                     {
                         label: '',
@@ -40,7 +38,7 @@
         mounted() {
             this.fillData();
             this.renderChart({
-                    labels: this.choices,
+                    labels: this.myChoices,
                     datasets: this.datasets},
                 this.options);
         },
@@ -48,8 +46,13 @@
         methods: {
             fillData() {
                 this.options.title.text = this.title;
-                this.datasets[0].data = this.absFreq;
 
+                for(let i = 0; i < this.choiceFreqPairs.length; i++) {
+                    this.myChoices[i] = this.choiceFreqPairs[i].choice;
+                    this.datasets[0].data[i] = this.choiceFreqPairs[i].absFreq;
+                }
+
+                //setting different background colors of choices
                 for(let i = 0; i < this.datasets[0].data.length; i++) {
                     this.datasets[0].backgroundColor[i] = this.backgroundColors[i];
                 }
