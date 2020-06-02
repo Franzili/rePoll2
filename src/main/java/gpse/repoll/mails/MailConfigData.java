@@ -2,27 +2,20 @@ package gpse.repoll.mails;
 
 public class MailConfigData {
 
-    private static MailConfigData instance;
+    public static final int PORT = 587;
 
-    protected String hostServer;
     protected int port;
-    protected String sendersAdress;
+    protected String hostServer;
+    protected String sendersAddress;
     protected String senderPassword;
     protected String sendTo;
 
-    public MailConfigData(String hostServer, int port, String my_Email, String password, String send_to) {
+    public MailConfigData(String hostServer, int port, String myEmail, String password, String sendTo) {
         this.hostServer = hostServer;
         this.port = port;
-        this.sendersAdress = my_Email;
+        this.sendersAddress = myEmail;
         this.senderPassword = password;
-        this.sendTo = send_to;
-    }
-
-    public MailConfigData getInstance() {
-        if (MailConfigData.instance == null) {
-            return MailConfigData.instance = new MailConfigData("smtp.gmail.com", 587,"zizimeyer4@gmail.com", "qwertz24", "zizimeyer4@gmail.com");
-        }
-        return MailConfigData.instance;
+        this.sendTo = sendTo;
     }
 
     public String getHostServer() {
@@ -41,12 +34,12 @@ public class MailConfigData {
         this.port = port;
     }
 
-    public String getSendersAdress() {
-        return sendersAdress;
+    public String getSendersAddress() {
+        return sendersAddress;
     }
 
-    public void setSendersAdress(String sendersAdress) {
-        this.sendersAdress = sendersAdress;
+    public void setSendersAddress(String sendersAddress) {
+        this.sendersAddress = sendersAddress;
     }
 
     public String getSenderPassword() {
