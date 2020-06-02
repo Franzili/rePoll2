@@ -25,13 +25,29 @@
     import Trends from "./Trends";
     import Entries from "./Entries";
     import Questions from "./Questions";
+    import {mapActions} from "vuex";
 
     export default {
         name: "PollStats",
         data() {
             return {
-                activeTab: 0
+                activeTab: 0,
+                pollId: 0,
             }
+        },
+        /*computed: {
+            ...mapState('currentPoll', {
+                statistics: 'statistics'
+            })
+        },*/
+        methods: {
+            ...mapActions('currentPoll', {
+                loadStatistics: 'loadMetaStats'
+            })
+        },
+        created() {
+            let pollId = this.$route.params.pollId
+            this.loadStatistics(pollId)
         },
         components: {Overview, Compare, Trends, Entries, Questions}
     }

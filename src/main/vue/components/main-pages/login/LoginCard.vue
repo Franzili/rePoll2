@@ -44,16 +44,11 @@
                 },
             }
         },
-        created() {
-            this.requestPolls()
-        },
         computed: {
-            ...mapState({
-                authenticated: 'authenticated'
-            })
+            ...mapState('auth', ['authenticated'])
         },
         methods: {
-            ...mapActions(['requestToken', 'requestPolls']),
+            ...mapActions('auth', ['requestToken']),
             login() {
                 this.requestToken(this.auth)
                     .then(() => {
@@ -64,14 +59,8 @@
                     })
             }
         },
-        components: {
-            ...mapState({
-                polls: state => state.polls
-            })
-        }
     }
 </script>
 
 <style scoped>
-
 </style>
