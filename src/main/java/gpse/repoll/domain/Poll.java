@@ -3,6 +3,8 @@ package gpse.repoll.domain;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.questions.Question;
+import gpse.repoll.domain.statistics.StatisticsQuestion;
+import gpse.repoll.domain.statistics.StatisticsSinglePoll;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,6 +27,9 @@ public class Poll {
     @GeneratedValue(generator = "uuid2")
     @Column
     private UUID id;
+
+    @OneToOne
+    private StatisticsSinglePoll pollStatistics;
 
     @Column
     private PollStatus status;
