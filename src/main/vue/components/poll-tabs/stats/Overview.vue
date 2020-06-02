@@ -1,10 +1,20 @@
 <template>
     <div>
-        <b-row v-bind:key="statistic.question.id" v-for="statistic in statistics">
-            <p>
-                {{statistic}}
-            </p>
-        </b-row>
+        <b-card v-bind:key="statistic.question.id" v-for="statistic in statistics">
+            <b-row>
+                <p>
+                    {{statistic.question.title}}
+                </p>
+            </b-row>
+
+
+            <b-row v-if="statistic.modalValue !== null">
+                <p>
+                    mode: {{statistic.modalValue.text}}
+                </p>
+            </b-row>
+
+        </b-card>
         <p>
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
             dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
