@@ -2,6 +2,11 @@ package gpse.repoll.domain;
 
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
+import gpse.repoll.domain.repositories.UserRepository;
+import gpse.repoll.domain.service.PollService;
+import gpse.repoll.domain.service.UserService;
+import gpse.repoll.domain.service.UserServiceImpl;
+import gpse.repoll.security.Roles;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -36,7 +41,8 @@ public class UserServiceImplTest {
             "AriellApfel",
             "aslf",
             "Arielle Apfel",
-            "arielle.apfel@gmail.com"
+            "arielle.apfel@gmail.com",
+                Roles.ADMIN
         );
         verify(userRepository).save(any(User.class));
     }
@@ -48,7 +54,7 @@ public class UserServiceImplTest {
         when(userRepository.findByUsername(eq(username))).thenReturn(Optional.of(user));
 
         assertThatThrownBy(() -> {
-            userService.addUser(username, null, null, null);
+            userService.addUser(username, null, null, null, null);
         }).isInstanceOf(UserNameAlreadyTakenException.class);
     }
 
@@ -59,7 +65,11 @@ public class UserServiceImplTest {
         when(user.getUsername()).thenReturn("abcdefg");
         when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
 
-        userService.updateUser(uuid, "PeterLustig", "Peter Lustig", "plustig@gmail.com");
+        userService.updateUser(uuid,
+                "PeterLustig",
+                "Peter Lustig",
+                "plustig@gmail.com",
+                Roles.POLL_EDITOR);
         verify(user).setUsername(eq("PeterLustig"));
         verify(user).setFullName(eq("Peter Lustig"));
         verify(user).setEmail(eq("plustig@gmail.com"));
@@ -73,7 +83,7 @@ public class UserServiceImplTest {
         User user = Mockito.mock(User.class);
         when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
 
-        userService.updateUser(uuid, null, null, "plustig@gmail.com");
+        userService.updateUser(uuid, null, null, "plustig@gmail.com", Roles.PARTICIPANT);
         verify(user, never()).setUsername(anyString());
         verify(user, never()).setFullName(anyString());
         verify(user).setEmail("plustig@gmail.com");
@@ -87,7 +97,11 @@ public class UserServiceImplTest {
         when(userRepository.findById(uuid)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> {
-            userService.updateUser(uuid, "PeterLustig", "Peter Lustig", "plustig@gmail.com");
+            userService.updateUser(uuid,
+                    "PeterLustig",
+                    "Peter Lustig",
+                    "plustig@gmail.com",
+                    null);
         }).isInstanceOf(NotFoundException.class);
     }
 
@@ -109,7 +123,7 @@ public class UserServiceImplTest {
         when(userRepository.findByUsername(eq("Username2"))).thenReturn(Optional.of(otherUser));
 
         assertThatThrownBy(() -> {
-            userService.updateUser(uuidMyUser, "Username2", null, null);
+            userService.updateUser(uuidMyUser, "Username2", null, null, null);
         }).isInstanceOf(UserNameAlreadyTakenException.class);
     }
 

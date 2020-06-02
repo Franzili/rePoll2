@@ -23,21 +23,22 @@
 
 <script>
     import PollTableElement from "./PollTableElement";
-    import axios from "axios";
+    import {mapActions} from "vuex";
 
     export default {
         name: "PollTableList",
         props: ["polls"],
         methods: {
-            addNewPoll() {
-                let pollCmd = {title: "new Poll"};
-                axios.post('/api/v1/polls/', pollCmd)
-                    .then((response) => {
-                        console.log(response.data);
-                        return this.$router.push({name: 'create', params: {tmpPollID: response.data.id}})
-                    }).catch((err) => {
-                    console.log(err.message)
-                });
+            ...mapActions('myPolls', {
+                createPoll: "create"
+            }),
+
+            async addNewPoll() {
+                let pollCmd = {
+                    title: "Unnamed Poll"
+                };
+                let poll = await this.createPoll(pollCmd);
+                return this.$router.push({name: 'create', params: {pollId: poll.id}})
             }
         },
         components: {

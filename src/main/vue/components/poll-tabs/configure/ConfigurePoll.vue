@@ -1,11 +1,8 @@
 <template>
     <div>
-        <p class="poll-mode-indicator">
-            <i>
-                Poll for pseudonymized participants.
-            </i>
+        <p>
+            <Anonymity></Anonymity>
         </p>
-
         <p>
             <SelectStatus></SelectStatus>
         </p>
@@ -24,10 +21,11 @@
     import SelectStatus from "./SelectStatus";
     import ManageParticipants from "./ManageParticipants";
     import DeletePoll from "./DeletePoll";
+    import Anonymity from "./Anonymity";
 
     export default {
         name: "ConfigurePoll",
-        components: { SelectStatus, ManageParticipants, DeletePoll }
+        components: {Anonymity, SelectStatus, ManageParticipants, DeletePoll }
     }
 </script>
 

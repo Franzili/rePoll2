@@ -1,14 +1,21 @@
 package gpse.repoll;
 
-import gpse.repoll.domain.answers.*;
-import gpse.repoll.domain.questions.Question;
-import gpse.repoll.domain.questions.QuestionBaseRepository;
+import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.Choice;
+import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.poll.answers.*;
+import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.repositories.*;
+import gpse.repoll.domain.service.PollEntryService;
+import gpse.repoll.domain.service.PollService;
+import gpse.repoll.domain.service.QuestionService;
+import gpse.repoll.domain.service.UserService;
+import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import gpse.repoll.domain.*;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -23,27 +30,31 @@ import java.util.List;
 public class InitializeDatabase implements InitializingBean {
 
     private final PollService pollService;
+    private final QuestionService questionService;
+    private final PollEntryService pollEntryService;
     private final UserService userService;
     private final TransactionTemplate transactionTemplate;
-    private final ChoiceRepository choiceRepository;
     private final PollEntryRepository pollEntryRepository;
     private final PollRepository pollRepository;
     private final PollSectionRepository pollSectionRepository;
     private final UserRepository userRepository;
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
     public InitializeDatabase(PollService pollService,
+                              QuestionService questionService,
+                              PollEntryService pollEntryService,
                               UserService userService,
                               PlatformTransactionManager transactionManager,
-                              final ChoiceRepository choiceRepository,
                               final PollEntryRepository pollEntryRepository,
                               final PollRepository pollRepository,
                               final PollSectionRepository pollSectionRepository,
                               final UserRepository userRepository) {
         this.pollService = pollService;
+        this.questionService = questionService;
+        this.pollEntryService = pollEntryService;
         this.userService = userService;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
-        this.choiceRepository = choiceRepository;
         this.pollEntryRepository = pollEntryRepository;
         this.pollRepository = pollRepository;
         this.pollSectionRepository = pollSectionRepository;
@@ -70,7 +81,8 @@ public class InitializeDatabase implements InitializingBean {
                     "JamesBond",
                     // Passwort: GutenTag
                     "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
-                    "Bob", "jbond@mi6.com"
+                    "Bob", "jbond@mi6.com",
+                        Roles.ADMIN
                 );
             }
             return null;
@@ -84,25 +96,61 @@ public class InitializeDatabase implements InitializingBean {
             //pollSectionRepository.deleteAll();
             User user = userService.getUser("JamesBond");
             Poll poll = pollService.addPoll("Gummibaerchen", user);
-            Question question1 = pollService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
+            Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255, user);
             Poll poll2 = pollService.addPoll("About this App", user);
-            pollService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
+            questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
                                         1000, 255, user);
-            pollService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
+            questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
                                         1000, 255, user);
+            //dummy user for US34 Task 14846
+            User nobody;
+            try {
+                nobody = userService.getUser("Nemo");
+            } catch (UsernameNotFoundException e) {
+                nobody = userService.addUser(
+                        "Nemo",
+                        // Passwort: GutenTag
+                        "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                        "Cpt Nemo",
+                        "x@404.com",
+                        Roles.POLL_CREATOR);
+            }
+
+            List<User> participants = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                User tmpUser;
+                try {
+                    tmpUser = userService.getUser("Patti" + i);
+                } catch (UsernameNotFoundException e) {
+                    tmpUser = userService.addUser(
+                            "Patti" + i,
+                            // Passwort: GutenTag
+                            "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                            "Privat Patti" + i,
+                            "x@404.com",
+                            Roles.PARTICIPANT);
+                }
+                participants.add(tmpUser);
+            }
+
+            //dummy Poll for Nemo
+            Poll poll3 = pollService.addPoll("Nothing to see here", nobody);
+            questionService.addTextQuestion(poll3.getId(), "This sentence is false",
+                                                        100, 255, nobody);
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
             Choice choice5 = new Choice("0-20");
             Choice choice6 = new Choice("21-40");
             Choice choice7 = new Choice("41-60");
             Choice choice8 = new Choice("60+");
+            String displayVariant = "dropdown";
             choicesRadioButtonList.add(choice5);
             choicesRadioButtonList.add(choice6);
             choicesRadioButtonList.add(choice7);
             choicesRadioButtonList.add(choice8);
-            Question question2 = pollService.addRadioButtonQuestion(poll.getId(), "How old are you?",
-                3, choicesRadioButtonList, user);
+            Question question2 = questionService.addRadioButtonQuestion(poll.getId(), "How old are you?",
+                3, choicesRadioButtonList, user, displayVariant);
 
             List<Choice> choicesChoiceQuestionList = new ArrayList<>();
             Choice choice1 = new Choice("Avicii");
@@ -113,13 +161,13 @@ public class InitializeDatabase implements InitializingBean {
             choicesChoiceQuestionList.add(choice2);
             choicesChoiceQuestionList.add(choice3);
             choicesChoiceQuestionList.add(choice4);
-            Question question3 = pollService.addChoiceQuestion(poll.getId(),
+            Question question3 = questionService.addChoiceQuestion(poll.getId(),
                 "Which artist do yo like the most?",
                 4, choicesChoiceQuestionList, user);
 
-            Question question4 = pollService.addScaleQuestion(poll.getId(),
+            Question question4 = questionService.addScaleQuestion(poll.getId(),
                 "How satisfied are you with our services?",
-                2, "Not good", "Very good", 1,user);
+                2, "Not good", "Very good", 1, user);
 
             // Create 10 TextAnswers
             TextAnswer textAnswer1 = new TextAnswer();
@@ -221,16 +269,16 @@ public class InitializeDatabase implements InitializingBean {
 
 
 
-            HashMap<Long,Answer> textMap1 = new HashMap<>();
-            HashMap<Long,Answer> textMap2 = new HashMap<>();
-            HashMap<Long,Answer> textMap3 = new HashMap<>();
-            HashMap<Long,Answer> textMap4 = new HashMap<>();
-            HashMap<Long,Answer> textMap5 = new HashMap<>();
-            HashMap<Long,Answer> textMap6 = new HashMap<>();
-            HashMap<Long,Answer> textMap7 = new HashMap<>();
-            HashMap<Long,Answer> textMap8 = new HashMap<>();
-            HashMap<Long,Answer> textMap9 = new HashMap<>();
-            HashMap<Long,Answer> textMap10 = new HashMap<>();
+            HashMap<Long, Answer> textMap1 = new HashMap<>();
+            HashMap<Long, Answer> textMap2 = new HashMap<>();
+            HashMap<Long, Answer> textMap3 = new HashMap<>();
+            HashMap<Long, Answer> textMap4 = new HashMap<>();
+            HashMap<Long, Answer> textMap5 = new HashMap<>();
+            HashMap<Long, Answer> textMap6 = new HashMap<>();
+            HashMap<Long, Answer> textMap7 = new HashMap<>();
+            HashMap<Long, Answer> textMap8 = new HashMap<>();
+            HashMap<Long, Answer> textMap9 = new HashMap<>();
+            HashMap<Long, Answer> textMap10 = new HashMap<>();
 
             //Add all Questions to the 10 Hashmaps
             textMap1.put(question1.getId(), textAnswer1);
@@ -284,16 +332,16 @@ public class InitializeDatabase implements InitializingBean {
             textMap10.put(question4.getId(), scaleAnswer10);
 
 
-            pollService.addPollEntry(poll.getId(), textMap1);
-            pollService.addPollEntry(poll.getId(), textMap2);
-            pollService.addPollEntry(poll.getId(), textMap3);
-            pollService.addPollEntry(poll.getId(), textMap4);
-            pollService.addPollEntry(poll.getId(), textMap5);
-            pollService.addPollEntry(poll.getId(), textMap6);
-            pollService.addPollEntry(poll.getId(), textMap7);
-            pollService.addPollEntry(poll.getId(), textMap8);
-            pollService.addPollEntry(poll.getId(), textMap9);
-            pollService.addPollEntry(poll.getId(), textMap10);
+            pollEntryService.addPollEntry(poll.getId(), textMap1, participants.get(0));
+            pollEntryService.addPollEntry(poll.getId(), textMap2, participants.get(1));
+            pollEntryService.addPollEntry(poll.getId(), textMap3, participants.get(2));
+            pollEntryService.addPollEntry(poll.getId(), textMap4, participants.get(3));
+            pollEntryService.addPollEntry(poll.getId(), textMap5, participants.get(4));
+            pollEntryService.addPollEntry(poll.getId(), textMap6, participants.get(5));
+            pollEntryService.addPollEntry(poll.getId(), textMap7, participants.get(6));
+            pollEntryService.addPollEntry(poll.getId(), textMap8, participants.get(7));
+            pollEntryService.addPollEntry(poll.getId(), textMap9, participants.get(8));
+            pollEntryService.addPollEntry(poll.getId(), textMap10, participants.get(9));
 
             return null;
         });

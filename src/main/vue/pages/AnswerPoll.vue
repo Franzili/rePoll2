@@ -1,7 +1,7 @@
 <template>
     <div class="my-back">
         <b-row align-h="center">
-            <h1>Fill yout our polls</h1>
+            <h1>Fill your our polls</h1>
         </b-row>
         <b-container class="my-container">
             <b-row style="text-align: center" class="my-row">

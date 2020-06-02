@@ -5,14 +5,13 @@ import Account from "./pages/Account";
 import Poll from "./pages/Poll";
 import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
-import PollSetup from "./pages/PollSetup";
 import AnswerPoll from "./pages/AnswerPoll";
 import PollTabbed from "./pages/PollTabbed";
 
-import store from "./store";
+import store from "./store/store";
 import TestCharts from "./pages/TestCharts";
 
-var router = new VueRouter({
+let router = new VueRouter({
     mode: 'history',
     routes: [
         {
@@ -56,14 +55,6 @@ var router = new VueRouter({
             }
         },
         {
-            path: '/config/',
-            name: 'config',
-            component: PollSetup,
-            meta: {
-                requiresAuth: true
-            }
-        },
-        {
             path: '/answer/',
             component: AnswerPoll,
             meta: {
@@ -94,13 +85,13 @@ router.beforeEach((to, from , next) => {
     // if auth is needed
     if (to.matched.some(route => route.meta.requiresAuth)) {
         // if auth is correct proceed to destination
-        if (store.getters.isAuthenticated) {
+        if (store.state.auth.authenticated) {
             next()
         } else {
             next("/");
         }
     // if auth is not needed but acquired go to polls if '/' is requested
-    } else if (store.getters.isAuthenticated && to.path === "/") {
+    } else if (store.state.auth.authenticated && to.path === "/") {
         next("/polls/");
     // base case if nothing is needed and acquired
     } else {
