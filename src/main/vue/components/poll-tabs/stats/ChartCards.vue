@@ -1,10 +1,27 @@
 <template>
     <b-card>
         <b-row>
-            <h5>{{statistic.question.title}}</h5>
+            <b-col cols="8">
+                <h5>{{statistic.question.title}}</h5>
+            </b-col>
+
+            <b-col align-self="end" v-if="statistic.modalValue !== null">
+                <b-button-toolbar class="float-right">
+                    <b-button-group class="mr-1">
+                        <b-button title="Bar Chart" v-on:click="isBarChart = true">
+                            <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon>
+                        </b-button>
+                        <b-button title="Bar Chart" v-on:click="isBarChart = false">
+                            <b-icon icon="pie-chart-fill" aria-hidden="true"></b-icon>
+                        </b-button>
+                    </b-button-group>
+                </b-button-toolbar>
+            </b-col>
         </b-row>
         <b-row>
-            <p v-if="statistic.modalValue !== null"> Mode: {{statistic.modalValue.text}}</p>
+            <b-col>
+                <p v-if="statistic.modalValue !== null"> Mode: {{statistic.modalValue.text}}</p>
+            </b-col>
         </b-row>
 
         <b-row v-if="statistic.question.type === 'TextQuestion'">
@@ -14,38 +31,29 @@
             </b-col>
         </b-row>
 
-        <b-row v-if="statistic.question.type === 'ScaleQuestion'">
-            <b-col align="center">
+        <b-row class="text-center" v-if="statistic.question.type === 'ScaleQuestion'">
+            <b-col>
                 <b-icon icon="graph-up" animation="spin" font-scale="4"></b-icon>
             </b-col>
-            <b-col align="center">
+            <b-col>
                 <b-icon icon="graph-up" animation="spin" font-scale="4"></b-icon>
             </b-col>
-            <b-col align="center">
+            <b-col>
                 <b-icon icon="graph-up" animation="spin" font-scale="4"></b-icon>
             </b-col>
         </b-row>
-        <!--
-        <b-row>
-            {{statistic.absoluteFrequencies}}
-            {{hahahaha}}
-            {{statistic}}
-        </b-row>
-        -->
 
-
-
-        <b-row v-if="statistic.modalValue !== null">
+        <b-row v-if="statistic.modalValue !== null && isBarChart === true">
             <b-col cols="12">
                 <BarChart :choiceFreqPairs="match" :title="statistic.question.title"></BarChart>
             </b-col>
         </b-row>
-        <!--
-        <b-row>
-            <p>
-                mode: {{statistic.modalValue.text}}
-            </p>
-        </b-row>-->
+
+        <b-row v-if="statistic.modalValue !== null && isBarChart === false">
+            <b-col cols="12">
+                <DoughnnutChart :choiceFreqPairs="match" :title="statistic.question.title"></DoughnnutChart>
+            </b-col>
+        </b-row>
 
     </b-card>
 </template>
@@ -53,6 +61,7 @@
 <script>
 
     import BarChart from "../../charts/BarChart";
+    import DoughnnutChart from "../../charts/DoughnnutChart";
 
     export default {
         name: "ChartCards",
@@ -60,7 +69,8 @@
         data() {
             return {
                 absoFreq: '',
-                match: []
+                match: [],
+                isBarChart: true,
             }
         },
         created() {
@@ -81,7 +91,8 @@
             }
         },
         components: {
-            BarChart
+            DoughnnutChart,
+            BarChart,
         }
     }
 </script>
