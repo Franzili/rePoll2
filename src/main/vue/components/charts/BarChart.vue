@@ -30,11 +30,11 @@
                         backgroundColor: '#3eab37', //02a097
                         data: []
                     },
-                    {
+                    /*{
                         label: 'Wie gut findest du die anderen Umfragetools',
                         backgroundColor: '#f87979',
                         data: [0, 10, 20, 50, 100]
-                    }
+                    }*/
                 ],
                 options: {
                     responsive: true,
