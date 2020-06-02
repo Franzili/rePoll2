@@ -9,6 +9,7 @@ import AnswerPoll from "./pages/AnswerPoll";
 import PollTabbed from "./pages/PollTabbed";
 
 import store from "./store/store";
+import TestCharts from "./pages/TestCharts";
 
 let router = new VueRouter({
     mode: 'history',
@@ -67,6 +68,11 @@ let router = new VueRouter({
             meta: {
                 requiresAuth: true
             }
+        },
+        //for Charts testing
+        {
+            path: '/test/',
+            component: TestCharts
         }
     ]
 });
