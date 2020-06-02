@@ -1,13 +1,14 @@
 package gpse.repoll.domain;
 
-import gpse.repoll.mails.MailConfigData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class MailServiceImpl implements MailService {
 
+    @Autowired
     private JavaMailSender emailSender;
 
     public MailServiceImpl() {
@@ -15,14 +16,12 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public String sendInvite(String subject, String text, String addressee) {
+    public String sendEmail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
-        MailConfigData data = new MailConfigData(
-            "smtp.gmail.com", 587,"zizimeyer4@gmail.com", "qwertz24", "zizimeyer4@gmail.com");
-
-        message.setTo(data.getSendTo());
+        message.setTo(to);
         message.setSubject(subject);
-        message.setText(text);
+        message.setText(body);
+        System.out.println("It's meeeeeeee");
 
         // Send Message!
         this.emailSender.send(message);

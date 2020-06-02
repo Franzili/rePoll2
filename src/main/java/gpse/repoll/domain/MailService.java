@@ -11,5 +11,5 @@ public interface MailService {
      * @param addressee CSV with the addressees.
      * @return Confirmation that the Mail was sent or an error message.
      */
-    String sendInvite(String subject, String text, String addressee);
+    String sendEmail(String subject, String text, String addressee);
 }

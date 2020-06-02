@@ -5,27 +5,56 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Properties;
+import java.util.UUID;
 
+/**
+ * Configuration class for Mails.
+ */
+@Entity
 @Configuration
 public class MailConfig {
 
-    public static final int PORT = 587;
-    public static final String DEFAULT_ACCOUNT = "zizimeyer4@gmail.com";
-    public static final String PASSWORD = "qwertz24";
-    public static final String DEFAULT_SMTP = "smtp.gmail.com";
-    public static final String TRUE = "true";
+    @Id
+    @GeneratedValue(generator = "uuid2")
+    UUID id;
 
+    @Column
+    private int port = 587;
+
+    @Column
+    private String hostServer = "smtp.gmail.com";
+
+    @Column
+    private String sendersAddress = "zizimeyer4@gmail.com";
+
+    @Column
+    private String senderPassword = "qwertz24";
+
+    private String sendTo;
+
+    private static final String TRUE = "true";
+
+    protected MailConfig() {
+
+    }
+
+    /**
+     * Bean that sends a Mail.
+     * @return JavaMailSender object that is sending the Mail.
+     */
     @Bean
     public JavaMailSender getJavaMailSender() {
-        MailConfigData data = new MailConfigData(
-            DEFAULT_SMTP, PORT, DEFAULT_ACCOUNT, PASSWORD, DEFAULT_ACCOUNT);
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(data.getHostServer());
-        mailSender.setPort(data.getPort());
+        mailSender.setHost(hostServer);
+        mailSender.setPort(port);
 
-        mailSender.setUsername(data.getSendersAddress());
-        mailSender.setPassword(data.getSenderPassword());
+        mailSender.setUsername(sendersAddress);
+        mailSender.setPassword(senderPassword);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
@@ -34,5 +63,53 @@ public class MailConfig {
         props.put("mail.debug", TRUE);
 
         return mailSender;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String getHostServer() {
+        return hostServer;
+    }
+
+    public void setHostServer(String hostServer) {
+        this.hostServer = hostServer;
+    }
+
+    public String getSendersAddress() {
+        return sendersAddress;
+    }
+
+    public void setSendersAddress(String sendersAddress) {
+        this.sendersAddress = sendersAddress;
+    }
+
+    public String getSenderPassword() {
+        return senderPassword;
+    }
+
+    public void setSenderPassword(String senderPassword) {
+        this.senderPassword = senderPassword;
+    }
+
+    public String getSendTo() {
+        return sendTo;
+    }
+
+    public void setSendTo(String sendTo) {
+        this.sendTo = sendTo;
     }
 }
