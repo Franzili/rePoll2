@@ -2,10 +2,8 @@ package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollSection;
-import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
-import gpse.repoll.domain.exceptions.UnauthorizedException;
 import gpse.repoll.domain.repositories.PollSectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,13 +40,8 @@ public class PollSectionServiceImpl implements PollSectionService {
     @Override
     public PollSection addPollSection(final UUID pollId,
                                       final String title,
-                                      final String description,
-                                      final User lastEditor) {
-        if (lastEditor == null) {
-            throw new UnauthorizedException();
-        }
+                                      final String description) {
         Poll poll = pollService.getPoll(pollId);
-        poll.setLastEditor(lastEditor);
         PollSection pollSection = new PollSection(title, description);
         pollSectionRepository.save(pollSection);
         poll.add(pollSection);
@@ -87,14 +80,9 @@ public class PollSectionServiceImpl implements PollSectionService {
     public PollSection updatePollSection(final UUID pollId,
                                          final UUID sectionId,
                                          final String title,
-                                         final String description,
-                                         final User lastEditor) {
-        if (lastEditor == null) {
-            throw new UnauthorizedException();
-        }
+                                         final String description) {
         Poll poll = pollService.getPoll(pollId);
         PollSection section = findSectionOfPoll(poll, sectionId);
-        poll.setLastEditor(lastEditor);
         if (title != null) {
             section.setTitle(title);
         }

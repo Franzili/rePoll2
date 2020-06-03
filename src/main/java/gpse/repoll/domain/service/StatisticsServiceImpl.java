@@ -1,6 +1,7 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
+import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.statistics.StatisticsQuestion;
@@ -8,6 +9,7 @@ import gpse.repoll.domain.repositories.StatisticsQuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +30,28 @@ public class StatisticsServiceImpl implements StatisticsService {
         this.statisticsQuestionRepository = statisticsQuestionRepository;
         this.pollService = pollService;
         this.questionService = questionService;
+    }
+
+    @Override
+    public List<StatisticsQuestion> getAll(UUID pollId) {
+        Poll poll = pollService.getPoll(pollId);
+        List<StatisticsQuestion> metaResult = new ArrayList<>();
+        for (Question question : poll.getQuestions()) {
+            if (statisticsQuestionRepository.existsByQuestion(question)) {
+                Optional<StatisticsQuestion> stats = statisticsQuestionRepository.findByQuestion(question);
+                if (stats.isPresent()) {
+                    metaResult.add(stats.get());
+                } else {
+                    throw new InternalServerErrorException();
+                }
+            } else {
+                List<PollEntry> pollEntries = pollService.getPoll(pollId).getPollEntries();
+                StatisticsQuestion statistics = new StatisticsQuestion(question, pollEntries);
+                statisticsQuestionRepository.save(statistics);
+                metaResult.add(statistics);
+            }
+        }
+        return metaResult;
     }
 
     @Override

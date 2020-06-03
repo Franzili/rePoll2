@@ -24,6 +24,7 @@ public class StatisticsQuestion {
     @Id
     @GeneratedValue(generator = "uuid2")
     @Column
+    @JsonIgnore
     private UUID id;
 
     @Column
@@ -32,7 +33,6 @@ public class StatisticsQuestion {
     private final List<Answer> answers = new ArrayList<>();
 
     @OneToOne
-    @JsonIgnore
     private Question question;
 
     @JsonSerialize(keyUsing = SerializeChoice.class)

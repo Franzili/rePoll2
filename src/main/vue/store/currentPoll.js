@@ -15,6 +15,7 @@ import {makeQuestion, SectionHeader} from "./poll-item-models/index"
 const currentPoll = {
     state: {
         poll: {},
+        statistics: {}
     },
 
     getters: {
@@ -28,7 +29,7 @@ const currentPoll = {
                 });
             });
             return res;
-        }
+        },
     },
 
     mutations: {
@@ -41,6 +42,9 @@ const currentPoll = {
 
         update(state, pollCmd) {
             Object.assign(state.poll, pollCmd)
+        },
+        setMetaStats(state, newMetaStats) {
+            state.statistics = newMetaStats
         }
     },
 
@@ -68,6 +72,17 @@ const currentPoll = {
                         reject(error);
                     })
             });
+        },
+        loadMetaStats({commit}, id) {
+            return new Promise((resolve, reject) => {
+                api.statistics.get(id).then(function (res) {
+                    commit('setMetaStats', res.data);
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
         }
     },
 

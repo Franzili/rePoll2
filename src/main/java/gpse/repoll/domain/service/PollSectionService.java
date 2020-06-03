@@ -2,7 +2,6 @@ package gpse.repoll.domain.service;
 
 
 import gpse.repoll.domain.poll.PollSection;
-import gpse.repoll.domain.User;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,11 +24,10 @@ public interface PollSectionService {
      * @param pollId The Poll's ID
      * @param title The title of the new section
      * @param description The description of the new section, or null
-     * @param lastEditor The last user that edited the poll
      * @return The newly created PollSection
      * @throws gpse.repoll.domain.exceptions.NotFoundException if the corresponding Poll could not be found
      */
-    PollSection addPollSection(final UUID pollId, final String title, final String description, final User lastEditor);
+    PollSection addPollSection(final UUID pollId, final String title, final String description);
 
     /**
      * Get a PollSection corresponding to a Poll.
@@ -48,7 +46,6 @@ public interface PollSectionService {
      * @param sectionId The PollSection's ID
      * @param title The new title, or null
      * @param description The new description, or null
-     * @param lastEditor The last user that edited the poll
      * @return the changed PollSection
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the PollSection or the corresponding Poll could
      * not be found.
@@ -57,7 +54,5 @@ public interface PollSectionService {
             final UUID pollId,
             final UUID sectionId,
             final String title,
-            final String description,
-            final User lastEditor
-    );
+            final String description);
 }
