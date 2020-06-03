@@ -1,6 +1,5 @@
 <template>
     <div class="my-sh">
-        <nav-bar></nav-bar>
         <b-row>
             <p style="margin-left: 20vw; margin-top: 2vh"></p>
         </b-row>
@@ -8,20 +7,20 @@
             <h1>User-Configuration</h1>
         </b-row>
         <b-col >
-            <b-button class="addButton" v-b-modal.modal-1>+</b-button>
+            <b-button class="addButton" v-b-modal.modal-1 v-on:isUpdate="false">+</b-button>
         </b-col>
         <!---b-modal for Adding a new User--->
-        <b-modal @ok="addNewUser"
+        <b-modal @ok="add_UpdateUser"
                  centered
                  id="modal-1"
                  role="dialog"
-                 title="Add a new User">
+                 title="User-Configuration">
             <div class="modal-content">
                 <div class="modal-body" style="padding:40px 50px;">
                     <form role="form">
                         <div class="form-group">
-                            <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
-                            <input class="form-control" id="usrname" placeholder="Enter Username" type="text">
+                            <label for="username"><span class="glyphicon glyphicon-user"></span> Username</label>
+                            <input class="form-control" id="username" placeholder="Enter Username" type="text">
                         </div>
                         <div class="form-group">
                             <label for="password"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
@@ -48,7 +47,7 @@
                 </div>
             </div>
         </b-modal>
-    <b-container fluid>
+    <b-card>
         <b-row>
             <b-col lg="6" class="my-1">
                 <b-form-group
@@ -183,38 +182,29 @@
             </template>
 
             <template v-slot:cell(actions)="row">
-                <b-button size="sm" @click="row.toggleDetails">
+                <b-button size="sm" variant="primary" v-b-modal.modal-1 v-on:isUpdate="true">
                     Edit
                 </b-button>
                 <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1">
                     Delete
                 </b-button>
             </template>
-
-            <template v-slot:row-details="row">
-                <b-card>
-                    <ul>
-                        <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-                    </ul>
-                </b-card>
-            </template>
-
-            <!----b-modal for edit--->
-
         </b-table>
 
-    </b-container>
+    </b-card>
+
     </div>
 </template>
 
 <script>
     import {mapActions, mapGetters} from "vuex";
     //import axios from "axios";
-    import NavBar from "../components/NavBar";
     export default {
         name: "Admin",
         data() {
             return {
+                //variable to change between add a new user or edit a user, when false: add a new user, when true: edit
+                isUpdate: false,
                 items: [
 
                     {username: 'JamesBond', mail: 'jbond@mi6.com', role: 'Admin'},
@@ -267,24 +257,22 @@
             },
             ...mapActions([]),
             // write methods to your means
-            addNewUser() {
+            add_UpdateUser() {
+                    if(this.isUpdate) {
+                        this.isUpdate = false;
+                    }
 
             },
             deleteUser() {
 
-            },
-            resetInfoModal() {
-                this.infoModal.title = ''
-                this.infoModal.content = ''
             },
             onFiltered(filteredItems) {
                 // Trigger pagination to update the number of buttons/pages due to filtering
                 this.totalRows = filteredItems.length
                 this.currentPage = 1
             },
-            comments: {
-                NavBar,
-            },
+            components: {
+            }
         }
     }
 </script>
