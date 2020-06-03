@@ -94,7 +94,6 @@ public class InitializeDatabase implements InitializingBean {
             //pollEntryRepository.deleteAll();
             //pollRepository.deleteAll();
             //pollSectionRepository.deleteAll();
-            User user = userService.getUser("JamesBond");
             Poll poll = pollService.addPoll("Gummibaerchen");
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255);

@@ -4,13 +4,10 @@ import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
-import gpse.repoll.domain.User;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -47,9 +44,6 @@ public class PollsController {
         if (pollCmd.getTitle() == null || pollCmd.getTitle().equals("")) {
             throw new BadRequestException("Title cannot be empty!");
         }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getPrincipal().toString();
-        User user = userService.getUser(username);
         return pollService.addPoll(pollCmd.getTitle());
     }
 
@@ -66,8 +60,6 @@ public class PollsController {
         if (pollCmd.getStructure() != null) {
             structure = pollCmd.getStructure().getSectionToQuestions();
         }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User lastEditor = userService.getUser(auth.getName());
         return pollService.updatePoll(
                 id,
                 pollCmd.getTitle(),

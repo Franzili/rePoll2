@@ -25,6 +25,7 @@ public class PollServiceImpl implements PollService {
         this.pollRepository = pollRepository;
     }
 
+    @Override
     public void save(Poll poll) {
         pollRepository.save(poll);
     }

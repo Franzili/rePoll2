@@ -1,7 +1,6 @@
 package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.Choice;
-import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.questions.Question;
@@ -12,8 +11,6 @@ import gpse.repoll.web.command.ChoiceCmd;
 import gpse.repoll.web.command.questions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -46,8 +43,6 @@ public class QuestionsController {
                                 @RequestBody QuestionCmd questionCmd) {
         String title = questionCmd.getTitle();
         int questionOrder = questionCmd.getQuestionOrder();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User lastEditor = userService.getUser(auth.getName());
         if (questionCmd instanceof TextQuestionCmd) {
             TextQuestionCmd textQuestionCmd = (TextQuestionCmd) questionCmd;
             return questionService.addTextQuestion(pollId, title, questionOrder, textQuestionCmd.getCharLimit());
@@ -118,8 +113,6 @@ public class QuestionsController {
         Long questionId = Long.valueOf(qId);
         String title = questionCmd.getTitle();
         int questionOrder = questionCmd.getQuestionOrder();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User lastEditor = userService.getUser(auth.getName());
         if (questionCmd instanceof TextQuestionCmd) {
             return questionService.updateTextQuestion(pollId,
                     questionId,
