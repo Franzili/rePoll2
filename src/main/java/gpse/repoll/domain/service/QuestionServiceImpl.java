@@ -96,11 +96,11 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc}
      */
     @Override
-    public SingleChoiceQuestion addRadioButtonQuestion(final UUID pollId,
-                                                       final String questionTitle,
-                                                       final int questionOrder,
-                                                       final List<Choice> choices,
-                                                       final String displayVariant) {
+    public SingleChoiceQuestion addSingleChoiceQuestion(final UUID pollId,
+                                                        final String questionTitle,
+                                                        final int questionOrder,
+                                                        final List<Choice> choices,
+                                                        final String displayVariant) {
         /*if (lastEditor == null) {
             throw new UnauthorizedException();
         }*/
@@ -123,10 +123,10 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc}
      */
     @Override
-    public MultiChoiceQuestion addChoiceQuestion(final UUID pollId,
-                                                 final String questionTitle,
-                                                 final int questionOrder,
-                                                 final List<Choice> choices) {
+    public MultiChoiceQuestion addMultiChoiceQuestion(final UUID pollId,
+                                                      final String questionTitle,
+                                                      final int questionOrder,
+                                                      final List<Choice> choices) {
         /*if (lastEditor == null) {
             throw new UnauthorizedException();
         }*/
@@ -251,11 +251,11 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc}
      */
     @Override
-    public SingleChoiceQuestion updateRadioButtonQuestion(final UUID pollId,
-                                                          final Long questionId,
-                                                          final int questionOrder,
-                                                          final String title,
-                                                          final List<Choice> choices) {
+    public SingleChoiceQuestion updateSingleChoiceQuestion(final UUID pollId,
+                                                           final Long questionId,
+                                                           final int questionOrder,
+                                                           final String title,
+                                                           final List<Choice> choices) {
         /*if (lastEditor == null) {
             throw new UnauthorizedException();
         }*/
@@ -281,11 +281,11 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc}
      */
     @Override
-    public MultiChoiceQuestion updateChoiceQuestion(final UUID pollId,
-                                                    final Long questionId,
-                                                    final int questionOrder,
-                                                    final String title,
-                                                    final List<Choice> choices) {
+    public MultiChoiceQuestion updateMultiChoiceQuestion(final UUID pollId,
+                                                         final Long questionId,
+                                                         final int questionOrder,
+                                                         final String title,
+                                                         final List<Choice> choices) {
         /*if (lastEditor == null) {
             throw new UnauthorizedException();
         }*/

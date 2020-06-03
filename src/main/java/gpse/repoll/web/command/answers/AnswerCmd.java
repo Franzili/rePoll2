@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(TextAnswerCmd.class),
     @JsonSubTypes.Type(ScaleAnswerCmd.class),
     @JsonSubTypes.Type(MultiChoiceAnswerCmd.class),
-    @JsonSubTypes.Type(ChoiceAnswerCmd.class)
+    @JsonSubTypes.Type(SingleChoiceAnswerCmd.class)
 })
 public abstract class AnswerCmd {
     protected AnswerCmd() {

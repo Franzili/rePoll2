@@ -74,13 +74,13 @@ public class PollEntriesController {
                 answer = new ScaleAnswer();
                 int scaleNumber = ((ScaleAnswerCmd) answerCmd).getScaleNumber();
                 ((ScaleAnswer) answer).setScaleNumber(scaleNumber);
-            } else if (answerCmd instanceof MultiChoiceAnswerCmd) {
+            } else if (answerCmd instanceof SingleChoiceAnswerCmd) {
                 answer = new SingleChoiceAnswer();
-                Long choiceId = ((MultiChoiceAnswerCmd) answerCmd).getChoice();
+                Long choiceId = ((SingleChoiceAnswerCmd) answerCmd).getChoice();
                 ((SingleChoiceAnswer) answer).setChoiceId(choiceId);
-            } else if (answerCmd instanceof ChoiceAnswerCmd) {
+            } else if (answerCmd instanceof MultiChoiceAnswerCmd) {
                 answer = new MultiChoiceAnswer();
-                List<Long> choiceIds = ((ChoiceAnswerCmd) answerCmd).getChoiceIds();
+                List<Long> choiceIds = ((MultiChoiceAnswerCmd) answerCmd).getChoiceIds();
                 ((MultiChoiceAnswer) answer).getChoiceIds().addAll(choiceIds);
             } else {
                 throw new InternalServerErrorException();

@@ -145,7 +145,7 @@ public class InitializeDatabase implements InitializingBean {
             choicesRadioButtonList.add(choice6);
             choicesRadioButtonList.add(choice7);
             choicesRadioButtonList.add(choice8);
-            Question question2 = questionService.addRadioButtonQuestion(poll.getId(), "How old are you?",
+            Question question2 = questionService.addSingleChoiceQuestion(poll.getId(), "How old are you?",
                 3, choicesRadioButtonList, displayVariant);
 
             List<Choice> choicesChoiceQuestionList = new ArrayList<>();
@@ -157,7 +157,7 @@ public class InitializeDatabase implements InitializingBean {
             choicesChoiceQuestionList.add(choice2);
             choicesChoiceQuestionList.add(choice3);
             choicesChoiceQuestionList.add(choice4);
-            Question question3 = questionService.addChoiceQuestion(poll.getId(),
+            Question question3 = questionService.addMultiChoiceQuestion(poll.getId(),
                 "Which artist do yo like the most?",
                 4, choicesChoiceQuestionList);
 

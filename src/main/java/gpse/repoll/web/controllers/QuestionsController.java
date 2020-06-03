@@ -68,7 +68,7 @@ public class QuestionsController {
                     && !singleChoiceQuestionCmd.getDisplayVariant().equals("dropdown"))) {
                 throw new BadRequestException("No display variant given for the question!");
             }
-            return questionService.addRadioButtonQuestion(
+            return questionService.addSingleChoiceQuestion(
                     pollId,
                     title,
                     questionOrder,
@@ -83,7 +83,7 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.addChoiceQuestion(pollId, title, questionOrder, choices);
+            return questionService.addMultiChoiceQuestion(pollId, title, questionOrder, choices);
         }
         // This should never happen
         throw new InternalServerErrorException();
@@ -137,7 +137,7 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : singleChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.updateRadioButtonQuestion(
+            return questionService.updateSingleChoiceQuestion(
                     pollId, questionId, questionOrder, title, choices);
         } else if (questionCmd instanceof MultiChoiceQuestionCmd) {
             MultiChoiceQuestionCmd multiChoiceQuestionCmd = (MultiChoiceQuestionCmd) questionCmd;
@@ -148,7 +148,7 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.updateChoiceQuestion(pollId, questionId, questionOrder, title, choices);
+            return questionService.updateMultiChoiceQuestion(pollId, questionId, questionOrder, title, choices);
         }
         // This should never happen
         throw new InternalServerErrorException();

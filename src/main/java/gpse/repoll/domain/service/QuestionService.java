@@ -42,16 +42,16 @@ public interface QuestionService {
             int stepCount);
 
     /**
-     * Add a new RadioButtonQuestion to a Poll.
+     * Add a new SingleChoiceQuestion to a Poll.
      * @param pollId The Poll's ID
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
      * @param displayVariant The display variant
-     * @return The newly created RadioButtonQuestion
+     * @return The newly created SingleChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    SingleChoiceQuestion addRadioButtonQuestion(
+    SingleChoiceQuestion addSingleChoiceQuestion(
             UUID pollId,
             String questionTitle,
             int questionOrder,
@@ -59,15 +59,15 @@ public interface QuestionService {
             String displayVariant);
 
     /**
-     * Add a new ChoiceQuestion to a Poll.
+     * Add a new MultiChoiceQuestion to a Poll.
      * @param pollId The Poll's ID
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
-     * @return The newly created ChoiceQuestion
+     * @return The newly created MultiChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    MultiChoiceQuestion addChoiceQuestion(
+    MultiChoiceQuestion addMultiChoiceQuestion(
             UUID pollId,
             String questionTitle,
             int questionOrder,
@@ -132,34 +132,34 @@ public interface QuestionService {
             int stepCount);
 
     /**
-     * Update a RadioButtonQuestion.
+     * Update a SingleChoiceQuestion.
      * @param pollId The Poll's ID
      * @param questionId The Question's ID
      * @param questionOrder The order for the Questions
      * @param questionTitle The title of the Question
      * @param choices The possible answers
-     * @return The changed RadioButtonQuestion
+     * @return The changed SingleChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    SingleChoiceQuestion updateRadioButtonQuestion(
+    SingleChoiceQuestion updateSingleChoiceQuestion(
             UUID pollId,
             Long questionId,
             int questionOrder,
             String questionTitle,
             List<Choice> choices);
     /**
-     * Update a ChoiceQuestion.
+     * Update a MultiChoiceQuestion.
      * @param pollId The Poll's ID
      * @param questionId The Question's ID
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
-     * @return The changed ChoiceQuestion
+     * @return The changed MultiChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    MultiChoiceQuestion updateChoiceQuestion(
+    MultiChoiceQuestion updateMultiChoiceQuestion(
             UUID pollId,
             Long questionId,
             int questionOrder,
