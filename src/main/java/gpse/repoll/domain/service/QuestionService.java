@@ -47,7 +47,7 @@ public interface QuestionService {
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
-
+     * @param displayVariant The display variant
      * @return The newly created RadioButtonQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
