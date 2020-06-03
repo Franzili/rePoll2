@@ -50,7 +50,7 @@ public class PollsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getPrincipal().toString();
         User user = userService.getUser(username);
-        return pollService.addPoll(pollCmd.getTitle(), user);
+        return pollService.addPoll(pollCmd.getTitle());
     }
 
     @Secured(Roles.POLL_EDITOR)
@@ -72,7 +72,7 @@ public class PollsController {
                 id,
                 pollCmd.getTitle(),
                 pollCmd.getStatus(),
-                structure, lastEditor,
+                structure,
                 pollCmd.getAnonymity());
     }
 

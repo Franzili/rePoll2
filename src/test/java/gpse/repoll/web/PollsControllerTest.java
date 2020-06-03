@@ -66,8 +66,8 @@ public class PollsControllerTest {
     @Test
     @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testGetAllNormal() {
-        Poll poll1 = new Poll(null, "Poll1");
-        Poll poll2 = new Poll(null, "Poll2");
+        Poll poll1 = new Poll("Poll1");
+        Poll poll2 = new Poll("Poll2");
         ArrayList<Poll> polls = new ArrayList<>();
         polls.add(poll1);
         polls.add(poll2);
@@ -89,7 +89,7 @@ public class PollsControllerTest {
         PollCmd cmd = new PollCmd();
         cmd.setTitle("Poll 1");
         controller.addPoll(cmd);
-        verify(pollService).addPoll(eq("Poll 1"), any(User.class));
+        verify(pollService).addPoll(eq("Poll 1"));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class PollsControllerTest {
         UUID uuid = UUID.randomUUID();
         cmd.setTitle("Poll 1");
         controller.addPoll(cmd);
-        verify(pollService).addPoll(eq("Poll 1"), any(User.class));
+        verify(pollService).addPoll(eq("Poll 1"));
         controller.removePoll(uuid);
         verify(pollService).removePoll(uuid);
     }

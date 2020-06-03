@@ -1,7 +1,6 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.Choice;
-import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.questions.*;
 
 import java.util.List;
@@ -18,11 +17,10 @@ public interface QuestionService {
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param charLimit The char limit for the answer.
-     * @param lastEditor The last user that edited the poll
      * @return The newly created TextQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    TextQuestion addTextQuestion(UUID pollId, String questionTitle, int questionOrder, int charLimit, User lastEditor);
+    TextQuestion addTextQuestion(UUID pollId, String questionTitle, int questionOrder, int charLimit);
 
     /**
      * Add a new ScaleQuestion to a Poll.
@@ -32,7 +30,6 @@ public interface QuestionService {
      * @param scaleNameLeft The name for the left part of the scale
      * @param scaleNameRight The name for the right part of the scale
      * @param stepCount The number of steps the scale has
-     * @param lastEditor The last user that edited the poll
      * @return The newly created ScaleQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
@@ -42,8 +39,7 @@ public interface QuestionService {
             int questionOrder,
             String scaleNameLeft,
             String scaleNameRight,
-            int stepCount,
-            User lastEditor);
+            int stepCount);
 
     /**
      * Add a new RadioButtonQuestion to a Poll.
@@ -51,7 +47,7 @@ public interface QuestionService {
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
-     * @param lastEditor The last user that edited the poll
+
      * @return The newly created RadioButtonQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
@@ -60,7 +56,6 @@ public interface QuestionService {
             String questionTitle,
             int questionOrder,
             List<Choice> choices,
-            User lastEditor,
             String displayVariant);
 
     /**
@@ -69,7 +64,6 @@ public interface QuestionService {
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
-     * @param lastEditor The last user that edited the poll
      * @return The newly created ChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
@@ -77,8 +71,7 @@ public interface QuestionService {
             UUID pollId,
             String questionTitle,
             int questionOrder,
-            List<Choice> choices,
-            User lastEditor);
+            List<Choice> choices);
 
     /**
      * Gets all Questions belonging to a Poll.
@@ -104,7 +97,6 @@ public interface QuestionService {
      * @param questionOrder The order for the Questions
      * @param questionTitle The title of the Question
      * @param charLimit The limit of characters for the answer
-     * @param lastEditor The last user that edited the poll
      * @return The changed TextQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
@@ -114,8 +106,7 @@ public interface QuestionService {
             Long questionId,
             int questionOrder,
             String questionTitle,
-            int charLimit,
-            User lastEditor);
+            int charLimit);
 
     /**
      * Update a ScaleQuestion.
@@ -126,7 +117,6 @@ public interface QuestionService {
      * @param scaleNameLeft The name of the left part of the scale
      * @param scaleNameRight The name of the right part of the scale
      * @param stepCount The number of steps the scale has
-     * @param lastEditor The last user that edited the poll
      * @return The changed ScaleQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
@@ -139,8 +129,7 @@ public interface QuestionService {
             String questionTitle,
             String scaleNameLeft,
             String scaleNameRight,
-            int stepCount,
-            User lastEditor);
+            int stepCount);
 
     /**
      * Update a RadioButtonQuestion.
@@ -149,7 +138,6 @@ public interface QuestionService {
      * @param questionOrder The order for the Questions
      * @param questionTitle The title of the Question
      * @param choices The possible answers
-     * @param lastEditor The last user that edited the poll
      * @return The changed RadioButtonQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
@@ -159,8 +147,7 @@ public interface QuestionService {
             Long questionId,
             int questionOrder,
             String questionTitle,
-            List<Choice> choices,
-            User lastEditor);
+            List<Choice> choices);
     /**
      * Update a ChoiceQuestion.
      * @param pollId The Poll's ID
@@ -168,7 +155,6 @@ public interface QuestionService {
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
-     * @param lastEditor The last user that edited the poll
      * @return The changed ChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
@@ -178,6 +164,5 @@ public interface QuestionService {
             Long questionId,
             int questionOrder,
             String questionTitle,
-            List<Choice> choices,
-            User lastEditor);
+            List<Choice> choices);
 }

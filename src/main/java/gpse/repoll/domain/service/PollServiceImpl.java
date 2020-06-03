@@ -1,12 +1,10 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.Anonymity;
-import gpse.repoll.domain.exceptions.UnauthorizedException;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollStatus;
 import gpse.repoll.domain.repositories.*;
-import gpse.repoll.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,11 +41,11 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Poll addPoll(final String title, final User creator) {
-        if (creator == null) {
+    public Poll addPoll(final String title) {
+        /*if (creator == null) {
             throw new UnauthorizedException();
-        }
-        final Poll poll = new Poll(creator, title);
+        }*/
+        final Poll poll = new Poll(title);
         pollRepository.save(poll);
         return poll;
     }
@@ -67,13 +65,11 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public Poll updatePoll(final UUID id, final String title, final PollStatus status,
-                           final Map<UUID, List<Long>> structure, final User lastEditor,
-                           final Anonymity anonymity) {
-        if (lastEditor == null) {
+                           final Map<UUID, List<Long>> structure, final Anonymity anonymity) {
+        /*if (lastEditor == null) {
             throw new UnauthorizedException();
-        }
+        }*/
         Poll poll = getPoll(id);
-        poll.setLastEditor(lastEditor);
         if (title != null) {
             poll.setTitle(title);
         }
