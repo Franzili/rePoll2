@@ -1,15 +1,12 @@
 <template>
-    <div class="my-sh">
+    <div>
         <b-row>
             <p style="margin-left: 20vw; margin-top: 2vh"></p>
         </b-row>
         <b-row align-h="center" style="margin-top: 5vh; margin-bottom: 5vh">
             <h1>User-Configuration</h1>
         </b-row>
-        <b-col >
-            <b-button class="addButton" v-b-modal.modal-1 v-on:isUpdate="false">+</b-button>
-        </b-col>
-        <!---b-modal for Adding a new User--->
+        <!---b-modal for Adding a new User and Editing--->
         <b-modal @ok="add_UpdateUser"
                  centered
                  id="modal-1"
@@ -47,153 +44,126 @@
                 </div>
             </div>
         </b-modal>
-    <b-card>
-        <b-row>
-            <b-col lg="6" class="my-1">
-                <b-form-group
-                    label="Sort"
-                    label-cols-sm="3"
-                    label-align-sm="right"
-                    label-size="sm"
-                    label-for="sortBySelect"
-                    class="mb-0"
+        <b-col>
+            <b-card>
+                <b-row>
+                    <!----Sorting--->
+                    <b-col lg="6" class="my-1">
+                        <b-form-group
+                            label="Sort"
+                            label-cols-sm="3"
+                            label-align-sm="right"
+                            label-size="sm"
+                            label-for="sortBySelect"
+                            class="mb-0"
+                        >
+                            <b-input-group size="sm">
+                                <b-form-select v-model="sortBy" id="sortBySelect" :options="sortOptions" class="w-75">
+                                    <template v-slot:first>
+                                        <option value="">-- none --</option>
+                                    </template>
+                                </b-form-select>
+                                <b-form-select v-model="sortDesc" size="sm" :disabled="!sortBy" class="w-25">
+                                    <option :value="false">Asc</option>
+                                    <option :value="true">Desc</option>
+                                </b-form-select>
+                            </b-input-group>
+                        </b-form-group>
+                    </b-col>
+
+                    <b-col lg="6" class="my-1">
+                        <b-form-group
+                            label="Initial sort"
+                            label-cols-sm="3"
+                            label-align-sm="right"
+                            label-size="sm"
+                            label-for="initialSortSelect"
+                            class="mb-0"
+                        >
+                            <b-form-select
+                                v-model="sortDirection"
+                                id="initialSortSelect"
+                                size="sm"
+                                :options="['asc', 'desc', 'last']"
+                            ></b-form-select>
+                        </b-form-group>
+                    </b-col>
+
+                    <!----Filter---->
+                    <b-col lg="6" class="my-1">
+                        <b-form-group
+                            label="Filter"
+                            label-cols-sm="3"
+                            label-align-sm="right"
+                            label-size="sm"
+                            label-for="filterInput"
+                            class="mb-0"
+                        >
+                            <b-input-group size="sm">
+                                <b-form-input
+                                    v-model="filter"
+                                    type="search"
+                                    id="filterInput"
+                                    placeholder="Type to Search"
+                                ></b-form-input>
+                                <b-input-group-append>
+                                    <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+                                </b-input-group-append>
+                            </b-input-group>
+                        </b-form-group>
+                    </b-col>
+
+                    <b-col lg="6" class="my-1">
+                        <b-form-group
+                            label="Filter On"
+                            label-cols-sm="3"
+                            label-align-sm="right"
+                            label-size="sm"
+                            description="Leave all unchecked to filter on all data"
+                            class="mb-0">
+                            <b-form-checkbox-group v-model="filterOn" class="mt-1">
+                                <b-form-checkbox value="username">Name</b-form-checkbox>
+                                <b-form-checkbox value="mail">Age</b-form-checkbox>
+                                <b-form-checkbox value="role">Role</b-form-checkbox>
+                            </b-form-checkbox-group>
+                        </b-form-group>
+                    </b-col>
+                </b-row>
+
+                <!-- Main table element -->
+                <b-table
+                    show-empty
+                    small
+                    :items="items"
+                    :fields="fields"
+                    :filter="filter"
+                    :filterIncludedFields="filterOn"
+                    :sort-by.sync="sortBy"
+                    :sort-desc.sync="sortDesc"
+                    :sort-direction="sortDirection"
+                    @filtered="onFiltered"
                 >
-                    <b-input-group size="sm">
-                        <b-form-select v-model="sortBy" id="sortBySelect" :options="sortOptions" class="w-75">
-                            <template v-slot:first>
-                                <option value="">-- none --</option>
-                            </template>
-                        </b-form-select>
-                        <b-form-select v-model="sortDesc" size="sm" :disabled="!sortBy" class="w-25">
-                            <option :value="false">Asc</option>
-                            <option :value="true">Desc</option>
-                        </b-form-select>
-                    </b-input-group>
-                </b-form-group>
-            </b-col>
+                    <template v-slot:cell(name)="row">
+                        {{ row.value.username }}
+                    </template>
 
-            <b-col lg="6" class="my-1">
-                <b-form-group
-                    label="Initial sort"
-                    label-cols-sm="3"
-                    label-align-sm="right"
-                    label-size="sm"
-                    label-for="initialSortSelect"
-                    class="mb-0"
-                >
-                    <b-form-select
-                        v-model="sortDirection"
-                        id="initialSortSelect"
-                        size="sm"
-                        :options="['asc', 'desc', 'last']"
-                    ></b-form-select>
-                </b-form-group>
-            </b-col>
-
-            <b-col lg="6" class="my-1">
-                <b-form-group
-                    label="Filter"
-                    label-cols-sm="3"
-                    label-align-sm="right"
-                    label-size="sm"
-                    label-for="filterInput"
-                    class="mb-0"
-                >
-                    <b-input-group size="sm">
-                        <b-form-input
-                            v-model="filter"
-                            type="search"
-                            id="filterInput"
-                            placeholder="Type to Search"
-                        ></b-form-input>
-                        <b-input-group-append>
-                            <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-                        </b-input-group-append>
-                    </b-input-group>
-                </b-form-group>
-            </b-col>
-
-            <b-col lg="6" class="my-1">
-                <b-form-group
-                    label="Filter On"
-                    label-cols-sm="3"
-                    label-align-sm="right"
-                    label-size="sm"
-                    description="Leave all unchecked to filter on all data"
-                    class="mb-0">
-                    <b-form-checkbox-group v-model="filterOn" class="mt-1">
-                        <b-form-checkbox value="username">Name</b-form-checkbox>
-                        <b-form-checkbox value="mail">Age</b-form-checkbox>
-                        <b-form-checkbox value="role">Role</b-form-checkbox>
-                    </b-form-checkbox-group>
-                </b-form-group>
-            </b-col>
-
-            <b-col sm="5" md="6" class="my-1">
-                <b-form-group
-                    label="Per page"
-                    label-cols-sm="6"
-                    label-cols-md="4"
-                    label-cols-lg="3"
-                    label-align-sm="right"
-                    label-size="sm"
-                    label-for="perPageSelect"
-                    class="mb-0"
-                >
-                    <b-form-select
-                        v-model="perPage"
-                        id="perPageSelect"
-                        size="sm"
-                        :options="pageOptions"
-                    ></b-form-select>
-                </b-form-group>
-            </b-col>
-
-            <b-col sm="7" md="6" class="my-1">
-                <b-pagination
-                    v-model="currentPage"
-                    :total-rows="totalRows"
-                    :per-page="perPage"
-                    align="fill"
-                    size="sm"
-                    class="my-0"
-                ></b-pagination>
-            </b-col>
-        </b-row>
-
-        <!-- Main table element -->
-        <b-table
-            show-empty
-            small
-            stacked="md"
-            :items="items"
-            :fields="fields"
-            :current-page="currentPage"
-            :per-page="perPage"
-            :filter="filter"
-            :filterIncludedFields="filterOn"
-            :sort-by.sync="sortBy"
-            :sort-desc.sync="sortDesc"
-            :sort-direction="sortDirection"
-            @filtered="onFiltered"
-        >
-            <template v-slot:cell(name)="row">
-                {{ row.value.username }}
-            </template>
-
-            <template v-slot:cell(actions)="row">
-                <b-button size="sm" variant="primary" v-b-modal.modal-1 v-on:isUpdate="true">
-                    Edit
-                </b-button>
-                <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1">
-                    Delete
-                </b-button>
-            </template>
-        </b-table>
-
-    </b-card>
-
+                    <!-----Delete and Edit Button--->
+                    <template v-slot:cell(actions)="row">
+                        <b-button size="sm" variant="primary" v-b-modal.modal-1 v-on:isUpdate="true">
+                            Edit
+                        </b-button>
+                        <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1">
+                            Delete
+                        </b-button>
+                    </template>
+                </b-table>
+                <b-col >
+                    <b-button class="addButton" v-b-modal.modal-1 v-on:isUpdate="false">+</b-button>
+                </b-col>
+            </b-card>
+        </b-col>
     </div>
+
 </template>
 
 <script>
@@ -219,19 +189,11 @@
                     { key: 'actions', label: 'Actions' }
                 ],
                 totalRows: 1,
-                currentPage: 1,
-                perPage: 5,
-                pageOptions: [5, 10, 15],
                 sortBy: '',
                 sortDesc: false,
                 sortDirection: 'asc',
-                filter: null,
+                filter: '',
                 filterOn: [],
-                infoModal: {
-                    id: 'info-modal',
-                    title: '',
-                    content: ''
-                }
             }
         },
         computed: {
@@ -250,11 +212,6 @@
             this.totalRows = this.items.length
         },
         methods: {
-            info(item, index, button) {
-                this.infoModal.title = `Row index: ${index}`
-                this.infoModal.content = JSON.stringify(item, null, 2)
-                this.$root.$emit('bv::show::modal', this.infoModal.id, button)
-            },
             ...mapActions([]),
             // write methods to your means
             add_UpdateUser() {
@@ -269,7 +226,6 @@
             onFiltered(filteredItems) {
                 // Trigger pagination to update the number of buttons/pages due to filtering
                 this.totalRows = filteredItems.length
-                this.currentPage = 1
             },
             components: {
             }
