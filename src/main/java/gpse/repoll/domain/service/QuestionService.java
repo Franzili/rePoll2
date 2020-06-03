@@ -51,7 +51,7 @@ public interface QuestionService {
      * @return The newly created RadioButtonQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    RadioButtonQuestion addRadioButtonQuestion(
+    SingleChoiceQuestion addRadioButtonQuestion(
             UUID pollId,
             String questionTitle,
             int questionOrder,
@@ -67,7 +67,7 @@ public interface QuestionService {
      * @return The newly created ChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    ChoiceQuestion addChoiceQuestion(
+    MultiChoiceQuestion addChoiceQuestion(
             UUID pollId,
             String questionTitle,
             int questionOrder,
@@ -142,7 +142,7 @@ public interface QuestionService {
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    RadioButtonQuestion updateRadioButtonQuestion(
+    SingleChoiceQuestion updateRadioButtonQuestion(
             UUID pollId,
             Long questionId,
             int questionOrder,
@@ -159,7 +159,7 @@ public interface QuestionService {
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    ChoiceQuestion updateChoiceQuestion(
+    MultiChoiceQuestion updateChoiceQuestion(
             UUID pollId,
             Long questionId,
             int questionOrder,

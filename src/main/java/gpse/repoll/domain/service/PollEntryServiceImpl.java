@@ -25,8 +25,8 @@ public class PollEntryServiceImpl implements PollEntryService {
     private final QuestionBaseRepository<Question> questionRepository;
     private final TextAnswerRepository textAnswerRepository;
     private final ScaleAnswerRepository scaleAnswerRepository;
-    private final RadioButtonAnswerRepository radioButtonAnswerRepository;
-    private final ChoiceAnswerRepository choiceAnswerRepository;
+    private final SingleChoiceAnswerRepository singleChoiceAnswerRepository;
+    private final MultiChoiceAnswerRepository multiChoiceAnswerRepository;
 
     @Autowired
     public PollEntryServiceImpl(
@@ -35,15 +35,15 @@ public class PollEntryServiceImpl implements PollEntryService {
             QuestionBaseRepository<Question> questionRepository,
             TextAnswerRepository textAnswerRepository,
             ScaleAnswerRepository scaleAnswerRepository,
-            RadioButtonAnswerRepository radioButtonAnswerRepository,
-            ChoiceAnswerRepository choiceAnswerRepository) {
+            SingleChoiceAnswerRepository singleChoiceAnswerRepository,
+            MultiChoiceAnswerRepository multiChoiceAnswerRepository) {
         this.pollService = pollService;
         this.pollEntryRepository = pollEntryRepository;
         this.questionRepository = questionRepository;
         this.textAnswerRepository = textAnswerRepository;
         this.scaleAnswerRepository = scaleAnswerRepository;
-        this.radioButtonAnswerRepository = radioButtonAnswerRepository;
-        this.choiceAnswerRepository = choiceAnswerRepository;
+        this.singleChoiceAnswerRepository = singleChoiceAnswerRepository;
+        this.multiChoiceAnswerRepository = multiChoiceAnswerRepository;
     }
 
     private void createAnswers(Poll poll, PollEntry pollEntry, Map<Long, Answer> associations) {
@@ -55,10 +55,10 @@ public class PollEntryServiceImpl implements PollEntryService {
                     textAnswerRepository.save((TextAnswer) answer);
                 } else if (answer instanceof ScaleAnswer) {
                     scaleAnswerRepository.save((ScaleAnswer) answer);
-                } else if (answer instanceof RadioButtonAnswer) {
-                    radioButtonAnswerRepository.save((RadioButtonAnswer) answer);
-                } else if (answer instanceof ChoiceAnswer) {
-                    choiceAnswerRepository.save((ChoiceAnswer) answer);
+                } else if (answer instanceof SingleChoiceAnswer) {
+                    singleChoiceAnswerRepository.save((SingleChoiceAnswer) answer);
+                } else if (answer instanceof MultiChoiceAnswer) {
+                    multiChoiceAnswerRepository.save((MultiChoiceAnswer) answer);
                 } else {
                     throw new InternalServerErrorException();
                 }

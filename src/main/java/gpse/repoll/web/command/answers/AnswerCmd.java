@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
     @JsonSubTypes.Type(TextAnswerCmd.class),
     @JsonSubTypes.Type(ScaleAnswerCmd.class),
-    @JsonSubTypes.Type(RadioButtonAnswerCmd.class),
+    @JsonSubTypes.Type(MultiChoiceAnswerCmd.class),
     @JsonSubTypes.Type(ChoiceAnswerCmd.class)
 })
 public abstract class AnswerCmd {

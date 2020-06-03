@@ -188,56 +188,56 @@ public class InitializeDatabase implements InitializingBean {
             textAnswer10.setText("Yummy.");
 
             // Create 10 RadioButtonAnswers
-            RadioButtonAnswer radioButtonAnswer1 = new RadioButtonAnswer();
-            radioButtonAnswer1.setChoiceId(choicesRadioButtonList.get(0).getId());
-            RadioButtonAnswer radioButtonAnswer2 = new RadioButtonAnswer();
-            radioButtonAnswer2.setChoiceId(choicesRadioButtonList.get(1).getId());
-            RadioButtonAnswer radioButtonAnswer3 = new RadioButtonAnswer();
-            radioButtonAnswer3.setChoiceId(choicesRadioButtonList.get(3).getId());
-            RadioButtonAnswer radioButtonAnswer4 = new RadioButtonAnswer();
-            radioButtonAnswer4.setChoiceId(choicesRadioButtonList.get(0).getId());
-            RadioButtonAnswer radioButtonAnswer5 = new RadioButtonAnswer();
-            radioButtonAnswer5.setChoiceId(choicesRadioButtonList.get(2).getId());
-            RadioButtonAnswer radioButtonAnswer6 = new RadioButtonAnswer();
-            radioButtonAnswer6.setChoiceId(choicesRadioButtonList.get(0).getId());
-            RadioButtonAnswer radioButtonAnswer7 = new RadioButtonAnswer();
-            radioButtonAnswer7.setChoiceId(choicesRadioButtonList.get(1).getId());
-            RadioButtonAnswer radioButtonAnswer8 = new RadioButtonAnswer();
-            radioButtonAnswer8.setChoiceId(choicesRadioButtonList.get(1).getId());
-            RadioButtonAnswer radioButtonAnswer9 = new RadioButtonAnswer();
-            radioButtonAnswer9.setChoiceId(choicesRadioButtonList.get(1).getId());
-            RadioButtonAnswer radioButtonAnswer10 = new RadioButtonAnswer();
-            radioButtonAnswer10.setChoiceId(choicesRadioButtonList.get(1).getId());
+            SingleChoiceAnswer singleChoiceAnswer1 = new SingleChoiceAnswer();
+            singleChoiceAnswer1.setChoiceId(choicesRadioButtonList.get(0).getId());
+            SingleChoiceAnswer singleChoiceAnswer2 = new SingleChoiceAnswer();
+            singleChoiceAnswer2.setChoiceId(choicesRadioButtonList.get(1).getId());
+            SingleChoiceAnswer singleChoiceAnswer3 = new SingleChoiceAnswer();
+            singleChoiceAnswer3.setChoiceId(choicesRadioButtonList.get(3).getId());
+            SingleChoiceAnswer singleChoiceAnswer4 = new SingleChoiceAnswer();
+            singleChoiceAnswer4.setChoiceId(choicesRadioButtonList.get(0).getId());
+            SingleChoiceAnswer singleChoiceAnswer5 = new SingleChoiceAnswer();
+            singleChoiceAnswer5.setChoiceId(choicesRadioButtonList.get(2).getId());
+            SingleChoiceAnswer singleChoiceAnswer6 = new SingleChoiceAnswer();
+            singleChoiceAnswer6.setChoiceId(choicesRadioButtonList.get(0).getId());
+            SingleChoiceAnswer singleChoiceAnswer7 = new SingleChoiceAnswer();
+            singleChoiceAnswer7.setChoiceId(choicesRadioButtonList.get(1).getId());
+            SingleChoiceAnswer singleChoiceAnswer8 = new SingleChoiceAnswer();
+            singleChoiceAnswer8.setChoiceId(choicesRadioButtonList.get(1).getId());
+            SingleChoiceAnswer singleChoiceAnswer9 = new SingleChoiceAnswer();
+            singleChoiceAnswer9.setChoiceId(choicesRadioButtonList.get(1).getId());
+            SingleChoiceAnswer singleChoiceAnswer10 = new SingleChoiceAnswer();
+            singleChoiceAnswer10.setChoiceId(choicesRadioButtonList.get(1).getId());
 
             // Create 10 ChoiceAnswers
-            ChoiceAnswer choiceAnswer1 = new ChoiceAnswer();
-            ChoiceAnswer choiceAnswer2 = new ChoiceAnswer();
-            ChoiceAnswer choiceAnswer3 = new ChoiceAnswer();
-            ChoiceAnswer choiceAnswer4 = new ChoiceAnswer();
-            ChoiceAnswer choiceAnswer5 = new ChoiceAnswer();
-            ChoiceAnswer choiceAnswer6 = new ChoiceAnswer();
-            ChoiceAnswer choiceAnswer7 = new ChoiceAnswer();
-            ChoiceAnswer choiceAnswer8 = new ChoiceAnswer();
-            ChoiceAnswer choiceAnswer9 = new ChoiceAnswer();
-            ChoiceAnswer choiceAnswer10 = new ChoiceAnswer();
+            MultiChoiceAnswer multiChoiceAnswer1 = new MultiChoiceAnswer();
+            MultiChoiceAnswer multiChoiceAnswer2 = new MultiChoiceAnswer();
+            MultiChoiceAnswer multiChoiceAnswer3 = new MultiChoiceAnswer();
+            MultiChoiceAnswer multiChoiceAnswer4 = new MultiChoiceAnswer();
+            MultiChoiceAnswer multiChoiceAnswer5 = new MultiChoiceAnswer();
+            MultiChoiceAnswer multiChoiceAnswer6 = new MultiChoiceAnswer();
+            MultiChoiceAnswer multiChoiceAnswer7 = new MultiChoiceAnswer();
+            MultiChoiceAnswer multiChoiceAnswer8 = new MultiChoiceAnswer();
+            MultiChoiceAnswer multiChoiceAnswer9 = new MultiChoiceAnswer();
+            MultiChoiceAnswer multiChoiceAnswer10 = new MultiChoiceAnswer();
 
             List<Long> listChoices = new ArrayList<>();
             listChoices.add(choicesChoiceQuestionList.get(1).getId());
             listChoices.add(choicesChoiceQuestionList.get(0).getId());
-            choiceAnswer1.setChoiceIds(listChoices);
-            choiceAnswer3.setChoiceIds(listChoices);
-            choiceAnswer4.setChoiceIds(listChoices);
-            choiceAnswer9.setChoiceIds(listChoices);
-            choiceAnswer10.setChoiceIds(listChoices);
+            multiChoiceAnswer1.setChoiceIds(listChoices);
+            multiChoiceAnswer3.setChoiceIds(listChoices);
+            multiChoiceAnswer4.setChoiceIds(listChoices);
+            multiChoiceAnswer9.setChoiceIds(listChoices);
+            multiChoiceAnswer10.setChoiceIds(listChoices);
             listChoices.remove(0);
-            choiceAnswer2.setChoiceIds(listChoices);
-            choiceAnswer5.setChoiceIds(listChoices);
+            multiChoiceAnswer2.setChoiceIds(listChoices);
+            multiChoiceAnswer5.setChoiceIds(listChoices);
             listChoices.remove(0);
             listChoices.add(choicesChoiceQuestionList.get(2).getId());
-            choiceAnswer6.setChoiceIds(listChoices);
+            multiChoiceAnswer6.setChoiceIds(listChoices);
             listChoices.add(choicesChoiceQuestionList.get(3).getId());
-            choiceAnswer7.setChoiceIds(listChoices);
-            choiceAnswer8.setChoiceIds(listChoices);
+            multiChoiceAnswer7.setChoiceIds(listChoices);
+            multiChoiceAnswer8.setChoiceIds(listChoices);
 
             //Create 10 ScaleAnswers
 
@@ -278,53 +278,53 @@ public class InitializeDatabase implements InitializingBean {
 
             //Add all Questions to the 10 Hashmaps
             textMap1.put(question1.getId(), textAnswer1);
-            textMap1.put(question2.getId(), radioButtonAnswer1);
-            textMap1.put(question3.getId(), choiceAnswer1);
+            textMap1.put(question2.getId(), singleChoiceAnswer1);
+            textMap1.put(question3.getId(), multiChoiceAnswer1);
             textMap1.put(question4.getId(), scaleAnswer1);
 
             textMap2.put(question1.getId(), textAnswer2);
-            textMap2.put(question2.getId(), radioButtonAnswer2);
-            textMap2.put(question3.getId(), choiceAnswer2);
+            textMap2.put(question2.getId(), singleChoiceAnswer2);
+            textMap2.put(question3.getId(), multiChoiceAnswer2);
             textMap2.put(question4.getId(), scaleAnswer2);
 
             textMap3.put(question1.getId(), textAnswer3);
-            textMap3.put(question2.getId(), radioButtonAnswer3);
-            textMap3.put(question3.getId(), choiceAnswer3);
+            textMap3.put(question2.getId(), singleChoiceAnswer3);
+            textMap3.put(question3.getId(), multiChoiceAnswer3);
             textMap3.put(question4.getId(), scaleAnswer3);
 
             textMap4.put(question1.getId(), textAnswer4);
-            textMap4.put(question2.getId(), radioButtonAnswer4);
-            textMap4.put(question3.getId(), choiceAnswer4);
+            textMap4.put(question2.getId(), singleChoiceAnswer4);
+            textMap4.put(question3.getId(), multiChoiceAnswer4);
             textMap4.put(question4.getId(), scaleAnswer4);
 
             textMap5.put(question1.getId(), textAnswer5);
-            textMap5.put(question2.getId(), radioButtonAnswer5);
-            textMap5.put(question3.getId(), choiceAnswer5);
+            textMap5.put(question2.getId(), singleChoiceAnswer5);
+            textMap5.put(question3.getId(), multiChoiceAnswer5);
             textMap5.put(question4.getId(), scaleAnswer5);
 
             textMap6.put(question1.getId(), textAnswer6);
-            textMap6.put(question2.getId(), radioButtonAnswer6);
-            textMap6.put(question3.getId(), choiceAnswer6);
+            textMap6.put(question2.getId(), singleChoiceAnswer6);
+            textMap6.put(question3.getId(), multiChoiceAnswer6);
             textMap6.put(question4.getId(), scaleAnswer6);
 
             textMap7.put(question1.getId(), textAnswer7);
-            textMap7.put(question2.getId(), radioButtonAnswer7);
-            textMap7.put(question3.getId(), choiceAnswer7);
+            textMap7.put(question2.getId(), singleChoiceAnswer7);
+            textMap7.put(question3.getId(), multiChoiceAnswer7);
             textMap7.put(question4.getId(), scaleAnswer7);
 
             textMap8.put(question1.getId(), textAnswer8);
-            textMap8.put(question2.getId(), radioButtonAnswer8);
-            textMap8.put(question3.getId(), choiceAnswer8);
+            textMap8.put(question2.getId(), singleChoiceAnswer8);
+            textMap8.put(question3.getId(), multiChoiceAnswer8);
             textMap8.put(question4.getId(), scaleAnswer8);
 
             textMap9.put(question1.getId(), textAnswer9);
-            textMap9.put(question2.getId(), radioButtonAnswer9);
-            textMap9.put(question3.getId(), choiceAnswer9);
+            textMap9.put(question2.getId(), singleChoiceAnswer9);
+            textMap9.put(question3.getId(), multiChoiceAnswer9);
             textMap9.put(question4.getId(), scaleAnswer9);
 
             textMap10.put(question1.getId(), textAnswer10);
-            textMap10.put(question2.getId(), radioButtonAnswer10);
-            textMap10.put(question3.getId(), choiceAnswer10);
+            textMap10.put(question2.getId(), singleChoiceAnswer10);
+            textMap10.put(question3.getId(), multiChoiceAnswer10);
             textMap10.put(question4.getId(), scaleAnswer10);
 
             pollEntryService.addPollEntry(poll.getId(), textMap1, participants.get(0));

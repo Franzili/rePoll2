@@ -21,8 +21,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final TextQuestionRepository textQuestionRepository;
     private final ScaleQuestionRepository scaleQuestionRepository;
-    private final RadioButtonQuestionRepository radioButtonQuestionRepository;
-    private final ChoiceQuestionRepository choiceQuestionRepository;
+    private final SingleChoiceQuestionRepository singleChoiceQuestionRepository;
+    private final MultiChoiceQuestionRepository multiChoiceQuestionRepository;
     private final ChoiceRepository choiceRepository;
     private final QuestionBaseRepository<Question> questionBaseRepository;
 
@@ -31,15 +31,15 @@ public class QuestionServiceImpl implements QuestionService {
             PollService pollService,
             TextQuestionRepository textQuestionRepository,
             ScaleQuestionRepository scaleQuestionRepository,
-            RadioButtonQuestionRepository radioButtonQuestionRepository,
-            ChoiceQuestionRepository choiceQuestionRepository,
+            SingleChoiceQuestionRepository singleChoiceQuestionRepository,
+            MultiChoiceQuestionRepository multiChoiceQuestionRepository,
             ChoiceRepository choiceRepository,
             QuestionBaseRepository<Question> questionBaseRepository) {
         this.pollService = pollService;
         this.textQuestionRepository = textQuestionRepository;
         this.scaleQuestionRepository = scaleQuestionRepository;
-        this.radioButtonQuestionRepository = radioButtonQuestionRepository;
-        this.choiceQuestionRepository = choiceQuestionRepository;
+        this.singleChoiceQuestionRepository = singleChoiceQuestionRepository;
+        this.multiChoiceQuestionRepository = multiChoiceQuestionRepository;
         this.choiceRepository = choiceRepository;
         this.questionBaseRepository = questionBaseRepository;
     }
@@ -96,16 +96,16 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc}
      */
     @Override
-    public RadioButtonQuestion addRadioButtonQuestion(final UUID pollId,
-                                                      final String questionTitle,
-                                                      final int questionOrder,
-                                                      final List<Choice> choices,
-                                                      final String displayVariant) {
+    public SingleChoiceQuestion addRadioButtonQuestion(final UUID pollId,
+                                                       final String questionTitle,
+                                                       final int questionOrder,
+                                                       final List<Choice> choices,
+                                                       final String displayVariant) {
         /*if (lastEditor == null) {
             throw new UnauthorizedException();
         }*/
         Poll poll = pollService.getPoll(pollId);
-        RadioButtonQuestion question = new RadioButtonQuestion();
+        SingleChoiceQuestion question = new SingleChoiceQuestion();
         for (Choice choice : choices) {
             choiceRepository.save(choice);
         }
@@ -113,7 +113,7 @@ public class QuestionServiceImpl implements QuestionService {
         question.setQuestionOrder(questionOrder);
         question.addAll(choices);
         question.setDisplayVariant(displayVariant);
-        radioButtonQuestionRepository.save(question);
+        singleChoiceQuestionRepository.save(question);
         poll.add(question);
         pollService.save(poll);
         return question;
@@ -123,10 +123,10 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc}
      */
     @Override
-    public ChoiceQuestion addChoiceQuestion(final UUID pollId,
-                                            final String questionTitle,
-                                            final int questionOrder,
-                                            final List<Choice> choices) {
+    public MultiChoiceQuestion addChoiceQuestion(final UUID pollId,
+                                                 final String questionTitle,
+                                                 final int questionOrder,
+                                                 final List<Choice> choices) {
         /*if (lastEditor == null) {
             throw new UnauthorizedException();
         }*/
@@ -134,11 +134,11 @@ public class QuestionServiceImpl implements QuestionService {
         for (Choice choice : choices) {
             choiceRepository.save(choice);
         }
-        ChoiceQuestion question = new ChoiceQuestion();
+        MultiChoiceQuestion question = new MultiChoiceQuestion();
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
         question.addAll(choices);
-        choiceQuestionRepository.save(question);
+        multiChoiceQuestionRepository.save(question);
         poll.add(question);
         pollService.save(poll);
         return question;
@@ -251,16 +251,16 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc}
      */
     @Override
-    public RadioButtonQuestion updateRadioButtonQuestion(final UUID pollId,
-                                                         final Long questionId,
-                                                         final int questionOrder,
-                                                         final String title,
-                                                         final List<Choice> choices) {
+    public SingleChoiceQuestion updateRadioButtonQuestion(final UUID pollId,
+                                                          final Long questionId,
+                                                          final int questionOrder,
+                                                          final String title,
+                                                          final List<Choice> choices) {
         /*if (lastEditor == null) {
             throw new UnauthorizedException();
         }*/
         Poll poll = pollService.getPoll(pollId);
-        RadioButtonQuestion question = radioButtonQuestionRepository.findById(questionId).orElseThrow(() -> {
+        SingleChoiceQuestion question = singleChoiceQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
         });
         testQuestion(poll, question);
@@ -273,7 +273,7 @@ public class QuestionServiceImpl implements QuestionService {
         if (choices != null) {
             question.setChoices(choices);
         }
-        radioButtonQuestionRepository.save(question);
+        singleChoiceQuestionRepository.save(question);
         return question;
     }
 
@@ -281,16 +281,16 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc}
      */
     @Override
-    public ChoiceQuestion updateChoiceQuestion(final UUID pollId,
-                                               final Long questionId,
-                                               final int questionOrder,
-                                               final String title,
-                                               final List<Choice> choices) {
+    public MultiChoiceQuestion updateChoiceQuestion(final UUID pollId,
+                                                    final Long questionId,
+                                                    final int questionOrder,
+                                                    final String title,
+                                                    final List<Choice> choices) {
         /*if (lastEditor == null) {
             throw new UnauthorizedException();
         }*/
         Poll poll = pollService.getPoll(pollId);
-        ChoiceQuestion question = choiceQuestionRepository.findById(questionId).orElseThrow(() -> {
+        MultiChoiceQuestion question = multiChoiceQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
         });
         testQuestion(poll, question);
@@ -303,7 +303,7 @@ public class QuestionServiceImpl implements QuestionService {
         if (choices != null) {
             question.setChoices(choices);
         }
-        choiceQuestionRepository.save(question);
+        multiChoiceQuestionRepository.save(question);
         return question;
     }
 }

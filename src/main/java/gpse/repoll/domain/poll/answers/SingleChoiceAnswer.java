@@ -8,7 +8,7 @@ import javax.persistence.Entity;
  * The one chosen Answer of multiple options.
  */
 @Entity
-public class RadioButtonAnswer extends Answer {
+public class SingleChoiceAnswer extends Answer {
 
     @Column
     private Long choiceId;

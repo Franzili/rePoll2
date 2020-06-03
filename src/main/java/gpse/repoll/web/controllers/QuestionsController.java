@@ -54,18 +54,18 @@ public class QuestionsController {
                     scaleQuestionCmd.getScaleNameLeft(),
                     scaleQuestionCmd.getScaleNameRight(),
                     scaleQuestionCmd.getStepCount());
-        } else if (questionCmd instanceof RadioButtonQuestionCmd) {
-            RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            if (radioButtonQuestionCmd.getChoices() == null) {
+        } else if (questionCmd instanceof SingleChoiceQuestionCmd) {
+            SingleChoiceQuestionCmd singleChoiceQuestionCmd = (SingleChoiceQuestionCmd) questionCmd;
+            if (singleChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : singleChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            if (radioButtonQuestionCmd.getDisplayVariant() == null
-                    || (!radioButtonQuestionCmd.getDisplayVariant().equals("radio")
-                    && !radioButtonQuestionCmd.getDisplayVariant().equals("dropdown"))) {
+            if (singleChoiceQuestionCmd.getDisplayVariant() == null
+                    || (!singleChoiceQuestionCmd.getDisplayVariant().equals("radio")
+                    && !singleChoiceQuestionCmd.getDisplayVariant().equals("dropdown"))) {
                 throw new BadRequestException("No display variant given for the question!");
             }
             return questionService.addRadioButtonQuestion(
@@ -73,14 +73,14 @@ public class QuestionsController {
                     title,
                     questionOrder,
                     choices,
-                    radioButtonQuestionCmd.getDisplayVariant());
-        } else if (questionCmd instanceof ChoiceQuestionCmd) {
-            ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
-            if (choiceQuestionCmd.getChoices() == null) {
+                    singleChoiceQuestionCmd.getDisplayVariant());
+        } else if (questionCmd instanceof MultiChoiceQuestionCmd) {
+            MultiChoiceQuestionCmd multiChoiceQuestionCmd = (MultiChoiceQuestionCmd) questionCmd;
+            if (multiChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
             return questionService.addChoiceQuestion(pollId, title, questionOrder, choices);
@@ -128,24 +128,24 @@ public class QuestionsController {
                     scaleQuestionCmd.getScaleNameLeft(),
                     scaleQuestionCmd.getScaleNameRight(),
                     scaleQuestionCmd.getStepCount());
-        } else if (questionCmd instanceof RadioButtonQuestionCmd) {
-            RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            if (radioButtonQuestionCmd.getChoices() == null) {
+        } else if (questionCmd instanceof SingleChoiceQuestionCmd) {
+            SingleChoiceQuestionCmd singleChoiceQuestionCmd = (SingleChoiceQuestionCmd) questionCmd;
+            if (singleChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : singleChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
             return questionService.updateRadioButtonQuestion(
                     pollId, questionId, questionOrder, title, choices);
-        } else if (questionCmd instanceof ChoiceQuestionCmd) {
-            ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
-            if (choiceQuestionCmd.getChoices() == null) {
+        } else if (questionCmd instanceof MultiChoiceQuestionCmd) {
+            MultiChoiceQuestionCmd multiChoiceQuestionCmd = (MultiChoiceQuestionCmd) questionCmd;
+            if (multiChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
             return questionService.updateChoiceQuestion(pollId, questionId, questionOrder, title, choices);

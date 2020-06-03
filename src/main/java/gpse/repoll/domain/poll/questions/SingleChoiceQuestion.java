@@ -11,7 +11,7 @@ import java.util.List;
  * A question that can be answered with a @link{RadioButtonAnswer}.
  */
 @Entity
-public class RadioButtonQuestion extends Question {
+public class SingleChoiceQuestion extends Question {
 
     @OneToMany
     private final List<Choice> choices = new ArrayList<>();
