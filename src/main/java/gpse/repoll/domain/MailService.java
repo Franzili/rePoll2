@@ -1,15 +1,23 @@
 package gpse.repoll.domain;
 
+/**
+ * Provides operations with Mailing to the Controller.
+ */
 public interface MailService {
-
-
 
     /**
      * Send Mail.
+     * @param to CSV with the addressees.
      * @param subject Subject of the Mail.
-     * @param text Message.
-     * @param addressee CSV with the addressees.
+     * @param body Message.
      * @return Confirmation that the Mail was sent or an error message.
      */
-    String sendEmail(String subject, String text, String addressee);
+    String sendEmail(String to, String subject, String body);
+
+    /**
+     * Sends a Mail that contains a the username and a new randomized password for a new user.
+     * @param to CSV with the addressees.
+     * @return Confirmation that the Mail was sent or an error message.
+     */
+    String sendPwdGenMail(String to);
 }

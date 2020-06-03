@@ -13,7 +13,7 @@ import java.util.Properties;
 import java.util.UUID;
 
 /**
- * Configuration class for Mails.
+ * Configuration class for Mails, generates a MailSender Bean.
  */
 @Entity
 @Configuration

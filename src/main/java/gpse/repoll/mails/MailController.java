@@ -25,4 +25,10 @@ public class MailController {
     public String sendSimpleEmail() {
         return mailService.sendEmail(ACCOUNT, "hihi", ACCOUNT);
     }
+
+    @ResponseBody
+    @RequestMapping("/api/user/newUser/")
+    public String pwdGenMail() {
+        return null;
+    }
 }

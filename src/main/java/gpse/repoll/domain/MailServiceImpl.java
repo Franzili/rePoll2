@@ -5,6 +5,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
+/**
+ * Default implementation of MailService.
+ */
 @Component
 public class MailServiceImpl implements MailService {
 
@@ -15,17 +18,27 @@ public class MailServiceImpl implements MailService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String sendEmail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-        System.out.println("It's meeeeeeee");
 
         // Send Message!
         this.emailSender.send(message);
 
         return "Email Sent!";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String sendPwdGenMail(String to) {
+        return null;
     }
 }
