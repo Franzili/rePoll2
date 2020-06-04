@@ -4,7 +4,6 @@
 
     export default {
 
-
         name: "BoxplotChart",
         extends: HorizontalBar ,
         props: {
@@ -80,16 +79,11 @@
             fillData (boxplotData) {
                 this.options.title.text = this.title;
 
-                this.datasets[0].data[0] = boxplotData.boxplotData[0];
-                this.datasets[1].data[0] = boxplotData.boxplotData[1];
-                this.datasets[2].data[0] = boxplotData.boxplotData[2];
-                this.datasets[3].data[0] = boxplotData.boxplotData[3];
-                this.datasets[4].data[0] = boxplotData.boxplotData[4];
-
+                for(let i = 0; i <this.datasets.length; i++) {
+                    this.datasets[i].data[0] = boxplotData.boxplotData[i];
+                }
             }
         },
-
-
     }
 </script>
 

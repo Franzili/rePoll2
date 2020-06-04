@@ -47,7 +47,7 @@
         mounted() {
             this.fillData();
             this.renderChart({
-                labels: this.myChoices, //myChoices
+                labels: this.myChoices,
                 datasets: this.datasets},
             this.options);
         },

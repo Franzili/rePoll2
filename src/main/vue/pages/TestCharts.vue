@@ -3,6 +3,7 @@
         <div v-if="isMobile()">
             <BarChart class="mt-5" :choiceFreqPairs="choiceFreqPairs" :title="questTitle"></BarChart>
             <DoughnutChart class="mt-5" :choiceFreqPairs="choiceFreqPairs" :title="questTitle"></DoughnutChart>
+            <BoxplotChart :boxplotData="boxplotData" :title="boxplotTitle"></BoxplotChart>
         </div>
 
         <div v-else>
