@@ -59,19 +59,16 @@ const currentPoll = {
             })
         },
         loadAnswers({commit}, answerCmd) {
-            let questions = this.state.poll.questions
-            for (let i = 0; questions.length; i++) {
-                return new Promise((resolve, reject) => {
-                    api.statistics.getAnswers(answerCmd.poll, answerCmd.quest).then(function (res) {
-                        commit('setAnswers', res.data);
-                        console.log(res.data)
-                        resolve(res.data);
-                    }).catch(function (error) {
-                        console.log(error);
-                        reject();
-                    })
+            return new Promise((resolve, reject) => {
+                api.statistics.getAnswers(answerCmd.poll, answerCmd.quest).then(function (res) {
+                    commit('setAnswers', res.data);
+                    console.log(res.data)
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
                 })
-            }
+            })
         }
     },
 

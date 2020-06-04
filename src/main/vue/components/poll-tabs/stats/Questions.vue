@@ -15,7 +15,7 @@
 
         <p> Hallo ich bin ausgewählt: {{selected}}</p>
 
-        <p>{{answers}}</p>
+        <p></p>
 
         <p>
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
@@ -55,7 +55,7 @@
 <script>
 
     import SelectBox from "../configure/SelectBox";
-    import {mapActions, mapState} from "vuex";
+    import {mapState} from "vuex";
 
     export default {
         name: "Questions",
@@ -69,19 +69,7 @@
         computed: {
             ...mapState('currentPoll', {
                 poll: 'poll',
-                answers: 'answers'
             }),
-        },
-        watch: {
-            selected: function (val) {
-                let answerCmd = {poll: this.poll.id, quest: val}
-                this.loadAnswers(answerCmd)
-            }
-        },
-        methods: {
-            ...mapActions('currentPoll', {
-                loadAnswers: 'loadAnswers'
-            })
         },
         components: {
             SelectBox
