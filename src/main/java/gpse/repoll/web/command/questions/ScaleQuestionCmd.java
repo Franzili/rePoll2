@@ -6,10 +6,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class ScaleQuestionCmd extends QuestionCmd {
 
     private String scaleNameLeft;
-
     private String scaleNameRight;
-
     private int stepCount;
+    private int min;
+    private int max;
 
     public String getScaleNameLeft() {
         return scaleNameLeft;
@@ -33,5 +33,21 @@ public class ScaleQuestionCmd extends QuestionCmd {
 
     public void setStepCount(int stepCount) {
         this.stepCount = stepCount;
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
     }
 }

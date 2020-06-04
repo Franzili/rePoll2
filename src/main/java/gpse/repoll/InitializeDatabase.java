@@ -166,7 +166,7 @@ public class InitializeDatabase implements InitializingBean {
 
             Question question4 = questionService.addScaleQuestion(poll.getId(),
                 "How satisfied are you with our services?",
-                2, "Not good", "Very good", 1);
+                2, "Not good", "Very good", 1, 1, 10);
 
             // Create 10 TextAnswers
             TextAnswer textAnswer1 = new TextAnswer();

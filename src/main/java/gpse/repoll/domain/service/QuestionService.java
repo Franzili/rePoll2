@@ -33,13 +33,16 @@ public interface QuestionService {
      * @return The newly created ScaleQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     ScaleQuestion addScaleQuestion(
             UUID pollId,
             String questionTitle,
             int questionOrder,
             String scaleNameLeft,
             String scaleNameRight,
-            int stepCount);
+            int stepCount,
+            int min,
+            int max);
 
     /**
      * Add a new RadioButtonQuestion to a Poll.
