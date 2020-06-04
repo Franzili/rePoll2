@@ -15,7 +15,7 @@ public interface MailService {
     String sendEmail(String to, String subject, String body);
 
     /**
-     * Sends a Mail that contains a the username and a new randomized password for a new user.
+     * Sends a Mail that contains the username and a new randomized password for a new user.
      * @param to CSV with the addressees.
      * @return Confirmation that the Mail was sent or an error message.
      */

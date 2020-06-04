@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import gpse.repoll.security.Roles;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 public class User implements UserDetails {
     private static final long serialVersionUID = 5L;
+    private static final int PWD_LENGTH = 12;
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -38,15 +40,16 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
+    private final List<String> roles = new ArrayList<>();
 
     @Column
     @OneToMany(mappedBy = "owner")
-    private List<Poll> ownPolls = new ArrayList<>();
+    private final List<Poll> ownPolls = new ArrayList<>();
 
     public User() {
         // Todo: refine user roles
         roles.add(Roles.ALL);
+        password = createRandomPwd(PWD_LENGTH);
     }
 
     public UUID getId() {
@@ -147,6 +150,21 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    /**
+     * Creates a new random password.
+     * @param length password length.
+     * @return password.
+     */
+    String createRandomPwd(int length) {
+        Random random = new Random();
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
+        char[] text = new char[length];
+        for (int i = 0; i < length; i++) {
+            text[i] = chars.charAt(random.nextInt(chars.length()));
+        }
+        return new String(text);
     }
 
     /**
