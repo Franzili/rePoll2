@@ -54,17 +54,6 @@ const currentPoll = {
                 })
             })
         },
-        delete({commit},id) {
-            return new Promise((resolve, reject) => {
-                api.poll.delete(id).then(function (res) {
-                    commit('', res.data)
-                    resolve(res.data);
-                }).catch(function (error) {
-                    console.log(error);
-                    reject();
-                })
-            })
-        }
     },
 
     namespaced: true

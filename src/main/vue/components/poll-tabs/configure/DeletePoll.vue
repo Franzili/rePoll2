@@ -23,7 +23,7 @@
             })
         },
         methods: {
-            ...mapActions('currentPoll', {
+            ...mapActions('myPolls', {
                 delete: 'delete',
             }),
             deletePoll() {
