@@ -1,13 +1,13 @@
 <template>
     <ul class="palette-list">
-        <li v-for="questionType in questionTypes" v-bind:key="questionType.index">
-            <PaletteItem v-bind:question-type="questionType"></PaletteItem>
+        <li v-for="itemModel in pollItemModels" v-bind:key="itemModel.index">
+            <PaletteItem v-bind:itemModel="itemModel"></PaletteItem>
         </li>
     </ul>
 </template>
 
 <script>
-    import { questionTypes} from "../../../store/poll-item-models";
+    import { models } from "../../../store/poll-item-models";
     import PaletteItem from "./PaletteItem";
 
     //import draggable from "vuedraggable";
@@ -20,7 +20,7 @@
         // variables provided by this component
         data() {
             return {
-                questionTypes: questionTypes
+                pollItemModels: models
             }
         },
 
@@ -36,5 +36,9 @@
     .palette-list {
         list-style-type: none;
         padding: 0;
+    }
+
+    .palette-list > :first-child {
+        margin-bottom: 10px;
     }
 </style>

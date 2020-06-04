@@ -7,6 +7,10 @@ class SectionHeaderModel extends PollItemModel {
         this.title = title;
         this.description = description;
     }
+
+    static getDisplayType() {
+        return "Section"
+    }
 }
 
 export default SectionHeaderModel;

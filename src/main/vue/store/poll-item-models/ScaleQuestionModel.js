@@ -1,15 +1,15 @@
 import PollItemModel from "./PollItemModel";
 
-class TextQuestionModel extends PollItemModel {
+class ScaleQuestionModel extends PollItemModel {
     constructor(title) {
         super();
-        this.type = "TextQuestionModel";
+        this.type = "ScaleQuestionModel";
         this.title = title;
     }
 
     static getDisplayType() {
-        return "Text";
+        return "Scale";
     }
 }
 
-export default TextQuestionModel;
+export default ScaleQuestionModel;
