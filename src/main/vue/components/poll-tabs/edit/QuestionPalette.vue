@@ -38,6 +38,7 @@
         padding: 0;
     }
 
+    // first child is section header
     .palette-list > :first-child {
         margin-bottom: 10px;
     }
