@@ -1,8 +1,9 @@
 import PollItemModel from "./PollItemModel";
 
 class TextQuestionModel extends PollItemModel {
-    constructor(title, charLimit = 255) {
+    constructor(id, title, charLimit = 255) {
         super();
+        this.id = id;
         this.type = "TextQuestionModel";
         this.title = title;
         this.charLimit = charLimit;

@@ -1,14 +1,17 @@
 <template>
-    <div>
-        <div v-for="item in pollStructure" v-bind:key="item.key" class="outline-item text-truncate">
-            <b v-if="item.type === 'SectionHeaderModel'" class="header text-truncate">
-                {{item.title}}
-            </b>
-            <span v-else class="question">
-                {{item.title}}
-            </span>
-        </div>
-    </div>
+    <b-nav class="outline"
+                  v-b-scrollspy="{offset: scrollspyOffset}">
+
+        <b-nav-item v-for="item in pollStructure"
+                           class="outline-item text-truncate"
+                           active-class="outline-item-active"
+                           v-bind:key="item.id"
+                           v-bind:class="{ header: item.type === 'SectionHeaderModel',
+                                           question: item.type !== 'SectionHeaderModel'}"
+                           :href="'#pollItem-' + item.id.toString()">
+            {{ item.title }}
+        </b-nav-item>
+    </b-nav>
 </template>
 
 <script>
@@ -18,6 +21,11 @@
             pollStructure: {
                 required: true,
                 type: Array
+            },
+            scrollspyOffset: {
+                required: false,
+                default: 400,
+                type: Number
             }
         }
     }
@@ -26,12 +34,26 @@
 <style lang="scss" scoped>
     @import "../assets/stylesheet.scss";
 
+    .outline {
+
+    }
+
     .outline-item {
-        overflow: hidden;
+        color: $text-muted !important;
+        background-color: transparent;
+        border: 0;
+        padding: 0;
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+
+    .outline-item-active {
+        background-color: transparent;
+        color: black !important;
+        font-weight: bold !important;
     }
 
     .question, .header {
-        color: $text-muted;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

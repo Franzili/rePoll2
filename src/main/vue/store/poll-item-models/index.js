@@ -20,5 +20,5 @@ export const models = [
 
 export function makeQuestion(question) {
     // TODO: return question types that are actually sensible.
-    return new TextQuestionModel(question.title);
+    return new TextQuestionModel(question.id, question.title);
 }

@@ -1,8 +1,9 @@
 import PollItemModel from "./PollItemModel";
 
 class SingleChoiceQuestionModel extends PollItemModel {
-    constructor(title) {
+    constructor(id, title) {
         super();
+        this.id = id;
         this.type = "SingleChoiceQuestionModel";
         this.title = title;
     }

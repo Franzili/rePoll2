@@ -22,7 +22,7 @@ const currentPoll = {
         pollStructureFlat: state => {
             let res = [];
             state.poll.pollSections.forEach(section => {
-                res.push(new SectionHeader(section.title, section.description));
+                res.push(new SectionHeader(section.id, section.title, section.description));
                 section.questions.forEach(q => {
                     let questionObject = state.poll.questions.find(item => item.id === q.id);
                     res.push(makeQuestion(questionObject));
