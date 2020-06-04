@@ -1,10 +1,12 @@
 <script>
 
-    import {Bar} from 'vue-chartjs';
+    import {HorizontalBar } from 'vue-chartjs';
 
     export default {
+
+
         name: "BoxplotChart",
-        extends: Bar,
+        extends: HorizontalBar ,
         props: {
             title: {
                 type: String
