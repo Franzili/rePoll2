@@ -3,10 +3,10 @@
         <p>
             <b-row style="margin-top: 2vh">
                 <b-col cols="4">
-                    <SelectBox :first="questionHeader" v-on:getSelected="selected = $event"></SelectBox>
+                    <b-form-select v-model="selected" :options="this.choices"></b-form-select>
                 </b-col>
                 <b-col cols="4">
-                    <SelectBox v-on:getSelected="selected = $event"></SelectBox>
+                    <b-form-select v-model="selected" :options="this.choices"></b-form-select>
                 </b-col>
                 <b-col cols="4"></b-col>
             </b-row>
@@ -57,18 +57,21 @@
 
 <script>
 
-    import SelectBox from "./SelectBox";
     import {mapActions, mapState} from "vuex";
 
     export default {
         name: "Questions",
         data() {
             return {
+                choices: [],
                 tmpID: 0,
                 selected: null,
                 questionHeader: {value: null, text: 'Select your question'},
                 match: []
             }
+        },
+        created() {
+            this.fillChoices()
         },
         computed: {
             ...mapState('currentPoll', {
@@ -91,10 +94,15 @@
         methods: {
             ...mapActions('currentPoll', {
                 loadAnswers: 'loadAnswers'
-            })
+            }),
+            fillChoices() {
+                for (let i = 0; i < this.poll.questions.length; i++) {
+                    let choice = {text: this.poll.questions[i].title, value: this.poll.questions[i].id}
+                    this.choices = [... this.choices, choice]
+                }
+            }
         },
         components: {
-            SelectBox
         }
     }
 </script>
