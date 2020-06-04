@@ -2,7 +2,7 @@
     <div>
         <div v-if="isMobile()">
             <BarChart class="mt-5" :choiceFreqPairs="choiceFreqPairs" :title="questTitle"></BarChart>
-            <DoughnutChart class="mt-5" :abs-freq="absoluteFrequencies" :choices="choices" :title="questTitle"></DoughnutChart>
+            <DoughnutChart class="mt-5" :choiceFreqPairs="choiceFreqPairs" :title="questTitle"></DoughnutChart>
         </div>
 
         <div v-else>
@@ -12,6 +12,9 @@
             <b-card class="chart-card">
                 <DoughnutChart :choiceFreqPairs="choiceFreqPairs" :title="questTitle"></DoughnutChart>
             </b-card>
+            <b-card class="chart-card">
+                <BoxplotChart :boxplotData="boxplotData" :title="boxplotTitle"></BoxplotChart>
+            </b-card>
         </div>
     </div>
 </template>
@@ -19,6 +22,7 @@
 <script>
     import BarChart from "../components/charts/BarChart";
     import DoughnutChart from "../components/charts/DoughnnutChart";
+    import BoxplotChart from "../components/charts/BoxplotChart";
 
     export default {
         name: "TestCharts",
@@ -48,7 +52,14 @@
                         choice: 'sehr schlecht',
                         absFreq: 0
                     }
-                ]
+                ],
+
+                boxplotTitle: "wieviel verdienst du pro Jahr(in 1000 Euro)",
+                boxplotData: {
+                    choice: 'sehr gut',
+                    boxplotData: [10, 20, 60, 90, 100]
+                },
+
             }
         },
         methods: {
@@ -57,6 +68,7 @@
             },
         },
         components: {
+            BoxplotChart,
             DoughnutChart,
             BarChart
         }

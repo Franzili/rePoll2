@@ -9,12 +9,6 @@
             title: {
                 type: String
             },
-            choices: {
-                type: Array
-            },
-            absFreq: {
-                type: Array
-            },
             choiceFreqPairs: {
                 type: Array
             }
