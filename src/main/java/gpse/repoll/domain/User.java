@@ -43,7 +43,7 @@ public class User implements UserDetails {
     private List<String> roles = new ArrayList<>();
 
     @Column
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Poll> ownPolls = new ArrayList<>();
 
     public User() {

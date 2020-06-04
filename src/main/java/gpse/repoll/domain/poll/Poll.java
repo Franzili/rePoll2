@@ -5,13 +5,11 @@ import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.questions.Question;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -21,7 +19,7 @@ import java.util.*;
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Poll {
+public class Poll extends Auditable<User> {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -38,20 +36,6 @@ public class Poll {
     @Lob
     @NotEmpty
     private String title;
-
-    @ManyToOne
-    private User creator;
-
-    @CreatedDate
-    @Column
-    private LocalDateTime creationTime;
-
-    @ManyToOne
-    private User lastEditor;
-
-    @LastModifiedDate
-    @Column
-    private LocalDateTime lastEditTime;
 
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
@@ -71,12 +55,9 @@ public class Poll {
 
     /**
      * Create a new poll.
-     * @param creator The user that is responsible for creating the poll.
      * @param title The title of the poll.
      */
-    public Poll(User creator, String title) {
-        this.creator = creator;
-        this.lastEditor = creator;
+    public Poll(String title) {
         this.title = title;
         this.status = PollStatus.IN_PROCESS;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
@@ -101,34 +82,6 @@ public class Poll {
 
     public UUID getId() {
         return id;
-    }
-
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
-
-    public LocalDateTime getCreationTime() {
-        return creationTime;
-    }
-
-    public User getLastEditor() {
-        return lastEditor;
-    }
-
-    public void setLastEditor(User lastEditor) {
-        this.lastEditor = lastEditor;
-    }
-
-    public LocalDateTime getLastEditTime() {
-        return lastEditTime;
-    }
-
-    public void setLastEditTime(LocalDateTime lastEditTime) {
-        this.lastEditTime = lastEditTime;
     }
 
     public List<PollEntry> getPollEntries() {
