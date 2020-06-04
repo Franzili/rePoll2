@@ -69,16 +69,16 @@ public class QuestionServiceImpl implements QuestionService {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @Override
     public ScaleQuestion addScaleQuestion(final UUID pollId,
                                           final String questionTitle,
                                           final int questionOrder,
                                           final String scaleNameLeft,
                                           final String scaleNameRight,
-                                          final int stepCount) {
-        /*if (lastEditor == null) {
-            throw new UnauthorizedException();
-        }*/
+                                          final int stepCount,
+                                          final int min,
+                                          final int max) {
         Poll poll = pollService.getPoll(pollId);
         ScaleQuestion question = new ScaleQuestion();
         question.setTitle(questionTitle);
@@ -86,6 +86,8 @@ public class QuestionServiceImpl implements QuestionService {
         question.setScaleNameLeft(scaleNameLeft);
         question.setScaleNameRight(scaleNameRight);
         question.setStepCount(stepCount);
+        question.setMin(min);
+        question.setMax(max);
         scaleQuestionRepository.save(question);
         poll.add(question);
         pollService.save(poll);
@@ -220,9 +222,6 @@ public class QuestionServiceImpl implements QuestionService {
                                              final String scaleNameLeft,
                                              final String scaleNameRight,
                                              final int stepCount) {
-        /*if (lastEditor == null) {
-            throw new UnauthorizedException();
-        }*/
         Poll poll = pollService.getPoll(pollId);
         ScaleQuestion question = scaleQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
@@ -240,7 +239,7 @@ public class QuestionServiceImpl implements QuestionService {
         if (scaleNameRight != null) {
             question.setScaleNameRight(scaleNameRight);
         }
-        if (stepCount > 1) {
+        if (stepCount > 0) {
             question.setStepCount(stepCount);
         }
         scaleQuestionRepository.save(question);

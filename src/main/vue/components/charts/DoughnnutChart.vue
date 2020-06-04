@@ -58,8 +58,24 @@
                 }
 
                 //setting different background colors of choices
-                for(let i = 0; i < this.datasets[0].data.length; i++) {
-                    this.datasets[0].backgroundColor[i] = this.backgroundColors[i];
+                if (this.choiceFreqPairs.length > this.backgroundColors.length){
+
+                    //first use the default colors
+                    for(let i = 0; i < this.backgroundColors.length; i++) {
+                        this.datasets[0].backgroundColor[i] = this.backgroundColors[i];
+                    }
+
+                    //then generate random colors
+                    for(let i = this.backgroundColors.length; i < this.datasets[0].data.length; i++) {
+                        //                                                                    FFFFFF in dec
+                        this.datasets[0].backgroundColor[i] = '#' + Math.floor(Math.random()*16777215).toString(16);
+                    }
+
+                } else {
+                    //only use the default colors
+                    for(let i = 0; i < this.datasets[0].data.length; i++) {
+                        this.datasets[0].backgroundColor[i] = this.backgroundColors[i];
+                    }
                 }
             }
         }

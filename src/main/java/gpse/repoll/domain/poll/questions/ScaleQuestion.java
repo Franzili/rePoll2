@@ -15,7 +15,13 @@ public class ScaleQuestion extends Question {
     private String scaleNameRight;
 
     @Column
-    private int stepCount; // todo > 1
+    private int stepCount;
+
+    @Column
+    private int min;
+
+    @Column
+    private int max;
 
     public String getScaleNameLeft() {
         return scaleNameLeft;
@@ -39,5 +45,21 @@ public class ScaleQuestion extends Question {
 
     public void setStepCount(int stepCount) {
         this.stepCount = stepCount;
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
     }
 }
