@@ -35,6 +35,11 @@ public class PollEntriesController {
         this.pollEntryService = pollEntryService;
     }
 
+    @GetMapping("/{pollId}/entries/")
+    public List<PollEntry> listPollEntries(@PathVariable("pollId") final UUID pollId) {
+        return pollEntryService.getAll(pollId);
+    }
+
     //todo handling wrong answer type
     @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
@@ -50,7 +55,7 @@ public class PollEntriesController {
         return  pollEntryService.getPollEntry(pollId, Long.valueOf(entryId));
     }
 
-    @PutMapping("/{pollId}/entries/{entryId:\\d+}")
+    @PutMapping("/{pollId}/entries/{entryId:\\d+}/")
     public PollEntry updatePollEntry(@PathVariable("pollId") final UUID pollId,
                                      @PathVariable("entryId") final String entryId,
                                      @RequestBody PollEntryCmd pollEntryCmd) {

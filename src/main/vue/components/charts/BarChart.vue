@@ -9,12 +9,6 @@
             title: {
                 type: String
             },
-            choices: {
-                type: Array
-            },
-            absFreq: {
-                type: Array
-            },
             choiceFreqPairs: {
                 type: Array
             }
@@ -38,7 +32,14 @@
                 ],
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
                 }
             }
         },
@@ -46,7 +47,7 @@
         mounted() {
             this.fillData();
             this.renderChart({
-                labels: this.myChoices, //myChoices
+                labels: this.myChoices,
                 datasets: this.datasets},
             this.options);
         },
