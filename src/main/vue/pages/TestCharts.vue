@@ -54,7 +54,7 @@
                     }
                 ],
 
-                boxplotTitle: "wieviel verdienst du pro Jahr(in 1000 Euro)",
+                boxplotTitle: "Wieviel verdienst du pro Jahr(in 1000 Euro)",
                 boxplotData: {
                     choice: 'sehr gut',
                     boxplotData: [10, 20, 60, 90, 100]

@@ -18,27 +18,31 @@
                 datasets: [
                     {
                         label: 'min',
-                        backgroundColor: '#aeaeae', //02a097
+                        backgroundColor: 'rgba(0,0,0,0)',
                         data: []
                     },
                     {
                         label: 'q1',
-                        backgroundColor: '#aeaeae', //02a097
+                        backgroundColor: '#aeaeae',
+                        barThickness: 5,
                         data: []
                     },
                     {
                         label: 'median',
-                        backgroundColor: '#02a097', //02a097
+                        backgroundColor: '#02a097',
+                        barThickness: 60,
                         data: []
                     },
                     {
                         label: 'q3',
-                        backgroundColor: '#3eab37', //02a097
+                        backgroundColor: '#3eab37',
+                        barThickness: 60,
                         data: []
                     },
                     {
                         label: 'max',
-                        backgroundColor: '#aeaeae', //02a097
+                        backgroundColor: '#aeaeae',
+                        barThickness: 5,
                         data: []
                     }
                 ],
