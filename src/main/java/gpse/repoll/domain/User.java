@@ -5,7 +5,6 @@ import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import gpse.repoll.security.Roles;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -159,7 +158,8 @@ public class User implements UserDetails {
      */
     String createRandomPwd(int length) {
         Random random = new Random();
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
+        String chars =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
         char[] text = new char[length];
         for (int i = 0; i < length; i++) {
             text[i] = chars.charAt(random.nextInt(chars.length()));

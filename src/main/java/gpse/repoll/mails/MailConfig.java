@@ -19,12 +19,15 @@ import java.util.UUID;
 @Configuration
 public class MailConfig {
 
+    private static final String TRUE = "true";
+    private static final int PORT = 587;
+
     @Id
     @GeneratedValue(generator = "uuid2")
     UUID id;
 
     @Column
-    private int port = 587;
+    private int port = PORT;
 
     @Column
     private String hostServer = "smtp.gmail.com";
@@ -37,7 +40,6 @@ public class MailConfig {
 
     private String sendTo;
 
-    private static final String TRUE = "true";
 
     protected MailConfig() {
 

@@ -3,6 +3,7 @@ package gpse.repoll.mails;
 import gpse.repoll.domain.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,8 +28,8 @@ public class MailController {
     }
 
     @ResponseBody
-    @RequestMapping("/api/user/newUser/")
-    public String pwdGenMail() {
-        return null;
+    @RequestMapping("/api/user/newUser/{userName}")
+    public String pwdGenMail(@PathVariable String userName) {
+        return mailService.sendPwdGenMail(userName, ACCOUNT);
     }
 }
