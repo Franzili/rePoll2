@@ -94,15 +94,14 @@ public class InitializeDatabase implements InitializingBean {
             //pollEntryRepository.deleteAll();
             //pollRepository.deleteAll();
             //pollSectionRepository.deleteAll();
-            User user = userService.getUser("JamesBond");
-            Poll poll = pollService.addPoll("Gummibaerchen", user);
+            Poll poll = pollService.addPoll("Gummibaerchen");
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
-                                        1, 255, user);
-            Poll poll2 = pollService.addPoll("About this App", user);
+                                        1, 255);
+            Poll poll2 = pollService.addPoll("About this App");
             questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
-                                        1000, 255, user);
+                                        1000, 255);
             questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
-                                        1000, 255, user);
+                                        1000, 255);
             //dummy user for US34 Task 14846
             User nobody;
             try {
@@ -135,9 +134,9 @@ public class InitializeDatabase implements InitializingBean {
             }
 
             //dummy Poll for Nemo
-            Poll poll3 = pollService.addPoll("Nothing to see here", nobody);
+            Poll poll3 = pollService.addPoll("Nothing to see here");
             questionService.addTextQuestion(poll3.getId(), "This sentence is false",
-                                                        100, 255, nobody);
+                                                        100, 255);
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
             Choice choice5 = new Choice("0-20");
@@ -150,7 +149,7 @@ public class InitializeDatabase implements InitializingBean {
             choicesRadioButtonList.add(choice7);
             choicesRadioButtonList.add(choice8);
             Question question2 = questionService.addRadioButtonQuestion(poll.getId(), "How old are you?",
-                3, choicesRadioButtonList, user, displayVariant);
+                3, choicesRadioButtonList, displayVariant);
 
             List<Choice> choicesChoiceQuestionList = new ArrayList<>();
             Choice choice1 = new Choice("Avicii");
@@ -163,11 +162,11 @@ public class InitializeDatabase implements InitializingBean {
             choicesChoiceQuestionList.add(choice4);
             Question question3 = questionService.addChoiceQuestion(poll.getId(),
                 "Which artist do yo like the most?",
-                4, choicesChoiceQuestionList, user);
+                4, choicesChoiceQuestionList);
 
             Question question4 = questionService.addScaleQuestion(poll.getId(),
                 "How satisfied are you with our services?",
-                2, "Not good", "Very good", 1, user);
+                2, "Not good", "Very good", 1);
 
             // Create 10 TextAnswers
             TextAnswer textAnswer1 = new TextAnswer();

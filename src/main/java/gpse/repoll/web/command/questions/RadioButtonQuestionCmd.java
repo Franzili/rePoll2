@@ -10,6 +10,7 @@ import java.util.List;
 public class RadioButtonQuestionCmd extends QuestionCmd {
 
     private String displayVariant;
+    private final List<ChoiceCmd> choices = new ArrayList<>();
 
     public String getDisplayVariant() {
         return displayVariant;
@@ -18,8 +19,6 @@ public class RadioButtonQuestionCmd extends QuestionCmd {
     public void setDisplayVariant(String displayVariant) {
         this.displayVariant = displayVariant;
     }
-
-    private List<ChoiceCmd> choices = new ArrayList<>();
 
     public List<ChoiceCmd> getChoices() {
         return choices;

@@ -18,6 +18,9 @@
                         <router-link class="link" :to="'/account/'">Account</router-link>
                     </b-nav-item>
                     <b-nav-item>
+                        <router-link class="link" :to="'/admin/'">Admin</router-link>
+                    </b-nav-item>
+                    <b-nav-item>
                         <router-link class="link" :to="'/polls/'">Polls</router-link>
                     </b-nav-item>
                     <b-nav-item>

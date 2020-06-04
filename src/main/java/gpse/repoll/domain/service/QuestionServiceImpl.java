@@ -2,10 +2,8 @@ package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
-import gpse.repoll.domain.exceptions.UnauthorizedException;
 import gpse.repoll.domain.poll.questions.*;
 import gpse.repoll.domain.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +51,11 @@ public class QuestionServiceImpl implements QuestionService {
     public TextQuestion addTextQuestion(final UUID pollId,
                                         final String questionTitle,
                                         final int questionOrder,
-                                        final int charLimit,
-                                        final User lastEditor) {
-        if (lastEditor == null) {
+                                        final int charLimit) {
+        /*if (lastEditor == null) {
             throw new UnauthorizedException();
-        }
+        }*/
         Poll poll = pollService.getPoll(pollId);
-        poll.setLastEditor(lastEditor);
         TextQuestion question = new TextQuestion();
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
@@ -79,13 +75,11 @@ public class QuestionServiceImpl implements QuestionService {
                                           final int questionOrder,
                                           final String scaleNameLeft,
                                           final String scaleNameRight,
-                                          final int stepCount,
-                                          final User lastEditor) {
-        if (lastEditor == null) {
+                                          final int stepCount) {
+        /*if (lastEditor == null) {
             throw new UnauthorizedException();
-        }
+        }*/
         Poll poll = pollService.getPoll(pollId);
-        poll.setLastEditor(lastEditor);
         ScaleQuestion question = new ScaleQuestion();
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
@@ -106,13 +100,11 @@ public class QuestionServiceImpl implements QuestionService {
                                                       final String questionTitle,
                                                       final int questionOrder,
                                                       final List<Choice> choices,
-                                                      final User lastEditor,
                                                       final String displayVariant) {
-        if (lastEditor == null) {
+        /*if (lastEditor == null) {
             throw new UnauthorizedException();
-        }
+        }*/
         Poll poll = pollService.getPoll(pollId);
-        poll.setLastEditor(lastEditor);
         RadioButtonQuestion question = new RadioButtonQuestion();
         for (Choice choice : choices) {
             choiceRepository.save(choice);
@@ -134,13 +126,11 @@ public class QuestionServiceImpl implements QuestionService {
     public ChoiceQuestion addChoiceQuestion(final UUID pollId,
                                             final String questionTitle,
                                             final int questionOrder,
-                                            final List<Choice> choices,
-                                            final User lastEditor) {
-        if (lastEditor == null) {
+                                            final List<Choice> choices) {
+        /*if (lastEditor == null) {
             throw new UnauthorizedException();
-        }
+        }*/
         Poll poll = pollService.getPoll(pollId);
-        poll.setLastEditor(lastEditor);
         for (Choice choice : choices) {
             choiceRepository.save(choice);
         }
@@ -196,13 +186,11 @@ public class QuestionServiceImpl implements QuestionService {
                                            final Long questionId,
                                            final int questionOrder,
                                            final String title,
-                                           final int charLimit,
-                                           final User lastEditor) {
-        if (lastEditor == null) {
+                                           final int charLimit) {
+        /*if (lastEditor == null) {
             throw new UnauthorizedException();
-        }
+        }*/
         Poll poll = pollService.getPoll(pollId);
-        poll.setLastEditor(lastEditor);
         TextQuestion question = textQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
         });
@@ -231,13 +219,11 @@ public class QuestionServiceImpl implements QuestionService {
                                              final String title,
                                              final String scaleNameLeft,
                                              final String scaleNameRight,
-                                             final int stepCount,
-                                             final User lastEditor) {
-        if (lastEditor == null) {
+                                             final int stepCount) {
+        /*if (lastEditor == null) {
             throw new UnauthorizedException();
-        }
+        }*/
         Poll poll = pollService.getPoll(pollId);
-        poll.setLastEditor(lastEditor);
         ScaleQuestion question = scaleQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
         });
@@ -269,13 +255,11 @@ public class QuestionServiceImpl implements QuestionService {
                                                          final Long questionId,
                                                          final int questionOrder,
                                                          final String title,
-                                                         final List<Choice> choices,
-                                                         final User lastEditor) {
-        if (lastEditor == null) {
+                                                         final List<Choice> choices) {
+        /*if (lastEditor == null) {
             throw new UnauthorizedException();
-        }
+        }*/
         Poll poll = pollService.getPoll(pollId);
-        poll.setLastEditor(lastEditor);
         RadioButtonQuestion question = radioButtonQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
         });
@@ -301,13 +285,11 @@ public class QuestionServiceImpl implements QuestionService {
                                                final Long questionId,
                                                final int questionOrder,
                                                final String title,
-                                               final List<Choice> choices,
-                                               final User lastEditor) {
-        if (lastEditor == null) {
+                                               final List<Choice> choices) {
+        /*if (lastEditor == null) {
             throw new UnauthorizedException();
-        }
+        }*/
         Poll poll = pollService.getPoll(pollId);
-        poll.setLastEditor(lastEditor);
         ChoiceQuestion question = choiceQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
         });
