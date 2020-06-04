@@ -12,7 +12,7 @@
 
         <b-col cols="3" class="sidebar">
             <div class="sticky-top sticky-offset">
-                Structure
+                <Outline :poll-structure="pollStructure"></Outline>
             </div>
         </b-col>
     </b-row>
@@ -22,6 +22,7 @@
     import {mapGetters} from "vuex";
     import QuestionPalette from "./QuestionPalette";
     import PollMainView from "./PollMainView";
+    import Outline from "../../Outline";
     export default {
         name: "EditPoll",
         computed: {
@@ -29,7 +30,7 @@
                 pollStructure: 'pollStructureFlat'
             })
         },
-        components: {PollMainView, QuestionPalette},
+        components: {PollMainView, QuestionPalette, Outline},
     }
 </script>
 
