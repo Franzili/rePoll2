@@ -1,7 +1,6 @@
 package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.Choice;
-import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.questions.Question;
@@ -12,8 +11,6 @@ import gpse.repoll.web.command.ChoiceCmd;
 import gpse.repoll.web.command.questions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -46,12 +43,9 @@ public class QuestionsController {
                                 @RequestBody QuestionCmd questionCmd) {
         String title = questionCmd.getTitle();
         int questionOrder = questionCmd.getQuestionOrder();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User lastEditor = userService.getUser(auth.getName());
         if (questionCmd instanceof TextQuestionCmd) {
             TextQuestionCmd textQuestionCmd = (TextQuestionCmd) questionCmd;
-            return questionService.addTextQuestion(pollId, title, questionOrder, textQuestionCmd.getCharLimit(),
-                    lastEditor);
+            return questionService.addTextQuestion(pollId, title, questionOrder, textQuestionCmd.getCharLimit());
         } else if (questionCmd instanceof ScaleQuestionCmd) {
             ScaleQuestionCmd scaleQuestionCmd = (ScaleQuestionCmd) questionCmd;
             return questionService.addScaleQuestion(pollId,
@@ -59,8 +53,7 @@ public class QuestionsController {
                     questionOrder,
                     scaleQuestionCmd.getScaleNameLeft(),
                     scaleQuestionCmd.getScaleNameRight(),
-                    scaleQuestionCmd.getStepCount(),
-                    lastEditor);
+                    scaleQuestionCmd.getStepCount());
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
             if (radioButtonQuestionCmd.getChoices() == null) {
@@ -70,10 +63,17 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            if (radioButtonQuestionCmd.getDisplayVariant() == null || (!radioButtonQuestionCmd.getDisplayVariant().equals("radio") && !radioButtonQuestionCmd.getDisplayVariant().equals("dropdown"))) {
+            if (radioButtonQuestionCmd.getDisplayVariant() == null
+                    || (!radioButtonQuestionCmd.getDisplayVariant().equals("radio")
+                    && !radioButtonQuestionCmd.getDisplayVariant().equals("dropdown"))) {
                 throw new BadRequestException("No display variant given for the question!");
             }
-            return questionService.addRadioButtonQuestion(pollId, title, questionOrder, choices, lastEditor, radioButtonQuestionCmd.getDisplayVariant());
+            return questionService.addRadioButtonQuestion(
+                    pollId,
+                    title,
+                    questionOrder,
+                    choices,
+                    radioButtonQuestionCmd.getDisplayVariant());
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
             if (choiceQuestionCmd.getChoices() == null) {
@@ -83,7 +83,7 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.addChoiceQuestion(pollId, title, questionOrder, choices, lastEditor);
+            return questionService.addChoiceQuestion(pollId, title, questionOrder, choices);
         }
         // This should never happen
         throw new InternalServerErrorException();
@@ -113,15 +113,12 @@ public class QuestionsController {
         Long questionId = Long.valueOf(qId);
         String title = questionCmd.getTitle();
         int questionOrder = questionCmd.getQuestionOrder();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User lastEditor = userService.getUser(auth.getName());
         if (questionCmd instanceof TextQuestionCmd) {
             return questionService.updateTextQuestion(pollId,
                     questionId,
                     questionOrder,
                     title,
-                    ((TextQuestionCmd) questionCmd).getCharLimit(),
-                    lastEditor);
+                    ((TextQuestionCmd) questionCmd).getCharLimit());
         } else if (questionCmd instanceof ScaleQuestionCmd) {
             ScaleQuestionCmd scaleQuestionCmd = (ScaleQuestionCmd) questionCmd;
             return questionService.updateScaleQuestion(pollId,
@@ -130,8 +127,7 @@ public class QuestionsController {
                     title,
                     scaleQuestionCmd.getScaleNameLeft(),
                     scaleQuestionCmd.getScaleNameRight(),
-                    scaleQuestionCmd.getStepCount(),
-                    lastEditor);
+                    scaleQuestionCmd.getStepCount());
         } else if (questionCmd instanceof RadioButtonQuestionCmd) {
             RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
             if (radioButtonQuestionCmd.getChoices() == null) {
@@ -142,7 +138,7 @@ public class QuestionsController {
                 choices.add(new Choice(choiceCmd.getText()));
             }
             return questionService.updateRadioButtonQuestion(
-                    pollId, questionId, questionOrder, title, choices, lastEditor);
+                    pollId, questionId, questionOrder, title, choices);
         } else if (questionCmd instanceof ChoiceQuestionCmd) {
             ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
             if (choiceQuestionCmd.getChoices() == null) {
@@ -152,7 +148,7 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.updateChoiceQuestion(pollId, questionId, questionOrder, title, choices, lastEditor);
+            return questionService.updateChoiceQuestion(pollId, questionId, questionOrder, title, choices);
         }
         // This should never happen
         throw new InternalServerErrorException();

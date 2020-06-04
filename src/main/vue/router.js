@@ -7,8 +7,10 @@ import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
 import AnswerPoll from "./pages/AnswerPoll";
 import PollTabbed from "./pages/PollTabbed";
+import Admin from "./pages/Admin";
 
 import store from "./store/store";
+import TestCharts from "./pages/TestCharts";
 
 let router = new VueRouter({
     mode: 'history',
@@ -67,6 +69,19 @@ let router = new VueRouter({
             meta: {
                 requiresAuth: true
             }
+        },
+        {
+            path: '/admin/',
+            component: Admin,
+            name: 'admin',
+            meta: {
+                requiresAuth: true
+            }
+        },
+        //for Charts testing
+        {
+            path: '/test/',
+            component: TestCharts
         }
     ]
 });
