@@ -1,5 +1,5 @@
 <template>
-    <b-container>
+    <b-container fluid="lg">
 
         <!-- To make the tab bar fit on the right side of the title,
              we actually use b-tab Components: one for the navigation,

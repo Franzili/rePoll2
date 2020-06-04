@@ -1,12 +1,12 @@
 <template>
     <b-row class="poll-editor">
-        <b-col cols="2" class="sidebar">
+        <b-col cols="1" lg="2" class="sidebar">
             <div class="sticky-top sticky-offset">
                 <QuestionPalette></QuestionPalette>
             </div>
         </b-col>
 
-        <b-col cols="7" class="editor-column">
+        <b-col class="editor-column">
             <PollMainView></PollMainView>
         </b-col>
 
@@ -47,6 +47,7 @@
 
     .sidebar {
         background-color: $light;
+        padding-top: 10px;
     }
 
     .sticky-offset {
