@@ -15,7 +15,10 @@
 
         <p> Hallo ich bin ausgewählt: {{selected}}</p>
 
-        <p></p>
+        <p>{{answers}}</p>
+        <p>{{match}}</p>
+
+        <b-table :items="match"></b-table>
 
         <p>
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
@@ -54,8 +57,8 @@
 
 <script>
 
-    import SelectBox from "../configure/SelectBox";
-    import {mapState} from "vuex";
+    import SelectBox from "./SelectBox";
+    import {mapActions, mapState} from "vuex";
 
     export default {
         name: "Questions",
@@ -64,12 +67,31 @@
                 tmpID: 0,
                 selected: null,
                 questionHeader: {value: null, text: 'Select your question'},
+                match: []
             }
         },
         computed: {
             ...mapState('currentPoll', {
                 poll: 'poll',
+                answers: 'answers'
             }),
+        },
+        watch: {
+            selected: function (val) {
+                let answerCmd = {poll: this.poll.id, quest: val}
+                this.loadAnswers(answerCmd)
+                this.match = []
+                let funfun = Object.entries(this.answers)
+                for (let i = 0; i < funfun.length; i++) {
+                    let set = {Username: funfun[i][0], Answers: funfun[i][1].text}
+                    this.match = [...this.match, set]
+                }
+            }
+        },
+        methods: {
+            ...mapActions('currentPoll', {
+                loadAnswers: 'loadAnswers'
+            })
         },
         components: {
             SelectBox
