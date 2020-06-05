@@ -7,9 +7,9 @@ public class ScaleQuestionCmd extends QuestionCmd {
 
     private String scaleNameLeft;
     private String scaleNameRight;
-    private int stepCount;
     private int min;
     private int max;
+    private int stepCount;
 
     public String getScaleNameLeft() {
         return scaleNameLeft;
