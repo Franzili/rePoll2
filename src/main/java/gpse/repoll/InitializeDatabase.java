@@ -13,6 +13,8 @@ import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -94,6 +96,11 @@ public class InitializeDatabase implements InitializingBean {
             //pollEntryRepository.deleteAll();
             //pollRepository.deleteAll();
             //pollSectionRepository.deleteAll();
+            User user = userRepository.findByUsername("JamesBond").get();
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user,
+                                                                                     null,
+                                                                                     null);
+            SecurityContextHolder.getContext().setAuthentication(auth);
             Poll poll = pollService.addPoll("Gummibaerchen");
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255);
@@ -192,25 +199,25 @@ public class InitializeDatabase implements InitializingBean {
 
             // Create 10 RadioButtonAnswers
             RadioButtonAnswer radioButtonAnswer1 = new RadioButtonAnswer();
-            radioButtonAnswer1.setChoiceId(choicesRadioButtonList.get(0).getId());
+            radioButtonAnswer1.setChoice(choicesRadioButtonList.get(0));
             RadioButtonAnswer radioButtonAnswer2 = new RadioButtonAnswer();
-            radioButtonAnswer2.setChoiceId(choicesRadioButtonList.get(1).getId());
+            radioButtonAnswer2.setChoice(choicesRadioButtonList.get(1));
             RadioButtonAnswer radioButtonAnswer3 = new RadioButtonAnswer();
-            radioButtonAnswer3.setChoiceId(choicesRadioButtonList.get(3).getId());
+            radioButtonAnswer3.setChoice(choicesRadioButtonList.get(3));
             RadioButtonAnswer radioButtonAnswer4 = new RadioButtonAnswer();
-            radioButtonAnswer4.setChoiceId(choicesRadioButtonList.get(0).getId());
+            radioButtonAnswer4.setChoice(choicesRadioButtonList.get(0));
             RadioButtonAnswer radioButtonAnswer5 = new RadioButtonAnswer();
-            radioButtonAnswer5.setChoiceId(choicesRadioButtonList.get(2).getId());
+            radioButtonAnswer5.setChoice(choicesRadioButtonList.get(2));
             RadioButtonAnswer radioButtonAnswer6 = new RadioButtonAnswer();
-            radioButtonAnswer6.setChoiceId(choicesRadioButtonList.get(0).getId());
+            radioButtonAnswer6.setChoice(choicesRadioButtonList.get(0));
             RadioButtonAnswer radioButtonAnswer7 = new RadioButtonAnswer();
-            radioButtonAnswer7.setChoiceId(choicesRadioButtonList.get(1).getId());
+            radioButtonAnswer7.setChoice(choicesRadioButtonList.get(1));
             RadioButtonAnswer radioButtonAnswer8 = new RadioButtonAnswer();
-            radioButtonAnswer8.setChoiceId(choicesRadioButtonList.get(1).getId());
+            radioButtonAnswer8.setChoice(choicesRadioButtonList.get(1));
             RadioButtonAnswer radioButtonAnswer9 = new RadioButtonAnswer();
-            radioButtonAnswer9.setChoiceId(choicesRadioButtonList.get(1).getId());
+            radioButtonAnswer9.setChoice(choicesRadioButtonList.get(1));
             RadioButtonAnswer radioButtonAnswer10 = new RadioButtonAnswer();
-            radioButtonAnswer10.setChoiceId(choicesRadioButtonList.get(1).getId());
+            radioButtonAnswer10.setChoice(choicesRadioButtonList.get(1));
 
             // Create 10 ChoiceAnswers
             ChoiceAnswer choiceAnswer1 = new ChoiceAnswer();
@@ -224,23 +231,23 @@ public class InitializeDatabase implements InitializingBean {
             ChoiceAnswer choiceAnswer9 = new ChoiceAnswer();
             ChoiceAnswer choiceAnswer10 = new ChoiceAnswer();
 
-            List<Long> listChoices = new ArrayList<>();
-            listChoices.add(choicesChoiceQuestionList.get(1).getId());
-            listChoices.add(choicesChoiceQuestionList.get(0).getId());
-            choiceAnswer1.setChoiceIds(listChoices);
-            choiceAnswer3.setChoiceIds(listChoices);
-            choiceAnswer4.setChoiceIds(listChoices);
-            choiceAnswer9.setChoiceIds(listChoices);
-            choiceAnswer10.setChoiceIds(listChoices);
+            List<Choice> listChoices = new ArrayList<>();
+            listChoices.add(choicesChoiceQuestionList.get(1));
+            listChoices.add(choicesChoiceQuestionList.get(0));
+            choiceAnswer1.setChoices(listChoices);
+            choiceAnswer3.setChoices(listChoices);
+            choiceAnswer4.setChoices(listChoices);
+            choiceAnswer9.setChoices(listChoices);
+            choiceAnswer10.setChoices(listChoices);
             listChoices.remove(0);
-            choiceAnswer2.setChoiceIds(listChoices);
-            choiceAnswer5.setChoiceIds(listChoices);
+            choiceAnswer2.setChoices(listChoices);
+            choiceAnswer5.setChoices(listChoices);
             listChoices.remove(0);
-            listChoices.add(choicesChoiceQuestionList.get(2).getId());
-            choiceAnswer6.setChoiceIds(listChoices);
-            listChoices.add(choicesChoiceQuestionList.get(3).getId());
-            choiceAnswer7.setChoiceIds(listChoices);
-            choiceAnswer8.setChoiceIds(listChoices);
+            listChoices.add(choicesChoiceQuestionList.get(2));
+            choiceAnswer6.setChoices(listChoices);
+            listChoices.add(choicesChoiceQuestionList.get(3));
+            choiceAnswer7.setChoices(listChoices);
+            choiceAnswer8.setChoices(listChoices);
 
             //Create 10 ScaleAnswers
 

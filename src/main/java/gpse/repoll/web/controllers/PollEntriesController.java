@@ -1,10 +1,12 @@
 package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
+import gpse.repoll.domain.repositories.ChoiceRepository;
 import gpse.repoll.domain.service.PollEntryService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.PollEntryCmd;
@@ -14,10 +16,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * REST Controller managing /api/v1/polls/ID/entries/* entry points.
@@ -29,10 +28,12 @@ import java.util.UUID;
 public class PollEntriesController {
 
     private final PollEntryService pollEntryService;
+    private final ChoiceRepository choiceRepository;
 
     @Autowired
-    public PollEntriesController(PollEntryService pollEntryService) {
+    public PollEntriesController(PollEntryService pollEntryService, ChoiceRepository choiceRepository) {
         this.pollEntryService = pollEntryService;
+        this.choiceRepository = choiceRepository;
     }
 
     @GetMapping("/{pollId}/entries/")
@@ -81,12 +82,21 @@ public class PollEntriesController {
                 ((ScaleAnswer) answer).setScaleNumber(scaleNumber);
             } else if (answerCmd instanceof RadioButtonAnswerCmd) {
                 answer = new RadioButtonAnswer();
-                Long choiceId = ((RadioButtonAnswerCmd) answerCmd).getChoice();
-                ((RadioButtonAnswer) answer).setChoiceId(choiceId);
+                Long choiceId = ((RadioButtonAnswerCmd) answerCmd).getChoiceId();
+                Choice choice = choiceRepository.findById(choiceId).orElseThrow(() -> {
+                    throw new BadRequestException("The choice does not exist!");
+                });
+                ((RadioButtonAnswer) answer).setChoice(choice);
             } else if (answerCmd instanceof ChoiceAnswerCmd) {
                 answer = new ChoiceAnswer();
                 List<Long> choiceIds = ((ChoiceAnswerCmd) answerCmd).getChoiceIds();
-                ((ChoiceAnswer) answer).getChoiceIds().addAll(choiceIds);
+                List<Choice> choices = new ArrayList<>();
+                for (Long choiceId : choiceIds) {
+                    choices.add(choiceRepository.findById(choiceId).orElseThrow(() -> {
+                      throw new BadRequestException("At least one choice does not exist!");
+                    }));
+                }
+                ((ChoiceAnswer) answer).setChoices(choices);
             } else {
                 throw new InternalServerErrorException();
             }

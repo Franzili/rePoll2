@@ -64,8 +64,8 @@ public class PollsController {
                 id,
                 pollCmd.getTitle(),
                 pollCmd.getStatus(),
-                structure,
-                pollCmd.getAnonymity());
+                pollCmd.getAnonymity(),
+                structure);
     }
 
     // todo creator cannot delete polls he didn't create
