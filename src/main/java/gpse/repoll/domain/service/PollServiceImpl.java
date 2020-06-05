@@ -43,9 +43,6 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public Poll addPoll(final String title) {
-        /*if (creator == null) {
-            throw new UnauthorizedException();
-        }*/
         final Poll poll = new Poll(title);
         pollRepository.save(poll);
         return poll;
@@ -66,19 +63,16 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public Poll updatePoll(final UUID id, final String title, final PollStatus status,
-                           final Map<UUID, List<Long>> structure, final Anonymity anonymity) {
-        /*if (lastEditor == null) {
-            throw new UnauthorizedException();
-        }*/
+                           final Anonymity anonymity, final Map<UUID, List<Long>> structure) {
         Poll poll = getPoll(id);
         if (title != null) {
             poll.setTitle(title);
         }
         if (status != null) {
             poll.setStatus(status);
-            if (status.equals(PollStatus.IN_PROCESS) && anonymity != null) {
-                poll.setAnonymity(anonymity);
-            }
+        }
+        if (poll.getStatus().equals(PollStatus.IN_PROCESS) && anonymity != null) {
+            poll.setAnonymity(anonymity);
         }
         if (structure != null) {
             poll.setStructure(structure);
