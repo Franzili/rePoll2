@@ -1,9 +1,9 @@
 <template>
     <div>
-        <b-container style="margin-top: 1rem; margin-bottom: 1rem" v-bind:key="statistic.question.id" v-for="statistic in statistics">
+        <b-card style="margin-top: 1rem; margin-bottom: 1rem" v-bind:key="statistic.question.id" v-for="statistic in statistics">
             <!--<p>{{statistic}}</p>-->
             <ChartCards v-bind:statistic="statistic"></ChartCards>
-        </b-container>
+        </b-card>
     </div>
 </template>
 

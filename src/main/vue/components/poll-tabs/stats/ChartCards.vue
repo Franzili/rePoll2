@@ -1,5 +1,13 @@
 <template>
-    <b-card>
+    <b-container>
+        <!-- raw data for illustration
+        <b-row>
+            <p>
+                {{statistic}}
+            </p>
+        </b-row>
+        -->
+
         <b-row>
             <b-col cols="8">
                 <h5>{{statistic.question.title}}</h5>
@@ -8,15 +16,23 @@
             <b-col align-self="end" v-if="statistic.modalValue !== null">
                 <b-button-toolbar class="float-right">
                     <b-button-group class="mr-1">
-                        <b-button title="Bar Chart" v-on:click="isBarChart = true">
+                        <b-button title="Bar Chart" v-on:click="chartsObj.currentChart = 'bar'">
                             <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon>
                         </b-button>
-                        <b-button title="Bar Chart" v-on:click="isBarChart = false">
+                        <b-button title="Bar Chart" v-on:click="chartsObj.currentChart = 'donut'">
                             <b-icon icon="pie-chart-fill" aria-hidden="true"></b-icon>
+                        </b-button>
+                        <b-button title="Boxplot" v-on:click="chartsObj.currentChart = 'boxplot'">
+                            <b-iconstack>
+                                <b-icon stacked shift-h="10" icon="dash"></b-icon>
+                                <b-icon stacked shift-h="" icon="vr"></b-icon>
+                                <b-icon stacked shift-h="-10" icon="dash"></b-icon>
+                            </b-iconstack>
                         </b-button>
                     </b-button-group>
                 </b-button-toolbar>
             </b-col>
+
         </b-row>
         <b-row>
             <b-col>
@@ -31,59 +47,38 @@
             </b-col>
         </b-row>
 
-        <b-row class="text-center" v-if="statistic.question.type === 'ScaleQuestion'">
-            <b-col>
-                <b-icon icon="graph-up" animation="spin" font-scale="4"></b-icon>
-            </b-col>
-            <b-col>
-                <b-icon icon="graph-up" animation="spin" font-scale="4"></b-icon>
-            </b-col>
-            <b-col>
-                <b-icon icon="graph-up" animation="spin" font-scale="4"></b-icon>
-            </b-col>
-        </b-row>
-
-        <b-row v-if="statistic.modalValue !== null && isBarChart === true">
-            <b-col cols="12">
-                <BarChart :choiceFreqPairs="match" :title="statistic.question.title"></BarChart>
-            </b-col>
-        </b-row>
-
-        <b-row v-if="statistic.modalValue !== null && isBarChart === false">
-            <b-col cols="12">
-                <DoughnnutChart :choiceFreqPairs="match" :title="statistic.question.title"></DoughnnutChart>
-            </b-col>
-        </b-row>
-
-    </b-card>
+        <ChartsInlay v-bind:chartsObj="chartsObj"></ChartsInlay>
+    </b-container>
 </template>
 
 <script>
 
-    import BarChart from "../../charts/BarChart";
-    import DoughnnutChart from "../../charts/DoughnnutChart";
+    import ChartsInlay from "./ChartsInlay";
 
     export default {
         name: "ChartCards",
         props: ['statistic'],
         data() {
             return {
-                absoFreq: '',
-                match: [],
-                isBarChart: true,
+                chartsObj: {
+                    currentChart: 'bar',
+                    match: [],
+                    question: {}
+                }
             }
         },
         created() {
-            this.absoFreq = Object.entries(this.statistic.absoluteFrequencies)
-            this.dofunny(this.absoFreq)
+            let absFreq = Object.entries(this.statistic.absoluteFrequencies)
+            this.convertStatsToCharts(absFreq)
         },
         methods: {
-            dofunny(aFrq) {
+            convertStatsToCharts(aFrq) {
+                this.chartsObj.question = this.statistic.question
                 for (let i = 0; i < aFrq.length; i++) {
                     for (let j = 0; j < this.statistic.question.choices.length; j++) {
                         if(aFrq[i][0] === this.statistic.question.choices[j].text) {
                             let newMatch = {choice: aFrq[i][0], absFreq: aFrq[i][1]}
-                            this.match = [...this.match, newMatch]
+                            this.chartsObj.match = [...this.chartsObj.match, newMatch]
                         }
 
                     }
@@ -91,8 +86,7 @@
             }
         },
         components: {
-            DoughnnutChart,
-            BarChart,
+            ChartsInlay
         }
     }
 </script>
