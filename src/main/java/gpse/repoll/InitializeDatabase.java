@@ -224,23 +224,23 @@ public class InitializeDatabase implements InitializingBean {
             ChoiceAnswer choiceAnswer9 = new ChoiceAnswer();
             ChoiceAnswer choiceAnswer10 = new ChoiceAnswer();
 
-            List<Long> listChoices = new ArrayList<>();
-            listChoices.add(choicesChoiceQuestionList.get(1).getId());
-            listChoices.add(choicesChoiceQuestionList.get(0).getId());
-            choiceAnswer1.setChoiceIds(listChoices);
-            choiceAnswer3.setChoiceIds(listChoices);
-            choiceAnswer4.setChoiceIds(listChoices);
-            choiceAnswer9.setChoiceIds(listChoices);
-            choiceAnswer10.setChoiceIds(listChoices);
+            List<Choice> listChoices = new ArrayList<>();
+            listChoices.add(choicesChoiceQuestionList.get(1));
+            listChoices.add(choicesChoiceQuestionList.get(0));
+            choiceAnswer1.setChoices(listChoices);
+            choiceAnswer3.setChoices(listChoices);
+            choiceAnswer4.setChoices(listChoices);
+            choiceAnswer9.setChoices(listChoices);
+            choiceAnswer10.setChoices(listChoices);
             listChoices.remove(0);
-            choiceAnswer2.setChoiceIds(listChoices);
-            choiceAnswer5.setChoiceIds(listChoices);
+            choiceAnswer2.setChoices(listChoices);
+            choiceAnswer5.setChoices(listChoices);
             listChoices.remove(0);
-            listChoices.add(choicesChoiceQuestionList.get(2).getId());
-            choiceAnswer6.setChoiceIds(listChoices);
-            listChoices.add(choicesChoiceQuestionList.get(3).getId());
-            choiceAnswer7.setChoiceIds(listChoices);
-            choiceAnswer8.setChoiceIds(listChoices);
+            listChoices.add(choicesChoiceQuestionList.get(2));
+            choiceAnswer6.setChoices(listChoices);
+            listChoices.add(choicesChoiceQuestionList.get(3));
+            choiceAnswer7.setChoices(listChoices);
+            choiceAnswer8.setChoices(listChoices);
 
             //Create 10 ScaleAnswers
 

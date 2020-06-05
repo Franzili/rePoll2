@@ -175,13 +175,9 @@ public class StatisticsQuestion {
 
         if (answers.get(0) instanceof ChoiceAnswer) {
             answers.forEach((answer) -> {
-                ((ChoiceAnswer) answer).getChoiceIds().forEach((id) -> {
-                    for (Choice choice : choices) {
-                        if (choice.getId().equals(id)) {
-                            Integer count = frequencies.get(choice);
-                            frequencies.put(choice, count + 1);
-                        }
-                    }
+                ((ChoiceAnswer) answer).getChoices().forEach((choice) -> {
+                    Integer count = frequencies.get(choice);
+                    frequencies.put(choice, count + 1);
                 });
             });
         } else {

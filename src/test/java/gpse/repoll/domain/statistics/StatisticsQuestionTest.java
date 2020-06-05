@@ -37,22 +37,22 @@ class StatisticsQuestionTest {
     List<PollEntry> examplePollEntriesChoiceQuestion(ChoiceQuestion question) {
         List<Choice> choices = question.getChoices();
 
-        Long choice1ID = choices.get(0).getId();
-        Long choice2ID = choices.get(1).getId();
-        Long choice3ID = choices.get(2).getId();
-        Long choice4ID = choices.get(3).getId();
-        List<Long> choiceIDs = new ArrayList<>();
-        choiceIDs.add(choice1ID);
-        choiceIDs.add(choice2ID);
-        choiceIDs.add(choice3ID);
-        choiceIDs.add(choice4ID);
+        Choice choice1 = choices.get(0);
+        Choice choice2 = choices.get(1);
+        Choice choice3 = choices.get(2);
+        Choice choice4 = choices.get(3);
+        List<Choice> moreChoices = new ArrayList<>();
+        moreChoices.add(choice1);
+        moreChoices.add(choice2);
+        moreChoices.add(choice3);
+        moreChoices.add(choice4);
 
         // Answers from Person 1
-        List<Long> choiceIDs1 = new ArrayList<>();
-        choiceIDs1.add(choice2ID);
-        choiceIDs1.add(choice3ID);
+        List<Choice> choices1 = new ArrayList<>();
+        choices1.add(choice2);
+        choices1.add(choice3);
         ChoiceAnswer answer1 = new ChoiceAnswer();
-        answer1.setChoiceIds(choiceIDs1);
+        answer1.setChoices(choices1);
 
         Map<Question, Answer> associations1 = new HashMap<>();
         associations1.put(question, answer1);
@@ -60,11 +60,11 @@ class StatisticsQuestionTest {
         pollEntry1.setAssociations(associations1);
 
         // Answers from Person 2
-        List<Long> choiceIDs2 = new ArrayList<>();
-        choiceIDs2.add(choice3ID);
-        choiceIDs2.add(choice4ID);
+        List<Choice> choices2 = new ArrayList<>();
+        choices2.add(choice3);
+        choices2.add(choice4);
         ChoiceAnswer answer2 = new ChoiceAnswer();
-        answer2.setChoiceIds(choiceIDs2);
+        answer2.setChoices(choices2);
 
         Map<Question, Answer> associations2 = new HashMap<>();
         associations2.put(question, answer2);
