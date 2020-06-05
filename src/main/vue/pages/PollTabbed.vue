@@ -118,7 +118,7 @@
     @import "../assets/stylesheet.scss";
 
     .primary-tab-bar {
-        top: 65px;
+        top: 80px;
         background-color: $floating-background-color;
     }
 

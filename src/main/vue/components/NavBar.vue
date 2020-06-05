@@ -62,7 +62,7 @@
     .nav-container {
         z-index: $zindex-sticky;
         top: 0;
-        padding-bottom: 20px;
+        padding-bottom: 21px;
         background-color: $floating-background-color;
     }
 

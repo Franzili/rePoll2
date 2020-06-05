@@ -1,7 +1,7 @@
 <template>
     <b-row class="poll-editor">
         <b-col cols="1" lg="2" class="sidebar">
-            <div class="sticky-top sticky-offset">
+            <div class="sticky-offset sticky-top">
                 <QuestionPalette></QuestionPalette>
             </div>
         </b-col>
@@ -11,7 +11,7 @@
         </b-col>
 
         <b-col cols="3" class="sidebar">
-            <div class="sticky-top sticky-offset">
+            <div class="sticky-offset sticky-top">
                 <Outline :poll-structure="pollStructure"></Outline>
             </div>
         </b-col>
@@ -52,6 +52,6 @@
     }
 
     .sticky-offset {
-        top: 115px;
+        top: 150px;
     }
 </style>
