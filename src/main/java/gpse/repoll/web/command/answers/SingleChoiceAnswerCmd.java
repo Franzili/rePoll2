@@ -7,11 +7,11 @@ public class SingleChoiceAnswerCmd extends AnswerCmd {
 
     private Long choiceId;
 
-    public Long getChoice() {
+    public Long getChoiceId() {
         return choiceId;
     }
 
-    public void setChoice(Long choiceId) {
+    public void setChoiceId(Long choiceId) {
         this.choiceId = choiceId;
     }
 }

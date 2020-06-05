@@ -1,7 +1,9 @@
 package gpse.repoll.domain.poll.answers;
 
-import javax.persistence.Column;
+import gpse.repoll.domain.poll.Choice;
+
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 
 /**
@@ -10,14 +12,14 @@ import javax.persistence.Entity;
 @Entity
 public class SingleChoiceAnswer extends Answer {
 
-    @Column
-    private Long choiceId;
+    @ManyToOne
+    private Choice choice;
 
-    public Long getChoiceId() {
-        return choiceId;
+    public Choice getChoice() {
+        return choice;
     }
 
-    public void setChoiceId(Long choiceId) {
-        this.choiceId = choiceId;
+    public void setChoice(Choice choice) {
+        this.choice = choice;
     }
 }

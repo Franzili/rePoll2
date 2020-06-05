@@ -4,8 +4,8 @@ import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.poll.questions.SingleChoiceQuestion;
 import gpse.repoll.domain.service.QuestionService;
-import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.ChoiceCmd;
 import gpse.repoll.web.command.questions.*;
@@ -29,12 +29,10 @@ public class QuestionsController {
     private static final String NO_CHOICES = "No choices given for the question!";
 
     private final QuestionService questionService;
-    private final UserService userService;
 
     @Autowired
-    public QuestionsController(QuestionService questionService, UserService userService) {
+    public QuestionsController(QuestionService questionService) {
         this.questionService = questionService;
-        this.userService = userService;
     }
 
     @Secured(Roles.POLL_EDITOR)
@@ -53,7 +51,9 @@ public class QuestionsController {
                     questionOrder,
                     scaleQuestionCmd.getScaleNameLeft(),
                     scaleQuestionCmd.getScaleNameRight(),
-                    scaleQuestionCmd.getStepCount());
+                    scaleQuestionCmd.getStepCount(),
+                    scaleQuestionCmd.getMin(),
+                    scaleQuestionCmd.getMax());
         } else if (questionCmd instanceof SingleChoiceQuestionCmd) {
             SingleChoiceQuestionCmd singleChoiceQuestionCmd = (SingleChoiceQuestionCmd) questionCmd;
             if (singleChoiceQuestionCmd.getChoices() == null) {

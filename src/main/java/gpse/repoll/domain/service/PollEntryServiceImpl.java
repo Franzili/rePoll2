@@ -13,6 +13,7 @@ import gpse.repoll.domain.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -67,6 +68,15 @@ public class PollEntryServiceImpl implements PollEntryService {
                 throw new BadRequestException("A question does not belong to this poll!");
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<PollEntry> getAll(UUID pollId) {
+        Poll poll = pollService.getPoll(pollId);
+        return poll.getPollEntries();
     }
 
     /**

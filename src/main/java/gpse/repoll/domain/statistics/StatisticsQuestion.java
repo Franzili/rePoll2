@@ -175,24 +175,16 @@ public class StatisticsQuestion {
 
         if (answers.get(0) instanceof MultiChoiceAnswer) {
             answers.forEach((answer) -> {
-                ((MultiChoiceAnswer) answer).getChoiceIds().forEach((id) -> {
-                    for (Choice choice : choices) {
-                        if (choice.getId().equals(id)) {
-                            Integer count = frequencies.get(choice);
-                            frequencies.put(choice, count + 1);
-                        }
-                    }
+                ((MultiChoiceAnswer) answer).getChoices().forEach((choice) -> {
+                    Integer count = frequencies.get(choice);
+                    frequencies.put(choice, count + 1);
                 });
             });
         } else {
             answers.forEach((answer -> {
-                Long choiceID = ((SingleChoiceAnswer) answer).getChoiceId();
-                for (Choice choice : choices) {
-                    if (choice.getId().equals(choiceID)) {
-                        Integer count = frequencies.get(choice);
-                        frequencies.put(choice, count + 1);
-                    }
-                }
+                Choice choice = ((SingleChoiceAnswer) answer).getChoice();
+                Integer count = frequencies.get(choice);
+                frequencies.put(choice, count + 1);
             }));
         }
     }
