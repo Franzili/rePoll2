@@ -13,8 +13,8 @@ public class QuestionAnswersSet {
     private final Map<User, Answer> userAnswerMap = new HashMap<>();
 
     public QuestionAnswersSet(Map<User, Answer> userAnswerMap, Question question) {
-        setQuestion(question);
-        setUserAnswerMap(userAnswerMap);
+        this.question = question;
+        this.userAnswerMap.putAll(userAnswerMap);
     }
 
     public void setQuestion(Question question) {
