@@ -192,25 +192,25 @@ public class InitializeDatabase implements InitializingBean {
 
             // Create 10 RadioButtonAnswers
             RadioButtonAnswer radioButtonAnswer1 = new RadioButtonAnswer();
-            radioButtonAnswer1.setChoiceId(choicesRadioButtonList.get(0).getId());
+            radioButtonAnswer1.setChoice(choicesRadioButtonList.get(0));
             RadioButtonAnswer radioButtonAnswer2 = new RadioButtonAnswer();
-            radioButtonAnswer2.setChoiceId(choicesRadioButtonList.get(1).getId());
+            radioButtonAnswer2.setChoice(choicesRadioButtonList.get(1));
             RadioButtonAnswer radioButtonAnswer3 = new RadioButtonAnswer();
-            radioButtonAnswer3.setChoiceId(choicesRadioButtonList.get(3).getId());
+            radioButtonAnswer3.setChoice(choicesRadioButtonList.get(3));
             RadioButtonAnswer radioButtonAnswer4 = new RadioButtonAnswer();
-            radioButtonAnswer4.setChoiceId(choicesRadioButtonList.get(0).getId());
+            radioButtonAnswer4.setChoice(choicesRadioButtonList.get(0));
             RadioButtonAnswer radioButtonAnswer5 = new RadioButtonAnswer();
-            radioButtonAnswer5.setChoiceId(choicesRadioButtonList.get(2).getId());
+            radioButtonAnswer5.setChoice(choicesRadioButtonList.get(2));
             RadioButtonAnswer radioButtonAnswer6 = new RadioButtonAnswer();
-            radioButtonAnswer6.setChoiceId(choicesRadioButtonList.get(0).getId());
+            radioButtonAnswer6.setChoice(choicesRadioButtonList.get(0));
             RadioButtonAnswer radioButtonAnswer7 = new RadioButtonAnswer();
-            radioButtonAnswer7.setChoiceId(choicesRadioButtonList.get(1).getId());
+            radioButtonAnswer7.setChoice(choicesRadioButtonList.get(1));
             RadioButtonAnswer radioButtonAnswer8 = new RadioButtonAnswer();
-            radioButtonAnswer8.setChoiceId(choicesRadioButtonList.get(1).getId());
+            radioButtonAnswer8.setChoice(choicesRadioButtonList.get(1));
             RadioButtonAnswer radioButtonAnswer9 = new RadioButtonAnswer();
-            radioButtonAnswer9.setChoiceId(choicesRadioButtonList.get(1).getId());
+            radioButtonAnswer9.setChoice(choicesRadioButtonList.get(1));
             RadioButtonAnswer radioButtonAnswer10 = new RadioButtonAnswer();
-            radioButtonAnswer10.setChoiceId(choicesRadioButtonList.get(1).getId());
+            radioButtonAnswer10.setChoice(choicesRadioButtonList.get(1));
 
             // Create 10 ChoiceAnswers
             ChoiceAnswer choiceAnswer1 = new ChoiceAnswer();

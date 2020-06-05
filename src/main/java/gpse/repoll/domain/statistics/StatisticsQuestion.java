@@ -182,13 +182,9 @@ public class StatisticsQuestion {
             });
         } else {
             answers.forEach((answer -> {
-                Long choiceID = ((RadioButtonAnswer) answer).getChoiceId();
-                for (Choice choice : choices) {
-                    if (choice.getId().equals(choiceID)) {
-                        Integer count = frequencies.get(choice);
-                        frequencies.put(choice, count + 1);
-                    }
-                }
+                Choice choice = ((RadioButtonAnswer) answer).getChoice();
+                Integer count = frequencies.get(choice);
+                frequencies.put(choice, count + 1);
             }));
         }
     }

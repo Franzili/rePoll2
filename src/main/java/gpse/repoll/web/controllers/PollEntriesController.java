@@ -82,8 +82,11 @@ public class PollEntriesController {
                 ((ScaleAnswer) answer).setScaleNumber(scaleNumber);
             } else if (answerCmd instanceof RadioButtonAnswerCmd) {
                 answer = new RadioButtonAnswer();
-                Long choiceId = ((RadioButtonAnswerCmd) answerCmd).getChoice();
-                ((RadioButtonAnswer) answer).setChoiceId(choiceId);
+                Long choiceId = ((RadioButtonAnswerCmd) answerCmd).getChoiceId();
+                Choice choice = choiceRepository.findById(choiceId).orElseThrow(() -> {
+                    throw new BadRequestException("The choice does not exist!");
+                });
+                ((RadioButtonAnswer) answer).setChoice(choice);
             } else if (answerCmd instanceof ChoiceAnswerCmd) {
                 answer = new ChoiceAnswer();
                 List<Long> choiceIds = ((ChoiceAnswerCmd) answerCmd).getChoiceIds();
