@@ -7,7 +7,8 @@
                            v-bind:key="item.id"
                            v-bind:class="{ header: item.type === 'SectionHeaderModel',
                                            question: item.type !== 'SectionHeaderModel'}"
-                           :href="'#pollItem-' + item.id.toString()">
+                           :href="'#pollItem-' + item.id"
+                           @click="scrollTo('pollItem-' + item.id, $event)">
             {{ item.title }}
         </b-nav-item>
     </b-nav>
@@ -23,8 +24,22 @@
             },
             scrollspyOffset: {
                 required: false,
-                default: 400,
+                default: 180,
                 type: Number
+            }
+        },
+        methods: {
+            scrollTo(id, event) {
+                event.preventDefault();
+                let elem = document.getElementById(id);
+                if (elem != null) {
+                    let bounds = elem.getBoundingClientRect();
+                    window.scrollTo({
+                        left: 0,
+                        top: bounds.y + window.scrollY - this.scrollspyOffset,
+                        behavior: 'smooth'
+                    });
+                }
             }
         }
     }
