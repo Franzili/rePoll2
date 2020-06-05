@@ -1,4 +1,7 @@
 <template>
+    <!--
+        An Item to be shown in the questions palette.
+    -->
     <b-button pill class="w-100 palette-item text-left">
         <b-icon-type-h1 v-if="itemModel.name === 'SectionHeaderModel'"></b-icon-type-h1>
         <b-icon-pen v-if="itemModel.name === 'TextQuestionModel'"></b-icon-pen>

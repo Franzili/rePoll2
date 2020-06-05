@@ -1,4 +1,7 @@
 <template>
+    <!--
+        Poll Editor main component.
+    -->
     <b-row class="poll-editor">
         <b-col cols="1" lg="2" class="sidebar">
             <div class="sticky-offset sticky-top">

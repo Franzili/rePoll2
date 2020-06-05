@@ -1,4 +1,7 @@
 <template>
+    <!--
+        Renders a poll.
+    -->
     <ul class="poll-main-view">
         <PollItem v-for="item in pollStructure" v-bind:key="item.id" :model="item" :id="'pollItem-' + item.id"></PollItem>
     </ul>

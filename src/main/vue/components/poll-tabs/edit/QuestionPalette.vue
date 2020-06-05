@@ -1,4 +1,8 @@
 <template>
+    <!--
+        Question palette for use in the poll editor.
+        Note: If question types are added, they need to be added in the models list in store/poll-item-models/index.js
+    -->
     <ul class="palette-list">
         <li v-for="itemModel in pollItemModels" v-bind:key="itemModel.index">
             <PaletteItem v-bind:itemModel="itemModel"></PaletteItem>
@@ -13,11 +17,8 @@
     //import draggable from "vuedraggable";
     export default {
 
-        // Order is related to its use
         name: "QuestionPalette",
-        // passed variables by e.g v-bind
         props: [],
-        // variables provided by this component
         data() {
             return {
                 pollItemModels: models
