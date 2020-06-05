@@ -13,6 +13,8 @@ import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -94,6 +96,11 @@ public class InitializeDatabase implements InitializingBean {
             //pollEntryRepository.deleteAll();
             //pollRepository.deleteAll();
             //pollSectionRepository.deleteAll();
+            User user = userRepository.findByUsername("JamesBond").get();
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user,
+                                                                                     null,
+                                                                                     null);
+            SecurityContextHolder.getContext().setAuthentication(auth);
             Poll poll = pollService.addPoll("Gummibaerchen");
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255);
