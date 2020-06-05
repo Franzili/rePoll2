@@ -213,7 +213,6 @@ public class QuestionServiceImpl implements QuestionService {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("checkstyle:ParameterNumber")
     @Override
     public ScaleQuestion updateScaleQuestion(final UUID pollId,
                                              final Long questionId,

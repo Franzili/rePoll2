@@ -1,7 +1,6 @@
 package gpse.repoll.domain.poll.questions;
 
 import gpse.repoll.domain.poll.Choice;
-import org.springframework.context.annotation.Primary;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;

@@ -30,6 +30,8 @@ public interface QuestionService {
      * @param scaleNameLeft The name for the left part of the scale
      * @param scaleNameRight The name for the right part of the scale
      * @param stepCount The number of steps the scale has
+     * @param min The minimum of the scale
+     * @param max The maximum of the scale
      * @return The newly created ScaleQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
@@ -124,7 +126,6 @@ public interface QuestionService {
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    @SuppressWarnings("checkstyle:ParameterNumber")
     ScaleQuestion updateScaleQuestion(
             UUID pollId,
             Long questionId,
