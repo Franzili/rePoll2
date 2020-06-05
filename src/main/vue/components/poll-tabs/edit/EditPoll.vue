@@ -52,6 +52,6 @@
     }
 
     .sticky-offset {
-        top: 100px;
+        top: 115px;
     }
 </style>

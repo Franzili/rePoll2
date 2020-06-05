@@ -4,7 +4,6 @@
 
         <b-nav-item v-for="item in pollStructure"
                            class="outline-item text-truncate"
-                           active-class="outline-item-active"
                            v-bind:key="item.id"
                            v-bind:class="{ header: item.type === 'SectionHeaderModel',
                                            question: item.type !== 'SectionHeaderModel'}"
@@ -39,24 +38,25 @@
     }
 
     .outline-item {
-        color: $text-muted !important;
-        background-color: transparent;
         border: 0;
         padding: 0;
         margin-top: 0;
         margin-bottom: 5px;
     }
 
-    .outline-item-active {
+    .outline-item > a {
+        color: $text-muted !important;
         background-color: transparent;
-        color: black !important;
-        font-weight: bold !important;
-    }
-
-    .question, .header {
+        padding: 0;
+        margin: 0;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+    .outline-item.active > a {
+        background-color: transparent;
+        font-weight: bold !important;
     }
 
     .question {
