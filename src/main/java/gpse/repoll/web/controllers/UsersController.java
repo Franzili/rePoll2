@@ -119,8 +119,15 @@ public class UsersController {
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @GetMapping("/{userId}/own-polls/")
-    public List<UUID> getOwnedPolls(@PathVariable UUID userId) {
-        return  userService.getOwnedPolls(userId);
+    public List<Poll> getOwnedPolls(@PathVariable UUID userId) {
+
+        List<Poll> ownPolls = new ArrayList<>();
+        for (UUID pollId:userService.getOwnedPolls(userId)) {
+            ownPolls.add(pollService.getPoll(pollId));
+        }
+        return ownPolls;
+
+        //return  userService.getOwnedPolls(userId);
     }
 
     /**
@@ -142,8 +149,15 @@ public class UsersController {
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @GetMapping("/{userId}/assigned-polls/")
-    public List<UUID> getAssignedPolls(@PathVariable UUID userId) {
-        return  userService.getAssignedPolls(userId);
+    public List<Poll> getAssignedPolls(@PathVariable UUID userId) {
+
+        List<Poll> assignedPolls = new ArrayList<>();
+        for (UUID pollId:userService.getAssignedPolls(userId)) {
+            assignedPolls.add(pollService.getPoll(pollId));
+        }
+        return assignedPolls;
+
+        //return  userService.getAssignedPolls(userId);
     }
 
     /**
@@ -157,7 +171,7 @@ public class UsersController {
     public User addAssignedPoll(@RequestBody UUID pollId, @PathVariable UUID userId) {
         return userService.addAssignedPoll(pollId, userId); }
 
-
+/*
     // todo this has to be fixed in future, now is blocking frontend from accessing the database
     //@Secured(Roles.POLL_CREATOR)
     @GetMapping("/")
@@ -172,6 +186,7 @@ public class UsersController {
         return ownPolls;
     }
 
+
     //@Secured(???)
     @GetMapping("/")
     public List<Poll> listAssignedPolls() {
@@ -183,7 +198,7 @@ public class UsersController {
             assignedPolls.add(pollService.getPoll(pollId));
         }
         return assignedPolls;
-    }
+    }*/
 
 
     /**
