@@ -4,13 +4,9 @@ import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.User;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
-import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.UserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -117,14 +113,18 @@ public class UsersController {
      * @param userId UUID identifier
      * @return List of polls owned by the user.
      */
-    //@PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
-    @GetMapping("/{userId}/own-polls/")
-    public List<Poll> getOwnedPolls(@PathVariable UUID userId) {
+    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    @GetMapping("/{userId}/ownPolls/")
+    public List<Poll> getOwnedPolls(@PathVariable  String userId) {
+        //public List<Poll> getOwnedPolls(@PathVariable("userId") final UUID userId) { //UUID userId)
 
         List<Poll> ownPolls = new ArrayList<>();
-        for (UUID pollId:userService.getOwnedPolls(userId)) {
-            ownPolls.add(pollService.getPoll(pollId));
+        if (isValidUuid(userId)) {
+            for (UUID pollId:userService.getOwnedPolls(UUID.fromString(userId))) {
+                ownPolls.add(pollService.getPoll(pollId));
+            }
         }
+
         return ownPolls;
 
         //return  userService.getOwnedPolls(userId);
@@ -137,9 +137,12 @@ public class UsersController {
      * @return modified user
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
-    @PutMapping("/{userId}/own-polls/")
-    public User addOwnedPoll(@RequestBody UUID pollId, @PathVariable UUID userId) {
-        return userService.addOwnedPoll(pollId, userId); }
+    @PutMapping("/{userId}/ownPolls/")
+    public User addOwnedPoll(@PathVariable UUID pollId, @PathVariable  String userId) {
+        //public User addOwnedPoll(@RequestBody UUID pollId, @PathVariable UUID userId) {
+
+        return userService.addOwnedPoll(pollId, UUID.fromString(userId));
+    }
 
     /**
      * Gets Polls assigned to the given user
@@ -148,7 +151,7 @@ public class UsersController {
      * @return List of polls assigned to the user
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
-    @GetMapping("/{userId}/assigned-polls/")
+    @GetMapping("/{userId}/assignedPolls/")
     public List<Poll> getAssignedPolls(@PathVariable UUID userId) {
 
         List<Poll> assignedPolls = new ArrayList<>();
@@ -167,7 +170,7 @@ public class UsersController {
      * @return modified user
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
-    @PutMapping("/{userId}/assigned-polls/")
+    @PutMapping("/{userId}/assignedPolls/")
     public User addAssignedPoll(@RequestBody UUID pollId, @PathVariable UUID userId) {
         return userService.addAssignedPoll(pollId, userId); }
 
