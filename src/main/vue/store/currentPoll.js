@@ -16,7 +16,7 @@ const currentPoll = {
         /**
          * The statistics belonging to that poll object.
          */
-        statistics: {}
+        statistics: []
     },
 
     getters: {
@@ -35,6 +35,20 @@ const currentPoll = {
                 });
             });
             return res;
+        },
+
+        statStructureObj: state => {
+            let strObj = [];
+            state.poll.pollSections.forEach(section => {
+                let statObjList = []
+                section.questions.forEach(q => {
+                    let stats = state.statistics.find(stat => stat.question.id === q.id)
+                    statObjList.push(stats)
+                })
+                let secObj = {title: section.title,id: section.id, statistics: statObjList}
+                strObj.push(secObj)
+            })
+            return strObj
         },
     },
 
