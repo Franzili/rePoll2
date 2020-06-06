@@ -14,7 +14,7 @@ import java.util.List;
  * A question that can be answered with a @link{ChoiceAnswer}.
  */
 @Entity
-public class ChoiceQuestion extends Question {
+public class MultiChoiceQuestion extends Question {
 
     @OneToMany
     @JoinColumn

@@ -43,6 +43,7 @@ public class PollSectionServiceImpl implements PollSectionService {
                                       final String description) {
         Poll poll = pollService.getPoll(pollId);
         PollSection pollSection = new PollSection(title, description);
+        pollSectionRepository.save(pollSection);
         poll.add(pollSection);
         pollService.save(poll);
         return pollSection;
