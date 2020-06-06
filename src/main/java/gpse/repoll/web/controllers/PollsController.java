@@ -38,63 +38,83 @@ public class PollsController {
     @GetMapping("/")
     public List<Poll> listPolls() {
         List<Poll> polls = new ArrayList<>();
-        //User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getPrincipal().toString();
         User user = userService.getUser(username);
-
-        /*if (user.getRoles().contains(Roles.POLL_CREATOR)) {
-            pollService.getAll().forEach(polls::add);
-        } else {
-            userService.getOwnedPolls(user.getId());
-        }*/
         if (user.getRoles().contains(Roles.ADMIN)) {
             pollService.getAll().forEach(polls::add);
         } else if (user.getRoles().contains(Roles.POLL_CREATOR)) {
-            //pollService.getAll().forEach(polls::add);
-
-            System.out.println("TheSize " + userService.getOwnedPolls(username).size());
-            //polls.addAll(userService.getOwnedPolls(user.getId()));
-
-            System.out.println("Polls : " + user.getOwnPolls());
-            System.out.println("Poll: " + user.getOwnPolls().get(0));
-
             for (UUID pollId:user.getOwnPolls()) {
                 polls.add(pollService.getPoll(pollId));
             }
-
-
-            //System.out.println("Name: " + user.getUsername());
-            //System.out.println("PollsSize: " + user.getOwnPolls().size());
-            //polls.addAll(user.getOwnPolls());
         } else if (user.getRoles().contains(Roles.POLL_EDITOR)) {
-            userService.getOwnedPolls(user.getId());
+            for (UUID pollId:user.getOwnPolls()) {
+                polls.add(pollService.getPoll(pollId));
+            }
         } else if (user.getRoles().contains(Roles.PARTICIPANT)) {
-            System.out.println("Participant");
-
-            //TODO following returns only empty list of owned polls workaround below
-            System.out.println("Roles" + userService.getRoles(username));
-            System.out.println("TheSize " + userService.getOwnedPolls(username).size());
-
-            //pollService.getAll().forEach(polls::add);
-            //polls.addAll(userService.getOwnedPolls(user.getId()));
-            //polls.addAll(user.getOwnPolls());
-            System.out.println("Name: " + user.getUsername());
-            System.out.println("PollsSize: " + user.getOwnPolls().size());
-            //polls.addAll(user.getOwnPolls());
-
-            //TODO this iterates over the polls to get all polls from a given user, but has to iterate over user to get their polls as above commented out
-            /*Iterable<Poll> tmpPolls = pollService.getAll();
-            for (Poll poll:tmpPolls
-                 ) {
-                if (poll.getCreator().equals(user)) {
-                    polls.add(poll);
-                }
-            }*/
+            for (UUID pollId:user.getOwnPolls()) {
+                polls.add(pollService.getPoll(pollId));
+            }
         } /*else if (user.getRoles().contains(Roles.NO_ROLE)) {
             userService.getOwnedPolls(user.getId());
         }*/
         return polls;
+    }
+
+    // todo this has to be fixed in future, now is blocking frontend from accessing the database
+    //@Secured(Roles.POLL_CREATOR)
+    @GetMapping("/")
+    public List<Poll> listOwnPolls() {
+        List<Poll> ownPolls = new ArrayList<>();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getPrincipal().toString();
+        User user = userService.getUser(username);
+        if (user.getRoles().contains(Roles.ADMIN)) {
+            pollService.getAll().forEach(ownPolls::add);
+        } else if (user.getRoles().contains(Roles.POLL_CREATOR)) {
+            for (UUID pollId:user.getOwnPolls()) {
+                ownPolls.add(pollService.getPoll(pollId));
+            }
+        } else if (user.getRoles().contains(Roles.POLL_EDITOR)) {
+            for (UUID pollId:user.getOwnPolls()) {
+                ownPolls.add(pollService.getPoll(pollId));
+            }
+        } else if (user.getRoles().contains(Roles.PARTICIPANT)) {
+            for (UUID pollId:user.getOwnPolls()) {
+                ownPolls.add(pollService.getPoll(pollId));
+            }
+        } /*else if (user.getRoles().contains(Roles.NO_ROLE)) {
+            userService.getOwnedPolls(user.getId());
+        }*/
+        return ownPolls;
+    }
+
+    // todo this has to be fixed in future, now is blocking frontend from accessing the database
+    //@Secured(Roles.POLL_CREATOR)
+    @GetMapping("/")
+    public List<Poll> listAssignedPolls() {
+        List<Poll> assignedPolls = new ArrayList<>();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getPrincipal().toString();
+        User user = userService.getUser(username);
+        if (user.getRoles().contains(Roles.ADMIN)) {
+            pollService.getAll().forEach(assignedPolls::add);
+        } else if (user.getRoles().contains(Roles.POLL_CREATOR)) {
+            for (UUID pollId:user.getOwnPolls()) {
+                assignedPolls.add(pollService.getPoll(pollId));
+            }
+        } else if (user.getRoles().contains(Roles.POLL_EDITOR)) {
+            for (UUID pollId:user.getOwnPolls()) {
+                assignedPolls.add(pollService.getPoll(pollId));
+            }
+        } else if (user.getRoles().contains(Roles.PARTICIPANT)) {
+            for (UUID pollId:user.getOwnPolls()) {
+                assignedPolls.add(pollService.getPoll(pollId));
+            }
+        } /*else if (user.getRoles().contains(Roles.NO_ROLE)) {
+            userService.getOwnedPolls(user.getId());
+        }*/
+        return assignedPolls;
     }
 
     @Secured(Roles.POLL_CREATOR)
