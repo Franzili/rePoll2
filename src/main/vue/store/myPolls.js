@@ -40,7 +40,9 @@ const myPolls = {
         load({commit}) {
             return new Promise((resolve, reject) => {
                 commit('loadStatus', "LOADING");
-                api.poll.list().then(function (res) {
+                //api.poll.list().then(function (res) {
+                api.poll.listOwn().then(function (res) {
+
                     commit('load', res.data);
                     commit('loadStatus', "DONE")
                     resolve();

@@ -20,7 +20,7 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/users")
-@Secured(Roles.ADMIN)
+//@Secured(Roles.ADMIN)
 public class UsersController {
     private final PollService pollService;
     private final UserService userService;
@@ -117,7 +117,7 @@ public class UsersController {
      * @param userId UUID identifier
      * @return List of polls owned by the user.
      */
-    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    //@PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @GetMapping("/{userId}/own-polls/")
     public List<Poll> getOwnedPolls(@PathVariable UUID userId) {
 
@@ -172,8 +172,7 @@ public class UsersController {
         return userService.addAssignedPoll(pollId, userId); }
 
 /*
-    // todo this has to be fixed in future, now is blocking frontend from accessing the database
-    //@Secured(Roles.POLL_CREATOR)
+
     @GetMapping("/")
     public List<Poll> listOwnPolls() {
         List<Poll> ownPolls = new ArrayList<>();

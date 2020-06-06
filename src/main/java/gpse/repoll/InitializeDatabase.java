@@ -135,28 +135,17 @@ public class InitializeDatabase implements InitializingBean {
                 participants.add(tmpUser);
             }
 
-
-            /*Poll poll = pollService.addPoll("Gummibaerchen", user);
-            Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
-                1, 255, user);
-            Poll poll2 = pollService.addPoll("About this App", user);
-            questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
-                1000, 255, user);
-            questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
-                1000, 255, user);
-            Poll poll3 = pollService.addPoll("Nothing to see here", nobody);
-            questionService.addTextQuestion(poll3.getId(), "This sentence is false",
-                100, 255, nobody);*/
-
             Poll poll = pollService.addPoll("Gummibaerchen");
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255);
+            userService.addOwnedPoll(poll.getId(), user.getUsername());
 
             Poll poll2 = pollService.addPoll("About this App");
             Question question2_1 = questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
                 1, 255);
             Question question2_2 = questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
                 1000, 255);
+            userService.addOwnedPoll(poll2.getId(), user.getUsername());
             //add poll2 to nobody's assignedPolls
             userService.addAssignedPoll(poll2.getId(), nobody.getUsername());
 
