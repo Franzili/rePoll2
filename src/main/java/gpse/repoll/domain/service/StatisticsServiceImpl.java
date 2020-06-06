@@ -1,9 +1,13 @@
 package gpse.repoll.domain.service;
 
+import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.poll.PollEntry;
+import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.statistics.QuestionStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,44 +25,20 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public List<QuestionStatistics> getAll(UUID pollId) {
-        /*Poll poll = pollService.getPoll(pollId);
+        Poll poll = pollService.getPoll(pollId);
         List<QuestionStatistics> metaResult = new ArrayList<>();
         for (Question question : poll.getQuestions()) {
-            if (statisticsQuestionRepository.existsByQuestion(question)) {
-                Optional<StatisticsQuestion> stats = statisticsQuestionRepository.findByQuestion(question);
-                if (stats.isPresent()) {
-                    metaResult.add(stats.get());
-                } else {
-                    throw new InternalServerErrorException();
-                }
-            } else {
-                List<PollEntry> pollEntries = pollService.getPoll(pollId).getPollEntries();
-                StatisticsQuestion statistics = new StatisticsQuestion(question, pollEntries);
-                statisticsQuestionRepository.save(statistics);
-                metaResult.add(statistics);
-            }
+            List<PollEntry> pollEntries = pollService.getPoll(pollId).getPollEntries();
+            metaResult.add(new QuestionStatistics(question, pollEntries));
         }
         return metaResult;
-         */
-        return null;
+
     }
 
     @Override
     public QuestionStatistics getStatistics(UUID pollId, Long questionId) {
-        /*Question question = questionService.getQuestion(pollId, questionId);
-        if (statisticsQuestionRepository.existsByQuestion(question)) {
-            Optional<StatisticsQuestion> stats = statisticsQuestionRepository.findByQuestion(question);
-            if (stats.isPresent()) {
-                return stats.get();
-            } else {
-                throw new InternalServerErrorException();
-            }
-        } else {
-            List<PollEntry> pollEntries = pollService.getPoll(pollId).getPollEntries();
-            StatisticsQuestion statistics = new StatisticsQuestion(question, pollEntries);
-            statisticsQuestionRepository.save(statistics);
-            return statistics;
-         */
-        return null;
+        Question question = questionService.getQuestion(pollId, questionId);
+        List<PollEntry> pollEntries = pollService.getPoll(pollId).getPollEntries();
+        return new QuestionStatistics(question, pollEntries);
     }
 }

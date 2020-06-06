@@ -1,7 +1,7 @@
 package gpse.repoll.domain.statistics;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.Answer;
@@ -10,40 +10,33 @@ import gpse.repoll.domain.poll.answers.SingleChoiceAnswer;
 import gpse.repoll.domain.poll.questions.MultiChoiceQuestion;
 import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.poll.questions.SingleChoiceQuestion;
-import gpse.repoll.domain.serialization.SerializeChoice;
 
 import java.util.*;
 
 /**
- * Statistics for a specific Question.
+ * Statistics for a specific Single- or MultiChoiceQuestion.
  */
 public class QuestionStatistics {
 
     @JsonIgnore
     private final List<Answer> answers = new ArrayList<>();
 
-    @JsonIgnore
-    private Question question;
+    private final Question question;
 
-    @JsonSerialize(keyUsing = SerializeChoice.class)
-    private final Map<Choice, Integer> absoluteFrequencies = new HashMap<>();
+    private final List<Frequency> frequencies = new ArrayList<>();
 
-    @JsonSerialize(keyUsing = SerializeChoice.class)
-    private final Map<Choice, Double> relativeFrequencies = new HashMap<>();
+    private final Set<Choice> mode = new HashSet<>();
 
-    private List<Choice> mode;
-
-
-    protected QuestionStatistics() {
-
-    }
+    private final List<CumulativeFrequency> cumulativeFrequencies = new ArrayList<>();
 
     public QuestionStatistics(Question question, List<PollEntry> pollEntries) {
         this.question = question;
         this.answers.addAll(getAnswersTo(this.question, pollEntries));
-        this.absoluteFrequencies.putAll(absoluteFrequencies(question, pollEntries)); //NOPMD
-        this.relativeFrequencies.putAll(relativeFrequencies(this.absoluteFrequencies)); //NOPMD
-        this.mode = mode(this.absoluteFrequencies);
+        if (question instanceof SingleChoiceQuestion || question instanceof MultiChoiceQuestion) {
+            computeFrequencies();
+            computeMode();
+            computeCumulativeFrequencies();
+        }
     }
 
     /**
@@ -64,124 +57,79 @@ public class QuestionStatistics {
         return answers;
     }
 
-    /**
-     * Absolute Frequencies of the answers to a specific question (Not for text questions!).
-     *
-     * @param question The question that you want the frequencies of.
-     * @param pollEntries List with the PollEntries of participants.
-     * @return The absolute frequency of every answer.
-     */
-    protected Map<Choice, Integer> absoluteFrequencies(Question question, List<PollEntry> pollEntries) {
-        Map<Choice, Integer> frequencies = new HashMap<>();
-
-        // An interface for CheckboxQuestions would be better here?
-        if (!(question instanceof MultiChoiceQuestion || question instanceof SingleChoiceQuestion)) {
-            return frequencies;
-        }
-
-        if (question instanceof MultiChoiceQuestion) {
-            // Initialize the list of all possible answers
-            List<Choice> choices = ((MultiChoiceQuestion) question).getChoices();
-            if (choices.isEmpty()) {
-                return frequencies;
+    private void computeFrequencies() {
+        List<Frequency> newFrequencies = new ArrayList<>();
+        int countAllChoices = 0;
+        Map<Choice, Integer> choiceCountMap = new HashMap<>();
+        if (question instanceof SingleChoiceQuestion) {
+            for (Answer answer : answers) {
+                if (answer instanceof SingleChoiceAnswer) {
+                    SingleChoiceAnswer singleChoiceAnswer = (SingleChoiceAnswer) answer;
+                    Choice choice = singleChoiceAnswer.getChoice();
+                    if (choiceCountMap.containsKey(choice)) {
+                        int currentChoiceCount = choiceCountMap.get(choice);
+                        choiceCountMap.put(choice, currentChoiceCount + 1);
+                    } else {
+                        choiceCountMap.put(choice, 1);
+                    }
+                    countAllChoices++;
+                } else {
+                    throw new InternalServerErrorException();
+                }
             }
-            for (Choice choice : choices) {
-                frequencies.put(choice, 0);
+        } else if (question instanceof MultiChoiceQuestion) {
+            for (Answer answer : answers) {
+                if (answer instanceof MultiChoiceAnswer) {
+                    MultiChoiceAnswer multiChoiceAnswer = (MultiChoiceAnswer) answer;
+                    List<Choice> choices = multiChoiceAnswer.getChoices();
+                    for (Choice choice : choices) {
+                        if (choiceCountMap.containsKey(choice)) {
+                            int currentChoiceCount = choiceCountMap.get(choice);
+                            choiceCountMap.put(choice, currentChoiceCount + 1);
+                        } else {
+                            choiceCountMap.put(choice, 1);
+                        }
+                        countAllChoices++;
+                    }
+                } else {
+                    throw  new InternalServerErrorException();
+                }
             }
-            countAnswers(frequencies, choices, pollEntries);
-        } else if (question instanceof SingleChoiceQuestion) {
-            // Initialize the list of all possible answers
-            List<Choice> choices = ((SingleChoiceQuestion) question).getChoices();
-            for (Choice choice : choices) {
-                frequencies.put(choice, 0);
-            }
-            countAnswers(frequencies, choices, pollEntries);
-        }
-
-        return frequencies;
-    }
-
-    /**
-     * Calculate the absolute frequencies for each Choice in a question.
-     *
-     * @param absoluteFrequencies Absolute frequencies.
-     * @return A Map that contains the relative frequencies of all possible answers to a given question.
-     */
-    protected Map<Choice, Double> relativeFrequencies(Map<Choice, Integer> absoluteFrequencies) {
-        Map<Choice, Double> frequencies = new HashMap<>();
-        Integer hundredPercent = sumAnswers(absoluteFrequencies);
-        if (hundredPercent == 0) {
-            return frequencies;
-        }
-        absoluteFrequencies.forEach(((choice, integer) -> {
-            Double percentage = (integer.doubleValue() / hundredPercent.doubleValue());
-            frequencies.put(choice, percentage);
-        }));
-        return frequencies;
-    }
-
-    /**
-     * Calculates the mode (Choice that was chosen most frequently).
-     *
-     * @param absoluteFrequencies Map of absolute frequencies to a given choice.
-     * @return The choice that was chosen most frequently.
-     */
-    protected List<Choice> mode(Map<Choice, Integer> absoluteFrequencies) {
-        final Integer[] modus = {0};
-        List<Choice> choices = new ArrayList<>();
-        absoluteFrequencies.forEach(((choice, integer) -> {
-            if (integer > modus[0]) {
-                modus[0] = integer;
-            }
-        }));
-        absoluteFrequencies.forEach(((choice, integer) -> {
-            if (integer.equals(modus[0])) {
-                choices.add(choice);
-            }
-        }));
-        return choices;
-    }
-
-    /**
-     * Calculate the sum of the frequencies of all answers from all participants.
-     *
-     * @param absoluteFrequencies Map with the absolute frequencies of each possible choice.
-     * @return The number of answers given in total (every ticked checkbox).
-     */
-    protected Integer sumAnswers(Map<Choice, Integer> absoluteFrequencies) {
-        final Integer[] frequency = {0};
-        absoluteFrequencies.forEach(((choice, integer) -> {
-            frequency[0] += integer;
-        }));
-        return frequency[0];
-    }
-
-    /**
-     * Count frequencies of CheckboxAnswers for a specific question.
-     *
-     * @param frequencies Map that allocates a frequency to each possible choice.
-     * @param choices List with all the possible checkbox answers.
-     */
-    private void countAnswers(Map<Choice, Integer> frequencies, List<Choice> choices, List<PollEntry> pollEntries) {
-        List<Answer> answers = getAnswersTo(this.question, pollEntries);
-
-        if (answers.isEmpty()) {
-            return;
-        }
-
-        if (answers.get(0) instanceof MultiChoiceAnswer) {
-            answers.forEach((answer) -> {
-                ((MultiChoiceAnswer) answer).getChoices().forEach((choice) -> {
-                    Integer count = frequencies.get(choice);
-                    frequencies.put(choice, count + 1);
-                });
-            });
         } else {
-            answers.forEach((answer -> {
-                Choice choice = ((SingleChoiceAnswer) answer).getChoice();
-                Integer count = frequencies.get(choice);
-                frequencies.put(choice, count + 1);
-            }));
+            throw new InternalServerErrorException();
+        }
+        for (Choice choice : choiceCountMap.keySet()) {
+            frequencies.add(new Frequency(choice, choiceCountMap.get(choice), countAllChoices));
+        }
+    }
+
+    private void computeMode() {
+        List<Frequency> maxima = new ArrayList<>();
+        maxima.add(frequencies.get(0));
+        for (int i = 1; i < frequencies.size(); i++) {
+            if (frequencies.get(i).getAbsolute() > maxima.get(0).getAbsolute()) {
+                maxima.clear();
+                maxima.add(frequencies.get(i));
+            } else if (frequencies.get(i).getAbsolute() == maxima.get(0).getAbsolute()) {
+                maxima.add(frequencies.get(i));
+            }
+        }
+        for (Frequency frequency : maxima) {
+            mode.add(frequency.getChoice());
+        }
+    }
+
+    private void computeCumulativeFrequencies() {
+        if (question instanceof SingleChoiceQuestion) {
+            for (Choice choice : ((SingleChoiceQuestion) question).getChoices()) {
+                cumulativeFrequencies.add(new CumulativeFrequency(choice, frequencies));
+            }
+        } else if (question instanceof MultiChoiceQuestion) {
+            for (Choice choice : ((MultiChoiceQuestion) question).getChoices()) {
+                cumulativeFrequencies.add(new CumulativeFrequency(choice, frequencies));
+            }
+        } else {
+            throw new InternalServerErrorException();
         }
     }
 
@@ -193,23 +141,15 @@ public class QuestionStatistics {
         return question;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
+    public List<Frequency> getFrequencies() {
+        return frequencies;
     }
 
-    public Map<Choice, Integer> getAbsoluteFrequencies() {
-        return absoluteFrequencies;
-    }
-
-    public Map<Choice, Double> getRelativeFrequencies() {
-        return relativeFrequencies;
-    }
-
-    public List<Choice> getMode() {
+    public Set<Choice> getMode() {
         return mode;
     }
 
-    public void setMode(List<Choice> mode) {
-        this.mode = mode;
+    public List<CumulativeFrequency> getCumulativeFrequencies() {
+        return cumulativeFrequencies;
     }
 }

@@ -80,21 +80,6 @@ class QuestionStatisticsTest {
 
     @Test
     void absoluteFrequencies() {
-        MultiChoiceQuestion question = exampleMultiChoiceQuestion();
-        List<PollEntry> pollEntries = examplePollEntriesChoiceQuestion(question);
-
-        Map<Choice, Integer> expected = new HashMap<>();
-        List<Choice> choices = question.getChoices();
-        expected.put(choices.get(0), 0);
-        expected.put(choices.get(1), 1);
-        expected.put(choices.get(2), 2);
-        expected.put(choices.get(3), 1);
-
-        Map<Choice, Integer> actual;
-        QuestionStatistics questionStatistics = new QuestionStatistics(question, pollEntries);
-        actual = questionStatistics.absoluteFrequencies(question, pollEntries);
-
-        assertEquals(expected, actual);
     }
 
     @Test
