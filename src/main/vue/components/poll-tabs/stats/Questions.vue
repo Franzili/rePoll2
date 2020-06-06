@@ -14,87 +14,73 @@
 
 
         <p> Hallo ich bin ausgewählt: {{selected}}</p>
+        <b-card v-if="selQuest.length > 0">
+            <b-row v-bind:key="question.id" v-for="question in selQuest" >
+                <b-col><h5>{{question.title}}</h5></b-col>
+                <b-col><b-button>x</b-button></b-col>
+            </b-row>
+        </b-card>
 
-        <p>{{answers}}</p>
-        <p>{{match}}</p>
+        <!--
+        <p>{{answerSet}}</p>
+        -->
 
-        <b-table :items="match"></b-table>
-
-        <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
-            diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-            takimata sanctus est Lorem ipsum dolor sit amet.
-        </p>
-        <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
-            diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-            takimata sanctus est Lorem ipsum dolor sit amet.
-        </p>
-        <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
-            diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-            takimata sanctus est Lorem ipsum dolor sit amet.
-        </p>
-        <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
-            diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-            takimata sanctus est Lorem ipsum dolor sit amet.
-        </p>
+        <b-table v-if="selected !== null" striped hover :items="answerSet" fixed :fields="fields" ></b-table>
     </div>
 </template>
 
 <script>
 
-    import {mapActions, mapState} from "vuex";
+    import {mapActions, mapGetters, mapState} from "vuex";
 
     export default {
         name: "Questions",
         data() {
             return {
                 choices: [],
-                tmpID: 0,
                 selected: null,
-                questionHeader: {value: null, text: 'Select your question'},
-                match: []
+                answerSet: [],
+                selQuest: [],
+                fields: [
+                    {key: 'Username', sortable: true},
+                    {key: 'Answers', sortable: true}
+                ]
             }
         },
         created() {
+            this.loadPollAnswers(this.poll.id)
             this.fillChoices()
         },
         computed: {
             ...mapState('currentPoll', {
                 poll: 'poll',
-                answers: 'answers'
+                pollAnswers: 'pollAnswers'
             }),
+            ...mapGetters('currentPoll', {
+                getPollAnswers: 'getAnswerSetByID'
+            })
         },
         watch: {
             selected: function (val) {
-                let answerCmd = {poll: this.poll.id, quest: val}
-                this.loadAnswers(answerCmd)
-                this.match = []
-                let funfun = Object.entries(this.answers)
-                for (let i = 0; i < funfun.length; i++) {
-                    let set = {Username: funfun[i][0], Answers: funfun[i][1].text}
-                    this.match = [...this.match, set]
-                }
+                this.answerSet = this.getPollAnswers(val)
+                this.doFuckingFunnyStuff(val)
             }
         },
         methods: {
             ...mapActions('currentPoll', {
-                loadAnswers: 'loadAnswers'
+                loadPollAnswers: 'loadPollAnswers'
             }),
+            doFuckingFunnyStuff(val) {
+                let question = this.poll.questions.find(question => question.id === val)
+                console.log(this.selQuest.length > 0)
+                if (this.selQuest.length > 0) {
+                    if (this.selQuest.find(quest => quest.id === val) === undefined) {
+                        this.selQuest.push(question)
+                    }
+                } else {
+                    this.selQuest.push(question)
+                }
+            },
             fillChoices() {
                 for (let i = 0; i < this.poll.questions.length; i++) {
                     let choice = {text: this.poll.questions[i].title, value: this.poll.questions[i].id}
