@@ -1,18 +1,24 @@
 <template>
-    <b-modal scrollable ref="modal" v-if="showModal">
+    <b-modal
+        scrollable
+        title="Add or remove Questions:"
+        ref="modal"
+        header-border-variant="dark"
+        footer-border-variant="dark"
+        v-if="showModal">
         <div class="d-block text-center">
-            <b-container  v-bind:key="section.section.id" v-for="section in modalObj">
+            <b-container  v-bind:key="section.id" v-for="section in modalObj">
                 <b-row>
-                    <h5>Section: {{section.section.name}}</h5>
+                    <h5>Section: {{section.title}}</h5>
                 </b-row>
 
 
                 <b-form-checkbox-group v-model="selected">
-                    <b-container v-bind:key="question.value" v-for="question in section.questions">
+                    <b-container v-bind:key="stat.question.id" v-for="stat in section.statistics">
                         <b-row>
-                            <b-col cols="8">{{question.text}}</b-col>
+                            <b-col cols="11">{{stat.question.title}}</b-col>
                             <b-col cols="1">
-                                <b-form-checkbox :value="question.value"></b-form-checkbox>
+                                <b-form-checkbox :value="stat.question.id"></b-form-checkbox>
                             </b-col>
                         </b-row>
                     </b-container>
