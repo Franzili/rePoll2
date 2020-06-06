@@ -43,8 +43,8 @@ public class StatisticsQuestion {
     @ElementCollection
     private final Map<Choice, Double> relativeFrequencies = new HashMap<>();
 
-    @OneToOne
-    private Choice modalValue;
+    @OneToMany
+    private List<Choice> modalValue;
 
 
     protected StatisticsQuestion() {
@@ -139,16 +139,20 @@ public class StatisticsQuestion {
      * @param absoluteFrequencies Map of absolute frequencies to a given choice.
      * @return The choice that was chosen most frequently.
      */
-    protected Choice modalValue(Map<Choice, Integer> absoluteFrequencies) {
+    protected List<Choice> modalValue(Map<Choice, Integer> absoluteFrequencies) {
         final Integer[] modus = {0};
-        final Choice[] choices = {null};
+        List<Choice> choices = new ArrayList<>();
         absoluteFrequencies.forEach(((choice, integer) -> {
             if (integer > modus[0]) {
                 modus[0] = integer;
-                choices[0] = choice;
             }
         }));
-        return choices[0];
+        absoluteFrequencies.forEach(((choice, integer) -> {
+            if (integer.equals(modus[0])) {
+                choices.add(choice);
+            }
+        }));
+        return choices;
     }
 
     /**
@@ -230,11 +234,11 @@ public class StatisticsQuestion {
         return relativeFrequencies;
     }
 
-    public Choice getModalValue() {
+    public List<Choice> getModalValue() {
         return modalValue;
     }
 
-    public void setModalValue(Choice modalValue) {
+    public void setModalValue(List<Choice> modalValue) {
         this.modalValue = modalValue;
     }
 }
