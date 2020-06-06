@@ -2,15 +2,15 @@ package gpse.repoll.domain.statistics;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import gpse.repoll.domain.Choice;
-import gpse.repoll.domain.PollEntry;
-import gpse.repoll.domain.SerializeChoice;
-import gpse.repoll.domain.answers.Answer;
-import gpse.repoll.domain.answers.ChoiceAnswer;
-import gpse.repoll.domain.answers.RadioButtonAnswer;
-import gpse.repoll.domain.questions.ChoiceQuestion;
-import gpse.repoll.domain.questions.Question;
-import gpse.repoll.domain.questions.RadioButtonQuestion;
+import gpse.repoll.domain.poll.Choice;
+import gpse.repoll.domain.poll.PollEntry;
+import gpse.repoll.domain.poll.answers.Answer;
+import gpse.repoll.domain.poll.answers.MultiChoiceAnswer;
+import gpse.repoll.domain.poll.answers.SingleChoiceAnswer;
+import gpse.repoll.domain.poll.questions.MultiChoiceQuestion;
+import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.poll.questions.SingleChoiceQuestion;
+import gpse.repoll.domain.serialization.SerializeChoice;
 
 import java.util.*;
 
@@ -75,13 +75,13 @@ public class QuestionStatistics {
         Map<Choice, Integer> frequencies = new HashMap<>();
 
         // An interface for CheckboxQuestions would be better here?
-        if (!(question instanceof ChoiceQuestion || question instanceof RadioButtonQuestion)) {
+        if (!(question instanceof MultiChoiceQuestion || question instanceof SingleChoiceQuestion)) {
             return frequencies;
         }
 
-        if (question instanceof ChoiceQuestion) {
+        if (question instanceof MultiChoiceQuestion) {
             // Initialize the list of all possible answers
-            List<Choice> choices = ((ChoiceQuestion) question).getChoices();
+            List<Choice> choices = ((MultiChoiceQuestion) question).getChoices();
             if (choices.isEmpty()) {
                 return frequencies;
             }
@@ -89,9 +89,9 @@ public class QuestionStatistics {
                 frequencies.put(choice, 0);
             }
             countAnswers(frequencies, choices, pollEntries);
-        } else if (question instanceof RadioButtonQuestion) {
+        } else if (question instanceof SingleChoiceQuestion) {
             // Initialize the list of all possible answers
-            List<Choice> choices = ((RadioButtonQuestion) question).getChoices();
+            List<Choice> choices = ((SingleChoiceQuestion) question).getChoices();
             for (Choice choice : choices) {
                 frequencies.put(choice, 0);
             }
@@ -169,26 +169,18 @@ public class QuestionStatistics {
             return;
         }
 
-        if (answers.get(0) instanceof ChoiceAnswer) {
+        if (answers.get(0) instanceof MultiChoiceAnswer) {
             answers.forEach((answer) -> {
-                ((ChoiceAnswer) answer).getChoiceIds().forEach((id) -> {
-                    for (Choice choice : choices) {
-                        if (choice.getId().equals(id)) {
-                            Integer count = frequencies.get(choice);
-                            frequencies.put(choice, count + 1);
-                        }
-                    }
+                ((MultiChoiceAnswer) answer).getChoices().forEach((choice) -> {
+                    Integer count = frequencies.get(choice);
+                    frequencies.put(choice, count + 1);
                 });
             });
         } else {
             answers.forEach((answer -> {
-                Long choiceID = ((RadioButtonAnswer) answer).getChoiceId();
-                for (Choice choice : choices) {
-                    if (choice.getId().equals(choiceID)) {
-                        Integer count = frequencies.get(choice);
-                        frequencies.put(choice, count + 1);
-                    }
-                }
+                Choice choice = ((SingleChoiceAnswer) answer).getChoice();
+                Integer count = frequencies.get(choice);
+                frequencies.put(choice, count + 1);
             }));
         }
     }

@@ -1,8 +1,13 @@
 package gpse.repoll.web;
 
-import gpse.repoll.domain.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
+import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.service.PollService;
+import gpse.repoll.domain.service.UserService;
+import gpse.repoll.domain.User;
 import gpse.repoll.testutils.MockTestUsers;
+import gpse.repoll.web.command.PollCmd;
+import gpse.repoll.web.controllers.PollsController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,21 +66,21 @@ public class PollsControllerTest {
     @Test
     @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testGetAllNormal() {
-        Poll poll1 = new Poll(null, "Poll1");
-        Poll poll2 = new Poll(null, "Poll2");
+        Poll poll1 = new Poll("Poll1");
+        Poll poll2 = new Poll("Poll2");
         ArrayList<Poll> polls = new ArrayList<>();
         polls.add(poll1);
         polls.add(poll2);
 
         when(pollService.getAll()).thenReturn(polls);
-        assertThat(controller.getAll()).containsAll(polls);
+        assertThat(controller.listPolls()).containsAll(polls);
     }
 
     @Test
     @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testGetAllEmpty() {
         when(pollService.getAll()).thenReturn(new ArrayList<Poll>());
-        assertThat(controller.getAll()).isEmpty();
+        assertThat(controller.listPolls()).isEmpty();
     }
 
     @Test
@@ -84,7 +89,7 @@ public class PollsControllerTest {
         PollCmd cmd = new PollCmd();
         cmd.setTitle("Poll 1");
         controller.addPoll(cmd);
-        verify(pollService).addPoll(eq("Poll 1"), any(User.class));
+        verify(pollService).addPoll(eq("Poll 1"));
     }
 
     @Test
@@ -104,7 +109,7 @@ public class PollsControllerTest {
         UUID uuid = UUID.randomUUID();
         cmd.setTitle("Poll 1");
         controller.addPoll(cmd);
-        verify(pollService).addPoll(eq("Poll 1"), any(User.class));
+        verify(pollService).addPoll(eq("Poll 1"));
         controller.removePoll(uuid);
         verify(pollService).removePoll(uuid);
     }

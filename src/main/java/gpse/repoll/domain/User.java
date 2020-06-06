@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import gpse.repoll.domain.exceptions.NoValidRoleException;
+import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.security.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -41,16 +43,19 @@ public class User implements UserDetails {
     private List<String> roles = new ArrayList<>();
 
     @Column
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Poll> ownPolls = new ArrayList<>();
 
     public User() {
-        // Todo: refine user roles
-        roles.add(Roles.ALL);
+        roles.add(Roles.NO_ROLE);
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID uuid) {
+        this.id = uuid;
     }
 
     /**
@@ -89,6 +94,43 @@ public class User implements UserDetails {
 
     public List<Poll> getOwnPolls() {
         return Collections.unmodifiableList(ownPolls);
+    }
+
+    public List<String> getRoles() {
+        return Collections.unmodifiableList(roles);
+    }
+
+    public void setRoles(String role) throws NoValidRoleException {
+        roles.clear();
+        if (role == null) {
+            roles.add(Roles.NO_ROLE);
+            return;
+        }
+        if (role.equals(Roles.NO_ROLE)) {
+            roles.add(Roles.NO_ROLE);
+            return;
+        }
+        List<String> allRoles = new ArrayList<>(Roles.getAllRoles());
+        if (role.equals(Roles.ADMIN)) {
+            roles.addAll(allRoles);
+            return;
+        }
+        allRoles.remove(Roles.ADMIN);
+        if (role.equals(Roles.POLL_CREATOR)) {
+            roles.addAll(allRoles);
+            return;
+        }
+        allRoles.remove(Roles.POLL_CREATOR);
+        if (role.equals(Roles.POLL_EDITOR)) {
+            roles.addAll(allRoles);
+            return;
+        }
+        allRoles.remove(Roles.POLL_EDITOR);
+        if (role.equals(Roles.PARTICIPANT)) {
+            roles.addAll(allRoles);
+            return;
+        }
+        throw new NoValidRoleException();
     }
 
     @JsonIgnore
