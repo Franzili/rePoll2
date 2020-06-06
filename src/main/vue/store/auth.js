@@ -34,6 +34,12 @@ const auth = {
         },
          */
 
+        /*
+        todo
+        new action for Mail request
+        data in credentials
+         */
+
         loadFromStorage({commit}) {
             let token = localStorage.getItem('authToken');
             commit('authenticate', token);

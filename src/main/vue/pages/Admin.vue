@@ -212,13 +212,25 @@
             this.totalRows = this.items.length
         },
         methods: {
-            ...mapActions([]),
+            ...mapActions('auth', {
+                sendMailInvite:'sendMailInvite'
+            }),
             // write methods to your means
             add_UpdateUser() {
-                    if(this.isUpdate) {
-                        this.isUpdate = false;
-                    }
-
+                if(this.isUpdate) {
+                    this.isUpdate = false;
+                }
+                /**
+                 * todo
+                 * Aufruf der Store Funktion für Mails
+                 * let credentials = {userName: VUE_Variable, eMail: VUE_Variable}
+                 * this.sendMailRequest(credentials)
+                 */
+                let VUE_Variable;
+                let credentials = {
+                    userName: VUE_Variable, eMail: VUE_Variable
+                }
+                this.sendMailInvite(credentials)
             },
             deleteUser() {
 
