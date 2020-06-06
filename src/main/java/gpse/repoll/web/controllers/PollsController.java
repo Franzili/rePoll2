@@ -38,29 +38,11 @@ public class PollsController {
     @GetMapping("/")
     public List<Poll> listPolls() {
         List<Poll> polls = new ArrayList<>();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getPrincipal().toString();
-        User user = userService.getUser(username);
-        if (user.getRoles().contains(Roles.ADMIN)) {
-            pollService.getAll().forEach(polls::add);
-        } else if (user.getRoles().contains(Roles.POLL_CREATOR)) {
-            for (UUID pollId:user.getOwnPolls()) {
-                polls.add(pollService.getPoll(pollId));
-            }
-        } else if (user.getRoles().contains(Roles.POLL_EDITOR)) {
-            for (UUID pollId:user.getOwnPolls()) {
-                polls.add(pollService.getPoll(pollId));
-            }
-        } else if (user.getRoles().contains(Roles.PARTICIPANT)) {
-            for (UUID pollId:user.getOwnPolls()) {
-                polls.add(pollService.getPoll(pollId));
-            }
-        } /*else if (user.getRoles().contains(Roles.NO_ROLE)) {
-            userService.getOwnedPolls(user.getId());
-        }*/
+        pollService.getAll().forEach(polls::add);
         return polls;
     }
 
+    /*
     // todo this has to be fixed in future, now is blocking frontend from accessing the database
     //@Secured(Roles.POLL_CREATOR)
     @GetMapping("/")
@@ -83,9 +65,9 @@ public class PollsController {
             for (UUID pollId:user.getOwnPolls()) {
                 ownPolls.add(pollService.getPoll(pollId));
             }
-        } /*else if (user.getRoles().contains(Roles.NO_ROLE)) {
-            userService.getOwnedPolls(user.getId());
-        }*/
+        } //else if (user.getRoles().contains(Roles.NO_ROLE)) {
+            //userService.getOwnedPolls(user.getId());
+        //}
         return ownPolls;
     }
 
@@ -111,11 +93,11 @@ public class PollsController {
             for (UUID pollId:user.getOwnPolls()) {
                 assignedPolls.add(pollService.getPoll(pollId));
             }
-        } /*else if (user.getRoles().contains(Roles.NO_ROLE)) {
-            userService.getOwnedPolls(user.getId());
-        }*/
+        } //else if (user.getRoles().contains(Roles.NO_ROLE)) {
+            //userService.getOwnedPolls(user.getId());
+        //}
         return assignedPolls;
-    }
+    }*/
 
     @Secured(Roles.POLL_CREATOR)
     @PostMapping("/")

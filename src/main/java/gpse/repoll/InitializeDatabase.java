@@ -165,7 +165,7 @@ public class InitializeDatabase implements InitializingBean {
                 100, 255);
             //add poll3 to nobody's ownedPolls
             userService.addOwnedPoll(poll3.getId(), nobody.getUsername());
-            
+
 
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
