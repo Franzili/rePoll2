@@ -40,6 +40,7 @@ public class UsersControllerTest {
     @Mock
     private PollService pollService;
 
+    @Mock
     private UsersController usersController;
 
     @BeforeEach
