@@ -6,19 +6,10 @@ import gpse.repoll.web.command.ChoiceCmd;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonTypeName("RadioButtonQuestion")
-public class RadioButtonQuestionCmd extends QuestionCmd {
+@JsonTypeName("MultiChoiceQuestion")
+public class MultiChoiceQuestionCmd extends QuestionCmd {
 
-    private String displayVariant;
-    private final List<ChoiceCmd> choices = new ArrayList<>();
-
-    public String getDisplayVariant() {
-        return displayVariant;
-    }
-
-    public void setDisplayVariant(String displayVariant) {
-        this.displayVariant = displayVariant;
-    }
+    private List<ChoiceCmd> choices = new ArrayList<>();
 
     public List<ChoiceCmd> getChoices() {
         return choices;

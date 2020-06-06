@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonTypeName("ChoiceAnswer")
-public class ChoiceAnswerCmd extends AnswerCmd {
+@JsonTypeName("MultiChoiceAnswer")
+public class MultiChoiceAnswerCmd extends AnswerCmd {
 
-    private List<Long> choiceIds = new ArrayList<>();
+    private final List<Long> choiceIds = new ArrayList<>();
 
     public List<Long> getChoiceIds() {
         return choiceIds;

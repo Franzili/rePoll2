@@ -4,6 +4,7 @@ import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.poll.questions.SingleChoiceQuestion;
 import gpse.repoll.domain.service.QuestionService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.ChoiceCmd;
@@ -53,36 +54,36 @@ public class QuestionsController {
                     scaleQuestionCmd.getStepCount(),
                     scaleQuestionCmd.getMin(),
                     scaleQuestionCmd.getMax());
-        } else if (questionCmd instanceof RadioButtonQuestionCmd) {
-            RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            if (radioButtonQuestionCmd.getChoices() == null) {
+        } else if (questionCmd instanceof SingleChoiceQuestionCmd) {
+            SingleChoiceQuestionCmd singleChoiceQuestionCmd = (SingleChoiceQuestionCmd) questionCmd;
+            if (singleChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : singleChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            if (radioButtonQuestionCmd.getDisplayVariant() == null
-                    || (!radioButtonQuestionCmd.getDisplayVariant().equals("radio")
-                    && !radioButtonQuestionCmd.getDisplayVariant().equals("dropdown"))) {
+            if (singleChoiceQuestionCmd.getDisplayVariant() == null
+                    || (!singleChoiceQuestionCmd.getDisplayVariant().equals("radio")
+                    && !singleChoiceQuestionCmd.getDisplayVariant().equals("dropdown"))) {
                 throw new BadRequestException("No display variant given for the question!");
             }
-            return questionService.addRadioButtonQuestion(
+            return questionService.addSingleChoiceQuestion(
                     pollId,
                     title,
                     questionOrder,
                     choices,
-                    radioButtonQuestionCmd.getDisplayVariant());
-        } else if (questionCmd instanceof ChoiceQuestionCmd) {
-            ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
-            if (choiceQuestionCmd.getChoices() == null) {
+                    singleChoiceQuestionCmd.getDisplayVariant());
+        } else if (questionCmd instanceof MultiChoiceQuestionCmd) {
+            MultiChoiceQuestionCmd multiChoiceQuestionCmd = (MultiChoiceQuestionCmd) questionCmd;
+            if (multiChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.addChoiceQuestion(pollId, title, questionOrder, choices);
+            return questionService.addMultiChoiceQuestion(pollId, title, questionOrder, choices);
         }
         // This should never happen
         throw new InternalServerErrorException();
@@ -127,27 +128,27 @@ public class QuestionsController {
                     scaleQuestionCmd.getScaleNameLeft(),
                     scaleQuestionCmd.getScaleNameRight(),
                     scaleQuestionCmd.getStepCount());
-        } else if (questionCmd instanceof RadioButtonQuestionCmd) {
-            RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            if (radioButtonQuestionCmd.getChoices() == null) {
+        } else if (questionCmd instanceof SingleChoiceQuestionCmd) {
+            SingleChoiceQuestionCmd singleChoiceQuestionCmd = (SingleChoiceQuestionCmd) questionCmd;
+            if (singleChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : singleChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.updateRadioButtonQuestion(
+            return questionService.updateSingleChoiceQuestion(
                     pollId, questionId, questionOrder, title, choices);
-        } else if (questionCmd instanceof ChoiceQuestionCmd) {
-            ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
-            if (choiceQuestionCmd.getChoices() == null) {
+        } else if (questionCmd instanceof MultiChoiceQuestionCmd) {
+            MultiChoiceQuestionCmd multiChoiceQuestionCmd = (MultiChoiceQuestionCmd) questionCmd;
+            if (multiChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.updateChoiceQuestion(pollId, questionId, questionOrder, title, choices);
+            return questionService.updateMultiChoiceQuestion(pollId, questionId, questionOrder, title, choices);
         }
         // This should never happen
         throw new InternalServerErrorException();

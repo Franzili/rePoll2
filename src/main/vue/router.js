@@ -1,5 +1,5 @@
 import VueRouter from "vue-router";
-import CreatePoll from "./pages/CreatePoll";
+import CreatePoll from "./components/poll-tabs/edit/EditPoll";
 import Start from "./pages/Start";
 import Account from "./pages/Account";
 import Poll from "./pages/Poll";
