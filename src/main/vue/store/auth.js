@@ -1,8 +1,17 @@
 import api from "../api";
 import axios from "axios";
 
+/**
+ * Holds the user authentication.
+ */
 const auth = {
     state: {
+        /**
+         * Whether we are authenticated at the moment. (i.e. whether we have a valid JWT token)
+         * - true if we are authenticated
+         * - false if we are not
+         * - null if we have not tried yet
+         */
         authenticated: null,
         token: null
     },
@@ -12,6 +21,10 @@ const auth = {
     },
 
     actions: {
+        /**
+         * Try to authenticate using a username and a password.
+         * This will set the token and the 'authenticated' state.
+         */
         requestToken({commit}, credentials) {
             return new Promise((resolve, reject) => {
                 api.auth.login(credentials.username, credentials.password)
@@ -34,6 +47,9 @@ const auth = {
         },
          */
 
+        /**
+         * Load a token from Browser localStorage.
+         */
         loadFromStorage({commit}) {
             let token = localStorage.getItem('authToken');
             commit('authenticate', token);
@@ -41,6 +57,10 @@ const auth = {
     },
 
     mutations: {
+        /**
+         * Sets a token as our current authorization methhod and sets up axios to use it everytime we
+         * call the backend.
+         */
         authenticate(state, token) {
             state.token = token;
             axios.defaults.headers['Authorization'] = token

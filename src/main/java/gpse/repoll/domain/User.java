@@ -42,8 +42,10 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    /*@Column
-    @OneToMany(mappedBy = "owner") //users own created polls
+
+    /*
+    @Column
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Poll> ownPolls = new ArrayList<>();
 
     @Column

@@ -1,8 +1,10 @@
 import poll from "./poll";
 import auth from "./auth";
+import statistics from "./statistics";
 import "./httpLogger";
 
 export default {
     auth,
-    poll
+    poll,
+    statistics
 }

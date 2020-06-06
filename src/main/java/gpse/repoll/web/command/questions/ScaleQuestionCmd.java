@@ -2,13 +2,14 @@ package gpse.repoll.web.command.questions;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+// CPD-OFF
 @JsonTypeName("ScaleQuestion")
 public class ScaleQuestionCmd extends QuestionCmd {
 
     private String scaleNameLeft;
-
     private String scaleNameRight;
-
+    private int min;
+    private int max;
     private int stepCount;
 
     public String getScaleNameLeft() {
@@ -34,4 +35,21 @@ public class ScaleQuestionCmd extends QuestionCmd {
     public void setStepCount(int stepCount) {
         this.stepCount = stepCount;
     }
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
+    // CPD-ON
 }

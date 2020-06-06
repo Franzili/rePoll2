@@ -7,7 +7,7 @@
         <b-icon-pencil class="my-icon" scale="1.5" v-else-if="edit" @click="changeEditQuestion"></b-icon-pencil>
 
         <!-- all possible answers possibilities -->
-        <div v-if="question.type === 'ChoiceQuestion'">
+        <div v-if="question.type === 'MultiChoiceQuestion'">
             <!-- changed variables -->
             <b-form-group>
                 <b-form-checkbox-group v-model="selected">
@@ -23,7 +23,7 @@
             </b-form-group>
         </div>
 
-        <div v-if="question.type === 'RadioButtonQuestion'">
+        <div v-if="question.type === 'SingleChoiceQuestion'">
             <!-- michaels variant with changes variables, works this way but is not a radio component in answer-->
             <b-form-group v-if="question.displayVariant === 'radio'">
                 <div v-bind:key="choice.id" v-for="choice in question.choices">
@@ -39,16 +39,11 @@
 
 
             <div v-if="question.displayVariant === 'dropdown'">
-                <b-dropdown variant="primary" class="drop-down" text="select answer">
-                    <div class="text-left" v-bind:key="pos.id" v-for="pos in question.choices">
-                        <!-- TODO how to set value -->
-                        <b-dropdown-item v-model="selected" :value="pos.text">{{pos.text}}</b-dropdown-item>
-                    </div>
-                </b-dropdown>
-                <b-icon-x-circle-fill class="dropdown-icon" scale="2" v-if="edit && !editDropdown" variant="secondary" @click="changeEditDropdown">delete possibilities</b-icon-x-circle-fill>
-                <b-icon-check-all class="dropdown-icon" scale="2" animation="fade" v-if="edit && editDropdown" @click="changeEditDropdown"></b-icon-check-all>
+                <b-form-select v-model="selected">
+                    <b-form-select-option v-bind:key="choice.id" v-for="choice in question.choices" :value="choice.text" >{{choice.text}}</b-form-select-option>
+                </b-form-select>
 
-                <div v-if="editDropdown">
+                <div v-if="edit">
                     <div v-bind:key="pos.id" v-for="pos in question.choices">
                         <b-container>
                             <b-row>
@@ -138,7 +133,6 @@
                 editQuestion: false,
                 editSlider: false,
                 editCharLimit: false,
-                editDropdown: false,
                 val: this.question.choices[0].min,
                 selected: []
             }
@@ -152,9 +146,6 @@
             },
             changeEditCharLimit() {
                 this.editCharLimit = !this.editCharLimit;
-            },
-            changeEditDropdown() {
-                this.editDropdown = !this.editDropdown;
             },
             addPos(newPos){
                 this.question.choices = [...this.question.choices, newPos];

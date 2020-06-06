@@ -1,5 +1,5 @@
 import VueRouter from "vue-router";
-import CreatePoll from "./pages/CreatePoll";
+import CreatePoll from "./components/poll-tabs/edit/EditPoll";
 import Start from "./pages/Start";
 import Account from "./pages/Account";
 import Poll from "./pages/Poll";
@@ -7,8 +7,10 @@ import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
 import AnswerPoll from "./pages/AnswerPoll";
 import PollTabbed from "./pages/PollTabbed";
+import Admin from "./pages/Admin";
 
 import store from "./store/store";
+import TestCharts from "./pages/TestCharts";
 
 let router = new VueRouter({
     mode: 'history',
@@ -67,6 +69,19 @@ let router = new VueRouter({
             meta: {
                 requiresAuth: true
             }
+        },
+        {
+            path: '/admin/',
+            component: Admin,
+            name: 'admin',
+            meta: {
+                requiresAuth: true
+            }
+        },
+        //for Charts testing
+        {
+            path: '/test/',
+            component: TestCharts
         }
     ]
 });

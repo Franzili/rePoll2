@@ -3,8 +3,8 @@ package gpse.repoll.domain.statistics;
 import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.Answer;
-import gpse.repoll.domain.poll.answers.ChoiceAnswer;
-import gpse.repoll.domain.poll.questions.ChoiceQuestion;
+import gpse.repoll.domain.poll.answers.MultiChoiceAnswer;
+import gpse.repoll.domain.poll.questions.MultiChoiceQuestion;
 import gpse.repoll.domain.poll.questions.Question;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 class StatisticsQuestionTest {
 
-    ChoiceQuestion exampleChoiceQuestion() {
+    MultiChoiceQuestion exampleMultiChoiceQuestion() {
         Choice choice1 = new Choice("test1", 1L);
         Choice choice2 = new Choice("test2", 2L);
         Choice choice3 = new Choice("test3", 3L);
@@ -28,31 +28,31 @@ class StatisticsQuestionTest {
         choices.add(choice3);
         choices.add(choice4);
 
-        ChoiceQuestion question = new ChoiceQuestion();
+        MultiChoiceQuestion question = new MultiChoiceQuestion();
         question.setChoices(choices);
 
         return question;
     }
 
-    List<PollEntry> examplePollEntriesChoiceQuestion(ChoiceQuestion question) {
+    List<PollEntry> examplePollEntriesChoiceQuestion(MultiChoiceQuestion question) {
         List<Choice> choices = question.getChoices();
 
-        Long choice1ID = choices.get(0).getId();
-        Long choice2ID = choices.get(1).getId();
-        Long choice3ID = choices.get(2).getId();
-        Long choice4ID = choices.get(3).getId();
-        List<Long> choiceIDs = new ArrayList<>();
-        choiceIDs.add(choice1ID);
-        choiceIDs.add(choice2ID);
-        choiceIDs.add(choice3ID);
-        choiceIDs.add(choice4ID);
+        Choice choice1 = choices.get(0);
+        Choice choice2 = choices.get(1);
+        Choice choice3 = choices.get(2);
+        Choice choice4 = choices.get(3);
+        List<Choice> moreChoices = new ArrayList<>();
+        moreChoices.add(choice1);
+        moreChoices.add(choice2);
+        moreChoices.add(choice3);
+        moreChoices.add(choice4);
 
         // Answers from Person 1
-        List<Long> choiceIDs1 = new ArrayList<>();
-        choiceIDs1.add(choice2ID);
-        choiceIDs1.add(choice3ID);
-        ChoiceAnswer answer1 = new ChoiceAnswer();
-        answer1.setChoiceIds(choiceIDs1);
+        List<Choice> choices1 = new ArrayList<>();
+        choices1.add(choice2);
+        choices1.add(choice3);
+        MultiChoiceAnswer answer1 = new MultiChoiceAnswer();
+        answer1.setChoices(choices1);
 
         Map<Question, Answer> associations1 = new HashMap<>();
         associations1.put(question, answer1);
@@ -60,11 +60,11 @@ class StatisticsQuestionTest {
         pollEntry1.setAssociations(associations1);
 
         // Answers from Person 2
-        List<Long> choiceIDs2 = new ArrayList<>();
-        choiceIDs2.add(choice3ID);
-        choiceIDs2.add(choice4ID);
-        ChoiceAnswer answer2 = new ChoiceAnswer();
-        answer2.setChoiceIds(choiceIDs2);
+        List<Choice> choices2 = new ArrayList<>();
+        choices2.add(choice3);
+        choices2.add(choice4);
+        MultiChoiceAnswer answer2 = new MultiChoiceAnswer();
+        answer2.setChoices(choices2);
 
         Map<Question, Answer> associations2 = new HashMap<>();
         associations2.put(question, answer2);
@@ -80,7 +80,7 @@ class StatisticsQuestionTest {
 
     @Test
     void absoluteFrequencies() {
-        ChoiceQuestion question = exampleChoiceQuestion();
+        MultiChoiceQuestion question = exampleMultiChoiceQuestion();
         List<PollEntry> pollEntries = examplePollEntriesChoiceQuestion(question);
 
         Map<Choice, Integer> expected = new HashMap<>();
