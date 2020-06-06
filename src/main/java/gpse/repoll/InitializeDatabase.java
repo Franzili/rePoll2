@@ -122,8 +122,9 @@ public class InitializeDatabase implements InitializingBean {
                 100, 255, nobody);
             //add poll3 to nobody's owned Polls
             //TODO :works here localy, but can later not accesed from elsewere -> ownPolls is empty
-            userService.addOwnedPoll(poll3, nobody.getUsername());
-            nobody.addOwnPoll(poll3);
+            userService.addOwnedPoll(poll3.getId(), nobody.getUsername());
+            //add poll2 from user(JamesBond) as assigned poll to nobody(Nemoo)
+            userService.addAssignedPoll(poll2.getId(), nobody.getUsername());
 
 
             List<User> participants = new ArrayList<>();

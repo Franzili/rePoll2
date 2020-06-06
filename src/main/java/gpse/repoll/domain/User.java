@@ -42,13 +42,21 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    @Column
+    /*@Column
     @OneToMany(mappedBy = "owner") //users own created polls
     private List<Poll> ownPolls = new ArrayList<>();
 
     @Column
     @OneToMany(mappedBy = "owner") //users assigned polls to fill out
-    private List<Poll> assignedPolls = new ArrayList<>();
+    private List<Poll> assignedPolls = new ArrayList<>();*/
+
+    @Column
+    @ElementCollection
+    private  List<UUID> ownPolls = new ArrayList<>();
+
+    @Column
+    @ElementCollection
+    private List<UUID> assignedPolls = new ArrayList<>();
 
     public User() {
         roles.add(Roles.NO_ROLE);
@@ -88,7 +96,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public void addOwnPoll(Poll poll) { ownPolls.add(poll); }
+    /*public void addOwnPoll(Poll poll) { ownPolls.add(poll); }
 
     public void removeOwnPoll(Poll poll) {
         ownPolls.remove(poll);
@@ -96,7 +104,18 @@ public class User implements UserDetails {
 
     public List<Poll> getOwnPolls() {
         return Collections.unmodifiableList(ownPolls);
-    }
+    }*/
+    public void addOwnPoll(UUID pollId) { ownPolls.add(pollId);}
+
+    public void removeOwnPoll(UUID pollId) { ownPolls.remove(pollId);}
+
+    public List<UUID> getOwnPolls() { return Collections.unmodifiableList(ownPolls);}
+
+    public void addAssignedPoll(UUID pollId) { assignedPolls.add(pollId);}
+
+    public void removeAssignedPoll(UUID pollId) { assignedPolls.remove(pollId);}
+
+    public List<UUID> getAssignedPolls() { return Collections.unmodifiableList(assignedPolls);}
 
     public List<String> getRoles() { return Collections.unmodifiableList(roles); }
 

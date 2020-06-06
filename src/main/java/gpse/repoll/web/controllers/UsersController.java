@@ -107,28 +107,50 @@ public class UsersController {
     }
 
     /**
-     * Gets Polls associated with the given user
+     * Gets Polls owned by the given user
      * The user can be referred to either by their username, or by their UUID identifier.
      * @param userId UUID identifier
-     * @return List of polls associated with the user.
+     * @return List of polls owned by the user.
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @GetMapping("/{userId}/own-polls/")
-    public List<Poll> getOwnedPolls(@PathVariable UUID userId) {
+    public List<UUID> getOwnedPolls(@PathVariable UUID userId) {
         return  userService.getOwnedPolls(userId);
     }
 
     /**
      * Adds polls to the repository of a given user
-     * @param poll poll to be added
+     * @param pollId UUID identifier of poll to be added
      * @param userId UUID identifier
      * @return modified user
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @PutMapping("/{userId}/own-polls/")
-    public User addOwnedPoll(@RequestBody Poll poll, @PathVariable UUID userId) {
-        return userService.addOwnedPoll(poll, userId);
+    public User addOwnedPoll(@RequestBody UUID pollId, @PathVariable UUID userId) {
+        return userService.addOwnedPoll(pollId, userId); }
+
+    /**
+     * Gets Polls assigned to the given user
+     * The user can be referred to either by their username, or by their UUID identifier.
+     * @param userId UUID identifier
+     * @return List of polls assigned to the user
+     */
+    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    @GetMapping("/{userId}/assigned-polls/")
+    public List<UUID> getAssignedPolls(@PathVariable UUID userId) {
+        return  userService.getAssignedPolls(userId);
     }
+
+    /**
+     * Adds polls to the repository of a given user
+     * @param pollId UUID identifier of poll to be added
+     * @param userId UUID identifier
+     * @return modified user
+     */
+    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    @PutMapping("/{userId}/assigned-polls/")
+    public User addAssignedPoll(@RequestBody UUID pollId, @PathVariable UUID userId) {
+        return userService.addAssignedPoll(pollId, userId); }
 
 
     /**

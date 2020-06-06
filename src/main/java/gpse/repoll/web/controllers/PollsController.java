@@ -53,16 +53,23 @@ public class PollsController {
         } else if (user.getRoles().contains(Roles.POLL_CREATOR)) {
             //pollService.getAll().forEach(polls::add);
 
-            System.out.println("Creator: " + username);
-
-            System.out.println("Roles" + userService.getRoles(username));
             System.out.println("TheSize " + userService.getOwnedPolls(username).size());
             //polls.addAll(userService.getOwnedPolls(user.getId()));
 
+            /*
+            for (Poll poll:pollService.getAll()) {
+                for (UUID pollId:user.getOwnPolls()) {
+                    if (pollId == poll.getId()) {
+                        polls.add(poll);
+                    }
+                }
+            }*/
 
-            System.out.println("Name: " + user.getUsername());
-            System.out.println("PollsSize: " + user.getOwnPolls().size());
-            polls.addAll(user.getOwnPolls());
+
+
+            //System.out.println("Name: " + user.getUsername());
+            //System.out.println("PollsSize: " + user.getOwnPolls().size());
+            //polls.addAll(user.getOwnPolls());
         } else if (user.getRoles().contains(Roles.POLL_EDITOR)) {
             userService.getOwnedPolls(user.getId());
         } else if (user.getRoles().contains(Roles.PARTICIPANT)) {
@@ -77,7 +84,7 @@ public class PollsController {
             //polls.addAll(user.getOwnPolls());
             System.out.println("Name: " + user.getUsername());
             System.out.println("PollsSize: " + user.getOwnPolls().size());
-            polls.addAll(user.getOwnPolls());
+            //polls.addAll(user.getOwnPolls());
 
             //TODO this iterates over the polls to get all polls from a given user, but has to iterate over user to get their polls as above commented out
             /*Iterable<Poll> tmpPolls = pollService.getAll();
