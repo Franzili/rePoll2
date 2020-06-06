@@ -31,6 +31,7 @@ const currentPoll = {
             let res = [];
             state.poll.pollSections.forEach(section => {
                 res.push(new SectionHeader(section.id, section.title, section.description));
+                console.log(section.questions)
                 section.questions.forEach(q => {
                     let questionObject = state.poll.questions.find(item => item.id === q.id);
                     res.push(makeQuestion(questionObject));
@@ -38,6 +39,21 @@ const currentPoll = {
             });
             return res;
         },
+
+        pollStructureObj: state => {
+            let strObj = [];
+            state.poll.pollSections.forEach(section => {
+                let qObjList = []
+                section.questions.forEach(q => {
+                    let choice = {text: q.title, value: q.id}
+                    qObjList.push(choice)
+                })
+                let secObj = {label: section.title, options: qObjList}
+                strObj.push(secObj)
+            })
+            return strObj
+        },
+
         // returns array of objects usable for table
         getAnswerSetByID: (state) => {
             return (id) => {
@@ -51,7 +67,7 @@ const currentPoll = {
                     }
                     return tableObj
 
-                } else if (match[0][1].type === 'RadioButtonAnswer') {
+                } else if (match[0][1].type === 'SingleChoiceAnswer') {
                     for (let i = 0; i < match.length; i++) {
                         let entry = {Username: match[i][0], Answers: match[i][1].choice.text}
                         tableObj = [...tableObj, entry]

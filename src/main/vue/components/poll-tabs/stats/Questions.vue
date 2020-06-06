@@ -10,7 +10,7 @@
                 -->
 
                 <b-col cols="8">
-                    <b-form-select v-model="selected" :options="this.qSelecter"></b-form-select>
+                    <b-form-select v-model="selected" :options="this.structure"></b-form-select>
                 </b-col>
                 <b-col cols="4"></b-col>
             </b-row>
@@ -30,6 +30,7 @@
             </b-row>
         </b-card>
         -->
+
         <b-row v-if="selected !==null">
             <h6>{{(poll.questions.find(question => question.id === selected).title)}}</h6>
         </b-row>
@@ -57,20 +58,22 @@
         name: "Questions",
         data() {
             return {
-                qSelecter: [{value: null, text: 'Select a question for display'}],
+                //{value: null, text: 'Select a question for display'}
                 selected: null,
                 answerSet: [],
                 fields: [
                     {key: 'Username', sortable: true},
                     {key: 'Answers', sortable: true}
                 ],
+                structure: []
                 // TODO Prototype for deeper analyses
                 //selQuest: [],
             }
         },
         created() {
             this.loadPollAnswers(this.poll.id)
-            this.fillChoices()
+            this.structure = this.getPollStructure
+            this.structure.splice(0,0, {value: null, text: 'Select a question for display'})
         },
         computed: {
             ...mapState('currentPoll', {
@@ -78,7 +81,8 @@
                 pollAnswers: 'pollAnswers'
             }),
             ...mapGetters('currentPoll', {
-                getPollAnswers: 'getAnswerSetByID'
+                getPollAnswers: 'getAnswerSetByID',
+                getPollStructure: 'pollStructureObj'
             })
         },
         watch: {
@@ -119,14 +123,6 @@
                     this.selQuest.push(question)
                 }
             },*/
-
-
-            fillChoices() {
-                for (let i = 0; i < this.poll.questions.length; i++) {
-                    let choice = {text: this.poll.questions[i].title, value: this.poll.questions[i].id}
-                    this.qSelecter = [... this.qSelecter, choice]
-                }
-            }
         },
         components: {
         }
