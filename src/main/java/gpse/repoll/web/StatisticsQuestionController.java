@@ -1,7 +1,7 @@
 package gpse.repoll.web;
 
 import gpse.repoll.domain.*;
-import gpse.repoll.domain.statistics.StatisticsQuestion;
+import gpse.repoll.domain.statistics.QuestionStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +23,8 @@ public class StatisticsQuestionController {
     }
 
     @GetMapping("{pollId}/statistics/questions/{questionId:\\d+}/")
-    public StatisticsQuestion getStatistics(@PathVariable UUID pollId, @PathVariable String questionId) {
-        StatisticsQuestion statisticsQuestion = statisticsService.getStatistics(pollId, Long.valueOf(questionId));
-        return statisticsQuestion;
+    public QuestionStatistics getStatistics(@PathVariable UUID pollId, @PathVariable String questionId) {
+        QuestionStatistics questionStatistics = statisticsService.getStatistics(pollId, Long.valueOf(questionId));
+        return questionStatistics;
     }
 }

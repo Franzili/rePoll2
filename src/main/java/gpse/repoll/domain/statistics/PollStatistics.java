@@ -1,6 +1,5 @@
 package gpse.repoll.domain.statistics;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -8,17 +7,13 @@ import java.util.UUID;
 /**
  * All Statistics to a specific poll.
  */
-@Entity
-public class StatisticsSinglePoll {
+public class PollStatistics {
 
-    @Id
-    @Column
     private UUID pollID;
 
-    @OneToMany
-    private List<StatisticsQuestion> questionStats = new ArrayList<>();
+    private List<QuestionStatistics> questionStats = new ArrayList<>();
 
-    protected StatisticsSinglePoll() {
+    protected PollStatistics() {
     }
 
     public UUID getPollID() {
@@ -29,11 +24,11 @@ public class StatisticsSinglePoll {
         this.pollID = pollID;
     }
 
-    public List<StatisticsQuestion> getQuestionStats() {
+    public List<QuestionStatistics> getQuestionStats() {
         return questionStats;
     }
 
-    public void setQuestionStats(List<StatisticsQuestion> questionStats) {
+    public void setQuestionStats(List<QuestionStatistics> questionStats) {
         this.questionStats = questionStats;
     }
 }

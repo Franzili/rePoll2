@@ -12,51 +12,38 @@ import gpse.repoll.domain.questions.ChoiceQuestion;
 import gpse.repoll.domain.questions.Question;
 import gpse.repoll.domain.questions.RadioButtonQuestion;
 
-import javax.persistence.*;
 import java.util.*;
 
 /**
  * Statistics for a specific Question.
  */
-@Entity
-public class StatisticsQuestion {
+public class QuestionStatistics {
 
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @Column
-    private UUID id;
-
-    @Column
-    @OneToMany
     @JsonIgnore
     private final List<Answer> answers = new ArrayList<>();
 
-    @OneToOne
     @JsonIgnore
     private Question question;
 
     @JsonSerialize(keyUsing = SerializeChoice.class)
-    @ElementCollection
     private final Map<Choice, Integer> absoluteFrequencies = new HashMap<>();
 
     @JsonSerialize(keyUsing = SerializeChoice.class)
-    @ElementCollection
     private final Map<Choice, Double> relativeFrequencies = new HashMap<>();
 
-    @OneToMany
-    private List<Choice> modalValue;
+    private List<Choice> mode;
 
 
-    protected StatisticsQuestion() {
+    protected QuestionStatistics() {
 
     }
 
-    public StatisticsQuestion(Question question, List<PollEntry> pollEntries) {
+    public QuestionStatistics(Question question, List<PollEntry> pollEntries) {
         this.question = question;
         this.answers.addAll(getAnswersTo(this.question, pollEntries));
         this.absoluteFrequencies.putAll(absoluteFrequencies(question, pollEntries)); //NOPMD
         this.relativeFrequencies.putAll(relativeFrequencies(this.absoluteFrequencies)); //NOPMD
-        this.modalValue = modalValue(this.absoluteFrequencies);
+        this.mode = mode(this.absoluteFrequencies);
     }
 
     /**
@@ -134,12 +121,12 @@ public class StatisticsQuestion {
     }
 
     /**
-     * Calculates the modalValue (Choice that was chosen most frequently).
+     * Calculates the mode (Choice that was chosen most frequently).
      *
      * @param absoluteFrequencies Map of absolute frequencies to a given choice.
      * @return The choice that was chosen most frequently.
      */
-    protected List<Choice> modalValue(Map<Choice, Integer> absoluteFrequencies) {
+    protected List<Choice> mode(Map<Choice, Integer> absoluteFrequencies) {
         final Integer[] modus = {0};
         List<Choice> choices = new ArrayList<>();
         absoluteFrequencies.forEach(((choice, integer) -> {
@@ -206,14 +193,6 @@ public class StatisticsQuestion {
         }
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public List<Answer> getAnswers() {
         return answers;
     }
@@ -234,11 +213,11 @@ public class StatisticsQuestion {
         return relativeFrequencies;
     }
 
-    public List<Choice> getModalValue() {
-        return modalValue;
+    public List<Choice> getMode() {
+        return mode;
     }
 
-    public void setModalValue(List<Choice> modalValue) {
-        this.modalValue = modalValue;
+    public void setMode(List<Choice> mode) {
+        this.mode = mode;
     }
 }

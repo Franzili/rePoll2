@@ -1,7 +1,6 @@
 package gpse.repoll.domain.statistics;
 
 import gpse.repoll.domain.Choice;
-import gpse.repoll.domain.Poll;
 import gpse.repoll.domain.PollEntry;
 import gpse.repoll.domain.answers.Answer;
 import gpse.repoll.domain.answers.ChoiceAnswer;
@@ -16,7 +15,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-class StatisticsQuestionTest {
+class QuestionStatisticsTest {
 
     ChoiceQuestion exampleChoiceQuestion() {
         Choice choice1 = new Choice("test1", 1L);
@@ -92,8 +91,8 @@ class StatisticsQuestionTest {
         expected.put(choices.get(3), 1);
 
         Map<Choice, Integer> actual;
-        StatisticsQuestion statisticsQuestion = new StatisticsQuestion(question, pollEntries);
-        actual = statisticsQuestion.absoluteFrequencies(question, pollEntries);
+        QuestionStatistics questionStatistics = new QuestionStatistics(question, pollEntries);
+        actual = questionStatistics.absoluteFrequencies(question, pollEntries);
 
         assertEquals(expected, actual);
     }
