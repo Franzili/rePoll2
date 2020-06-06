@@ -2,12 +2,15 @@ package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.User;
+import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.UserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,10 +22,12 @@ import java.util.UUID;
 @RequestMapping("/api/v1/users")
 @Secured(Roles.ADMIN)
 public class UsersController {
+    private final PollService pollService;
     private final UserService userService;
 
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersController(PollService pollService, UserService userService) {
+        this.pollService = pollService;
         this.userService = userService;
     }
 
@@ -151,6 +156,34 @@ public class UsersController {
     @PutMapping("/{userId}/assigned-polls/")
     public User addAssignedPoll(@RequestBody UUID pollId, @PathVariable UUID userId) {
         return userService.addAssignedPoll(pollId, userId); }
+
+
+    // todo this has to be fixed in future, now is blocking frontend from accessing the database
+    //@Secured(Roles.POLL_CREATOR)
+    @GetMapping("/")
+    public List<Poll> listOwnPolls() {
+        List<Poll> ownPolls = new ArrayList<>();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getPrincipal().toString();
+        User user = userService.getUser(username);
+        for (UUID pollId:user.getOwnPolls()) {
+            ownPolls.add(pollService.getPoll(pollId));
+        }
+        return ownPolls;
+    }
+
+    //@Secured(???)
+    @GetMapping("/")
+    public List<Poll> listAssignedPolls() {
+        List<Poll> assignedPolls = new ArrayList<>();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getPrincipal().toString();
+        User user = userService.getUser(username);
+        for (UUID pollId:user.getOwnPolls()) {
+            assignedPolls.add(pollService.getPoll(pollId));
+        }
+        return assignedPolls;
+    }
 
 
     /**
