@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
  * The one chosen Answer of multiple options.
  */
 @Entity
-public class RadioButtonAnswer extends Answer {
+public class SingleChoiceAnswer extends Answer {
 
     @ManyToOne
     private Choice choice;

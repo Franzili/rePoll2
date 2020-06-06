@@ -80,23 +80,23 @@ public class PollEntriesController {
                 answer = new ScaleAnswer();
                 int scaleNumber = ((ScaleAnswerCmd) answerCmd).getScaleNumber();
                 ((ScaleAnswer) answer).setScaleNumber(scaleNumber);
-            } else if (answerCmd instanceof RadioButtonAnswerCmd) {
-                answer = new RadioButtonAnswer();
-                Long choiceId = ((RadioButtonAnswerCmd) answerCmd).getChoiceId();
+            } else if (answerCmd instanceof SingleChoiceAnswerCmd) {
+                answer = new SingleChoiceAnswer();
+                Long choiceId = ((SingleChoiceAnswerCmd) answerCmd).getChoiceId();
                 Choice choice = choiceRepository.findById(choiceId).orElseThrow(() -> {
                     throw new BadRequestException("The choice does not exist!");
                 });
-                ((RadioButtonAnswer) answer).setChoice(choice);
-            } else if (answerCmd instanceof ChoiceAnswerCmd) {
-                answer = new ChoiceAnswer();
-                List<Long> choiceIds = ((ChoiceAnswerCmd) answerCmd).getChoiceIds();
+                ((SingleChoiceAnswer) answer).setChoice(choice);
+            } else if (answerCmd instanceof MultiChoiceAnswerCmd) {
+                answer = new MultiChoiceAnswer();
+                List<Long> choiceIds = ((MultiChoiceAnswerCmd) answerCmd).getChoiceIds();
                 List<Choice> choices = new ArrayList<>();
                 for (Long choiceId : choiceIds) {
                     choices.add(choiceRepository.findById(choiceId).orElseThrow(() -> {
                       throw new BadRequestException("At least one choice does not exist!");
                     }));
                 }
-                ((ChoiceAnswer) answer).setChoices(choices);
+                ((MultiChoiceAnswer) answer).setChoices(choices);
             } else {
                 throw new InternalServerErrorException();
             }

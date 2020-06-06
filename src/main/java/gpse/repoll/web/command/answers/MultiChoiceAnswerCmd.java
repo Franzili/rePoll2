@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonTypeName("ChoiceAnswer")
-public class ChoiceAnswerCmd extends AnswerCmd {
+@JsonTypeName("MultiChoiceAnswer")
+public class MultiChoiceAnswerCmd extends AnswerCmd {
 
     private final List<Long> choiceIds = new ArrayList<>();
 

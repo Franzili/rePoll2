@@ -7,7 +7,7 @@
         <b-icon-pencil class="my-icon" scale="1.5" v-else-if="edit" @click="changeEditQuestion"></b-icon-pencil>
 
         <!-- all possible answers possibilities -->
-        <div v-if="question.type === 'ChoiceQuestion'">
+        <div v-if="question.type === 'MultiChoiceQuestion'">
             <!-- changed variables -->
             <b-form-group>
                 <b-form-checkbox-group v-model="selected">
@@ -23,7 +23,7 @@
             </b-form-group>
         </div>
 
-        <div v-if="question.type === 'RadioButtonQuestion'">
+        <div v-if="question.type === 'SingleChoiceQuestion'">
             <!-- michaels variant with changes variables, works this way but is not a radio component in answer-->
             <b-form-group v-if="question.displayVariant === 'radio'">
                 <div v-bind:key="choice.id" v-for="choice in question.choices">

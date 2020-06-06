@@ -11,7 +11,7 @@ import java.util.List;
  * One or more chosen answers of multiple options.
  */
 @Entity
-public class ChoiceAnswer extends Answer {
+public class MultiChoiceAnswer extends Answer {
 
     @ManyToMany
     @JoinColumn
