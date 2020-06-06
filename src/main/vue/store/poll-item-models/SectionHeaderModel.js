@@ -1,0 +1,17 @@
+import PollItemModel from "./PollItemModel"
+
+class SectionHeaderModel extends PollItemModel {
+    constructor(id, title, description) {
+        super();
+        this.id = id;
+        this.type = "SectionHeaderModel";
+        this.title = title;
+        this.description = description;
+    }
+
+    static getDisplayType() {
+        return "Section"
+    }
+}
+
+export default SectionHeaderModel;
