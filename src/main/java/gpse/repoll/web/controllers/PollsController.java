@@ -56,15 +56,12 @@ public class PollsController {
             System.out.println("TheSize " + userService.getOwnedPolls(username).size());
             //polls.addAll(userService.getOwnedPolls(user.getId()));
 
-            /*
-            for (Poll poll:pollService.getAll()) {
-                for (UUID pollId:user.getOwnPolls()) {
-                    if (pollId == poll.getId()) {
-                        polls.add(poll);
-                    }
-                }
-            }*/
+            System.out.println("Polls : " + user.getOwnPolls());
+            System.out.println("Poll: " + user.getOwnPolls().get(0));
 
+            for (UUID pollId:user.getOwnPolls()) {
+                polls.add(pollService.getPoll(pollId));
+            }
 
 
             //System.out.println("Name: " + user.getUsername());
