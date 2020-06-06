@@ -13,7 +13,7 @@ public interface StatisticsService {
      * @param pollId
      * @return Absolute Frequency.
      */
-    List<StatisticsQuestion> getAll(UUID pollId);
+    List<QuestionStatistics> getAll(UUID pollId);
 
     /**
      * Calculate the absolute frequency of all Choices within a given question.

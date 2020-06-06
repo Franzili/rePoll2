@@ -4,7 +4,6 @@ import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.questions.Question;
-import gpse.repoll.domain.poll.questions.SingleChoiceQuestion;
 import gpse.repoll.domain.service.QuestionService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.ChoiceCmd;
