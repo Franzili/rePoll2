@@ -1,9 +1,21 @@
 <template>
     <b-container>
 
-        <b-button @click="showModal" > lalaa</b-button>
-        <myModal ref="mymodal" v-bind:modalObj="getPollStructure"></myModal>
+        <p>
+            {{cardList}}
+        </p>
 
+        <b-button @click="showModal" > lalaa</b-button>
+        <!-- TODO v-on with funtion-->
+        <myModal
+
+            v-on:getSelected="$event !== [] && cardList.push($event)"
+            ref="mymodal"
+            v-bind:modalObj="getPollStructure"
+        ></myModal>
+        <b-button @click="cardList = []">
+            kill
+        </b-button>
         <p>
             {{getPollStructure}}
         </p>
@@ -16,6 +28,11 @@
 
     export default {
         name: "Compare",
+        data() {
+            return {
+                cardList: []
+            }
+        },
         computed: {
             ...mapState('currentPoll', {
                 statistics: 'statistics'
@@ -25,8 +42,8 @@
             })
         },
         created() {
-            console.log('compre tab: ')
-            console.log(this.getPollStructure)
+            //console.log('compre tab: ')
+            //console.log(this.getPollStructure)
         },
         methods: {
             showModal() {

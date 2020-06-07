@@ -5,7 +5,9 @@
         ref="modal"
         header-border-variant="dark"
         footer-border-variant="dark"
-        v-if="showModal">
+        v-if="showModal"
+        @ok="$emit('getSelected', selected)"
+        >
         <div class="d-block text-center">
             <b-container  v-bind:key="section.id" v-for="section in modalObj">
                 <b-row>
@@ -18,7 +20,7 @@
                         <b-row>
                             <b-col cols="11">{{statistic.question.title}}</b-col>
                             <b-col cols="1">
-                                <b-form-checkbox :value="statistic.question.id"></b-form-checkbox>
+                                <b-form-checkbox :value="statistic"></b-form-checkbox>
                             </b-col>
                         </b-row>
                     </b-container>
@@ -40,16 +42,17 @@
             }
         },
         created() {
-            console.log('im modal: ')
-            console.log(this.modalObj)
+            //console.log('im modal: ')
+            //console.log(this.modalObj)
         },
         methods: {
             show() {
+                this.selected = []
                 this.$refs.modal.show()
             },
             hide() {
                 this.$refs.modal.hide()
-            }
+            },
         }
     }
 </script>

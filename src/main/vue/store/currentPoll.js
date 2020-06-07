@@ -40,7 +40,7 @@ const currentPoll = {
         },
 
         statStructureObj: state => {
-            console.log(' hi ich bin im gtetter anfang')
+            //console.log(' hi ich bin im gtetter anfang')
             let strObj = [];
             state.poll.pollSections.forEach(section => {
                 let statObjList = []
@@ -51,7 +51,7 @@ const currentPoll = {
                 let secObj = {title: section.title,id: section.id, statistics: statObjList}
                 strObj.push(secObj)
             })
-            console.log(' bye bye ich bin am Ende des getters')
+            //console.log(' bye bye ich bin am Ende des getters')
             return strObj
         },
 
