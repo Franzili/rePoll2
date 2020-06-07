@@ -24,6 +24,10 @@
                 getPollStructure: 'statStructureObj'
             })
         },
+        created() {
+            console.log('compre tab: ')
+            console.log(this.getPollStructure)
+        },
         methods: {
             showModal() {
                 this.$refs.mymodal.show()

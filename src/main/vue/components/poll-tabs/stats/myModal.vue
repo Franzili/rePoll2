@@ -14,11 +14,11 @@
 
 
                 <b-form-checkbox-group v-model="selected">
-                    <b-container v-bind:key="stat.question.id" v-for="stat in section.statistics">
+                    <b-container v-bind:key="statistic.question.id" v-for="statistic in section.statistics">
                         <b-row>
-                            <b-col cols="11">{{stat.question.title}}</b-col>
+                            <b-col cols="11">{{statistic.question.title}}</b-col>
                             <b-col cols="1">
-                                <b-form-checkbox :value="stat.question.id"></b-form-checkbox>
+                                <b-form-checkbox :value="statistic.question.id"></b-form-checkbox>
                             </b-col>
                         </b-row>
                     </b-container>
@@ -38,6 +38,10 @@
                 showModal: true,
                 selected: [],
             }
+        },
+        created() {
+            console.log('im modal: ')
+            console.log(this.modalObj)
         },
         methods: {
             show() {
