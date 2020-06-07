@@ -1,6 +1,6 @@
 import api from "../api";
 
-import {makeQuestion, SectionHeader} from "./poll-item-models/index"
+import SectionHeaderModel from "./poll-item-models/SectionHeaderModel";
 
 /**
  * currentPoll holds the state of the Poll that is currently open, or otherwise in focus.
@@ -12,7 +12,10 @@ const currentPoll = {
         /**
          * The current poll object.
          */
-        poll: {},
+        poll: {
+            questions: [],
+            pollSections: []
+        },
         /**
          * The statistics belonging to that poll object.
          */
@@ -28,10 +31,11 @@ const currentPoll = {
         pollStructureFlat: state => {
             let res = [];
             state.poll.pollSections.forEach(section => {
-                res.push(new SectionHeader(section.id, section.title, section.description));
+                res.push(new SectionHeaderModel(section.id, section.title, section.description));
                 section.questions.forEach(q => {
                     let questionObject = state.poll.questions.find(item => item.id === q.id);
-                    res.push(makeQuestion(questionObject));
+                    //res.push(makeQuestion(questionObject));
+                    res.push(questionObject);
                 });
             });
             return res;
