@@ -16,21 +16,21 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/v1/polls/")
 @Secured(Roles.POLL_CREATOR)
-public class StatisticsQuestionController {
+public class StatisticsController {
 
     private final StatisticsService statisticsService;
 
     @Autowired
-    public StatisticsQuestionController(StatisticsService statisticsService) {
+    public StatisticsController(StatisticsService statisticsService) {
         this.statisticsService = statisticsService;
     }
 
-    @GetMapping("{pollId}/statistics/questions/")
+    @GetMapping("{pollId}/statistics/")
     public List<QuestionStatistics> listStatistics(@PathVariable UUID pollId) {
         return statisticsService.getAll(pollId);
     }
 
-    @GetMapping("{pollId}/statistics/questions/{questionId:\\d+}/")
+    @GetMapping("{pollId}/statistics/{questionId:\\d+}/")
     public QuestionStatistics getStatistics(@PathVariable UUID pollId, @PathVariable String questionId) {
          return statisticsService.getStatistics(pollId, Long.valueOf(questionId));
     }
