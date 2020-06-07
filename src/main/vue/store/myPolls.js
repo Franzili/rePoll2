@@ -37,7 +37,8 @@ const myPolls = {
          * Re-loads the polls from backend.
          * Will set loadStatus to "DONE" once finished.
          */
-        load({commit}, userId) { //,userId)
+        load({commit, rootState}) { //,userId)
+            let userId = rootState.auth.username
             return new Promise((resolve, reject) => {
                 commit('loadStatus', "LOADING");
                 //api.poll.list().then(function (res) {

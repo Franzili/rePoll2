@@ -28,6 +28,7 @@ const auth = {
          */
         requestToken({commit}, credentials) {
             //hier set username von credentials
+            commit('setUsername',credentials.username)
             return new Promise((resolve, reject) => {
                 api.auth.login(credentials.username, credentials.password)
                     .then(function (res) {
@@ -75,6 +76,12 @@ const auth = {
 
             localStorage.setItem('authToken', token);
         },
+        /**
+         * sets the username
+         */
+        setUsername(state, username) {
+            state.username = username;
+        }
 
     },
 
