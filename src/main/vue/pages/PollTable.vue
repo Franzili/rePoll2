@@ -38,7 +38,7 @@
     export default {
         name: "PollTable",
 
-        mounted() {
+        created() {
             this.loadPolls()
         },
 

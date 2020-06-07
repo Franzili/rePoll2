@@ -1,6 +1,6 @@
 import api from "../api";
 
-import {makeQuestion, SectionHeader} from "./poll-item-models/index"
+import SectionHeaderModel from "./poll-item-models/SectionHeaderModel";
 
 /**
  * currentPoll holds the state of the Poll that is currently open, or otherwise in focus.
@@ -12,7 +12,12 @@ const currentPoll = {
         /**
          * The current poll object.
          */
-        poll: {},
+        poll: {
+            questions: [],
+            pollSections: []
+        },
+        answers: [],
+        pollAnswers: [],
         /**
          * The statistics belonging to that poll object.
          */
@@ -28,14 +33,70 @@ const currentPoll = {
         pollStructureFlat: state => {
             let res = [];
             state.poll.pollSections.forEach(section => {
-                res.push(new SectionHeader(section.id, section.title, section.description));
+                res.push(new SectionHeaderModel(section.id, section.title, section.description));
                 section.questions.forEach(q => {
                     let questionObject = state.poll.questions.find(item => item.id === q.id);
-                    res.push(makeQuestion(questionObject));
+                    //res.push(makeQuestion(questionObject));
+                    res.push(questionObject);
                 });
             });
             return res;
         },
+
+        pollStructureObj: state => {
+            let strObj = [];
+            state.poll.pollSections.forEach(section => {
+                let qObjList = []
+                section.questions.forEach(q => {
+                    let choice = {text: q.title, value: q.id}
+                    qObjList.push(choice)
+                })
+                let secObj = {label: section.title, options: qObjList}
+                strObj.push(secObj)
+            })
+            return strObj
+        },
+
+        // returns array of objects usable for table
+        getAnswerSetByID: (state) => {
+            return (id) => {
+                let match = Object.entries((state.pollAnswers.find(answerSet => answerSet.question.id === id))
+                    .userAnswerMap)
+                let tableObj = []
+                if (match[0][1].type === 'TextAnswer') {
+                    for (let i = 0; i < match.length; i++) {
+                        let entry = {Username: match[i][0], Answers: match[i][1].text}
+                        tableObj = [...tableObj, entry]
+                    }
+                    return tableObj
+
+                } else if (match[0][1].type === 'SingleChoiceAnswer') {
+                    for (let i = 0; i < match.length; i++) {
+                        let entry = {Username: match[i][0], Answers: match[i][1].choice.text}
+                        tableObj = [...tableObj, entry]
+                    }
+                    return tableObj
+
+                } else if (match[0][1].type === 'ScaleAnswer') {
+                    for (let i = 0; i < match.length; i++) {
+                        let entry = {Username: match[i][0], Answers: match[i][1].scaleNumber}
+                        tableObj = [...tableObj, entry]
+                    }
+                    return tableObj
+
+                } else {
+                    for (let i = 0; i < match.length; i++) {
+                        let answers = ''
+                        for (let j = 0; j < match[i][1].choices.length; j++) {
+                            answers = match[i][1].choices[j].text + ', ' + answers
+                        }
+                        let entry = {Username: match[i][0], Answers: answers}
+                        tableObj = [...tableObj, entry]
+                    }
+                    return tableObj
+                }
+            }
+        }
     },
 
     mutations: {
@@ -55,9 +116,21 @@ const currentPoll = {
             Object.assign(state.poll, pollCmd)
         },
 
+        updatePollSection(state, pollSectionCmd) {
+            let pollSection = state.poll.pollSections.find(section => section.id === pollSectionCmd.id);
+            Object.assign(pollSection, pollSectionCmd);
+        },
 
         setMetaStats(state, newMetaStats) {
             state.statistics = newMetaStats
+        },
+
+        setAnswersById(state, newAnswers) {
+            state.answers = newAnswers
+        },
+
+        setPollAnswers(state, newPollAnswers) {
+            state.pollAnswers = newPollAnswers
         }
     },
 
@@ -106,7 +179,47 @@ const currentPoll = {
                     reject();
                 })
             })
-        }
+        },
+
+        updatePollItem({commit, state}, pollItemModel) {
+            console.log(pollItemModel);
+            if (pollItemModel.type === 'SectionHeaderModel') {
+                let pollSectionCmd = {
+                    id: pollItemModel.id,
+                    title: pollItemModel.title,
+                    description: pollItemModel.description
+                }
+                commit('updatePollSection', pollSectionCmd);
+                return new Promise(function(resolve, reject) {
+                    api.poll.updatePollSection(state.poll.id, pollSectionCmd).catch(function(error) {
+                        console.log(error);
+                        reject();
+                    })
+                })
+            }
+        },
+        loadPollAnswers({commit}, id) {
+            return new Promise((resolve, reject) => {
+                api.statistics.getPollAnswers(id).then(function (res) {
+                    commit('setPollAnswers', res.data);
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
+        },
+        loadAnswersById({commit}, answerCmd) {
+            return new Promise((resolve, reject) => {
+                api.statistics.getAnswersById(answerCmd.poll, answerCmd.quest).then(function (res) {
+                    commit('setAnswersById', res.data);
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
+        },
     },
 
     namespaced: true

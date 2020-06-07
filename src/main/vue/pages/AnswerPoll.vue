@@ -22,13 +22,15 @@
     export default {
         name: "AnswerPoll",
         created() {
-            this.requestPolls()
+            this.loadPolls()
         },
-        computed: mapState({
+        computed: mapState('myPolls',{
             polls: state => state.polls
         }),
         methods: {
-            ...mapActions(['requestPolls'])
+            ...mapActions('myPolls', {
+                loadPolls: 'load'
+            })
         },
         components: {
             AnswerPollTableList
