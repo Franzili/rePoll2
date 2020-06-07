@@ -103,7 +103,7 @@
         },
         methods: {
             ...mapActions('currentPoll', {
-                loadPoll: 'load'
+                loadPoll: 'load',
             })
         },
         created() {
