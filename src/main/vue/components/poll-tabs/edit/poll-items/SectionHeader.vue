@@ -1,18 +1,15 @@
 <template>
-    <b-card class="header-card">
-        <h2>{{ model.title }}</h2>
+    <div>
         <span class="text-muted">{{ model.description }}</span>
-    </b-card>
+    </div>
 </template>
 
 <script>
-    import SectionHeaderModel from "../../../../store/poll-item-models/SectionHeaderModel";
-
     export default {
         name: "SectionHeader",
         props: {
             model: {
-                type: SectionHeaderModel,
+                type: Object,
                 required: true
             }
         }
@@ -20,8 +17,4 @@
 </script>
 
 <style scoped>
-    .header-card {
-        margin-top: 20px;
-        border: none;
-    }
 </style>
