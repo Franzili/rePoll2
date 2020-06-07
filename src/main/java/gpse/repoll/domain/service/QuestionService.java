@@ -1,7 +1,6 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.Choice;
-import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.questions.*;
 
 import java.util.List;
@@ -18,11 +17,10 @@ public interface QuestionService {
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param charLimit The char limit for the answer.
-     * @param lastEditor The last user that edited the poll
      * @return The newly created TextQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    TextQuestion addTextQuestion(UUID pollId, String questionTitle, int questionOrder, int charLimit, User lastEditor);
+    TextQuestion addTextQuestion(UUID pollId, String questionTitle, int questionOrder, int charLimit);
 
     /**
      * Add a new ScaleQuestion to a Poll.
@@ -32,10 +30,12 @@ public interface QuestionService {
      * @param scaleNameLeft The name for the left part of the scale
      * @param scaleNameRight The name for the right part of the scale
      * @param stepCount The number of steps the scale has
-     * @param lastEditor The last user that edited the poll
+     * @param min The minimum of the scale
+     * @param max The maximum of the scale
      * @return The newly created ScaleQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     ScaleQuestion addScaleQuestion(
             UUID pollId,
             String questionTitle,
@@ -43,41 +43,40 @@ public interface QuestionService {
             String scaleNameLeft,
             String scaleNameRight,
             int stepCount,
-            User lastEditor);
+            int min,
+            int max);
 
     /**
-     * Add a new RadioButtonQuestion to a Poll.
+     * Add a new SingleChoiceQuestion to a Poll.
      * @param pollId The Poll's ID
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
-     * @param lastEditor The last user that edited the poll
-     * @return The newly created RadioButtonQuestion
+     * @param displayVariant The display variant
+     * @return The newly created SingleChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    RadioButtonQuestion addRadioButtonQuestion(
+    SingleChoiceQuestion addSingleChoiceQuestion(
             UUID pollId,
             String questionTitle,
             int questionOrder,
             List<Choice> choices,
-            User lastEditor);
+            String displayVariant);
 
     /**
-     * Add a new ChoiceQuestion to a Poll.
+     * Add a new MultiChoiceQuestion to a Poll.
      * @param pollId The Poll's ID
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
-     * @param lastEditor The last user that edited the poll
-     * @return The newly created ChoiceQuestion
+     * @return The newly created MultiChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    ChoiceQuestion addChoiceQuestion(
+    MultiChoiceQuestion addMultiChoiceQuestion(
             UUID pollId,
             String questionTitle,
             int questionOrder,
-            List<Choice> choices,
-            User lastEditor);
+            List<Choice> choices);
 
     /**
      * Gets all Questions belonging to a Poll.
@@ -103,7 +102,6 @@ public interface QuestionService {
      * @param questionOrder The order for the Questions
      * @param questionTitle The title of the Question
      * @param charLimit The limit of characters for the answer
-     * @param lastEditor The last user that edited the poll
      * @return The changed TextQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
@@ -113,8 +111,7 @@ public interface QuestionService {
             Long questionId,
             int questionOrder,
             String questionTitle,
-            int charLimit,
-            User lastEditor);
+            int charLimit);
 
     /**
      * Update a ScaleQuestion.
@@ -125,12 +122,10 @@ public interface QuestionService {
      * @param scaleNameLeft The name of the left part of the scale
      * @param scaleNameRight The name of the right part of the scale
      * @param stepCount The number of steps the scale has
-     * @param lastEditor The last user that edited the poll
      * @return The changed ScaleQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    @SuppressWarnings("checkstyle:ParameterNumber")
     ScaleQuestion updateScaleQuestion(
             UUID pollId,
             Long questionId,
@@ -138,45 +133,40 @@ public interface QuestionService {
             String questionTitle,
             String scaleNameLeft,
             String scaleNameRight,
-            int stepCount,
-            User lastEditor);
+            int stepCount);
 
     /**
-     * Update a RadioButtonQuestion.
+     * Update a SingleChoiceQuestion.
      * @param pollId The Poll's ID
      * @param questionId The Question's ID
      * @param questionOrder The order for the Questions
      * @param questionTitle The title of the Question
      * @param choices The possible answers
-     * @param lastEditor The last user that edited the poll
-     * @return The changed RadioButtonQuestion
+     * @return The changed SingleChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    RadioButtonQuestion updateRadioButtonQuestion(
+    SingleChoiceQuestion updateSingleChoiceQuestion(
             UUID pollId,
             Long questionId,
             int questionOrder,
             String questionTitle,
-            List<Choice> choices,
-            User lastEditor);
+            List<Choice> choices);
     /**
-     * Update a ChoiceQuestion.
+     * Update a MultiChoiceQuestion.
      * @param pollId The Poll's ID
      * @param questionId The Question's ID
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
-     * @param lastEditor The last user that edited the poll
-     * @return The changed ChoiceQuestion
+     * @return The changed MultiChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
-    ChoiceQuestion updateChoiceQuestion(
+    MultiChoiceQuestion updateMultiChoiceQuestion(
             UUID pollId,
             Long questionId,
             int questionOrder,
             String questionTitle,
-            List<Choice> choices,
-            User lastEditor);
+            List<Choice> choices);
 }

@@ -1,22 +1,22 @@
 <template>
     <div>
         <p class="poll-mode-indicator">
-            <i v-if="this.poll.anonymity === 'NON_ANONYMOUS'">
+            <i v-if="poll.anonymity === 'NON_ANONYMOUS'">
                 Poll for known participants.</i>
-            <i v-if="this.poll.anonymity === 'PSEUDONYMOUS'">
+            <i v-if="poll.anonymity === 'PSEUDONYMOUS'">
                 Poll for pseudonymized participants.</i>
-            <i v-if="this.poll.anonymity === 'ANONYMOUS'">
+            <i v-if="poll.anonymity === 'ANONYMOUS'">
                 Poll for anonymized participants.</i>
         </p>
 
 
-        <b-card v-if="this.poll.status === 'IN_PROCESS'">
+        <b-card v-if="poll.status === 'IN_PROCESS'">
             <h6>Anonymity</h6>
 
             <b-form-radio-group
                 v-on:input="changeAnonymityConfirmation"
                 v-model="anonymityChecked"
-                initial-anonymity-checked=this.poll.anonymity>
+                initial-anonymity-checked=poll.anonymity>
 
                 <b-form-radio value="ANONYMOUS" :disabled="waitingForConfirmation">
                     anonymous<br>
@@ -57,30 +57,29 @@
 </template>
 
 <script>
-    import axios from "axios";
-    import {mapGetters} from "vuex";
+    import {mapState, mapActions} from "vuex";
 
     export default {
         name: "Anonymity",
-        props: ["initialAnonoymityChecked"],
         data() {
             return {
-                tmpID: 0,
-                anonymityChecked: this.initialAnonymityChecked,
+                anonymityChecked: '',
                 sureToChangeAnonymity: false,
                 waitingForConfirmation: false
             }
         },
         computed: {
-            ...mapGetters(['getPoll']),
-            poll() {
-                return this.getPoll(this.tmpID)
-            }
+            ...mapState('currentPoll', {
+                poll: 'poll'
+            })
         },
-        created: function () {
-            this.tmpID = this.$route.params.tmpPollID;
+        created() {
+            this.anonymityChecked = this.poll.anonymity
         },
         methods: {
+            ...mapActions('currentPoll', {
+                updatePoll: 'update'
+            }),
             changeAnonymityConfirmation: function () {
                 if (this.poll.anonymity !== this.anonymityChecked) {
                     this.sureToChangeAnonymity = true
@@ -93,14 +92,11 @@
                 this.sureToChangeAnonymity = false
                 this.poll.anonymity = this.anonymityChecked
                 this.waitingForConfirmation = false
-                let pollCmd = this.poll
-                console.log(this.poll.id)
-                axios.put('/api/v1/polls/'+ this.poll.id + '/', pollCmd)
-                    .then((response) => {
-                        console.log(response.data)
-                    }).catch((err) => {
-                    console.log(err.message)
-                })
+                let pollCmd = {
+                    id: this.poll.id,
+                    anonymity: this.poll.anonymity
+                }
+                this.updatePoll(pollCmd);
             },
             dontChangeAnonymity() {
                 this.sureToChangeAnonymity = false

@@ -4,10 +4,18 @@ import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.Answer;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public interface PollEntryService {
+
+    /**
+     * Gets all PollEntries of a poll.
+     * @param pollId The Poll's ID
+     * @return The list of the PollEntries
+     */
+    List<PollEntry> getAll(UUID pollId);
 
     /**
      * Add a new PollEntry to a Poll.

@@ -48,7 +48,7 @@
         created() {
         },
 
-        // ...maps at top, functions provided by store
+        // ...maps at top, functions provided by index
         computed: {
             ...mapGetters([]),
             _ImSomethingElse() {

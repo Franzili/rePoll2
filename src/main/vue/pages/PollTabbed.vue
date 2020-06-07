@@ -1,5 +1,5 @@
 <template>
-    <b-container>
+    <b-container fluid="lg">
 
         <!-- To make the tab bar fit on the right side of the title,
              we actually use b-tab Components: one for the navigation,
@@ -8,7 +8,7 @@
 
         <b-row class="primary-tab-bar sticky align-items-baseline">
             <b-col>
-                <h3>Titel: Moby Dick</h3>
+                <h3>Titel: {{ poll.title }}</h3>
             </b-col>
             <b-col>
                 <b-tabs pills align="right" v-model="activeTab">
@@ -42,8 +42,6 @@
                 </b-tabs>
             </b-col>
         </b-row>
-
-
     </b-container>
 </template>
 
@@ -85,35 +83,32 @@
     */
 
     import ConfigurePoll from "../components/poll-tabs/configure/ConfigurePoll";
-    import CreatePoll from "./CreatePoll";
+    import CreatePoll from "../components/poll-tabs/edit/EditPoll";
     import PollStats from "../components/poll-tabs/stats/PollStats";
-    import {mapActions, mapGetters} from "vuex";
+    import {mapState, mapActions} from "vuex";
     export default {
         name: "PollTabbed",
         data() {
             return {
-                tmpID: 0,
-                activeTab: '',
+                activeTab: 0,
                 TAB_CONFIGURE: 0,
                 TAB_EDIT: 1,
                 TAB_STATISTICS: 2,
             }
         },
-        created() {
-            this.tmpID = this.$route.params.tmpPollID
-            //this.activeTab = this.$route.params.tabWish
-            this.requestPoll(this.tmpID)
-
-        },
         computed: {
-            ...mapGetters(['getPoll']),
-            poll() {
-                return this.getPoll(this.tmpID)
-            }
+            ...mapState('currentPoll', {
+                poll: 'poll'
+            })
         },
         methods: {
-            ...mapActions(['requestPoll'])
-
+            ...mapActions('currentPoll', {
+                loadPoll: 'load',
+            })
+        },
+        created() {
+            let pollId = this.$route.params.pollId
+            this.loadPoll(pollId)
         },
         components: {ConfigurePoll, CreatePoll, PollStats}
     }
@@ -123,7 +118,7 @@
     @import "../assets/stylesheet.scss";
 
     .primary-tab-bar {
-        top: 65px;
+        top: 80px;
         background-color: $floating-background-color;
     }
 

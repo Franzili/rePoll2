@@ -1,19 +1,16 @@
 package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.Choice;
-import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.poll.questions.SingleChoiceQuestion;
 import gpse.repoll.domain.service.QuestionService;
-import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.ChoiceCmd;
 import gpse.repoll.web.command.questions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,12 +29,10 @@ public class QuestionsController {
     private static final String NO_CHOICES = "No choices given for the question!";
 
     private final QuestionService questionService;
-    private final UserService userService;
 
     @Autowired
-    public QuestionsController(QuestionService questionService, UserService userService) {
+    public QuestionsController(QuestionService questionService) {
         this.questionService = questionService;
-        this.userService = userService;
     }
 
     @Secured(Roles.POLL_EDITOR)
@@ -46,12 +41,9 @@ public class QuestionsController {
                                 @RequestBody QuestionCmd questionCmd) {
         String title = questionCmd.getTitle();
         int questionOrder = questionCmd.getQuestionOrder();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User lastEditor = userService.getUser(auth.getName());
         if (questionCmd instanceof TextQuestionCmd) {
             TextQuestionCmd textQuestionCmd = (TextQuestionCmd) questionCmd;
-            return questionService.addTextQuestion(pollId, title, questionOrder, textQuestionCmd.getCharLimit(),
-                    lastEditor);
+            return questionService.addTextQuestion(pollId, title, questionOrder, textQuestionCmd.getCharLimit());
         } else if (questionCmd instanceof ScaleQuestionCmd) {
             ScaleQuestionCmd scaleQuestionCmd = (ScaleQuestionCmd) questionCmd;
             return questionService.addScaleQuestion(pollId,
@@ -60,27 +52,38 @@ public class QuestionsController {
                     scaleQuestionCmd.getScaleNameLeft(),
                     scaleQuestionCmd.getScaleNameRight(),
                     scaleQuestionCmd.getStepCount(),
-                    lastEditor);
-        } else if (questionCmd instanceof RadioButtonQuestionCmd) {
-            RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            if (radioButtonQuestionCmd.getChoices() == null) {
+                    scaleQuestionCmd.getMin(),
+                    scaleQuestionCmd.getMax());
+        } else if (questionCmd instanceof SingleChoiceQuestionCmd) {
+            SingleChoiceQuestionCmd singleChoiceQuestionCmd = (SingleChoiceQuestionCmd) questionCmd;
+            if (singleChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : singleChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.addRadioButtonQuestion(pollId, title, questionOrder, choices, lastEditor);
-        } else if (questionCmd instanceof ChoiceQuestionCmd) {
-            ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
-            if (choiceQuestionCmd.getChoices() == null) {
+            if (singleChoiceQuestionCmd.getDisplayVariant() == null
+                    || (!singleChoiceQuestionCmd.getDisplayVariant().equals("radio")
+                    && !singleChoiceQuestionCmd.getDisplayVariant().equals("dropdown"))) {
+                throw new BadRequestException("No display variant given for the question!");
+            }
+            return questionService.addSingleChoiceQuestion(
+                    pollId,
+                    title,
+                    questionOrder,
+                    choices,
+                    singleChoiceQuestionCmd.getDisplayVariant());
+        } else if (questionCmd instanceof MultiChoiceQuestionCmd) {
+            MultiChoiceQuestionCmd multiChoiceQuestionCmd = (MultiChoiceQuestionCmd) questionCmd;
+            if (multiChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.addChoiceQuestion(pollId, title, questionOrder, choices, lastEditor);
+            return questionService.addMultiChoiceQuestion(pollId, title, questionOrder, choices);
         }
         // This should never happen
         throw new InternalServerErrorException();
@@ -110,15 +113,12 @@ public class QuestionsController {
         Long questionId = Long.valueOf(qId);
         String title = questionCmd.getTitle();
         int questionOrder = questionCmd.getQuestionOrder();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User lastEditor = userService.getUser(auth.getName());
         if (questionCmd instanceof TextQuestionCmd) {
             return questionService.updateTextQuestion(pollId,
                     questionId,
                     questionOrder,
                     title,
-                    ((TextQuestionCmd) questionCmd).getCharLimit(),
-                    lastEditor);
+                    ((TextQuestionCmd) questionCmd).getCharLimit());
         } else if (questionCmd instanceof ScaleQuestionCmd) {
             ScaleQuestionCmd scaleQuestionCmd = (ScaleQuestionCmd) questionCmd;
             return questionService.updateScaleQuestion(pollId,
@@ -127,29 +127,28 @@ public class QuestionsController {
                     title,
                     scaleQuestionCmd.getScaleNameLeft(),
                     scaleQuestionCmd.getScaleNameRight(),
-                    scaleQuestionCmd.getStepCount(),
-                    lastEditor);
-        } else if (questionCmd instanceof RadioButtonQuestionCmd) {
-            RadioButtonQuestionCmd radioButtonQuestionCmd = (RadioButtonQuestionCmd) questionCmd;
-            if (radioButtonQuestionCmd.getChoices() == null) {
+                    scaleQuestionCmd.getStepCount());
+        } else if (questionCmd instanceof SingleChoiceQuestionCmd) {
+            SingleChoiceQuestionCmd singleChoiceQuestionCmd = (SingleChoiceQuestionCmd) questionCmd;
+            if (singleChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : radioButtonQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : singleChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.updateRadioButtonQuestion(
-                    pollId, questionId, questionOrder, title, choices, lastEditor);
-        } else if (questionCmd instanceof ChoiceQuestionCmd) {
-            ChoiceQuestionCmd choiceQuestionCmd = (ChoiceQuestionCmd) questionCmd;
-            if (choiceQuestionCmd.getChoices() == null) {
+            return questionService.updateSingleChoiceQuestion(
+                    pollId, questionId, questionOrder, title, choices);
+        } else if (questionCmd instanceof MultiChoiceQuestionCmd) {
+            MultiChoiceQuestionCmd multiChoiceQuestionCmd = (MultiChoiceQuestionCmd) questionCmd;
+            if (multiChoiceQuestionCmd.getChoices() == null) {
                 throw new BadRequestException(NO_CHOICES);
             }
             List<Choice> choices = new ArrayList<>();
-            for (ChoiceCmd choiceCmd : choiceQuestionCmd.getChoices()) {
+            for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.updateChoiceQuestion(pollId, questionId, questionOrder, title, choices, lastEditor);
+            return questionService.updateMultiChoiceQuestion(pollId, questionId, questionOrder, title, choices);
         }
         // This should never happen
         throw new InternalServerErrorException();

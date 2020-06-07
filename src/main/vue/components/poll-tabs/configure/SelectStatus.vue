@@ -5,35 +5,35 @@
         <b-row class="align-items-center">
             <b-col>
                 <b-form-radio-group
-                    v-model="selected"
+                    v-model="statusSelected"
                     name="plain-inline">
                     <b-form-radio value="IN_PROCESS"
-                                  :disabled="poll.status === 'READY'
-                                || poll.status === 'ACTIVATED'
-                                || poll.status === 'DEACTIVATED'">In Bearbeitung</b-form-radio>
+                                  :disabled="this.pollStatus === 'READY'
+                                || this.pollStatus === 'ACTIVATED'
+                                || this.pollStatus === 'DEACTIVATED'">In Bearbeitung</b-form-radio>
                     <b-form-radio value="READY"
-                                  :disabled="poll.status === 'ACTIVATED'
-                                || poll.status === 'DEACTIVATED'">Bereit</b-form-radio>
+                                  :disabled="this.pollStatus === 'ACTIVATED'
+                                || this.pollStatus === 'DEACTIVATED'">Bereit</b-form-radio>
                     <b-form-radio value="ACTIVATED"
-                                  :disabled="poll.status === 'DEACTIVATED'">Aktiviert</b-form-radio>
+                                  :disabled="this.pollStatus === 'DEACTIVATED'">Aktiviert</b-form-radio>
                     <b-form-radio value="DEACTIVATED">Deaktiviert</b-form-radio>
                 </b-form-radio-group>
             </b-col>
 
             <b-col cols="2">
                 <b-button class="float-right" v-b-modal.modal-center>Apply</b-button>
-                <b-modal v-if="isStatusChange()"
+                <b-modal v-if="this.pollStatus !== statusSelected"
                          id="modal-center"
                          centered
                          title="Are you sure you want to change poll status?"
                          header-bg-variant="danger"
-                         @ok="handleOk">
-                    <p v-if="poll.status === 'IN_PROCESS'">
+                         @ok="doUpdate()">
+                    <p v-if="this.pollStatus === 'IN_PROCESS'">
                         If you proceed you won't be able to change the degree of anonymity anymore
                         and the status can no longer be changed in a previous one.
                     </p>
                     <p class="my-4" v-else>
-                        If you proceed the status can no longer be changed in a previos one.
+                        If you proceed the status can no longer be changed in a previous one.
                     </p>
                 </b-modal>
             </b-col>
@@ -42,45 +42,33 @@
 </template>
 
 <script>
-    import axios from "axios";
-    import {mapGetters} from "vuex";
+    import {mapActions, mapState} from "vuex";
 
     export default {
         name: "SelectStatus",
         data() {
             return {
-                tmpID: 0,
-                selected: ''
+                statusSelected: "",
             }
         },
         computed: {
-            ...mapGetters(['getPoll']),
-            poll() {
-                return this.getPoll(this.tmpID)
-            }
-        },
-        created: function () {
-            this.tmpID = this.$route.params.tmpPollID;
+            ...mapState('currentPoll', {
+                pollId: state => state.poll.id,
+                pollStatus: state => state.poll.status,
+            }),
         },
         methods: {
-            isStatusChange() {
-                if (this.selected === '') {
-                    return false
+            ...mapActions('currentPoll', {
+                updatePoll: 'update'
+            }),
+            doUpdate() {
+                let pollCmd = {
+                    id: this.pollId,
+                    status: this.statusSelected
                 }
-                return !(this.selected === this.poll.status)
-            },
-            handleOk() {
-                this.poll.status = this.selected
-                let pollCmd = this.poll
-                console.log(this.poll.id)
-                axios.put('/api/v1/polls/'+ this.poll.id + '/', pollCmd)
-                    .then((response) => {
-                        console.log(response.data)
-                    }).catch((err) => {
-                    console.log(err.message)
-                })
-            },
-        }
+                this.updatePoll(pollCmd);
+            }
+        },
     }
 </script>
 

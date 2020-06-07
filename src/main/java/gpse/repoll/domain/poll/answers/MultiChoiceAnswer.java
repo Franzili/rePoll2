@@ -1,4 +1,4 @@
-package gpse.repoll.domain.poll.questions;
+package gpse.repoll.domain.poll.answers;
 
 import gpse.repoll.domain.poll.Choice;
 
@@ -8,12 +8,13 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A question that can be answered with a @link{RadioButtonAnswer}.
+ * One or more chosen answers of multiple options.
  */
 @Entity
-public class RadioButtonQuestion extends Question {
+public class MultiChoiceAnswer extends Answer {
 
-    @OneToMany
+    @ManyToMany
+    @JoinColumn
     private final List<Choice> choices = new ArrayList<>();
 
     public List<Choice> getChoices() {
@@ -22,14 +23,6 @@ public class RadioButtonQuestion extends Question {
 
     public void setChoices(List<Choice> choices) {
         this.choices.clear();
-        this.choices.addAll(choices);
-    }
-
-    public void add(Choice choice) {
-        this.choices.add(choice);
-    }
-
-    public void addAll(List<Choice> choices) {
         this.choices.addAll(choices);
     }
 }

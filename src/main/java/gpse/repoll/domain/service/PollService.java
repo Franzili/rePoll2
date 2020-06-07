@@ -3,7 +3,6 @@ package gpse.repoll.domain.service;
 import gpse.repoll.domain.Anonymity;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollStatus;
-import gpse.repoll.domain.User;
 
 import java.util.List;
 import java.util.Map;
@@ -30,10 +29,9 @@ public interface PollService {
      * Add a new Poll.
      * This internally creates a new Poll object and sets the appropriate parameters.
      * @param title The title of the Poll object
-     * @param creator The user that was responsible for creating the poll.
      * @return The Poll object created.
      */
-    Poll addPoll(String title, User creator);
+    Poll addPoll(String title);
 
     /**
      * Get a Poll by its ID.
@@ -49,18 +47,16 @@ public interface PollService {
      * @param id The Poll's ID
      * @param title A new title, or null
      * @param status The status of the Poll
-     * @param structure The structure for the Poll
-     * @param lastEditor The last user that edited the poll
      * @param anonymity The anonymity of the poll
+     * @param structure The structure for the Poll
      * @return The updated Poll.
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the poll could not be found.
      */
     Poll updatePoll(UUID id,
                     String title,
                     PollStatus status,
-                    Map<UUID, List<Long>> structure,
-                    User lastEditor,
-                    Anonymity anonymity);
+                    Anonymity anonymity,
+                    Map<UUID, List<Long>> structure);
 
     /**
      * Deletes the poll from the database.

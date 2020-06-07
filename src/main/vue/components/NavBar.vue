@@ -1,5 +1,5 @@
 <template>
-    <b-container class="sticky nav-container">
+    <b-container class="sticky nav-container" fluid="lg">
         <b-navbar toggleable="" type="dark" class="nav">
             <b-navbar-brand href="#">
                 <img v-on:click="toStart" src="../assets/logo.png" width="123" height="27" alt>
@@ -16,6 +16,9 @@
                 <b-navbar-nav class="ml-auto">
                     <b-nav-item>
                         <router-link class="link" :to="'/account/'">Account</router-link>
+                    </b-nav-item>
+                    <b-nav-item>
+                        <router-link class="link" :to="'/admin/'">Admin</router-link>
                     </b-nav-item>
                     <b-nav-item>
                         <router-link class="link" :to="'/polls/'">Polls</router-link>
@@ -59,7 +62,7 @@
     .nav-container {
         z-index: $zindex-sticky;
         top: 0;
-        padding-bottom: 20px;
+        padding-bottom: 21px;
         background-color: $floating-background-color;
     }
 

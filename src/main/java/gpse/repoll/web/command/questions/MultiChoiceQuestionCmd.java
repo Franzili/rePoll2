@@ -6,8 +6,8 @@ import gpse.repoll.web.command.ChoiceCmd;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonTypeName("ChoiceQuestion")
-public class ChoiceQuestionCmd extends QuestionCmd {
+@JsonTypeName("MultiChoiceQuestion")
+public class MultiChoiceQuestionCmd extends QuestionCmd {
 
     private List<ChoiceCmd> choices = new ArrayList<>();
 

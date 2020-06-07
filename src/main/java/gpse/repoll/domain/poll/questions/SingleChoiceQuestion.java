@@ -2,23 +2,30 @@ package gpse.repoll.domain.poll.questions;
 
 import gpse.repoll.domain.poll.Choice;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 /**
- * A question that can be answered with a @link{ChoiceAnswer}.
+ * A question that can be answered with a @link{SingleChoiceAnswer}.
  */
 @Entity
-public class ChoiceQuestion extends Question {
+public class SingleChoiceQuestion extends Question {
 
     @OneToMany
-    @JoinColumn
     private final List<Choice> choices = new ArrayList<>();
+
+    @Column
+    private String displayVariant = "radio";
+
+    public String getDisplayVariant() {
+        return displayVariant;
+    }
+
+    public void setDisplayVariant(String variant) {
+        this.displayVariant = variant;
+    }
 
     public List<Choice> getChoices() {
         return Collections.unmodifiableList(choices);

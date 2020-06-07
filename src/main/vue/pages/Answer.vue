@@ -11,7 +11,7 @@
                             <b-col></b-col>
                             <b-form-group>
 
-                                <div :key="question.id" v-for="question in this.poll.questions">
+                                <div :key="question.id" v-for="question in questions">
 
                                 <!--
                                 <div :key="item.id" v-for="item in items">
@@ -56,11 +56,13 @@
                 id: 0,
                 sections: [],
                 questions: [],
+                edit: false
             }
         },
         created() {
-            this.id = this.$route.params.id
-            this.poll = this.getPoll(this.id)
+            this.id = this.$route.params.id;
+            this.poll = this.getPoll(this.id);
+            this.questions = this.poll.questions;
         },
         computed: {
             ...mapGetters(['getPoll']),
@@ -90,7 +92,7 @@
         methods: {
             ...mapMutations(['updatePoll']),
             savePollEntry() {
-                this.updatePoll(this.poll)
+                this.updatePoll(this.poll);
                 this.$router.push('/') //redirect to page '', here start page
             }
         },
