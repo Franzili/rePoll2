@@ -222,13 +222,14 @@
                 }
                 /**
                  * todo
-                 * Aufruf der Store Funktion für Mails
+                 * Create a new user
                  * let credentials = {userName: VUE_Variable, eMail: VUE_Variable}
                  * this.sendMailRequest(credentials)
                  */
                 let VUE_Variable;
                 let credentials = {
-                    userName: VUE_Variable, eMail: VUE_Variable
+                    userName: VUE_Variable,
+                    eMail: VUE_Variable
                 }
                 this.sendMailInvite(credentials)
             },
