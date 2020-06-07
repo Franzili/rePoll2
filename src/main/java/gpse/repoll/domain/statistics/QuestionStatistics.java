@@ -58,7 +58,6 @@ public class QuestionStatistics {
     }
 
     private void computeFrequencies() {
-        List<Frequency> newFrequencies = new ArrayList<>();
         int countAllChoices = 0;
         Map<Choice, Integer> choiceCountMap = new HashMap<>();
         if (question instanceof SingleChoiceQuestion) {
