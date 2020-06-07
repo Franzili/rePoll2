@@ -30,6 +30,10 @@ public class QuestionStatistics {
 
     private final List<CumulativeFrequency> cumulativeFrequencies = new ArrayList<>();
 
+    private final Frequency median;
+
+    private final Quartiles quartiles;
+
     public QuestionStatistics(Question question, List<PollEntry> pollEntries) {
         this.question = question;
         this.answers.addAll(getAnswersTo(this.question, pollEntries));
@@ -42,6 +46,12 @@ public class QuestionStatistics {
             computeFrequencies();
             computeMode();
             computeCumulativeFrequencies();
+            computeMedian(this.frequencies);
+            this.median = computeMedian(this.frequencies);
+            this.quartiles = computeQuartiles();
+        } else {
+            this.median = null;
+            this.quartiles = null;
         }
     }
 
@@ -143,6 +153,36 @@ public class QuestionStatistics {
         for (Frequency frequency : maxima) {
             mode.add(frequency.getChoice());
         }
+    }
+
+    /**
+     * Calculates the median of the absolute frequencies of a question.
+     * The median is the {@link Frequency} of a specific choice, with the absolute frequency, that would be in the
+     * middle of a sorted list of the frequencies to all choices.
+     * If the count of choices to the question is even, the lower value is chosen.
+     * @return The {@link Frequency}, where the absolute frequency is the median
+     */
+    private Frequency computeMedian(List<Frequency> frequencies) {
+        List<Frequency> freq = new ArrayList<>(frequencies);
+        freq.sort(null);
+        // ScaleQuestions are converted into SingleChoiceQuestions in the QuestionStatistics Constructor
+        int size = freq.size();
+        int middle = size / 2;
+        return freq.get(middle);
+    }
+
+    /**
+     * Calculates the lower and upper quartile of the frequencies.
+     * @return {@link Quartiles} that contain the first and the third quartile of the frequencies
+     */
+    private Quartiles computeQuartiles() {
+        List<Frequency> freq = new ArrayList<>(frequencies);
+        freq.sort(null);
+        int size = freq.size();
+        int chunkSize = freq.size() % 2 == 0 ? freq.size() / 2 : (freq.size() / 2) + 1;
+        List<Frequency> firstHalf = freq.subList(0, chunkSize);
+        List<Frequency> secondHalf = freq.subList(chunkSize + 1, size);
+        return new Quartiles(computeMedian(firstHalf), computeMedian(secondHalf));
     }
 
     private void computeCumulativeFrequencies() {
