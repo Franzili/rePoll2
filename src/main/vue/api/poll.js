@@ -28,8 +28,16 @@ export default {
         return axios.post('api/v1/polls/' + poll.id + '/entries/', pollEntryCmd);
     },
     answerAgain(poll) { //saving every following time changing the answers
-        let pollEntryCmd = {pollID: poll.id , user: poll.user};
-        return axios.put('api/v1/polls/' + poll.id + '/entries/' + poll.id.entry.id , pollEntryCmd);
-
+        let pollEntryCmd = {pollID: poll.id, user: poll.user};
+        return axios.put('api/v1/polls/' + poll.id + '/entries/' + poll.id.entry.id, pollEntryCmd);
     }
+
+        /*
+    update(pollCmd) {
+        return axios.put('/api/v1/polls/' + pollCmd.id + '/', pollCmd);
+    },
+    delete(id) {
+        return axios.delete('/api/v1/polls/' + id + '/')
+
+    }*/
 }
