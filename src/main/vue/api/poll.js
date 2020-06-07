@@ -16,8 +16,8 @@ export default {
     update(pollCmd) {
         return axios.put('/api/v1/polls/' + pollCmd.id + '/', pollCmd);
     },
-    listOwn() {
-        return axios.get('api/v1/users/{userId}/ownPolls/') //' + id + '
+    listOwn(userId) {
+        return axios.get('api/v1/users/{' + userId + '/ownPolls/') //' + id + ' //{userId}
     },
     listAssigned() {
         return axios.get('api/v1/users/{userId}/assignedPolls/')

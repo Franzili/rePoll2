@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * REST Controller managing /api/v1/users/* entry points.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/users")
@@ -115,12 +117,13 @@ public class UsersController {
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @GetMapping("/{userId}/ownPolls/")
-    public List<Poll> getOwnedPolls(@PathVariable  String userId) {
+    public List<Poll> getOwnedPolls(@PathVariable  String userId) { //String userId //UUID userId
         //public List<Poll> getOwnedPolls(@PathVariable("userId") final UUID userId) { //UUID userId)
 
         List<Poll> ownPolls = new ArrayList<>();
         if (isValidUuid(userId)) {
-            for (UUID pollId:userService.getOwnedPolls(UUID.fromString(userId))) {
+            //for (UUID pollId:userService.getOwnedPolls(UUID.fromString(userId))) {
+            for (UUID pollId:userService.getOwnedPolls(userId)) {
                 ownPolls.add(pollService.getPoll(pollId));
             }
         }

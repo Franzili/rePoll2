@@ -51,51 +51,21 @@ public class PollsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getPrincipal().toString();
         User user = userService.getUser(username);
-        if (user.getRoles().contains(Roles.ADMIN)) {
-            pollService.getAll().forEach(ownPolls::add);
-        } else if (user.getRoles().contains(Roles.POLL_CREATOR)) {
-            for (UUID pollId:user.getOwnPolls()) {
-                ownPolls.add(pollService.getPoll(pollId));
-            }
-        } else if (user.getRoles().contains(Roles.POLL_EDITOR)) {
-            for (UUID pollId:user.getOwnPolls()) {
-                ownPolls.add(pollService.getPoll(pollId));
-            }
-        } else if (user.getRoles().contains(Roles.PARTICIPANT)) {
-            for (UUID pollId:user.getOwnPolls()) {
-                ownPolls.add(pollService.getPoll(pollId));
-            }
-        } //else if (user.getRoles().contains(Roles.NO_ROLE)) {
-            //userService.getOwnedPolls(user.getId());
-        //}
+        for (UUID pollId:user.getOwnPolls()) {
+            ownPolls.add(pollService.getPoll(pollId));
+        }
         return ownPolls;
     }
 
-    // todo this has to be fixed in future, now is blocking frontend from accessing the database
-    //@Secured(Roles.POLL_CREATOR)
     @GetMapping("/")
     public List<Poll> listAssignedPolls() {
         List<Poll> assignedPolls = new ArrayList<>();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getPrincipal().toString();
         User user = userService.getUser(username);
-        if (user.getRoles().contains(Roles.ADMIN)) {
-            pollService.getAll().forEach(assignedPolls::add);
-        } else if (user.getRoles().contains(Roles.POLL_CREATOR)) {
-            for (UUID pollId:user.getOwnPolls()) {
-                assignedPolls.add(pollService.getPoll(pollId));
-            }
-        } else if (user.getRoles().contains(Roles.POLL_EDITOR)) {
-            for (UUID pollId:user.getOwnPolls()) {
-                assignedPolls.add(pollService.getPoll(pollId));
-            }
-        } else if (user.getRoles().contains(Roles.PARTICIPANT)) {
-            for (UUID pollId:user.getOwnPolls()) {
-                assignedPolls.add(pollService.getPoll(pollId));
-            }
-        } //else if (user.getRoles().contains(Roles.NO_ROLE)) {
-            //userService.getOwnedPolls(user.getId());
-        //}
+        for (UUID pollId:user.getOwnPolls()) {
+            assignedPolls.add(pollService.getPoll(pollId));
+        }
         return assignedPolls;
     }*/
 
