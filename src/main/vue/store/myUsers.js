@@ -16,7 +16,8 @@ const myUsers = {
             state.users.filter(user => user.id !== id)
         },
         update(state, user) {
-            state.users.update(user)
+            let IndexOldUser = state.users.findIndex(oldUser => oldUser.id === user.id)
+            state.users[IndexOldUser] = user;
         }
     },
     actions: {
@@ -66,7 +67,8 @@ const myUsers = {
             })
         }
 
-    }
+    },
+    namespaced: true
 }
 
 export default myUsers;

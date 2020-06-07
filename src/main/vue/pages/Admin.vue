@@ -1,5 +1,8 @@
 <template>
     <b-container>
+        <p>
+            {{users}}
+        </p>
         <b-row>
             <p style="margin-left: 20vw; margin-top: 2vh"></p>
         </b-row>
@@ -12,36 +15,45 @@
                  id="modal-1"
                  role="dialog"
                  title="User-Configuration">
-            <div class="modal-content">
-                <div class="modal-body" style="padding:40px 50px;">
-                    <form role="form">
-                        <div class="form-group">
-                            <label for="username"><span class="glyphicon glyphicon-user"></span> Username</label>
-                            <input v-model="username" class="form-control" id="username" placeholder="Enter Username" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label for="password"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
-                            <input class="form-control" id="password" placeholder="Enter Password" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label for="fullname"><span class="glyphicon glyphicon-eye-open"></span> Fullname</label>
-                            <input class="form-control" id="fullname" placeholder="Enter Fullname" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label for="mail"><span class="glyphicon glyphicon-eye-open"></span> E-Mail-Adress</label>
-                            <input class="form-control" id="mail" placeholder="Enter Mail" type="text">
-                        </div>
-                        <div class="form-group">
-                            <b-dropdown id="role"
-                                        text="Select Role"
-                                        class="m-2">
-                                <b-dropdown-item>Admin</b-dropdown-item>
-                                <b-dropdown-item>Creator</b-dropdown-item>
-                                <b-dropdown-item>Editor</b-dropdown-item>
-                            </b-dropdown>
-                        </div>
-                    </form>
-                </div>
+            <div>
+                <b-form-group
+                    label="Username:"
+                    label-for="username-input">
+                    <b-form-input
+                        id="username-input"
+                        v-model="username">
+                    </b-form-input>
+                </b-form-group>
+                <b-form-group
+                    v-if="!isUpdate"
+                    label="Password:"
+                    label-for="password-input">
+                    <b-form-input
+                        id="password-input"
+                        v-model="password">
+                    </b-form-input>
+                </b-form-group>
+                <b-form-group
+                    label="Fullname:"
+                    label-for="fullName-input">
+                    <b-form-input
+                        id="fullName-input"
+                        v-model="fullName">
+                    </b-form-input>
+                </b-form-group>
+                <b-form-group
+                    label="Email:"
+                    label-for="email-input">
+                    <b-form-input
+                        id="email-input"
+                        v-model="email">
+                    </b-form-input>
+                </b-form-group>
+                <b-form-group
+                    label="Role:"
+                    label-for="role-input">
+                    <b-form-select v-model="role" id="role-input" :options="options">Role</b-form-select>
+                </b-form-group>
             </div>
         </b-modal>
         <b-col>
@@ -80,7 +92,7 @@
                             class="mb-0">
                             <b-form-checkbox-group v-model="filterOn" class="mt-1">
                                 <b-form-checkbox value="username">Name</b-form-checkbox>
-                                <b-form-checkbox value="mail">Age</b-form-checkbox>
+                                <b-form-checkbox value="mail">Mail</b-form-checkbox>
                                 <b-form-checkbox value="role">Role</b-form-checkbox>
                             </b-form-checkbox-group>
                         </b-form-group>
@@ -91,7 +103,7 @@
                 <b-table
                     show-empty
                     small
-                    :items="items"
+                    :items="this.users"
                     :fields="fields"
                     :filter="filter"
                     :filterIncludedFields="filterOn"
@@ -105,7 +117,7 @@
 
                     <!-----Delete and Edit Button--->
                     <template v-slot:cell(actions)="row">
-                        <b-button size="sm" variant="primary" v-b-modal.modal-1 v-on:isUpdate="true">
+                        <b-button size="sm" variant="primary" v-b-modal.modal-1 @click="isUpdate=true">
                             Edit
                         </b-button>
                         <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1">
@@ -114,7 +126,7 @@
                     </template>
                 </b-table>
                 <b-col >
-                    <b-button class="addButton" v-b-modal.modal-1 v-on:isUpdate="false">+</b-button>
+                    <b-button class="addButton" v-b-modal.modal-1 @click="isUpdate=false">+</b-button>
                 </b-col>
             </b-card>
         </b-col>
@@ -128,19 +140,22 @@
         name: "Admin",
         data() {
             return {
-                //variable to change between add a new user or edit a user, when false: add a new user, when true: edit
                 isUpdate: false,
-                items: [
-
-                    {username: 'JamesBond', mail: 'jbond@mi6.com', role: 'Admin'},
-
-                    {username: 'JamesMartin', mail: 'jmartin@web.com', role: 'Creator'}
-
+                items: [],
+                options: [
+                    { value: 'ROLE_ADMIN', text: 'Admin'},
+                    { value: 'ROLE_POLL_CREATOR', text: 'Creator'},
+                    { value: 'ROLE_POLL_EDITOR', text: 'Editor'}
                 ],
+                username: '',
+                password: '',
+                fullName: '',
+                email: '',
+                role: '',
                 fields: [
                     { key: 'username', label: 'Username', sortable: true, sortDirection: 'desc' },
-                    { key: 'mail', label: 'E-Mail', sortable: true, class: 'text-center' },
-                    { key: 'role', label: 'Role', sortable: true, class: 'text-center' },
+                    { key: 'email', label: 'E-Mail', sortable: true, class: 'text-center' },
+                    { key: 'fullName', label: 'Fullname', sortable: true, class: 'text-center' },
                     { key: 'actions', label: 'Actions' }
                 ],
                 totalRows: 1,
@@ -158,15 +173,17 @@
         mounted() {
             // Set the initial number of items
             this.totalRows = this.items.length
+            this.loadUser()
+
         },
         methods: {
             ...mapActions('myUsers', {
                 createUser: "create",
                 updateUser: 'update',
-                deleteUser: 'delete',
+                deleteuser: 'delete',
                 loadUser: 'load'
             }),
-            async add_UpdateUser() {
+            add_UpdateUser() {
                 // Update user
                     if(this.isUpdate) {
                         this.isUpdate = false;
@@ -177,27 +194,27 @@
                             email: this.email,
                             role: this.role
                         };
-                        let user = await this.updateUser(userCmd);
-                        return this.$router.put({name: 'update', params: {userId: user.id}})
+                        this.updateUser(userCmd);
 
                     }
                     // Add new user
                     else {
                         let userCmd = {
                             username: this.username,
-                            password: this.username,
+                            password: this.password,
                             fullName: this.fullName,
                             email: this.email,
                             role: this.role
                         };
-                        let user = await this.createUser(userCmd);
-                        return this.$router.push({name: 'create', params: {userId: user.id}})
+                        console.log(userCmd);
+                        this.createUser(userCmd);
                     }
 
             },
-            deleteUser() {
-                this.deleteUser(this.user.id);
-                return this.$router.push('/')
+            deleteUser(row) {
+                console.log(row);
+                this.deleteuser(row.id);
+                this.loadUser();
             },
             onFiltered(filteredItems) {
                 this.totalRows = filteredItems.length
