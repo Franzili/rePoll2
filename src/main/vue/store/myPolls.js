@@ -64,6 +64,18 @@ const myPolls = {
                     reject();
                 });
             });
+        },
+        delete({commit,dispatch},id) {
+            return new Promise((resolve, reject) => {
+                api.poll.delete(id).then(function (res) {
+                    commit('currentPoll/set', {}, {root: true})
+                    dispatch('load')
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
         }
     },
 
