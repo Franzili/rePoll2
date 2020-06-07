@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -115,22 +116,27 @@ public class UsersController {
      * @param userId UUID identifier
      * @return List of polls owned by the user.
      */
-    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    //@PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @GetMapping("/{userId}/ownPolls/")
     public List<Poll> getOwnedPolls(@PathVariable  String userId) { //String userId //UUID userId
         //public List<Poll> getOwnedPolls(@PathVariable("userId") final UUID userId) { //UUID userId)
 
         List<Poll> ownPolls = new ArrayList<>();
+
+        //1. is user Id valid uuid else username
         if (isValidUuid(userId)) {
-            //for (UUID pollId:userService.getOwnedPolls(UUID.fromString(userId))) {
+            for (UUID pollId:userService.getOwnedPolls(UUID.fromString(userId))) {
+                ownPolls.add(pollService.getPoll(pollId));
+            }
+        } else {
             for (UUID pollId:userService.getOwnedPolls(userId)) {
                 ownPolls.add(pollService.getPoll(pollId));
             }
         }
 
-        return ownPolls;
 
-        //return  userService.getOwnedPolls(userId);
+
+        return ownPolls;
     }
 
     /**

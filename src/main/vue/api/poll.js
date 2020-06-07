@@ -22,8 +22,8 @@ export default {
     delete(id) {
         return axios.delete('/api/v1/polls/' + id + '/')
     },
-    listOwn(userId) {
-    return axios.get('api/v1/users/{' + userId + '/ownPolls/') //' + id + ' //{userId}
+    listOwn(userId) { //(userId) //()
+    return axios.get('api/v1/users/' + userId + '/ownPolls/') //' + userId + ' //{userId}
         },
     listAssigned() {
         return axios.get('api/v1/users/{userId}/assignedPolls/')
