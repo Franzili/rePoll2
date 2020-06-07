@@ -9,6 +9,7 @@ import gpse.repoll.domain.poll.answers.MultiChoiceAnswer;
 import gpse.repoll.domain.poll.answers.SingleChoiceAnswer;
 import gpse.repoll.domain.poll.questions.MultiChoiceQuestion;
 import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.poll.questions.ScaleQuestion;
 import gpse.repoll.domain.poll.questions.SingleChoiceQuestion;
 
 import java.util.*;
@@ -32,11 +33,37 @@ public class QuestionStatistics {
     public QuestionStatistics(Question question, List<PollEntry> pollEntries) {
         this.question = question;
         this.answers.addAll(getAnswersTo(this.question, pollEntries));
+
+        if (question instanceof ScaleQuestion) {
+            question = convertScaleToSingleChoiceQuestion((ScaleQuestion) question);
+        }
+
         if (question instanceof SingleChoiceQuestion || question instanceof MultiChoiceQuestion) {
             computeFrequencies();
             computeMode();
             computeCumulativeFrequencies();
         }
+    }
+
+    /**
+     * Converts a ScaleQuestion to a SingleChoiceQuestion to get the possibility to make Statistics on them.
+     * @param question question
+     * @return SingleChoiceQuestion
+     */
+    private SingleChoiceQuestion convertScaleToSingleChoiceQuestion(ScaleQuestion question) {
+        int min = question.getMin();
+        int max = question.getMax();
+        int stepCount = question.getStepCount();
+
+        // if (!(max % stepCount == 0)), the maximum is not included in the statistics :(
+
+        List<Choice> choices = new ArrayList<>();
+        for (int i = min; i <= max; i += stepCount) {
+            choices.add(new Choice(String.valueOf(i)));
+        }
+        SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion();
+        singleChoiceQuestion.setChoices(choices);
+        return singleChoiceQuestion;
     }
 
     /**
