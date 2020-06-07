@@ -5,11 +5,15 @@
                                 'question-card-is-header': model.type === 'SectionHeaderModel' } ">
             <div class="question-card-header">
                 <div v-if="editable" class="float-right">
-                    <b-button-group sm>
+                    <b-button-group size="sm">
                         <!-- edit button -->
-                        <b-button variant="outline-secondary" @click="toggleEdit">
-                            <b-icon-pencil v-if="!editing" />
-                            <b-icon-check v-else />
+                        <b-button variant="outline-secondary" v-if="!editing"
+                                                              @click="setEditing(true)">
+                            <b-icon-pencil/>
+                        </b-button>
+                        <b-button variant="outline-secondary" v-else
+                                                              @click="setEditing(false)">
+                            <b-icon-check/>
                         </b-button>
 
                         <!-- grab handle -->
@@ -79,18 +83,25 @@
             onModelChanged(newModel) {
                 this.model = newModel
             },
-            toggleEdit() {
+            setEditing(editing) {
                 if (!this.editable) {
-                    console.warn("Warning: toggling edit although this component is not editable. " +
+                    console.warn("Warning: changing editing state although this component is not editable. " +
                         "This should not happen.");
                 }
-                this.editing = !this.editing;
+                this.editing = editing
                 if (!this.editing) {
-                    this.onEditFinished()
+                    this.onEditFinished();
+                } else {
+                    this.onEditStarted();
                 }
             },
             onEditFinished() {
-                console.log("Edit finished!");
+                this.$emit('editFinished', this);
+                console.debug(`[RePoll] Poll Item ${this.model.id} finished editing.`);
+            },
+            onEditStarted() {
+                this.$emit('editStarted', this);
+                console.debug(`[RePoll] Poll Item ${this.model.id} started editing.`);
             }
         },
         components: {EditableLabel, SectionHeader, TextQuestion}

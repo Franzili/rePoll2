@@ -55,6 +55,10 @@ const currentPoll = {
             Object.assign(state.poll, pollCmd)
         },
 
+        updatePollSection(state, pollSectionCmd) {
+            let pollSection = state.poll.pollSections.find(section => section.id === pollSectionCmd.id);
+            Object.assign(pollSection, pollSectionCmd);
+        },
 
         setMetaStats(state, newMetaStats) {
             state.statistics = newMetaStats
@@ -106,6 +110,24 @@ const currentPoll = {
                     reject();
                 })
             })
+        },
+
+        updatePollItem({commit, state}, pollItemModel) {
+            console.log(pollItemModel);
+            if (pollItemModel.type === 'SectionHeaderModel') {
+                let pollSectionCmd = {
+                    id: pollItemModel.id,
+                    title: pollItemModel.title,
+                    description: pollItemModel.description
+                }
+                commit('updatePollSection', pollSectionCmd);
+                return new Promise(function(resolve, reject) {
+                    api.poll.updatePollSection(state.poll.id, pollSectionCmd).catch(function(error) {
+                        console.log(error);
+                        reject();
+                    })
+                })
+            }
         }
     },
 
