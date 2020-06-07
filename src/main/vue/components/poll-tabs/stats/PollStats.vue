@@ -37,7 +37,8 @@
         },
         methods: {
             ...mapActions('currentPoll', {
-                loadStatistics: 'loadMetaStats'
+                loadStatistics: 'loadMetaStats',
+                loadEntries: 'loadEntries'
             })
         },
         created() {

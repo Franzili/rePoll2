@@ -21,7 +21,8 @@ const currentPoll = {
         /**
          * The statistics belonging to that poll object.
          */
-        statistics: {}
+        statistics: {},
+        entries: []
     },
 
     getters: {
@@ -107,6 +108,10 @@ const currentPoll = {
             state.poll = newPoll
         },
 
+        setEntries(state, newEntries) {
+            state.entries = newEntries
+        },
+
         /**
          * Updates some poll parameters.
          * The pollCmd object may not be a full poll object. All parameters will be copied, so
@@ -142,6 +147,18 @@ const currentPoll = {
             return new Promise((resolve, reject) => {
                 api.poll.get(id).then(function (res) {
                     commit('set', res.data);
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                });
+            });
+        },
+
+        loadEntries({commit}, id) {
+            return new Promise((resolve, reject) => {
+                api.entries.list(id).then(function (res) {
+                    commit('setEntries', res.data);
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);
