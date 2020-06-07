@@ -17,7 +17,7 @@
                     <form role="form">
                         <div class="form-group">
                             <label for="username"><span class="glyphicon glyphicon-user"></span> Username</label>
-                            <input class="form-control" id="username" placeholder="Enter Username" type="text">
+                            <input v-model="username" class="form-control" id="username" placeholder="Enter Username" type="text">
                         </div>
                         <div class="form-group">
                             <label for="password"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
@@ -47,48 +47,6 @@
         <b-col>
             <b-card>
                 <b-row>
-                    <!----Sorting--->
-                    <b-col lg="6" class="my-1">
-                        <b-form-group
-                            label="Sort"
-                            label-cols-sm="3"
-                            label-align-sm="right"
-                            label-size="sm"
-                            label-for="sortBySelect"
-                            class="mb-0"
-                        >
-                            <b-input-group size="sm">
-                                <b-form-select v-model="sortBy" id="sortBySelect" :options="sortOptions" class="w-75">
-                                    <template v-slot:first>
-                                        <option value="">-- none --</option>
-                                    </template>
-                                </b-form-select>
-                                <b-form-select v-model="sortDesc" size="sm" :disabled="!sortBy" class="w-25">
-                                    <option :value="false">Asc</option>
-                                    <option :value="true">Desc</option>
-                                </b-form-select>
-                            </b-input-group>
-                        </b-form-group>
-                    </b-col>
-
-                    <b-col lg="6" class="my-1">
-                        <b-form-group
-                            label="Initial sort"
-                            label-cols-sm="3"
-                            label-align-sm="right"
-                            label-size="sm"
-                            label-for="initialSortSelect"
-                            class="mb-0"
-                        >
-                            <b-form-select
-                                v-model="sortDirection"
-                                id="initialSortSelect"
-                                size="sm"
-                                :options="['asc', 'desc', 'last']"
-                            ></b-form-select>
-                        </b-form-group>
-                    </b-col>
-
                     <!----Filter---->
                     <b-col lg="6" class="my-1">
                         <b-form-group
@@ -119,7 +77,6 @@
                             label-cols-sm="3"
                             label-align-sm="right"
                             label-size="sm"
-                            description="Leave all unchecked to filter on all data"
                             class="mb-0">
                             <b-form-checkbox-group v-model="filterOn" class="mt-1">
                                 <b-form-checkbox value="username">Name</b-form-checkbox>
@@ -138,7 +95,6 @@
                     :fields="fields"
                     :filter="filter"
                     :filterIncludedFields="filterOn"
-                    :sort-by.sync="sortBy"
                     :sort-desc.sync="sortDesc"
                     :sort-direction="sortDirection"
                     @filtered="onFiltered"
@@ -167,8 +123,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from "vuex";
-    //import axios from "axios";
+    import {mapActions, mapState} from "vuex";
     export default {
         name: "Admin",
         data() {
@@ -189,7 +144,6 @@
                     { key: 'actions', label: 'Actions' }
                 ],
                 totalRows: 1,
-                sortBy: '',
                 sortDesc: false,
                 sortDirection: 'asc',
                 filter: '',
@@ -197,34 +151,55 @@
             }
         },
         computed: {
-            ...mapGetters([]),
-            sortOptions() {
-                // Create an options list from our fields
-                return this.fields
-                    .filter(f => f.sortable)
-                    .map(f => {
-                        return { text: f.label, value: f.key }
-                    })
-            }
+            ...mapState('myUsers', {
+                users: 'users'
+            })
         },
         mounted() {
             // Set the initial number of items
             this.totalRows = this.items.length
         },
         methods: {
-            ...mapActions([]),
-            // write methods to your means
-            add_UpdateUser() {
+            ...mapActions('myUsers', {
+                createUser: "create",
+                updateUser: 'update',
+                deleteUser: 'delete',
+                loadUser: 'load'
+            }),
+            async add_UpdateUser() {
+                // Update user
                     if(this.isUpdate) {
                         this.isUpdate = false;
+                        let userCmd = {
+                            username: this.username,
+                            password: this.password,
+                            fullName: this.fullName,
+                            email: this.email,
+                            role: this.role
+                        };
+                        let user = await this.updateUser(userCmd);
+                        return this.$router.put({name: 'update', params: {userId: user.id}})
+
+                    }
+                    // Add new user
+                    else {
+                        let userCmd = {
+                            username: this.username,
+                            password: this.username,
+                            fullName: this.fullName,
+                            email: this.email,
+                            role: this.role
+                        };
+                        let user = await this.createUser(userCmd);
+                        return this.$router.push({name: 'create', params: {userId: user.id}})
                     }
 
             },
             deleteUser() {
-
+                this.deleteUser(this.user.id);
+                return this.$router.push('/')
             },
             onFiltered(filteredItems) {
-                // Trigger pagination to update the number of buttons/pages due to filtering
                 this.totalRows = filteredItems.length
             }
         },
