@@ -5,13 +5,11 @@
 </template>
 
 <script>
-    import SectionHeaderModel from "../../../../store/poll-item-models/SectionHeaderModel";
-
     export default {
         name: "SectionHeader",
         props: {
             model: {
-                type: SectionHeaderModel,
+                type: Object,
                 required: true
             }
         }

@@ -22,8 +22,6 @@
 </template>
 
 <script>
-    import TextQuestionModel from "../../../../store/poll-item-models/TextQuestionModel";
-
     export default {
         name: "TextQuestion",
         data() {
@@ -31,9 +29,16 @@
                 answerText: ""
             }
         },
+        computed: {
+            text: function() {
+                return {
+                    text: this.answerText
+                }
+            }
+        },
         props: {
             model: {
-                type: TextQuestionModel,
+                type: Object,
                 required: true
             },
             editing: {

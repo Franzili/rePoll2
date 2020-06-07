@@ -1,8 +1,8 @@
 <template>
     <li>
         <b-card class="question-card"
-                v-bind:class="{ 'question-card-hide-border': hideBorder || model.type === 'SectionHeaderModel',
-                                'question-card-is-header': model.type === 'SectionHeaderModel' } ">
+                v-bind:class="{ 'question-card-hide-border': hideBorder || model.type === 'SectionHeader',
+                                'question-card-is-header': model.type === 'SectionHeader' } ">
             <div class="question-card-header">
                 <div v-if="editable" class="float-right">
                     <b-button-group size="sm">
@@ -23,7 +23,7 @@
                     </b-button-group>
                 </div>
 
-                <EditableLabel v-if="model.type === 'SectionHeaderModel'"
+                <EditableLabel v-if="model.type === 'SectionHeader'"
                                tag="h2"
                                :value="model.title"
                                :editing="editing"
@@ -36,11 +36,24 @@
                                v-on:valueChanged="model.title = $event"/>
             </div>
 
-            <TextQuestion v-if="tmpModel.type === 'TextQuestionModel'"
+
+            <TextQuestion v-if="model.type === 'TextQuestion'"
                           :model="model"
                           :editing="editing"
                           v-on:modelChanged="onModelChanged($event)"/>
-            <SectionHeader v-if="tmpModel.type === 'SectionHeaderModel'"
+            <SingleChoiceQuestion v-else-if="model.type === 'SingleChoiceQuestion'"
+                                  :model="model"
+                                  :editing="editing"
+                                  v-on:modelChanged="onModelChanged($event)"/>
+            <MultiChoiceQuestion v-else-if="model.type === 'MultiChoiceQuestion'"
+                                 :model="model"
+                                 :editing="editing"
+                                 v-on:modelChanged="onModelChanged($event)"/>
+            <ScaleQuestion v-else-if="model.type === 'ScaleQuestion'"
+                           :model="model"
+                           :editing="editing"
+                           v-on:modelChanged="onModelChanged($event)"/>
+            <SectionHeader v-else-if="model.type === 'SectionHeader'"
                            :model="model"
                            :editing="editing"
                            v-on:modelChanged="onModelChanged($event)"/>
@@ -49,10 +62,12 @@
 </template>
 
 <script>
-    import PollItemModel from "../../../../store/poll-item-models/PollItemModel";
-
     import SectionHeader from "./SectionHeader";
     import TextQuestion from "./TextQuestion";
+    import SingleChoiceQuestion from "./SingleChoiceQuestion";
+    import MultiChoiceQuestion from "./MultiChoiceQuestion";
+    import ScaleQuestion from "./ScaleQuestion";
+
     import EditableLabel from "../../../EditableLabel";
 
     export default {
@@ -60,12 +75,11 @@
         data() {
             return {
                 editing: false,
-                tmpModel: this.model
             }
         },
         props: {
             model: {
-                type: PollItemModel,
+                type: Object,
                 required: true
             },
             editable: {
@@ -104,7 +118,14 @@
                 console.debug(`[RePoll] Poll Item ${this.model.id} started editing.`);
             }
         },
-        components: {EditableLabel, SectionHeader, TextQuestion}
+        components: {
+            TextQuestion,
+            MultiChoiceQuestion,
+            SingleChoiceQuestion,
+            ScaleQuestion,
+            SectionHeader,
+            EditableLabel,
+        }
     }
 </script>
 
