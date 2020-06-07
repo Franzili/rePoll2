@@ -15,8 +15,7 @@
 
             <b-form-radio-group
                 v-on:input="changeAnonymityConfirmation"
-                v-model="anonymityChecked"
-                initial-anonymity-checked=poll.anonymity>
+                v-model="anonymityChecked">
 
                 <b-form-radio value="ANONYMOUS" :disabled="waitingForConfirmation">
                     anonymous<br>
@@ -42,8 +41,6 @@
             </b-form-radio-group>
 
 
-
-
                 <b-alert class="alert-info" role="alert" align="center" v-model="sureToChangeAnonymity">
                     <strong>Warning!</strong>
                     Are you sure that you want to change the level of anonymity to {{anonymityChecked}}?<br>
@@ -65,33 +62,37 @@
             return {
                 anonymityChecked: '',
                 sureToChangeAnonymity: false,
-                waitingForConfirmation: false
+                waitingForConfirmation: false,
+                first: ''
             }
         },
         computed: {
             ...mapState('currentPoll', {
-                poll: 'poll'
+                poll: 'poll',
             })
         },
-        created() {
-            this.anonymityChecked = this.poll.anonymity
+        created: function() {
+            this.anonymityChecked = this.poll.anonymity;
         },
         methods: {
             ...mapActions('currentPoll', {
                 updatePoll: 'update'
             }),
             changeAnonymityConfirmation: function () {
+                if (this.anonymityChecked === null) { // weg
+                    console.log("anonymity gleich null")
+                }
                 if (this.poll.anonymity !== this.anonymityChecked) {
-                    this.sureToChangeAnonymity = true
+                    this.sureToChangeAnonymity = true;
                     this.waitingForConfirmation = true
                 } else {
                     this.sureToChangeAnonymity = false
                 }
             },
             changeAnonymity() {
-                this.sureToChangeAnonymity = false
-                this.poll.anonymity = this.anonymityChecked
-                this.waitingForConfirmation = false
+                this.sureToChangeAnonymity = false;
+                this.poll.anonymity = this.anonymityChecked;
+                this.waitingForConfirmation = false;
                 let pollCmd = {
                     id: this.poll.id,
                     anonymity: this.poll.anonymity
