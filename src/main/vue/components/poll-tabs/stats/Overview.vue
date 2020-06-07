@@ -8,12 +8,17 @@
                 Section: {{section.title}}
             </h5>
 
-            <b-card  border-variant="dark"
-                     style="margin-top: 1rem; margin-bottom: 1rem"
-                     v-bind:key="statistic.question.id"
-                     v-for="statistic in section.statistics">
-                <ChartCards v-bind:statistic="statistic"></ChartCards>
-            </b-card>
+            <div v-if="section.statistics[0] !== undefined">
+                <b-card  border-variant="dark"
+                         style="margin-top: 1rem; margin-bottom: 1rem"
+                         v-bind:key="statistic.question.id"
+                         v-for="statistic in section.statistics">
+
+                    <ChartCards v-bind:statistic="statistic"></ChartCards>
+                </b-card>
+            </div>
+
+
         </b-container>
     </div>
 </template>
