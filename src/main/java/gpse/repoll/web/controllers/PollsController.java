@@ -45,6 +45,7 @@ public class PollsController {
     /*
     // todo this has to be fixed in future, now is blocking frontend from accessing the database
     //@Secured(Roles.POLL_CREATOR)
+    //TODO only one GetMapping("/") allowed .combine all and return list of lists ?
     @GetMapping("/")
     public List<Poll> listOwnPolls() {
         List<Poll> ownPolls = new ArrayList<>();
@@ -67,6 +68,13 @@ public class PollsController {
             assignedPolls.add(pollService.getPoll(pollId));
         }
         return assignedPolls;
+    }*/
+
+    /*
+    @GetMapping("/")
+    public List<List<Poll>> listPollLists() {
+
+
     }*/
 
     @Secured(Roles.POLL_CREATOR)

@@ -13,7 +13,8 @@ const auth = {
          * - null if we have not tried yet
          */
         authenticated: null,
-        token: null
+        token: null,
+        username: null
     },
 
     getters: {
@@ -26,6 +27,7 @@ const auth = {
          * This will set the token and the 'authenticated' state.
          */
         requestToken({commit}, credentials) {
+            //hier set username von credentials
             return new Promise((resolve, reject) => {
                 api.auth.login(credentials.username, credentials.password)
                     .then(function (res) {
