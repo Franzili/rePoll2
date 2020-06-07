@@ -18,7 +18,6 @@
             })
         },
         components: { PollItem }
-
     }
 </script>
 
