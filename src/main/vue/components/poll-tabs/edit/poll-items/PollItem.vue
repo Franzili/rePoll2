@@ -8,7 +8,8 @@
                     <b-button-group sm>
                         <!-- edit button -->
                         <b-button variant="outline-secondary" @click="toggleEdit">
-                            <b-icon-pencil />
+                            <b-icon-pencil v-if="!editing" />
+                            <b-icon-check v-else />
                         </b-button>
 
                         <!-- grab handle -->
