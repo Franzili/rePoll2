@@ -10,7 +10,11 @@
                 -->
 
                 <b-col cols="8">
-                    <b-form-select v-model="selected" :options="this.structure"></b-form-select>
+                    <b-form-select v-model="selected" :options="this.structure">
+                        <template v-slot:first>
+                            <b-form-select-option :value="null">Select a question for display</b-form-select-option>
+                        </template>
+                    </b-form-select>
                 </b-col>
                 <b-col cols="4"></b-col>
             </b-row>
@@ -70,10 +74,10 @@
                 //selQuest: [],
             }
         },
-        created() {
+        mounted() {
             this.loadPollAnswers(this.poll.id)
             this.structure = this.getPollStructure
-            this.structure.splice(0,0, {value: null, text: 'Select a question for display'})
+
         },
         computed: {
             ...mapState('currentPoll', {
