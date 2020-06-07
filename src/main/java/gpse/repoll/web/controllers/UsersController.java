@@ -118,12 +118,8 @@ public class UsersController {
      */
     //@PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @GetMapping("/{userId}/ownPolls/")
-    public List<Poll> getOwnedPolls(@PathVariable  String userId) { //String userId //UUID userId
-        //public List<Poll> getOwnedPolls(@PathVariable("userId") final UUID userId) { //UUID userId)
-
+    public List<Poll> getOwnedPolls(@PathVariable  String userId) {
         List<Poll> ownPolls = new ArrayList<>();
-
-        //1. is user Id valid uuid else username
         if (isValidUuid(userId)) {
             for (UUID pollId:userService.getOwnedPolls(UUID.fromString(userId))) {
                 ownPolls.add(pollService.getPoll(pollId));
@@ -133,9 +129,6 @@ public class UsersController {
                 ownPolls.add(pollService.getPoll(pollId));
             }
         }
-
-
-
         return ownPolls;
     }
 
@@ -147,10 +140,16 @@ public class UsersController {
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @PutMapping("/{userId}/ownPolls/")
-    public User addOwnedPoll(@PathVariable UUID pollId, @PathVariable  String userId) {
+    public User addOwnedPoll(@RequestBody UUID pollId, @PathVariable  String userId) { //PathVariable UUID pollId
         //public User addOwnedPoll(@RequestBody UUID pollId, @PathVariable UUID userId) {
 
-        return userService.addOwnedPoll(pollId, UUID.fromString(userId));
+        if (isValidUuid(userId)) {
+            return userService.addOwnedPoll(pollId, UUID.fromString(userId));
+        } else {
+            return userService.addOwnedPoll(pollId, userId);
+        }
+
+        //return userService.addOwnedPoll(pollId, UUID.fromString(userId));
     }
 
     /**
@@ -159,17 +158,20 @@ public class UsersController {
      * @param userId UUID identifier
      * @return List of polls assigned to the user
      */
-    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    //@PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @GetMapping("/{userId}/assignedPolls/")
-    public List<Poll> getAssignedPolls(@PathVariable UUID userId) {
-
+    public List<Poll> getAssignedPolls(@PathVariable  String userId) {
         List<Poll> assignedPolls = new ArrayList<>();
-        for (UUID pollId:userService.getAssignedPolls(userId)) {
-            assignedPolls.add(pollService.getPoll(pollId));
+        if (isValidUuid(userId)) {
+            for (UUID pollId:userService.getOwnedPolls(UUID.fromString(userId))) {
+                assignedPolls.add(pollService.getPoll(pollId));
+            }
+        } else {
+            for (UUID pollId:userService.getOwnedPolls(userId)) {
+                assignedPolls.add(pollService.getPoll(pollId));
+            }
         }
         return assignedPolls;
-
-        //return  userService.getAssignedPolls(userId);
     }
 
     /**
@@ -180,36 +182,14 @@ public class UsersController {
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
     @PutMapping("/{userId}/assignedPolls/")
-    public User addAssignedPoll(@RequestBody UUID pollId, @PathVariable UUID userId) {
-        return userService.addAssignedPoll(pollId, userId); }
-
-/*
-
-    @GetMapping("/")
-    public List<Poll> listOwnPolls() {
-        List<Poll> ownPolls = new ArrayList<>();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getPrincipal().toString();
-        User user = userService.getUser(username);
-        for (UUID pollId:user.getOwnPolls()) {
-            ownPolls.add(pollService.getPoll(pollId));
+    public User addAssignedPoll(@RequestBody UUID pollId, @PathVariable String userId) {
+        if (isValidUuid(userId)) {
+            return userService.addAssignedPoll(pollId, UUID.fromString(userId));
+        } else {
+            return userService.addAssignedPoll(pollId, userId);
         }
-        return ownPolls;
+        //return userService.addAssignedPoll(pollId, userId);
     }
-
-
-    //@Secured(???)
-    @GetMapping("/")
-    public List<Poll> listAssignedPolls() {
-        List<Poll> assignedPolls = new ArrayList<>();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getPrincipal().toString();
-        User user = userService.getUser(username);
-        for (UUID pollId:user.getOwnPolls()) {
-            assignedPolls.add(pollService.getPoll(pollId));
-        }
-        return assignedPolls;
-    }*/
 
 
     /**

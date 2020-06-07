@@ -1,17 +1,12 @@
 package gpse.repoll.web.controllers;
 
-import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.service.PollService;
-import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.method.P;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -25,12 +20,10 @@ import java.util.*;
 public class PollsController {
 
     private final PollService pollService;
-    private final UserService userService;
 
     @Autowired
-    public PollsController(PollService pollService, UserService userService) {
+    public PollsController(PollService pollService) {
         this.pollService = pollService;
-        this.userService = userService;
     }
 
     // todo this has to be fixed in future, now is blocking frontend from accessing the database
@@ -41,41 +34,6 @@ public class PollsController {
         pollService.getAll().forEach(polls::add);
         return polls;
     }
-
-    /*
-    // todo this has to be fixed in future, now is blocking frontend from accessing the database
-    //@Secured(Roles.POLL_CREATOR)
-    //TODO only one GetMapping("/") allowed .combine all and return list of lists ?
-    @GetMapping("/")
-    public List<Poll> listOwnPolls() {
-        List<Poll> ownPolls = new ArrayList<>();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getPrincipal().toString();
-        User user = userService.getUser(username);
-        for (UUID pollId:user.getOwnPolls()) {
-            ownPolls.add(pollService.getPoll(pollId));
-        }
-        return ownPolls;
-    }
-
-    @GetMapping("/")
-    public List<Poll> listAssignedPolls() {
-        List<Poll> assignedPolls = new ArrayList<>();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getPrincipal().toString();
-        User user = userService.getUser(username);
-        for (UUID pollId:user.getOwnPolls()) {
-            assignedPolls.add(pollService.getPoll(pollId));
-        }
-        return assignedPolls;
-    }*/
-
-    /*
-    @GetMapping("/")
-    public List<List<Poll>> listPollLists() {
-
-
-    }*/
 
     @Secured(Roles.POLL_CREATOR)
     @PostMapping("/")

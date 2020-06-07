@@ -27,7 +27,6 @@ const auth = {
          * This will set the token and the 'authenticated' state.
          */
         requestToken({commit}, credentials) {
-            //hier set username von credentials
             commit('setUsername',credentials.username)
             return new Promise((resolve, reject) => {
                 api.auth.login(credentials.username, credentials.password)
