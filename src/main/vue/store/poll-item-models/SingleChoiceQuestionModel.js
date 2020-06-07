@@ -4,7 +4,7 @@ class SingleChoiceQuestionModel extends PollItemModel {
     constructor(id, title) {
         super();
         this.id = id;
-        this.type = "SingleChoiceQuestionModel";
+        this.type = "SingleChoiceQuestion";
         this.title = title;
     }
 

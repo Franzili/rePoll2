@@ -1,6 +1,6 @@
 import api from "../api";
 
-import {makeQuestion, SectionHeader} from "./poll-item-models/index"
+import SectionHeaderModel from "./poll-item-models/SectionHeaderModel";
 
 /**
  * currentPoll holds the state of the Poll that is currently open, or otherwise in focus.
@@ -12,7 +12,10 @@ const currentPoll = {
         /**
          * The current poll object.
          */
-        poll: {},
+        poll: {
+            questions: [],
+            pollSections: []
+        },
         answers: [],
         pollAnswers: [],
         /**
@@ -30,10 +33,11 @@ const currentPoll = {
         pollStructureFlat: state => {
             let res = [];
             state.poll.pollSections.forEach(section => {
-                res.push(new SectionHeader(section.id, section.title, section.description));
+                res.push(new SectionHeaderModel(section.id, section.title, section.description));
                 section.questions.forEach(q => {
                     let questionObject = state.poll.questions.find(item => item.id === q.id);
-                    res.push(makeQuestion(questionObject));
+                    //res.push(makeQuestion(questionObject));
+                    res.push(questionObject);
                 });
             });
             return res;
@@ -112,6 +116,11 @@ const currentPoll = {
             Object.assign(state.poll, pollCmd)
         },
 
+        updatePollSection(state, pollSectionCmd) {
+            let pollSection = state.poll.pollSections.find(section => section.id === pollSectionCmd.id);
+            Object.assign(pollSection, pollSectionCmd);
+        },
+
         setMetaStats(state, newMetaStats) {
             state.statistics = newMetaStats
         },
@@ -170,6 +179,24 @@ const currentPoll = {
                     reject();
                 })
             })
+        },
+
+        updatePollItem({commit, state}, pollItemModel) {
+            console.log(pollItemModel);
+            if (pollItemModel.type === 'SectionHeaderModel') {
+                let pollSectionCmd = {
+                    id: pollItemModel.id,
+                    title: pollItemModel.title,
+                    description: pollItemModel.description
+                }
+                commit('updatePollSection', pollSectionCmd);
+                return new Promise(function(resolve, reject) {
+                    api.poll.updatePollSection(state.poll.id, pollSectionCmd).catch(function(error) {
+                        console.log(error);
+                        reject();
+                    })
+                })
+            }
         },
         loadPollAnswers({commit}, id) {
             return new Promise((resolve, reject) => {

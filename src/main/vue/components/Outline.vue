@@ -5,8 +5,8 @@
         <b-nav-item v-for="item in pollStructure"
                            class="outline-item text-truncate"
                            v-bind:key="item.id"
-                           v-bind:class="{ header: item.type === 'SectionHeaderModel',
-                                           question: item.type !== 'SectionHeaderModel'}"
+                           v-bind:class="{ header: item.type === 'SectionHeader',
+                                           question: item.type !== 'SectionHeader'}"
                            :href="'#pollItem-' + item.id"
                            @click="scrollTo('pollItem-' + item.id, $event)">
             {{ item.title }}
