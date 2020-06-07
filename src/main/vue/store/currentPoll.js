@@ -192,7 +192,7 @@ const currentPoll = {
                     reject();
                 })
             })
-        }
+        },
     },
 
     namespaced: true

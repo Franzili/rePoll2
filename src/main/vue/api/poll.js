@@ -16,4 +16,7 @@ export default {
     update(pollCmd) {
         return axios.put('/api/v1/polls/' + pollCmd.id + '/', pollCmd);
     },
+    delete(id) {
+        return axios.delete('/api/v1/polls/' + id + '/')
+    }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <b-container>
         <b-row>
             <p style="margin-left: 20vw; margin-top: 2vh"></p>
         </b-row>
@@ -162,7 +162,7 @@
                 </b-col>
             </b-card>
         </b-col>
-    </div>
+    </b-container>
 
 </template>
 
@@ -226,9 +226,10 @@
             onFiltered(filteredItems) {
                 // Trigger pagination to update the number of buttons/pages due to filtering
                 this.totalRows = filteredItems.length
-            },
-            components: {
             }
+        },
+        components:{
+
         }
     }
 </script>
