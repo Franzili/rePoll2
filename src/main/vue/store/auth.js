@@ -55,6 +55,9 @@ const auth = {
         loadFromStorage({commit}) {
             let token = localStorage.getItem('authToken');
             commit('authenticate', token);
+
+            let username = localStorage.getItem('username');
+            commit('setUsername', username)
         }
     },
 
@@ -80,6 +83,9 @@ const auth = {
          */
         setUsername(state, username) {
             state.username = username;
+
+
+            localStorage.setItem('username', username)
         }
 
     },

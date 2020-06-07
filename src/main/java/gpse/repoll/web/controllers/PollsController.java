@@ -3,10 +3,14 @@ package gpse.repoll.web.controllers;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.service.PollService;
+import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.method.P;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -20,10 +24,12 @@ import java.util.*;
 public class PollsController {
 
     private final PollService pollService;
+    private final UserService userService;
 
     @Autowired
-    public PollsController(PollService pollService) {
+    public PollsController(PollService pollService, UserService userService) {
         this.pollService = pollService;
+        this.userService = userService;
     }
 
     // todo this has to be fixed in future, now is blocking frontend from accessing the database
