@@ -16,6 +16,8 @@ const currentPoll = {
             questions: [],
             pollSections: []
         },
+        answers: [],
+        pollAnswers: [],
         /**
          * The statistics belonging to that poll object.
          */
@@ -40,6 +42,61 @@ const currentPoll = {
             });
             return res;
         },
+
+        pollStructureObj: state => {
+            let strObj = [];
+            state.poll.pollSections.forEach(section => {
+                let qObjList = []
+                section.questions.forEach(q => {
+                    let choice = {text: q.title, value: q.id}
+                    qObjList.push(choice)
+                })
+                let secObj = {label: section.title, options: qObjList}
+                strObj.push(secObj)
+            })
+            return strObj
+        },
+
+        // returns array of objects usable for table
+        getAnswerSetByID: (state) => {
+            return (id) => {
+                let match = Object.entries((state.pollAnswers.find(answerSet => answerSet.question.id === id))
+                    .userAnswerMap)
+                let tableObj = []
+                if (match[0][1].type === 'TextAnswer') {
+                    for (let i = 0; i < match.length; i++) {
+                        let entry = {Username: match[i][0], Answers: match[i][1].text}
+                        tableObj = [...tableObj, entry]
+                    }
+                    return tableObj
+
+                } else if (match[0][1].type === 'SingleChoiceAnswer') {
+                    for (let i = 0; i < match.length; i++) {
+                        let entry = {Username: match[i][0], Answers: match[i][1].choice.text}
+                        tableObj = [...tableObj, entry]
+                    }
+                    return tableObj
+
+                } else if (match[0][1].type === 'ScaleAnswer') {
+                    for (let i = 0; i < match.length; i++) {
+                        let entry = {Username: match[i][0], Answers: match[i][1].scaleNumber}
+                        tableObj = [...tableObj, entry]
+                    }
+                    return tableObj
+
+                } else {
+                    for (let i = 0; i < match.length; i++) {
+                        let answers = ''
+                        for (let j = 0; j < match[i][1].choices.length; j++) {
+                            answers = match[i][1].choices[j].text + ', ' + answers
+                        }
+                        let entry = {Username: match[i][0], Answers: answers}
+                        tableObj = [...tableObj, entry]
+                    }
+                    return tableObj
+                }
+            }
+        }
     },
 
     mutations: {
@@ -66,6 +123,14 @@ const currentPoll = {
 
         setMetaStats(state, newMetaStats) {
             state.statistics = newMetaStats
+        },
+
+        setAnswersById(state, newAnswers) {
+            state.answers = newAnswers
+        },
+
+        setPollAnswers(state, newPollAnswers) {
+            state.pollAnswers = newPollAnswers
         }
     },
 
@@ -132,7 +197,29 @@ const currentPoll = {
                     })
                 })
             }
-        }
+        },
+        loadPollAnswers({commit}, id) {
+            return new Promise((resolve, reject) => {
+                api.statistics.getPollAnswers(id).then(function (res) {
+                    commit('setPollAnswers', res.data);
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
+        },
+        loadAnswersById({commit}, answerCmd) {
+            return new Promise((resolve, reject) => {
+                api.statistics.getAnswersById(answerCmd.poll, answerCmd.quest).then(function (res) {
+                    commit('setAnswersById', res.data);
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
+        },
     },
 
     namespaced: true

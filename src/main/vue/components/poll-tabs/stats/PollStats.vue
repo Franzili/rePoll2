@@ -35,11 +35,6 @@
                 pollId: 0,
             }
         },
-        /*computed: {
-            ...mapState('currentPoll', {
-                statistics: 'statistics'
-            })
-        },*/
         methods: {
             ...mapActions('currentPoll', {
                 loadStatistics: 'loadMetaStats'

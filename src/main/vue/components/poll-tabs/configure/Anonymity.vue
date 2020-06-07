@@ -61,10 +61,9 @@
 
     export default {
         name: "Anonymity",
-        props: ["initialAnonymityChecked"],
         data() {
             return {
-                anonymityChecked: this.initialAnonymityChecked,
+                anonymityChecked: '',
                 sureToChangeAnonymity: false,
                 waitingForConfirmation: false
             }
@@ -73,6 +72,9 @@
             ...mapState('currentPoll', {
                 poll: 'poll'
             })
+        },
+        created() {
+            this.anonymityChecked = this.poll.anonymity
         },
         methods: {
             ...mapActions('currentPoll', {
