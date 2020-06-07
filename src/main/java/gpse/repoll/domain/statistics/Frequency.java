@@ -2,7 +2,7 @@ package gpse.repoll.domain.statistics;
 
 import gpse.repoll.domain.poll.Choice;
 
-public class Frequency implements Comparable {
+public class Frequency implements Comparable<Frequency> {
 
     private final Choice choice;
 
@@ -28,7 +28,7 @@ public class Frequency implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        return Integer.compare(((Frequency) o).absolute, this.getAbsolute());
+    public int compareTo(Frequency o) {
+        return Integer.compare(o.absolute, this.getAbsolute());
     }
 }

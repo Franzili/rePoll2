@@ -30,6 +30,8 @@ public class QuestionStatistics {
 
     private final List<CumulativeFrequency> cumulativeFrequencies = new ArrayList<>();
 
+    private final double arithmeticMean;
+
     private final Frequency median;
 
     private final Quartiles quartiles;
@@ -52,6 +54,12 @@ public class QuestionStatistics {
         } else {
             this.median = null;
             this.quartiles = null;
+        }
+
+        if (question instanceof SingleChoiceQuestion) {
+            this.arithmeticMean = arithmeticMean();
+        } else {
+            this.arithmeticMean = 0;
         }
     }
 
@@ -183,6 +191,18 @@ public class QuestionStatistics {
         List<Frequency> firstHalf = freq.subList(0, chunkSize);
         List<Frequency> secondHalf = freq.subList(chunkSize + 1, size);
         return new Quartiles(computeMedian(firstHalf), computeMedian(secondHalf));
+    }
+
+    /**
+     * Calculates the arithmetic mean for ScaleQuestions.
+     * @return arithmetic mean of the corresponding question entries
+     */
+    private double arithmeticMean() {
+        final int[] value = {0};
+        frequencies.forEach(frequency -> {
+            value[0] += frequency.getAbsolute() * Integer.parseInt(frequency.getChoice().getText());
+        });
+        return value[0] / frequencies.size();
     }
 
     private void computeCumulativeFrequencies() {
