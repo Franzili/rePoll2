@@ -44,6 +44,7 @@
         created() {
             let pollId = this.$route.params.pollId
             this.loadStatistics(pollId)
+            this.loadEntries(pollId)
         },
         components: {Overview, Compare, Trends, Entries, Questions}
     }

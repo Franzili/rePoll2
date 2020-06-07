@@ -3,7 +3,7 @@
         <p> {{entries}} </p>
         <b-container>
             <b-col cols="8">
-                <b-form-select v-model="selected" :options="this.structure">
+                <b-form-select v-model="selected">
                     <template v-slot:first>
                         <b-form-select-option :value="null">Select a User</b-form-select-option>
                     </template>
