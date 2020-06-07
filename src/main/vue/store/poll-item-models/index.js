@@ -1,6 +1,5 @@
 /**
- * View Models for Question objects.
- * Note: Section Headers are also modeled here, in SectionHeaderModel.
+ * Models for Questions. These are used if we create question objects ourselves.
  */
 
 import TextQuestionModel from "./TextQuestionModel";
