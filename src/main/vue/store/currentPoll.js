@@ -44,6 +44,20 @@ const currentPoll = {
             return res;
         },
 
+
+        /**
+         * return the entries in form: [()]?
+         * */
+        entriesWithoutSection: state => {
+            let res = [];
+            state.entries.forEach(entry => {
+                console.log(entry.user.username);
+                let entryUser = {text: entry.user.username, value: entry.user.id};
+                res.push(entryUser)
+            });
+            return res;
+        },
+
         pollStructureObj: state => {
             let strObj = [];
             state.poll.pollSections.forEach(section => {
