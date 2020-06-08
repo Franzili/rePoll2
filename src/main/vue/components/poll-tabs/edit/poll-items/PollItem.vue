@@ -3,8 +3,23 @@
         <b-card class="question-card"
                 v-bind:class="{ 'question-card-hide-border': hideBorder || model.type === 'SectionHeader',
                                 'question-card-is-header': model.type === 'SectionHeader' } ">
-            <div class="question-card-header">
-                <div v-if="editable" class="float-right">
+
+            <p class="question-card-header">
+                <span class="question-card-title">
+                    <EditableLabel v-if="model.type === 'SectionHeader'"
+                                   tag="h2"
+                                   :value="model.title"
+                                   :editing="editing"
+                                   v-on:valueChanged="model.title = $event"/>
+
+                    <EditableLabel v-else
+                                   tag="b-card-title"
+                                   :value="model.title"
+                                   :editing="editing"
+                                   v-on:valueChanged="model.title = $event"/>
+                </span>
+
+                <span v-if="editable">
                     <b-button-group size="sm">
                         <!-- edit button -->
                         <b-button variant="outline-secondary" v-if="!editing"
@@ -21,39 +36,33 @@
                             <b-icon-arrow-up-down />
                         </b-button>
                     </b-button-group>
-                </div>
+                </span>
 
-                <EditableLabel v-if="model.type === 'SectionHeader'"
-                               tag="h2"
-                               :value="model.title"
-                               :editing="editing"
-                               v-on:valueChanged="model.title = $event"/>
-
-                <EditableLabel v-else
-                               tag="b-card-title"
-                               :value="model.title"
-                               :editing="editing"
-                               v-on:valueChanged="model.title = $event"/>
-            </div>
+            </p>
 
 
             <TextQuestion v-if="model.type === 'TextQuestion'"
+                          class="question-card-content-area"
                           :model="model"
                           :editing="editing"
                           v-on:modelChanged="onModelChanged($event)"/>
             <SingleChoiceQuestion v-else-if="model.type === 'SingleChoiceQuestion'"
+                                  class="question-card-content-area"
                                   :model="model"
                                   :editing="editing"
                                   v-on:modelChanged="onModelChanged($event)"/>
             <MultiChoiceQuestion v-else-if="model.type === 'MultiChoiceQuestion'"
+                                 class="question-card-content-area"
                                  :model="model"
                                  :editing="editing"
                                  v-on:modelChanged="onModelChanged($event)"/>
             <ScaleQuestion v-else-if="model.type === 'ScaleQuestion'"
+                           class="question-card-content-area"
                            :model="model"
                            :editing="editing"
                            v-on:modelChanged="onModelChanged($event)"/>
             <SectionHeader v-else-if="model.type === 'SectionHeader'"
+                           class="question-card-content-area"
                            :model="model"
                            :editing="editing"
                            v-on:modelChanged="onModelChanged($event)"/>
@@ -129,14 +138,30 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .question-card {
         margin-bottom: 10px;
     }
+    .question-card-header {
+        display: flex;
+    }
+    .question-card-header > .question-card-title {
+        flex-grow: 1;
+        margin-right: 20px;
+    }
+
+
+
     .question-card-hide-border {
-        border: 0;
+        border: 0 !important;
     }
     .question-card-is-header {
-        margin-top: 20px;
+        margin-top: 30px;
+    }
+
+
+    /* remove bottom margin from last <p> tag */
+    .question-card-content-area > p:last-child {
+        margin-bottom: 0;
     }
 </style>
