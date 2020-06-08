@@ -17,13 +17,13 @@
                 v-on:input="changeAnonymityConfirmation"
                 v-model="anonymityChecked">
 
-                <b-form-radio value="ANONYMOUS" :disabled="waitingForConfirmation">
+                <b-form-radio value="ANONYMOUS">
                     anonymous<br>
                     <small class="text-muted">
                         The participants are unknown. You get one link for all participants.
                     </small>
                 </b-form-radio>
-                <b-form-radio value="PSEUDONYMOUS" :disabled="waitingForConfirmation">
+                <b-form-radio value="PSEUDONYMOUS">
                     pseudonymous<br>
                     <small class="text-muted">
                         There is minimal data transfer.
@@ -31,7 +31,7 @@
                         They get different links, but you cannot track the singular participant.
                     </small>
                 </b-form-radio>
-                <b-form-radio value="NON_ANONYMOUS" :disabled="waitingForConfirmation">
+                <b-form-radio value="NON_ANONYMOUS">
                     non-anonymous<br>
                     <small class="text-muted">
                         The participants are known. Each of them gets a personalized link to
@@ -40,14 +40,16 @@
                 </b-form-radio>
             </b-form-radio-group>
 
+            <b-button class="float-right" v-b-modal.change-anoymity>Apply</b-button>
 
-                <b-alert class="alert-info" role="alert" align="center" v-model="sureToChangeAnonymity">
-                    <strong>Warning!</strong>
-                    Are you sure that you want to change the level of anonymity to {{anonymityChecked}}?<br>
-                    <b-button @click="changeAnonymity" class="my-button">yes</b-button>
-                    <b-button @click="dontChangeAnonymity" class="my-button">no</b-button>
-                </b-alert>
-
+            <b-modal v-if="this.poll.anonymity !== anonymityChecked"
+                     id="change-anoymity"
+                     centered
+                     @ok="changeAnonymity()">
+                <p>
+                    Are you sure you want to change poll anonymity?
+                </p>
+            </b-modal>
 
         </b-card>
     </div>
@@ -78,42 +80,18 @@
             ...mapActions('currentPoll', {
                 updatePoll: 'update'
             }),
-            changeAnonymityConfirmation: function () {
-                if (this.anonymityChecked === null) { // weg
-                    console.log("anonymity gleich null")
-                }
-                if (this.poll.anonymity !== this.anonymityChecked) {
-                    this.sureToChangeAnonymity = true;
-                    this.waitingForConfirmation = true
-                } else {
-                    this.sureToChangeAnonymity = false
-                }
-            },
             changeAnonymity() {
-                this.sureToChangeAnonymity = false;
                 this.poll.anonymity = this.anonymityChecked;
-                this.waitingForConfirmation = false;
                 let pollCmd = {
                     id: this.poll.id,
                     anonymity: this.poll.anonymity
-                }
+                };
                 this.updatePoll(pollCmd);
-            },
-            dontChangeAnonymity() {
-                this.sureToChangeAnonymity = false
-                this.anonymityChecked = this.poll.anonymity
-                this.waitingForConfirmation = false
             }
         }
     }
 </script>
 
 <style scoped>
-    .my-button {
-        background-color: InfoBackground;
-        font-size: 100%;
-        color: black;
-        margin-top: 1vw;
-        margin-left: 4vw;
-    }
+
 </style>
