@@ -53,16 +53,16 @@ public class Choice {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Choice)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         Choice choice = (Choice) o;
-        return Objects.equals(id, choice.id);
+        return Objects.equals(id, choice.id) && Objects.equals(text, choice.text);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, text);
     }
 }
 

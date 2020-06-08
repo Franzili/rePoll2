@@ -5,28 +5,28 @@ package gpse.repoll.domain.statistics;
  */
 public class Quartiles {
 
-    protected Frequency firstQuartile;
+    protected Integer firstQuartile;
 
-    protected Frequency thirdQuartile;
+    protected Integer thirdQuartile;
 
-    protected Quartiles(Frequency firstQuartile, Frequency thirdQuartile) {
+    protected Quartiles(Integer firstQuartile, Integer thirdQuartile) {
         this.firstQuartile  = firstQuartile;
         this.thirdQuartile = thirdQuartile;
     }
 
-    public Frequency getFirstQuartile() {
+    public Integer getFirstQuartile() {
         return firstQuartile;
     }
 
-    public void setFirstQuartile(Frequency firstQuartile) {
+    public void setFirstQuartile(Integer firstQuartile) {
         this.firstQuartile = firstQuartile;
     }
 
-    public Frequency getThirdQuartile() {
+    public Integer getThirdQuartile() {
         return thirdQuartile;
     }
 
-    public void setThirdQuartile(Frequency thirdQuartile) {
+    public void setThirdQuartile(Integer thirdQuartile) {
         this.thirdQuartile = thirdQuartile;
     }
 }

@@ -6,6 +6,7 @@ import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.Answer;
 import gpse.repoll.domain.poll.answers.MultiChoiceAnswer;
+import gpse.repoll.domain.poll.answers.ScaleAnswer;
 import gpse.repoll.domain.poll.answers.SingleChoiceAnswer;
 import gpse.repoll.domain.poll.questions.MultiChoiceQuestion;
 import gpse.repoll.domain.poll.questions.Question;
@@ -19,6 +20,7 @@ import java.util.*;
  */
 public class QuestionStatistics {
 
+    public static final int MIN_LIST_SIZE = 3;
     @JsonIgnore
     private final List<Answer> answers = new ArrayList<>();
 
@@ -30,36 +32,41 @@ public class QuestionStatistics {
 
     private final List<CumulativeFrequency> cumulativeFrequencies = new ArrayList<>();
 
-    private final double arithmeticMean;
+    private final Double arithmeticMean;
 
-    private final Frequency median;
+    private final Integer median;
 
     private final Quartiles quartiles;
 
     public QuestionStatistics(Question question, List<PollEntry> pollEntries) {
         this.question = question;
         this.answers.addAll(getAnswersTo(this.question, pollEntries));
+        List<Answer> answerList = new ArrayList<>();
 
         if (question instanceof ScaleQuestion) {
             question = convertScaleToSingleChoiceQuestion((ScaleQuestion) question);
-        }
-
-        if (question instanceof SingleChoiceQuestion || question instanceof MultiChoiceQuestion) {
-            computeFrequencies();
+            for (Answer answer : answers) {
+                answerList.add(convertScaleToChoiceAnswer(answer));
+            }
+            computeFrequencies(question, answerList);
+            computeCumulativeFrequencies(question);
             computeMode();
-            computeCumulativeFrequencies();
-            computeMedian(this.frequencies);
-            this.median = computeMedian(this.frequencies);
+            this.median = computeMedian();
             this.quartiles = computeQuartiles();
-        } else {
-            this.median = null;
-            this.quartiles = null;
-        }
-
-        if (question instanceof SingleChoiceQuestion) {
             this.arithmeticMean = arithmeticMean();
         } else {
-            this.arithmeticMean = 0;
+            answerList.addAll(answers);
+            this.median = null;
+            this.quartiles = null;
+
+            if (question instanceof SingleChoiceQuestion || question instanceof MultiChoiceQuestion) {
+                computeFrequencies(question, answerList);
+                computeMode();
+                computeCumulativeFrequencies(question);
+                this.arithmeticMean = arithmeticMean();
+            } else {
+                this.arithmeticMean = null;
+            }
         }
     }
 
@@ -73,7 +80,7 @@ public class QuestionStatistics {
         int max = question.getMax();
         int stepCount = question.getStepCount();
 
-        // if (!(max % stepCount == 0)), the maximum is not included in the statistics :(
+        // ToDo:  if (!(max % stepCount == 0)), the maximum is not included in the statistics :(
 
         List<Choice> choices = new ArrayList<>();
         for (int i = min; i <= max; i += stepCount) {
@@ -82,6 +89,18 @@ public class QuestionStatistics {
         SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion();
         singleChoiceQuestion.setChoices(choices);
         return singleChoiceQuestion;
+    }
+
+    private SingleChoiceAnswer convertScaleToChoiceAnswer(Answer answer) {
+        if (answer instanceof ScaleAnswer) {
+            ScaleAnswer scaleAnswer = (ScaleAnswer) answer;
+            Choice choice = new Choice(String.valueOf(scaleAnswer.getScaleNumber()));
+            SingleChoiceAnswer singleChoiceAnswer = new SingleChoiceAnswer();
+            singleChoiceAnswer.setChoice(choice);
+            return singleChoiceAnswer;
+        } else {
+            throw new InternalServerErrorException();
+        }
     }
 
     /**
@@ -102,7 +121,7 @@ public class QuestionStatistics {
         return answers;
     }
 
-    private void computeFrequencies() {
+    private void computeFrequencies(Question question, List<Answer> answers) {
         int countAllChoices = 0;
         Map<Choice, Integer> choiceCountMap = new HashMap<>();
         if (question instanceof SingleChoiceQuestion) {
@@ -121,6 +140,11 @@ public class QuestionStatistics {
                     throw new InternalServerErrorException();
                 }
             }
+            for (Choice choice : ((SingleChoiceQuestion) question).getChoices()) {
+                if (!choiceCountMap.containsKey(choice)) {
+                    choiceCountMap.put(choice, 0);
+                }
+            }
         } else if (question instanceof MultiChoiceQuestion) {
             for (Answer answer : answers) {
                 if (answer instanceof MultiChoiceAnswer) {
@@ -137,6 +161,11 @@ public class QuestionStatistics {
                     }
                 } else {
                     throw  new InternalServerErrorException();
+                }
+            }
+            for (Choice choice : ((MultiChoiceQuestion) question).getChoices()) {
+                if (!choiceCountMap.containsKey(choice)) {
+                    choiceCountMap.put(choice, 0);
                 }
             }
         } else {
@@ -165,18 +194,15 @@ public class QuestionStatistics {
 
     /**
      * Calculates the median of the absolute frequencies of a question.
-     * The median is the {@link Frequency} of a specific choice, with the absolute frequency, that would be in the
+     * The median is the text of a specific choice, with the absolute frequency, that would be in the
      * middle of a sorted list of the frequencies to all choices.
      * If the count of choices to the question is even, the lower value is chosen.
-     * @return The {@link Frequency}, where the absolute frequency is the median
+     * @return The value of the number in the middle of the sorted list
      */
-    private Frequency computeMedian(List<Frequency> frequencies) {
-        List<Frequency> freq = new ArrayList<>(frequencies);
-        freq.sort(null);
-        // ScaleQuestions are converted into SingleChoiceQuestions in the QuestionStatistics Constructor
-        int size = freq.size();
-        int middle = size / 2;
-        return freq.get(middle);
+    private Integer computeMedian() {
+        // ToDo:  make this shit right
+        int size = this.cumulativeFrequencies.get(cumulativeFrequencies.size() - 1).getAbsolute();
+        return this.cumulativeFrequencies.get((size / 2)).getAbsolute();
     }
 
     /**
@@ -185,27 +211,37 @@ public class QuestionStatistics {
      */
     private Quartiles computeQuartiles() {
         List<Frequency> freq = new ArrayList<>(frequencies);
-        freq.sort(null);
-        int size = freq.size();
-        int chunkSize = freq.size() % 2 == 0 ? freq.size() / 2 : (freq.size() / 2) + 1;
-        List<Frequency> firstHalf = freq.subList(0, chunkSize);
-        List<Frequency> secondHalf = freq.subList(chunkSize + 1, size);
-        return new Quartiles(computeMedian(firstHalf), computeMedian(secondHalf));
+        freq.removeIf(frequency -> frequency.getAbsolute() == 0);
+        List<CumulativeFrequency> cumFreq = this.cumulativeFrequencies;
+        int size = cumFreq.size();
+        int listsize = MIN_LIST_SIZE;
+        if (size == listsize) {
+            return new Quartiles(cumFreq.get(1).getAbsolute(), cumFreq.get(1).getAbsolute());
+        } else if (size < listsize) {
+            return null;
+        }
+        int chunkSize = cumFreq.get(cumFreq.size() - 1).getAbsolute() / 2;
+        int firstQuartile = cumFreq.get(chunkSize).getAbsolute();
+        int secondQuartile = cumFreq.get(size - chunkSize).getAbsolute();
+        return new Quartiles(firstQuartile, secondQuartile);
     }
 
     /**
      * Calculates the arithmetic mean for ScaleQuestions.
      * @return arithmetic mean of the corresponding question entries
      */
-    private double arithmeticMean() {
-        final int[] value = {0};
-        frequencies.forEach(frequency -> {
-            value[0] += frequency.getAbsolute() * Integer.parseInt(frequency.getChoice().getText());
-        });
-        return (double) value[0] / frequencies.size();
+    private Double arithmeticMean() {
+        try {
+            final int[] value = {0};
+            frequencies.forEach(frequency -> value[0] += frequency.getAbsolute()
+                * Integer.parseInt(frequency.getChoice().getText()));
+            return (double) value[0] / frequencies.size();
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
-    private void computeCumulativeFrequencies() {
+    private void computeCumulativeFrequencies(Question question) {
         if (question instanceof SingleChoiceQuestion) {
             for (Choice choice : ((SingleChoiceQuestion) question).getChoices()) {
                 cumulativeFrequencies.add(new CumulativeFrequency(choice, frequencies));
@@ -219,8 +255,20 @@ public class QuestionStatistics {
         }
     }
 
+    public Double getArithmeticMean() {
+        return arithmeticMean;
+    }
+
+    public Integer getMedian() {
+        return median;
+    }
+
+    public Quartiles getQuartiles() {
+        return quartiles;
+    }
+
     public List<Answer> getAnswers() {
-        return answers;
+        return Collections.unmodifiableList(answers);
     }
 
     public Question getQuestion() {
@@ -228,7 +276,7 @@ public class QuestionStatistics {
     }
 
     public List<Frequency> getFrequencies() {
-        return frequencies;
+        return Collections.unmodifiableList(frequencies);
     }
 
     public Set<Choice> getMode() {
@@ -236,6 +284,6 @@ public class QuestionStatistics {
     }
 
     public List<CumulativeFrequency> getCumulativeFrequencies() {
-        return cumulativeFrequencies;
+        return Collections.unmodifiableList(cumulativeFrequencies);
     }
 }
