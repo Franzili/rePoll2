@@ -1,8 +1,5 @@
 <template>
     <b-container>
-        <p>
-            {{users}}
-        </p>
         <b-row>
             <p style="margin-left: 20vw; margin-top: 2vh"></p>
         </b-row>
@@ -92,14 +89,14 @@
                             class="mb-0">
                             <b-form-checkbox-group v-model="filterOn" class="mt-1">
                                 <b-form-checkbox value="username">Name</b-form-checkbox>
-                                <b-form-checkbox value="mail">Mail</b-form-checkbox>
-                                <b-form-checkbox value="role">Role</b-form-checkbox>
+                                <b-form-checkbox value="email">E-Mail</b-form-checkbox>
+                                <b-form-checkbox value="fullName">Fullname</b-form-checkbox>
                             </b-form-checkbox-group>
                         </b-form-group>
                     </b-col>
                 </b-row>
 
-                <!-- Main table element -->
+                <!-- User table -->
                 <b-table
                     show-empty
                     small
@@ -125,6 +122,7 @@
                         </b-button>
                     </template>
                 </b-table>
+                <!---- Add button to create new user--->
                 <b-col >
                     <b-button class="addButton" v-b-modal.modal-1 @click="isUpdate=false">+</b-button>
                 </b-col>
