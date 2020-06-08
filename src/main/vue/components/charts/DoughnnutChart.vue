@@ -23,7 +23,12 @@
                         data: []
                     }
                 ],
-                backgroundColors: ['#3eab37', '#dc322f', '#02a097', '#b58900', '#70E1F8'],
+                backgroundColors: ['#56a137',
+                    '#cb4b16',
+                    '#02a097',
+                    '#b58900',
+                    '#6c71c4',
+                    '#268bd2'],
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
