@@ -46,30 +46,40 @@ const currentPoll = {
 
 
         /**
-         * return the entries in form: [()]?
+         * return the entries in form: [(questionId, answer)]
          * */
         entriesWithoutSection: (state) => {
             return (userId) => {
                 let res = [];
-                console.log(state.poll.pollSections);
-                console.log(state.entries);
+                let userEntry = {entry: state.entries.find(entry => entry.user.id === userId)};
+                let associations = null;
+                let answers = [];       //used in MultiChoiceAnswer
 
-                /*state.poll.pollSections.forEach(section => {
-                    section.questions.forEach(q => {
-                        let sectionQuestionUserAnswer = {section: section.title, question: q.title, };
-                        res.push(sectionQuestionUserAnswer);
-                    })
-                });*/
+                if (userEntry.entry) {
+                    associations = {associations: userEntry.entry.associations};
 
-
-                console.log(userId);
-                //console.log(state.entries.find(user => user.));
-                let userEntry = {text: state.entries.find(entry => entry.user.id === userId)};
-                console.log(userEntry);
-                //console.log(userEntry.text.user);
-                res.push(userEntry.text);
-                //let userName = {text: userEntry.text.user.username};
-                //res.push(userName);
+                    for (var prop in associations.associations) {
+                        let answerAndId = null
+                        switch (associations.associations[prop].type) {
+                            case 'TextAnswer':
+                                answerAndId = {qId: associations.associations[prop].id, answer: associations.associations[prop].text};
+                                break;
+                            case 'SingleChoiceAnswer' :
+                                answerAndId = {qId: associations.associations[prop].id, answer: associations.associations[prop].choice.text};
+                                break;
+                            case 'MultiChoiceAnswer' :
+                                for (let i = 0; i < associations.associations[prop].choices.length; i++) {
+                                    answers.push(associations.associations[prop].choices[i].text);
+                                }
+                                answerAndId = {qId: associations.associations[prop].id, answer: answers};
+                                break;
+                            case 'ScaleAnswer' :
+                                answerAndId = {qId: associations.associations[prop].id, answer: associations.associations[prop].scaleNumber};
+                                break;
+                        }
+                        res.push(answerAndId);
+                    }
+                }
                 return res;
             }
         },

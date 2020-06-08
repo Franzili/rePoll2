@@ -1,6 +1,5 @@
 <template>
     <div>
-        <p> {{getEntries(selected)[0].user.username}} </p>
         <b-container>
             <b-col cols="8">
                 <b-form-select v-model="selected" :options="getNames">
@@ -10,6 +9,14 @@
                 </b-form-select>
             </b-col>
         </b-container>
+
+        <h6> Answers </h6>
+
+        <div v-if="getEntries(selected)[0]">
+            <div v-bind:key="answer.qId" v-for="answer in getEntries(selected)">
+                <p> {{answer.answer}} </p>
+            </div>
+        </div>
     </div>
 </template>
 
