@@ -1,46 +1,43 @@
 <template>
     <div>
-        <!-- michaels variant with changes variables, works this way but is not a radio component in answer-->
-        <b-form-group v-if="model.displayVariant === 'radio'">
-            <div v-bind:key="choice.id" v-for="choice in model.choices">
-                <b-form-radio v-model="selected" :value="choice.text">{{choice.text}}</b-form-radio>
-                <b-button size="sm"
-                          variant="outline-secondary"
-                          pill v-if="editing"
-                          @click="delPos(choice.id)">
-                    <b-icon-trash-fill/>
-                </b-button>
-            </div>
-        </b-form-group>
+        <template v-if="!editing">
+            <p>
+                <b-form-group v-if="model.displayVariant === 'radio'" class="radio-group">
+                    <div v-bind:key="choice.id" v-for="choice in model.choices">
+                        <b-form-radio v-model="selected" :value="choice.id">{{choice.text}}</b-form-radio>
+                    </div>
+                </b-form-group>
+            </p>
 
-        <div v-if="model.displayVariant === 'dropdown'">
-            <b-form-select v-model="selected">
-                <b-form-select-option v-bind:key="choice.id"
-                                      v-for="choice in model.choices"
-                                      :value="choice.text">{{choice.text}}</b-form-select-option>
-            </b-form-select>
+            <p v-if="model.displayVariant === 'dropdown'">
+                <b-form-select v-model="selected">
+                    <b-form-select-option v-bind:key="choice.id"
+                                          v-for="choice in model.choices"
+                                          :value="choice.id">{{choice.text}}</b-form-select-option>
+                </b-form-select>
+            </p>
+        </template>
 
-            <div v-if="editing">
-                <div v-bind:key="pos.id" v-for="pos in model.choices">
-                    <b-container>
-                        <b-row>
-                            <b-col class="text-left" cols="8">{{pos.text}}</b-col>
-                            <b-col><b-button class="del-pos-btn"
-                                             size="sm"
-                                             variant="outline-secondary"
-                                             pill
-                                             v-if="editing"
-                                             @click="delPos(pos.id)">x</b-button></b-col>
-                        </b-row>
-                    </b-container>
-                </div>
-            </div>
-        </div>
+        <template v-else>
+            <h6>Choices:</h6>
+            <ChoiceEditor :choices="model.choices"
+                          v-on:choicesChanged="this.model.choices = $event"/>
+
+            <h6>Display Variant:</h6>
+            <p>
+                <b-form-select v-model="model.displayVariant">
+                    <b-form-select-option value="dropdown">Drop-Down</b-form-select-option>
+                    <b-form-select-option value="radio">Radio Buttons</b-form-select-option>
+                </b-form-select>
+            </p>
+        </template>
     </div>
 
 </template>
 
 <script>
+    import ChoiceEditor from "./ChoiceEditor";
+
     export default {
         name: "SingleChoiceQuestion",
         data() {
@@ -71,8 +68,14 @@
                 default: false
             }
         },
+        components: {
+            ChoiceEditor,
+        }
     }
 </script>
 
 <style lang="scss" scoped>
+    .radio-group {
+        margin-bottom: 0;
+    }
 </style>
