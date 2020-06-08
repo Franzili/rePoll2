@@ -2,32 +2,42 @@
     <!--
         Renders a poll.
     -->
-    <ul class="poll-main-view">
+    <draggable tag="ul"
+               class="poll-main-view"
+               v-model="pollStructure"
+               handle=".handle">
         <PollItem v-for="item in pollStructure"
                   v-bind:key="item.id"
                   :model="item"
                   :id="'pollItem-' + item.id"
                   v-on:editStarted="onItemEditStarted($event)"
                   v-on:editFinished="onItemEditFinished($event)"/>
-    </ul>
+    </draggable>
 </template>
 
 <script>
-    import {mapGetters, mapActions} from "vuex"
+    import {mapActions} from "vuex"
 
     import PollItem from "./poll-items/PollItem";
+
+    import draggable from "vuedraggable";
 
     export default {
         name: "PollMainView",
         data() {
             return {
-                currentlyEditing: null
+                currentlyEditing: null,
             }
         },
         computed: {
-            ...mapGetters('currentPoll', {
-                pollStructure: 'pollStructureFlat'
-            })
+            pollStructure: {
+                get() {
+                    return this.$store.getters["currentPoll/pollStructureFlat"];
+                },
+                set(value) {
+                    this.$store.dispatch('currentPoll/updateStructure', value);
+                }
+            }
         },
         methods: {
             ...mapActions('currentPoll', {
@@ -46,7 +56,7 @@
                 }
             }
         },
-        components: { PollItem }
+        components: { PollItem, draggable }
     }
 </script>
 

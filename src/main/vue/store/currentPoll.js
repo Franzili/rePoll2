@@ -31,16 +31,19 @@ const currentPoll = {
          * in ./poll-item-models/
          */
         pollStructureFlat: state => {
-            let res = [];
+            let result = [];
             state.poll.pollSections.forEach(section => {
-                res.push(new SectionHeaderModel(section.id, section.title, section.description));
+                result.push(new SectionHeaderModel(section.id, section.title, section.description));
+                let tmp = []
                 section.questions.forEach(q => {
                     let questionObject = state.poll.questions.find(item => item.id === q.id);
                     //res.push(makeQuestion(questionObject));
-                    res.push(questionObject);
+                    tmp.push(questionObject);
+                    tmp = tmp.sort((q1, q2) => q1.questionOrder - q2.questionOrder);
                 });
+                result = result.concat(tmp);
             });
-            return res;
+            return result;
         },
 
         statStructureObj: state => {
@@ -135,16 +138,41 @@ const currentPoll = {
             Object.assign(pollSection, pollSectionCmd);
         },
 
-        setMetaStats(state, newMetaStats) {
-            state.statistics = newMetaStats
-        },
+        updateStructureFromFlat(state, structure) {
+            /* this is basically a duplicate of the updateStructure action, but because PollStructureCmd.java and
+               state.poll.pollStructure require two slightly different formats, we cannot really avoid it. :(  */
 
-        setAnswersById(state, newAnswers) {
-            state.answers = newAnswers
-        },
+            if (structure[0].type !== 'SectionHeader') {
+                console.warn("[RePoll] Invalid poll structure format: first element needs to be header. abort.");
+                return;
+            }
 
-        setPollAnswers(state, newPollAnswers) {
-            state.pollAnswers = newPollAnswers
+            // assign the right questionOrders.
+            for (let i = 0; i < structure.length; i++) {
+                if (structure[i].type !== 'SectionHeader') {
+                    structure[i].questionOrder = i + 1;
+                }
+            }
+
+            let pollSections = []
+            let currentSection = null;
+
+            structure.forEach((item) => {
+                if (item.type === 'SectionHeader') {
+                    if (currentSection != null) {
+                        pollSections.push(currentSection);
+                    }
+                    currentSection = item;
+                    currentSection.questions = [];
+                } else {
+                    currentSection.questions.push(item);
+                }
+            })
+            pollSections.push(currentSection);
+
+            console.log(pollSections);
+
+            state.poll.pollSections = pollSections;
         }
     },
 
@@ -204,7 +232,9 @@ const currentPoll = {
                 }
                 commit('updatePollSection', pollSectionCmd);
                 return new Promise(function(resolve, reject) {
-                    api.poll.updatePollSection(state.poll.id, pollSectionCmd).catch(function(error) {
+                    api.poll.updatePollSection(state.poll.id, pollSectionCmd).then(() => {
+                        resolve();
+                    }).catch(function(error) {
                         console.log(error);
                         reject();
                     })
@@ -213,13 +243,52 @@ const currentPoll = {
 
             else {
                 return new Promise(function(resolve, reject) {
-                    api.poll.updateQuestion(state.poll.id, pollItem).catch(function(error) {
+                    api.poll.updateQuestion(state.poll.id, pollItem).then(() => {
+                        resolve();
+                    }).catch(function(error) {
                         console.log(error);
                         reject();
                     })
                 })
             }
         },
+
+        async updateStructure({state, dispatch, commit}, newStructure) {
+            if (newStructure[0].type !== 'SectionHeader') {
+                console.warn("[RePoll] New poll structure does not start with a header. Aborting.");
+                return;
+            }
+
+            /* first, assign question orders */
+            for (let i = 0; i < newStructure.length; i++) {
+                if (newStructure[i].type !== 'SectionHeader') {
+                    newStructure[i].questionOrder = i + 1;
+                }
+            }
+
+            let structureCmd = {};
+            let currentSectionId = "";
+
+            newStructure.forEach(function (elem) {
+                if (elem.type === 'SectionHeader') {
+                    currentSectionId = elem.id;
+                    structureCmd[currentSectionId] = [];
+                } else {
+                    structureCmd[currentSectionId].push(elem.id);
+                }
+            });
+
+            commit('updateStructureFromFlat', newStructure)
+
+            // send all questions to the backend to update question order. This is suuuper bad.-
+            let promises = newStructure
+                .filter(item => item.type !== 'SectionHeader')
+                .map(item => dispatch('updatePollItem', item))
+
+            await Promise.all(promises);
+            await api.poll.updateStructure(state.poll.id, structureCmd);
+        },
+
         loadPollAnswers({commit}, id) {
             return new Promise((resolve, reject) => {
                 api.statistics.getPollAnswers(id).then(function (res) {
@@ -231,6 +300,7 @@ const currentPoll = {
                 })
             })
         },
+
         loadAnswersById({commit}, answerCmd) {
             return new Promise((resolve, reject) => {
                 api.statistics.getAnswersById(answerCmd.poll, answerCmd.quest).then(function (res) {

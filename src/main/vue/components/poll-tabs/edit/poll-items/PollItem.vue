@@ -32,7 +32,7 @@
                         </b-button>
 
                         <!-- grab handle -->
-                        <b-button variant="outline-secondary">
+                        <b-button variant="outline-secondary" class="handle">
                             <b-icon-arrow-up-down />
                         </b-button>
                     </b-button-group>
