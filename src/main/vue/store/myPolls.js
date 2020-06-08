@@ -11,6 +11,11 @@ const myPolls = {
         polls: [],
 
         /**
+         *
+         */
+        assigned: [],
+
+        /**
          * The loading status. Will be "LOADING" if the polls are being reloaded right now, otherwise it will be
          * "DONE". Can be used for loading spinners etc.
          */
@@ -23,6 +28,14 @@ const myPolls = {
          */
         load(state, polls) {
             state.polls = polls
+        },
+        /**
+         *
+         * @param state
+         * @param assigned
+         */
+        loadAssigned(state, assigned) {
+            state.assigned = assigned
         },
         /**
          * Sets the load status. For internal use.
@@ -42,7 +55,7 @@ const myPolls = {
             return new Promise((resolve, reject) => {
                 commit('loadStatus', "LOADING");
                 //api.poll.list().then(function (res) {
-                api.poll.listOwn(userId).then(function (res) { //do the same with listAssigned
+                api.poll.listOwn(userId).then(function (res) {
 
                     commit('load', res.data);
                     commit('loadStatus', "DONE")
@@ -52,6 +65,20 @@ const myPolls = {
                     reject();
                 });
             });
+        },
+        loadAssigned({commit, rootState}) {
+            let userId = rootState.auth.username
+            return new Promise(((resolve, reject) => {
+                commit('loadStatus', "LOADING");
+                api.poll.listAssigned(userId).then(function (res) {
+                    commit('loadAssigned', res.data);
+                    commit('loadStatus', "DONE")
+                    resolve();
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                });
+            }))
         },
         /**
          * Creates a new poll. Accesses currentPoll store module to set the newly created poll as the

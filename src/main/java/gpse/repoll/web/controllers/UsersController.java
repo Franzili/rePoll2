@@ -163,11 +163,11 @@ public class UsersController {
     public List<Poll> getAssignedPolls(@PathVariable  String userId) {
         List<Poll> assignedPolls = new ArrayList<>();
         if (isValidUuid(userId)) {
-            for (UUID pollId:userService.getOwnedPolls(UUID.fromString(userId))) {
+            for (UUID pollId:userService.getAssignedPolls(UUID.fromString(userId))) {
                 assignedPolls.add(pollService.getPoll(pollId));
             }
         } else {
-            for (UUID pollId:userService.getOwnedPolls(userId)) {
+            for (UUID pollId:userService.getAssignedPolls(userId)) {
                 assignedPolls.add(pollService.getPoll(pollId));
             }
         }
