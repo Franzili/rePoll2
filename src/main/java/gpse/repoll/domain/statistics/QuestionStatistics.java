@@ -15,7 +15,7 @@ import gpse.repoll.domain.poll.questions.SingleChoiceQuestion;
 import java.util.*;
 
 /**
- * Statistics for a specific Single- or MultiChoiceQuestion.
+ * Statistics for a specific Single-/MultiChoiceQuestion or ScaleQuestion.
  */
 public class QuestionStatistics {
 

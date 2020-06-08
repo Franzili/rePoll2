@@ -5,9 +5,9 @@ package gpse.repoll.domain.statistics;
  */
 public class Quartiles {
 
-    Frequency firstQuartile;
+    protected Frequency firstQuartile;
 
-    Frequency thirdQuartile;
+    protected Frequency thirdQuartile;
 
     protected Quartiles(Frequency firstQuartile, Frequency thirdQuartile) {
         this.firstQuartile  = firstQuartile;
