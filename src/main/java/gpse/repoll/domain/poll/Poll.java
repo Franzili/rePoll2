@@ -283,5 +283,9 @@ public class Poll extends Auditable<User> {
             pollSection.addAll(movedQuestions); // The questions are moved in the correct section
         }
         sortQuestions();
+
+        for(PollSection section : pollSections) {
+            section.sortQuestions();
+        }
     }
 }
