@@ -46,6 +46,9 @@ public class Poll extends Auditable<User> {
     @OneToMany
     private final List<Question> questions = new ArrayList<>(); // todo sorting
 
+    @OneToMany
+    private final List<User> pollEditors = new ArrayList<>();
+
     @ManyToOne
     private User owner;
 
@@ -82,6 +85,15 @@ public class Poll extends Auditable<User> {
 
     public UUID getId() {
         return id;
+    }
+
+    public List<User> getPollEditors() {
+        return pollEditors;
+    }
+
+    public void setPollEditors(List<User> pollEditors) {
+        this.pollEditors.clear();
+        this.pollEditors.addAll(pollEditors);
     }
 
     public List<PollEntry> getPollEntries() {
