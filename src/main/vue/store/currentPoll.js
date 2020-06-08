@@ -48,10 +48,38 @@ const currentPoll = {
         /**
          * return the entries in form: [()]?
          * */
-        entriesWithoutSection: state => {
+        entriesWithoutSection: (state) => {
+            return (userId) => {
+                let res = [];
+                console.log(state.poll.pollSections);
+                console.log(state.entries);
+
+                /*state.poll.pollSections.forEach(section => {
+                    section.questions.forEach(q => {
+                        let sectionQuestionUserAnswer = {section: section.title, question: q.title, };
+                        res.push(sectionQuestionUserAnswer);
+                    })
+                });*/
+
+
+                console.log(userId);
+                //console.log(state.entries.find(user => user.));
+                let userEntry = {text: state.entries.find(entry => entry.user.id === userId)};
+                console.log(userEntry);
+                //console.log(userEntry.text.user);
+                res.push(userEntry.text);
+                //let userName = {text: userEntry.text.user.username};
+                //res.push(userName);
+                return res;
+            }
+        },
+
+        /**
+         * return every username in entries
+         * */
+        entriesUserNames: state => {
             let res = [];
             state.entries.forEach(entry => {
-                console.log(entry.user.username);
                 let entryUser = {text: entry.user.username, value: entry.user.id};
                 res.push(entryUser)
             });

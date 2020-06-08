@@ -1,10 +1,9 @@
 <template>
     <div>
-        <p> {{getEntries}} </p>
-        <p> {{selected}} </p>
+        <p> {{getEntries(selected)[0].user.username}} </p>
         <b-container>
             <b-col cols="8">
-                <b-form-select v-model="selected" :options="getEntries">
+                <b-form-select v-model="selected" :options="getNames">
                     <template v-slot:first>
                         <b-form-select-option :value="null">Select a User</b-form-select-option>
                     </template>
@@ -34,7 +33,8 @@
                 entries: 'entries'
             }),
             ...mapGetters('currentPoll', {
-                getEntries: 'entriesWithoutSection'
+                getEntries: 'entriesWithoutSection',
+                getNames: 'entriesUserNames'
             })
         },
     }
