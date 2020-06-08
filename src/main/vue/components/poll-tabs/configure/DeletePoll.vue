@@ -13,35 +13,22 @@
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
-    import axios from "axios";
+    import {mapActions, mapState} from "vuex";
 
     export default {
         name: "DeletePoll",
-        data() {
-            return {
-                tmpID: 0,
-            }
-        },
         computed: {
-            ...mapGetters(['getPoll']),
-            poll() {
-                return this.getPoll(this.tmpID)
-            }
-        },
-        created: function () {
-            this.tmpID = this.$route.params.tmpPollID;
+            ...mapState('currentPoll', {
+                poll: 'poll'
+            })
         },
         methods: {
+            ...mapActions('myPolls', {
+                delete: 'delete',
+            }),
             deletePoll() {
-                let pollCmd = {title: this.poll.title, status: this.poll.status};
-                axios.delete('/api/v1/polls/' + this.poll.id + '/', pollCmd)
-                    .then((response) => {
-                        console.log(response.data)
-                        return this.$router.push('/polls')
-                    }).catch((err) => {
-                    console.log(err.message)
-                })
+                this.delete(this.poll.id);
+                return this.$router.push('/')
             },
         }
     }

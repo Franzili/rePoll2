@@ -4,7 +4,7 @@ class ScaleQuestionModel extends PollItemModel {
     constructor(id, title) {
         super();
         this.id = id;
-        this.type = "ScaleQuestionModel";
+        this.type = "ScaleQuestion";
         this.title = title;
     }
 

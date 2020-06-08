@@ -5,7 +5,6 @@ import Account from "./pages/Account";
 import Poll from "./pages/Poll";
 import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
-import AnswerPoll from "./pages/AnswerPoll";
 import PollTabbed from "./pages/PollTabbed";
 import Admin from "./pages/Admin";
 
@@ -51,13 +50,6 @@ let router = new VueRouter({
         {
             path: '/poll/:id/answer',
             component: Answer,
-            meta: {
-                requiresAuth: true
-            }
-        },
-        {
-            path: '/answer/',
-            component: AnswerPoll,
             meta: {
                 requiresAuth: true
             }
