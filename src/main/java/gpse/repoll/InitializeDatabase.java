@@ -141,16 +141,15 @@ public class InitializeDatabase implements InitializingBean {
             userService.addOwnedPoll(poll.getId(), user.getUsername());
 
             Poll poll2 = pollService.addPoll("About this App");
-            Question question2_1 = questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
+            questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
                 1, 255);
-            Question question2_2 = questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
+            questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
                 1000, 255);
             userService.addOwnedPoll(poll2.getId(), user.getUsername());
-            //add poll2 to nobody's assignedPolls
             userService.addAssignedPoll(poll2.getId(), nobody.getUsername());
 
             Poll poll3 = pollService.addPoll("Nothing to see here");
-            Question question3_1 = questionService.addTextQuestion(poll3.getId(), "This sentence is false",
+            questionService.addTextQuestion(poll3.getId(), "This sentence is false",
                 100, 255);
             //add poll3 to nobody's ownedPolls
             userService.addOwnedPoll(poll3.getId(), nobody.getUsername());
