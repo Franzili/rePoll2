@@ -100,11 +100,28 @@ public class InitializeDatabase implements InitializingBean {
             //pollEntryRepository.deleteAll();
             //pollRepository.deleteAll();
             //pollSectionRepository.deleteAll();
+
+
+            //User user = userService.getUser("JamesBond");
             User user = userRepository.findByUsername("JamesBond").get();
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user,
-                                                                                     null,
-                                                                                     null);
+                null,
+                null);
             SecurityContextHolder.getContext().setAuthentication(auth);
+
+            //dummy user as creator
+            User nobody;
+            try {
+                nobody = userService.getUser("Nemo");
+            } catch (UsernameNotFoundException e) {
+                nobody = userService.addUser(
+                        "Nemo",
+                        // Passwort: GutenTag
+                        "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                        "Cpt Nemo",
+                        "x@404.com",
+                        Roles.POLL_CREATOR);
+            }
 
             List<User> participants = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
@@ -132,6 +149,23 @@ public class InitializeDatabase implements InitializingBean {
 
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255);
+            userService.addOwnedPoll(poll.getId(), user.getUsername());
+
+            Poll poll2 = pollService.addPoll("About this App");
+            questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
+                1, 255);
+            questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
+                1000, 255);
+            userService.addOwnedPoll(poll2.getId(), user.getUsername());
+            userService.addAssignedPoll(poll2.getId(), nobody.getUsername());
+
+            Poll poll3 = pollService.addPoll("Nothing to see here");
+            questionService.addTextQuestion(poll3.getId(), "This sentence is false",
+                100, 255);
+            //add poll3 to nobody's ownedPolls
+            userService.addOwnedPoll(poll3.getId(), nobody.getUsername());
+
+
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
             Choice choice5 = new Choice("0-20");

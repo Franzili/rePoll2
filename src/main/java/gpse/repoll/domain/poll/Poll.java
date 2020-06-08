@@ -52,6 +52,9 @@ public class Poll extends Auditable<User> {
     @ManyToOne
     private User owner;
 
+    /*@ManyToMany
+    private User assigned;*/
+
     protected Poll() {
 
     }
@@ -64,6 +67,7 @@ public class Poll extends Auditable<User> {
         this.title = title;
         this.status = PollStatus.IN_PROCESS;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
+        //this.owner = creator; // in PollsController breaks add(poll) in listpolls() Funktion
     }
 
     @Override
@@ -151,6 +155,10 @@ public class Poll extends Auditable<User> {
     public void setOwner(User owner) {
         this.owner = owner;
     }
+
+    /*public User getAssigned() {return assigned; }
+
+    public void setAssigned(User assigned) {this.assigned = assigned; }*/
 
     public Anonymity getAnonymity() {
         return anonymity;

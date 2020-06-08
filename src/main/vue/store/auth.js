@@ -13,7 +13,8 @@ const auth = {
          * - null if we have not tried yet
          */
         authenticated: null,
-        token: null
+        token: null,
+        username: null
     },
 
     getters: {
@@ -26,6 +27,7 @@ const auth = {
          * This will set the token and the 'authenticated' state.
          */
         requestToken({commit}, credentials) {
+            commit('setUsername',credentials.username)
             return new Promise((resolve, reject) => {
                 api.auth.login(credentials.username, credentials.password)
                     .then(function (res) {
@@ -53,6 +55,9 @@ const auth = {
         loadFromStorage({commit}) {
             let token = localStorage.getItem('authToken');
             commit('authenticate', token);
+
+            let username = localStorage.getItem('username');
+            commit('setUsername', username)
         }
     },
 
@@ -73,6 +78,15 @@ const auth = {
 
             localStorage.setItem('authToken', token);
         },
+        /**
+         * sets the username
+         */
+        setUsername(state, username) {
+            state.username = username;
+
+
+            localStorage.setItem('username', username)
+        }
 
     },
 
