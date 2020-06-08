@@ -6,7 +6,7 @@
         <b-container class="my-container">
             <b-row style="text-align: center" class="my-row">
                 <b-col >
-                    <AnswerPollTableList v-bind:polls="polls"/>
+                    <AnswerPollTableList v-bind:polls="assigned"/>
                 </b-col>
             </b-row>
         </b-container>
@@ -22,14 +22,14 @@
     export default {
         name: "AnswerPoll",
         created() {
-            this.loadPolls()
+            this.loadAssigned()
         },
         computed: mapState('myPolls',{
-            polls: state => state.polls
+            assigned: 'assigned'
         }),
         methods: {
             ...mapActions('myPolls', {
-                loadPolls: 'load'
+                loadAssigned: 'loadAssigned',
             })
         },
         components: {
