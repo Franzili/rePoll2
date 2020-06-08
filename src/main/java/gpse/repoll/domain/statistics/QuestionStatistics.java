@@ -202,7 +202,7 @@ public class QuestionStatistics {
         frequencies.forEach(frequency -> {
             value[0] += frequency.getAbsolute() * Integer.parseInt(frequency.getChoice().getText());
         });
-        return value[0] / frequencies.size();
+        return (double) value[0] / frequencies.size();
     }
 
     private void computeCumulativeFrequencies() {
