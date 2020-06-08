@@ -50,11 +50,15 @@ const currentPoll = {
          * */
         entriesWithoutSection: (state) => {
             return (userId) => {
-                let res = [];
+                //let res = [];
                 let userEntry = {entry: state.entries.find(entry => entry.user.id === userId)};
                 let associations = null;
                 let answers = [];       //used in MultiChoiceAnswer
 
+                let answersWithIds = [];
+                //let questionsWithIds = [];
+
+                //first get all answers with question ids in one array
                 if (userEntry.entry) {
                     associations = {associations: userEntry.entry.associations};
 
@@ -77,10 +81,19 @@ const currentPoll = {
                                 answerAndId = {qId: associations.associations[prop].id, answer: associations.associations[prop].scaleNumber};
                                 break;
                         }
-                        res.push(answerAndId);
+                        answersWithIds.push(answerAndId);
                     }
                 }
-                return res;
+
+
+                for (var section in state.poll.pollSections) {
+                    console.log(state.poll.pollSections[section].questions);
+
+                    //TODO add all questions with (id, title) in questionsWithIds, then put them together in form (qID, q.title, answer)
+                }
+
+                //console.log(state.poll.pollSections);
+                return answersWithIds;
             }
         },
 
