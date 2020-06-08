@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -133,7 +132,7 @@ public class UsersController {
     }
 
     /**
-     * Adds polls to the repository of a given user
+     * Adds polls to the repository of a given user.
      * @param pollId UUID identifier of poll to be added
      * @param userId UUID identifier
      * @return modified user
@@ -153,7 +152,7 @@ public class UsersController {
     }
 
     /**
-     * Gets Polls assigned to the given user
+     * Gets Polls assigned to the given user.
      * The user can be referred to either by their username, or by their UUID identifier.
      * @param userId UUID identifier
      * @return List of polls assigned to the user
@@ -175,7 +174,7 @@ public class UsersController {
     }
 
     /**
-     * Adds polls to the repository of a given user
+     * Adds polls to the repository of a given user.
      * @param pollId UUID identifier of poll to be added
      * @param userId UUID identifier
      * @return modified user

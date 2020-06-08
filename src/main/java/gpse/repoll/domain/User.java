@@ -5,7 +5,6 @@ import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import gpse.repoll.domain.exceptions.NoValidRoleException;
-import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.security.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -41,7 +40,7 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
+    private final List<String> roles = new ArrayList<>();
 
 
     /*
@@ -55,11 +54,11 @@ public class User implements UserDetails {
 
     @Column
     @ElementCollection
-    private  List<UUID> ownPolls = new ArrayList<>();
+    private final List<UUID> ownPolls = new ArrayList<>();
 
     @Column
     @ElementCollection
-    private List<UUID> assignedPolls = new ArrayList<>();
+    private final List<UUID> assignedPolls = new ArrayList<>();
 
     public User() {
         // Todo: refine user roles
@@ -110,19 +109,33 @@ public class User implements UserDetails {
     public List<Poll> getOwnPolls() {
         return Collections.unmodifiableList(ownPolls);
     }*/
-    public void addOwnPoll(UUID pollId) { ownPolls.add(pollId);}
+    public void addOwnPoll(UUID pollId) {
+        ownPolls.add(pollId);
+    }
 
-    public void removeOwnPoll(UUID pollId) { ownPolls.remove(pollId);}
+    public void removeOwnPoll(UUID pollId) {
+        ownPolls.remove(pollId);
+    }
 
-    public List<UUID> getOwnPolls() { return Collections.unmodifiableList(ownPolls);}
+    public List<UUID> getOwnPolls() {
+        return Collections.unmodifiableList(ownPolls);
+    }
 
-    public void addAssignedPoll(UUID pollId) { assignedPolls.add(pollId);}
+    public void addAssignedPoll(UUID pollId) {
+        assignedPolls.add(pollId);
+    }
 
-    public void removeAssignedPoll(UUID pollId) { assignedPolls.remove(pollId);}
+    public void removeAssignedPoll(UUID pollId) {
+        assignedPolls.remove(pollId);
+    }
 
-    public List<UUID> getAssignedPolls() { return Collections.unmodifiableList(assignedPolls);}
+    public List<UUID> getAssignedPolls() {
+        return Collections.unmodifiableList(assignedPolls);
+    }
 
-    public List<String> getRoles() { return Collections.unmodifiableList(roles); }
+    public List<String> getRoles() {
+        return Collections.unmodifiableList(roles);
+    }
 
     public void setRoles(String role) throws NoValidRoleException {
         roles.clear();

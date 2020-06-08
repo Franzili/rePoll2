@@ -210,23 +210,18 @@
                         };
                         console.log(userCmd);
                         this.createUser(userCmd);
+
+                        // Send E-Mail with temporary password to the new user
+                        let credentials = {
+                            userName: this.userName,
+                            eMail: this.email
+                        }
+                        this.sendMailInvite(credentials)
                     }
 
                 if(this.isUpdate) {
                     this.isUpdate = false;
                 }
-                /**
-                 * todo
-                 * Create a new user
-                 * let credentials = {userName: VUE_Variable, eMail: VUE_Variable}
-                 * this.sendMailRequest(credentials)
-                 */
-                let VUE_Variable;
-                let credentials = {
-                    userName: VUE_Variable,
-                    eMail: VUE_Variable
-                }
-                this.sendMailInvite(credentials)
             },
             deleteUser(row) {
                 console.log(row);
