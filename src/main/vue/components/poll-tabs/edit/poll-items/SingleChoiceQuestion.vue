@@ -21,7 +21,7 @@
         <template v-else>
             <h6>Choices:</h6>
             <ChoiceEditor :choices="model.choices"
-                          v-on:choicesChanged="this.model.choices = $event"/>
+                          v-on:choicesChanged="model.choices = $event"/>
 
             <h6>Display Variant:</h6>
             <p>

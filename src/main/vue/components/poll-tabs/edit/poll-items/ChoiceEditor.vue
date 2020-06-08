@@ -43,9 +43,7 @@
                 });
             },
             deleteChoice(id) {
-                console.log(this.choices)
                 let choiceIndex = this.choices.findIndex(choice => choice.id === id);
-                console.log(choiceIndex);
                 if (choiceIndex === -1) {
                     console.warn(`[RePoll] Could not find choice with id ${id}`);
                     return;
