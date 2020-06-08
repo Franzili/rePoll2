@@ -1,5 +1,5 @@
 <template>
-    <b-container class="sticky nav-container">
+    <b-container class="sticky nav-container" fluid="lg">
         <b-navbar toggleable="" type="dark" class="nav">
             <b-navbar-brand href="#">
                 <img v-on:click="toStart" src="../assets/logo.png" width="123" height="27" alt>
@@ -25,12 +25,6 @@
                     </b-nav-item>
                     <b-nav-item>
                         <router-link class="link" :to="'/create/'">Create Poll</router-link>
-                    </b-nav-item>
-                    <b-nav-item>
-                        <router-link class="link" :to="'/answer/'">Answer Poll</router-link>
-                    </b-nav-item>
-                    <b-nav-item>
-                        <router-link class="link" :to="'/myPolls/'">My Polls</router-link>
                     </b-nav-item>
                 </b-navbar-nav>
             </b-collapse>
@@ -62,7 +56,7 @@
     .nav-container {
         z-index: $zindex-sticky;
         top: 0;
-        padding-bottom: 20px;
+        padding-bottom: 21px;
         background-color: $floating-background-color;
     }
 

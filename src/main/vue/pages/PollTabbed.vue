@@ -1,5 +1,5 @@
 <template>
-    <b-container>
+    <b-container fluid="lg">
 
         <!-- To make the tab bar fit on the right side of the title,
              we actually use b-tab Components: one for the navigation,
@@ -11,7 +11,7 @@
                 <h3>Titel: {{ poll.title }}</h3>
             </b-col>
             <b-col>
-                <b-tabs pills align="right" v-model="activeTab">
+                <b-tabs lazy pills align="right" v-model="activeTab">
 
                     <b-tab active title="Configure">
                     </b-tab>
@@ -83,7 +83,7 @@
     */
 
     import ConfigurePoll from "../components/poll-tabs/configure/ConfigurePoll";
-    import CreatePoll from "./CreatePoll";
+    import CreatePoll from "../components/poll-tabs/edit/EditPoll";
     import PollStats from "../components/poll-tabs/stats/PollStats";
     import {mapState, mapActions} from "vuex";
     export default {
@@ -103,7 +103,7 @@
         },
         methods: {
             ...mapActions('currentPoll', {
-                loadPoll: 'load'
+                loadPoll: 'load',
             })
         },
         created() {
@@ -118,7 +118,7 @@
     @import "../assets/stylesheet.scss";
 
     .primary-tab-bar {
-        top: 65px;
+        top: 80px;
         background-color: $floating-background-color;
     }
 

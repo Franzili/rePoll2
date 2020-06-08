@@ -8,6 +8,9 @@ import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.method.P;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -64,8 +67,8 @@ public class PollsController {
                 id,
                 pollCmd.getTitle(),
                 pollCmd.getStatus(),
-                structure,
-                pollCmd.getAnonymity());
+                pollCmd.getAnonymity(),
+                structure);
     }
 
     // todo creator cannot delete polls he didn't create

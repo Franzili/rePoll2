@@ -9,12 +9,6 @@
             title: {
                 type: String
             },
-            choices: {
-                type: Array
-            },
-            absFreq: {
-                type: Array
-            },
             choiceFreqPairs: {
                 type: Array
             }
@@ -30,15 +24,22 @@
                         backgroundColor: '#3eab37', //02a097
                         data: []
                     },
-                    {
+                    /*{
                         label: 'Wie gut findest du die anderen Umfragetools',
                         backgroundColor: '#f87979',
                         data: [0, 10, 20, 50, 100]
-                    }
+                    }*/
                 ],
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
                 }
             }
         },
@@ -46,7 +47,7 @@
         mounted() {
             this.fillData();
             this.renderChart({
-                labels: this.myChoices, //myChoices
+                labels: this.myChoices,
                 datasets: this.datasets},
             this.options);
         },

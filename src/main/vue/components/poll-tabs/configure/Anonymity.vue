@@ -61,10 +61,9 @@
 
     export default {
         name: "Anonymity",
-        props: ["initialAnonymityChecked"],
         data() {
             return {
-                anonymityChecked: this.initialAnonymityChecked,
+                anonymityChecked: '',
                 sureToChangeAnonymity: false,
                 waitingForConfirmation: false
             }
@@ -73,6 +72,9 @@
             ...mapState('currentPoll', {
                 poll: 'poll'
             })
+        },
+        created() {
+            this.anonymityChecked = this.poll.anonymity
         },
         methods: {
             ...mapActions('currentPoll', {
@@ -92,9 +94,7 @@
                 this.waitingForConfirmation = false
                 let pollCmd = {
                     id: this.poll.id,
-                    anonymity: this.poll.anonymity,
-                    status: this.poll.status        // todo: we should not have to specify this attribute.
-                                                    // bug in backend, need to clean up later.
+                    anonymity: this.poll.anonymity
                 }
                 this.updatePoll(pollCmd);
             },

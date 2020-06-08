@@ -4,6 +4,7 @@ import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.Answer;
 import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.statistics.QuestionAnswersSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +40,15 @@ public class QuestionsAnswersServiceImpl implements QuestionsAnswersService {
             }
         }
         return userAnswerMap;
+    }
+
+    @Override
+    public List<QuestionAnswersSet> getAll(UUID pollId) {
+        List<QuestionAnswersSet> answersSets = new ArrayList<>();
+        List<Question> questions = pollService.getPoll(pollId).getQuestions();
+        questions.forEach((question) -> {
+            answersSets.add(new QuestionAnswersSet(getAnswers(pollId, question.getId()), question));
+        });
+        return answersSets;
     }
 }

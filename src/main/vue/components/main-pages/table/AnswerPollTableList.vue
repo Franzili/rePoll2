@@ -1,9 +1,14 @@
 <template>
-    <div>
-        <div v-bind:key="poll.id" v-for="poll in polls">
-            <AnswerPollTableElement v-bind:poll="poll"/>
-        </div>
-    </div>
+
+    <b-container>
+        <b-row v-bind:key="poll.id" v-for="poll in polls">
+            <b-col>
+                <p>
+                    <AnswerPollTableElement v-bind:poll="poll"/>
+                </p>
+            </b-col>
+        </b-row>
+    </b-container>
 </template>
 
 <script>
