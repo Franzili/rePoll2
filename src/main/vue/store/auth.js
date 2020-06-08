@@ -52,11 +52,10 @@ const auth = {
         /**
          * Load a token from Browser localStorage.
          */
-        /*
-        todo
-        new action for Mail request
-        data in credentials
-         */
+
+        sendMailInvite(userName) {
+            return Promise.resolve(undefined);
+        },
 
         loadFromStorage({commit}) {
             let token = localStorage.getItem('authToken');

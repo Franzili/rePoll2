@@ -180,9 +180,8 @@
                 updateUser: 'update',
                 deleteuser: 'delete',
                 loadUser: 'load'
-            }),
-            ...mapActions('auth', {
-                sendMailInvite:'sendMailInvite'
+            }, 'auth', {
+                sendMailInvite: 'sendMailInvite'
             }),
             // write methods to your means
             add_UpdateUser() {

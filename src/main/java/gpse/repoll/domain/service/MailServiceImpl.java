@@ -64,7 +64,7 @@ public class MailServiceImpl implements MailService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(eMail);
             message.setSubject("Welcome to RePoll!");
-            message.setText("This is your temporarily password for rePoll: " + password
+            message.setText("This is your temporary password for rePoll: " + password
                 + " Please change your password as far as possible.");
 
             // Send Message!
