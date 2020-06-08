@@ -195,17 +195,25 @@ const currentPoll = {
             })
         },
 
-        updatePollItem({commit, state}, pollItemModel) {
-            console.log(pollItemModel);
-            if (pollItemModel.type === 'SectionHeaderModel') {
+        updatePollItem({commit, state}, pollItem) {
+            if (pollItem.type === 'SectionHeader') {
                 let pollSectionCmd = {
-                    id: pollItemModel.id,
-                    title: pollItemModel.title,
-                    description: pollItemModel.description
+                    id: pollItem.id,
+                    title: pollItem.title,
+                    description: pollItem.description
                 }
                 commit('updatePollSection', pollSectionCmd);
                 return new Promise(function(resolve, reject) {
                     api.poll.updatePollSection(state.poll.id, pollSectionCmd).catch(function(error) {
+                        console.log(error);
+                        reject();
+                    })
+                })
+            }
+
+            else {
+                return new Promise(function(resolve, reject) {
+                    api.poll.updateQuestion(state.poll.id, pollItem).catch(function(error) {
                         console.log(error);
                         reject();
                     })
