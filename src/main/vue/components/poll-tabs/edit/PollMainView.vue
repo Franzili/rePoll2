@@ -5,6 +5,7 @@
     <draggable tag="ul"
                class="poll-main-view"
                v-model="pollStructure"
+               :group="{ name: 'pollEditor' }"
                handle=".handle">
         <PollItem v-for="item in pollStructure"
                   v-bind:key="item.id"
