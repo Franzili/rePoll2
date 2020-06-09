@@ -30,7 +30,7 @@
             }
         },
         computed: {
-            text: function() {
+            answer: function() {
                 return {
                     text: this.answerText
                 }
