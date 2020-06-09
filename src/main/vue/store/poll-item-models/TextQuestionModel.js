@@ -4,7 +4,7 @@ class TextQuestionModel extends PollItemModel {
     constructor(id, title, charLimit = 255) {
         super();
         this.id = id;
-        this.type = "TextQuestionModel";
+        this.type = "TextQuestion";
         this.title = title;
         this.charLimit = charLimit;
     }

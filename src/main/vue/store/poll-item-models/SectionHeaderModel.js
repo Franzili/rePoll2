@@ -1,10 +1,10 @@
-import PollItemModel from "./PollItemModel"
+import PollItemModel from "./PollItemModel";
 
 class SectionHeaderModel extends PollItemModel {
     constructor(id, title, description) {
-        super();
+        super()
         this.id = id;
-        this.type = "SectionHeaderModel";
+        this.type = "SectionHeader";
         this.title = title;
         this.description = description;
     }
