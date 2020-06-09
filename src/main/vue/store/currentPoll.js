@@ -46,11 +46,12 @@ const currentPoll = {
 
 
         /**
-         * return the entries in form: [(questionId, question, answer)]
+         * return the entries in form: [{section.title, [{questionId, question, answer}]}]
+         * for a given user with a provided user id
          * */
         entriesWithoutSection: (state) => {
             return (userId) => {
-                //let res = [];
+                let res = [];
                 let userEntry = {entry: state.entries.find(entry => entry.user.id === userId)};
                 let associations = null;
                 let answers = [];       //used in MultiChoiceAnswer
@@ -58,6 +59,7 @@ const currentPoll = {
                 let orderedAnswers = [];  //ordered answers after questionsIDs
                 let orderedQuestionsWithIds = [];
                 let idQA = [];            //array in form [(questionId, Question, answer)]
+                let sectionsWithQId = []; //array in form [(section.title, [question ids])]
 
                 //first get all answers orderes after question IDs in one array
                 if (userEntry.entry) {
@@ -87,8 +89,6 @@ const currentPoll = {
                 }
 
 
-
-
                 //then get all questions with question ids in one array
                 for (let i = 0; i < state.poll.questions.length; i++) {
                     //TODO: this only works for questions with ids: 1,2,... !!!!!!!!
@@ -97,18 +97,39 @@ const currentPoll = {
                     orderedQuestionsWithIds.push(idQObj);
                 }
 
-                //finally combine the upper two arrays into desired form
+                //combine the upper two arrays into desired form
                 for (let i = 0; i < orderedAnswers.length; i++) {
                     let IdQAObj = {qId: orderedQuestionsWithIds[i]['qId'], question: orderedQuestionsWithIds[i]['question'], answer: orderedAnswers[i]['answer']};
                     idQA.push(IdQAObj);
                 }
 
-                //TODO return in form: [section_0, section_1, ...] with section_k = [{objects in form of objects in idQA}]
-                /*for (var section in state.poll.pollSections) {
+                //here sectionsWithQId is filled with objects of form: {section.title, [question ids]}
+                for (let section in state.poll.pollSections) {
 
-                }*/
+                    let qIds = [];
 
-                return idQA;
+                    for (let i = 0; i < state.poll.pollSections[section].questions.length; i++) {
+                        qIds.push(state.poll.pollSections[section].questions[i].id);
+                    }
+
+                    let sectionsWithQIdObj = {section: state.poll.pollSections[section].title, qIds: qIds};
+
+                    sectionsWithQId.push(sectionsWithQIdObj);
+                    console.log(state.poll.pollSections[section]);
+                }
+
+                //finally bring all together in the final return form
+                for (let i = 0; i < sectionsWithQId.length; i++) {
+                    let tmpIdQA = [];
+                    for (let j = 0; j < sectionsWithQId[i].qIds.length; j++) {
+                        let idQAObj = idQA.find(idQAObj => idQAObj.qId === sectionsWithQId[i].qIds[j]);
+                        tmpIdQA.push(idQAObj);
+                    }
+                    let finalObj = {section: sectionsWithQId[i].section, idQA: tmpIdQA};
+                    res.push(finalObj);
+                }
+
+                return res;
             }
         },
 

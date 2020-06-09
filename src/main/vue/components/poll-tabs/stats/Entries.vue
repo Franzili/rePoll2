@@ -11,7 +11,7 @@
         </b-container>
 
         <div v-if="getEntries(selected)[0]">
-            <b-container>
+            <!--<b-container>
                 <b-row>
                     <b-col><h6>Questions</h6></b-col>
                     <b-col><h6>Answers</h6></b-col>
@@ -26,7 +26,12 @@
                         </b-col>
                     </b-row>
                 </div>
-            </b-container>
+            </b-container>-->
+
+            <p>
+                {{getEntries(selected)}}
+            </p>
+
         </div>
     </div>
 </template>
