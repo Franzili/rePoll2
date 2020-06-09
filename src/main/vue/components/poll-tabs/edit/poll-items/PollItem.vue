@@ -40,18 +40,22 @@
             <TextQuestion v-if="model.type === 'TextQuestion'"
                           :model="model"
                           :editing="editing"
+                          class="question-body"
                           v-on:modelChanged="onModelChanged($event)"/>
             <SingleChoiceQuestion v-else-if="model.type === 'SingleChoiceQuestion'"
                                   :model="model"
                                   :editing="editing"
+                                  class="question-body"
                                   v-on:modelChanged="onModelChanged($event)"/>
             <MultiChoiceQuestion v-else-if="model.type === 'MultiChoiceQuestion'"
                                  :model="model"
                                  :editing="editing"
+                                 class="question-body"
                                  v-on:modelChanged="onModelChanged($event)"/>
             <ScaleQuestion v-else-if="model.type === 'ScaleQuestion'"
                            :model="model"
                            :editing="editing"
+                           class="question-body"
                            v-on:modelChanged="onModelChanged($event)"/>
             <SectionHeader v-else-if="model.type === 'SectionHeader'"
                            :model="model"
