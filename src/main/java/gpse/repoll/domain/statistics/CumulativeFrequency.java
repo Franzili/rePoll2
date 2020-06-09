@@ -1,7 +1,9 @@
 package gpse.repoll.domain.statistics;
 
+import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.Choice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CumulativeFrequency {
@@ -12,13 +14,18 @@ public class CumulativeFrequency {
     private double relative;
 
     public CumulativeFrequency(Choice limit, List<Frequency> frequencies) {
+            List<Frequency> frequencyList = new ArrayList<>(frequencies);
+        try {
+            frequencyList.sort(Frequency::compareChoicesText);
+        } catch (InternalServerErrorException ignore) {
+        }
         this.limit = limit;
         int i = -1;
         do {
             i++;
-            absolute += frequencies.get(i).getAbsolute();
-            relative += frequencies.get(i).getRelative();
-        } while (!frequencies.get(i).getChoice().equals(limit));
+            absolute += frequencyList.get(i).getAbsolute();
+            relative += frequencyList.get(i).getRelative();
+        } while (!frequencyList.get(i).getChoice().equals(limit));
     }
 
     public Choice getLimit() {

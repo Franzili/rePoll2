@@ -193,6 +193,22 @@ public class QuestionStatistics {
     }
 
     /**
+     * Create a, by Choice text, sorted list of the integers, representing the choices in a ScaleQuestion.
+     * @param frequencies The list of frequencies to be sorted
+     * @return A sorted list of integers, representing the choices
+     */
+    private List<Integer> getSortedListIntegers(List<Frequency> frequencies) {
+        frequencies.sort(Frequency::compareChoicesText);
+        List<Integer> values = new ArrayList<>();
+        for (Frequency f : frequencies) {
+            for (int i = 0; i < f.getAbsolute(); i++) {
+                values.add(Integer.parseInt(f.getChoice().getText()));
+            }
+        }
+        return values;
+    }
+
+    /**
      * Calculates the median of the absolute frequencies of a question.
      * The median is the text of a specific choice, with the absolute frequency, that would be in the
      * middle of a sorted list of the frequencies to all choices.
@@ -200,9 +216,9 @@ public class QuestionStatistics {
      * @return The value of the number in the middle of the sorted list
      */
     private Integer computeMedian() {
-        // ToDo:  make this shit right
-        int size = this.cumulativeFrequencies.get(cumulativeFrequencies.size() - 1).getAbsolute();
-        return this.cumulativeFrequencies.get((size / 2)).getAbsolute();
+        List<Integer> values = getSortedListIntegers(this.frequencies);
+        int sizeVal = values.size();
+        return values.get(sizeVal / 2);
     }
 
     /**
@@ -210,19 +226,18 @@ public class QuestionStatistics {
      * @return {@link Quartiles} that contain the first and the third quartile of the frequencies
      */
     private Quartiles computeQuartiles() {
-        List<Frequency> freq = new ArrayList<>(frequencies);
-        freq.removeIf(frequency -> frequency.getAbsolute() == 0);
-        List<CumulativeFrequency> cumFreq = this.cumulativeFrequencies;
-        int size = cumFreq.size();
-        int listsize = MIN_LIST_SIZE;
-        if (size == listsize) {
-            return new Quartiles(cumFreq.get(1).getAbsolute(), cumFreq.get(1).getAbsolute());
-        } else if (size < listsize) {
+        List<Integer> values = getSortedListIntegers(this.frequencies);
+        int sizeVal = values.size();
+        int listSize = MIN_LIST_SIZE;
+        if (sizeVal == listSize) {
+            return new Quartiles(values.get(1), values.get(1));
+        } else if (sizeVal < listSize) {
             return null;
         }
-        int chunkSize = cumFreq.get(cumFreq.size() - 1).getAbsolute() / 2;
-        int firstQuartile = cumFreq.get(chunkSize).getAbsolute();
-        int secondQuartile = cumFreq.get(size - chunkSize).getAbsolute();
+        List<Integer> firstHalf = values.subList(0, this.median);
+        List<Integer> secondHalf = values.subList(this.median + 1, values.size());
+        int firstQuartile = firstHalf.get(firstHalf.size() / 2);
+        int secondQuartile = secondHalf.get(secondHalf.size() / 2);
         return new Quartiles(firstQuartile, secondQuartile);
     }
 
