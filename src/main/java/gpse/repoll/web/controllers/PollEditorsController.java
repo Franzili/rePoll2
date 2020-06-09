@@ -44,8 +44,6 @@ public class PollEditorsController {
                 if (((UserCmd) user).getUsername() != null) {
                     editors.add(userService.getUser(((UserCmd) user).getUsername()));
                 }
-            } else {
-                System.out.println("User failed ----------------------------------------------");
             }
         }
         return pollEditorsService.updatePollEditors(
