@@ -53,11 +53,14 @@
             answerPoll() {
                 //TODO is this the first time answering this poll, then "answerFirst(poll)" else "answerAgain(poll) in polls.js"
 
-                let pollAnswers = document.querySelector('.poll-main-view').children;
-                console.log('pollAnswers: ', pollAnswers)
+                let pollAnswers = document.querySelectorAll('.question-body') //alle Frage Einträge
+                //console.log('pollAnswers: ', pollAnswers)
                 for (let i=0; i < pollAnswers.length; i++) {
-                    console.log('pollAnswers: ', pollAnswers[i])
+                    console.log('pollAnswers i : ', pollAnswers[i].__vue__.answer)
+                    console.log(pollAnswers[0].__vue__.model.id)
                 }
+                //das da oben on entry objekt packen nach "(siehe code)" und abspeichern
+
 
                 /*if (!(this.status.equals("filledOut"))) { //first time filling out  //("ready")
                     this.status.set("filledOut")
