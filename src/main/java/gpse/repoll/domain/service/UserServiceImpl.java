@@ -18,13 +18,16 @@ import java.util.UUID;
 @Primary
 public class UserServiceImpl implements UserService {
     private final PollService pollService;
+    private final MailService mailService;
     private final UserRepository userRepository;
 
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
+                           MailService mailService,
                            PollService pollService) {
         this.pollService = pollService;
+        this.mailService = mailService;
         this.userRepository = userRepository;
     }
 

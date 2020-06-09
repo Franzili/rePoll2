@@ -1,5 +1,7 @@
 package gpse.repoll.domain.service;
 
+import gpse.repoll.domain.User;
+
 /**
  * Provides operations with Mailing to the Controller.
  */
@@ -16,8 +18,8 @@ public interface MailService {
 
     /**
      * Sends a Mail that contains the username and a new randomized password for a new user.
-     * @param userName username of the new User.
+     * @param user The new User.
      * @return Confirmation that the Mail was sent or an error message.
      */
-    String sendPwdGenMail(String userName);
+    String sendPwdGenMail(User user);
 }

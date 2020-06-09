@@ -180,8 +180,6 @@
                 updateUser: 'update',
                 deleteuser: 'delete',
                 loadUser: 'load'
-            }, 'auth', {
-                sendMailInvite: 'sendMailInvite'
             }),
             // write methods to your means
             add_UpdateUser() {
@@ -209,13 +207,6 @@
                         };
                         console.log(userCmd);
                         this.createUser(userCmd);
-
-                        // Send E-Mail with temporary password to the new user
-                        let credentials = {
-                            userName: this.userName,
-                            eMail: this.email
-                        }
-                        this.sendMailInvite(credentials)
                     }
 
                 if(this.isUpdate) {

@@ -53,10 +53,6 @@ const auth = {
          * Load a token from Browser localStorage.
          */
 
-        sendMailInvite(userName) {
-            return Promise.resolve(undefined);
-        },
-
         loadFromStorage({commit}) {
             let token = localStorage.getItem('authToken');
             commit('authenticate', token);

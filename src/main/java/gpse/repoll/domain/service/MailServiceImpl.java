@@ -8,8 +8,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 /**
  * Default implementation of MailService.
  */
@@ -50,13 +48,11 @@ public class MailServiceImpl implements MailService {
      * {@inheritDoc}
      */
     @Override
-    public String sendPwdGenMail(String userName) {
-        Optional<User> user = userRepository.findByUsername(userName);
-        if (user.isPresent()) {
+    public String sendPwdGenMail(User user) {
             // Get the password that was generated for a new user in User.class
-            String password = user.get().getPassword();
+            String password = user.getPassword();
             // Corresponding E-Mail address
-            String eMail = user.get().getEmail();
+            String eMail = user.getEmail();
             if (eMail == null) {
                 return "The user has no E-Mail address";
             }
@@ -70,12 +66,10 @@ public class MailServiceImpl implements MailService {
             // Send Message!
             try {
                 this.emailSender.send(message);
+                System.out.println("mail sent actually");
                 return EMAIL_SENT;
             } catch (MailException e) {
                 return FAILURE;
             }
-        } else {
-            return "There is no user with this username!";
-        }
     }
 }
