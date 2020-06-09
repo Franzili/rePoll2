@@ -44,7 +44,7 @@
             BarChart,
             DoughnnutChart,
             BoxplotChart
-        }
+        },
     }
 </script>
 

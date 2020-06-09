@@ -57,8 +57,17 @@
                 this.datasets[0].label = this.title;
                 for(let i = 0; i < this.choiceFreqPairs.length; i++) {
                     this.myChoices[i] = this.choiceFreqPairs[i].choice;
-                    this.datasets[0].data[i] = this.choiceFreqPairs[i].absFreq;
+                    this.datasets[0].data[i] = this.choiceFreqPairs[i].freq;
                 }
+            }
+        },
+        watch: {
+            choiceFreqPairs() {
+                this.fillData();
+                this.renderChart({
+                        labels: this.myChoices,
+                        datasets: this.datasets},
+                    this.options);
             }
         }
     }

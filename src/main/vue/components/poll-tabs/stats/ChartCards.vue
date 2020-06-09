@@ -53,25 +53,42 @@
                     currentChart: 'bar',
                     match: [],
                     question: {}
+                },
+                absolute: [],
+                relative: [],
+                frequency: 'abs'
+            }
+        },
+        watch: {
+            frequency: function (val) {
+                if (val === 'abs') {
+                    this.chartsObj.match = this.absolute
+                } else {
+                    this.chartsObj.match = this.relative
                 }
             }
         },
         created() {
             let absFreq = Object.entries(this.statistic.absoluteFrequencies)
-            this.convertStatsToCharts(absFreq)
+            this.absolute = this.convertStatsToCharts(absFreq)
+            let relFreq = Object.entries(this.statistic.relativeFrequencies)
+            this.relative = this.convertStatsToCharts(relFreq)
+            this.chartsObj.match = this.absolute
         },
         methods: {
             convertStatsToCharts(aFrq) {
+                let abs = []
                 this.chartsObj.question = this.statistic.question
                 for (let i = 0; i < aFrq.length; i++) {
                     for (let j = 0; j < this.statistic.question.choices.length; j++) {
                         if(aFrq[i][0] === this.statistic.question.choices[j].text) {
-                            let newMatch = {choice: aFrq[i][0], absFreq: aFrq[i][1]}
-                            this.chartsObj.match = [...this.chartsObj.match, newMatch]
+                            let newMatch = {choice: aFrq[i][0], freq: aFrq[i][1]}
+                            abs = [...abs, newMatch]
                         }
 
                     }
                 }
+                return abs
             }
         },
         components: {

@@ -54,7 +54,7 @@
 
                 for(let i = 0; i < this.choiceFreqPairs.length; i++) {
                     this.myChoices[i] = this.choiceFreqPairs[i].choice;
-                    this.datasets[0].data[i] = this.choiceFreqPairs[i].absFreq;
+                    this.datasets[0].data[i] = this.choiceFreqPairs[i].freq;
                 }
 
                 //setting different background colors of choices
@@ -77,6 +77,16 @@
                         this.datasets[0].backgroundColor[i] = this.backgroundColors[i];
                     }
                 }
+            }
+        },
+        watch: {
+            choiceFreqPairs() {
+                console.log('hallo bums')
+                this.fillData();
+                this.renderChart({
+                        labels: this.myChoices,
+                        datasets: this.datasets},
+                    this.options);
             }
         }
     }
