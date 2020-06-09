@@ -49,7 +49,7 @@ const currentPoll = {
          * return the entries in form: [{section.title, [{questionId, question, answer}]}]
          * for a given user with a provided user id
          * */
-        entriesWithoutSection: (state) => {
+        entriesWithSections: (state) => {
             return (userId) => {
                 let res = [];
                 let userEntry = {entry: state.entries.find(entry => entry.user.id === userId)};
@@ -115,7 +115,6 @@ const currentPoll = {
                     let sectionsWithQIdObj = {section: state.poll.pollSections[section].title, qIds: qIds};
 
                     sectionsWithQId.push(sectionsWithQIdObj);
-                    console.log(state.poll.pollSections[section]);
                 }
 
                 //finally bring all together in the final return form
