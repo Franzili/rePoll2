@@ -9,28 +9,16 @@
         -->
 
         <b-row>
-            <b-col cols="8">
+            <b-col cols="6">
                 <h5>{{statistic.question.title}}</h5>
             </b-col>
 
-            <b-col align-self="end" v-if="statistic.modalValue !== null">
-                <b-button-toolbar class="float-right">
-                    <b-button-group class="mr-1">
-                        <b-button title="Bar Chart" v-on:click="chartsObj.currentChart = 'bar'">
-                            <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon>
-                        </b-button>
-                        <b-button title="Bar Chart" v-on:click="chartsObj.currentChart = 'donut'">
-                            <b-icon icon="pie-chart-fill" aria-hidden="true"></b-icon>
-                        </b-button>
-                        <b-button title="Boxplot" v-on:click="chartsObj.currentChart = 'boxplot'">
-                            <b-iconstack>
-                                <b-icon stacked shift-h="10" icon="dash"></b-icon>
-                                <b-icon stacked shift-h="" icon="vr"></b-icon>
-                                <b-icon stacked shift-h="-10" icon="dash"></b-icon>
-                            </b-iconstack>
-                        </b-button>
-                    </b-button-group>
-                </b-button-toolbar>
+            <b-col cols="6" v-if="statistic.modalValue !== null">
+                <ToolBar
+                    v-bind:actives="[true,true,true,true]"
+                    v-on:chart="chartsObj.currentChart = $event"
+                    v-on:frequency="frequency = $event"
+                    class="float-right"></ToolBar>
             </b-col>
 
         </b-row>
@@ -54,6 +42,7 @@
 <script>
 
     import ChartsInlay from "./ChartsInlay";
+    import ToolBar from "./ToolBar";
 
     export default {
         name: "ChartCards",
@@ -86,7 +75,8 @@
             }
         },
         components: {
-            ChartsInlay
+            ChartsInlay,
+            ToolBar
         }
     }
 </script>

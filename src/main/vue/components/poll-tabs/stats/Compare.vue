@@ -5,11 +5,21 @@
             {{cardList}}
         </p>
 
+        <div>
+            <b-container v-bind:key="card.id" v-for="card in cardList">
+                <b-card>
+                    <b-container v-bind:key="statistic.question.id" v-for="statistic in card.compSet">
+                        <ChartCards v-bind:statistic="statistic"></ChartCards>
+                    </b-container>
+                </b-card>
+            </b-container>
+        </div>
+
         <b-button @click="showModal" > lalaa</b-button>
         <!-- TODO v-on with funtion-->
         <myModal
 
-            v-on:getSelected="$event !== [] && cardList.push($event)"
+            v-on:getSelected="fillCompares($event)"
             ref="mymodal"
             v-bind:modalObj="getPollStructure"
         ></myModal>
@@ -25,6 +35,7 @@
 <script>
     import {mapGetters, mapState} from "vuex";
     import myModal from "./myModal";
+    import ChartCards from "./ChartCards";
 
     export default {
         name: "Compare",
@@ -49,9 +60,16 @@
             showModal() {
                 this.$refs.mymodal.show()
             },
+            fillCompares(compSet) {
+                if (compSet.length > 0) {
+                    let cardObj = {id: Date.now(), compSet}
+                    this.cardList.push(cardObj)
+                }
+            }
         },
         components: {
-            myModal
+            myModal,
+            ChartCards,
         }
     }
 </script>
