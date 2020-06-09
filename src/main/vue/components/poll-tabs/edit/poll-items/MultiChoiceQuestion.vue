@@ -1,14 +1,16 @@
 <template>
-    <b-form-checkbox-group v-model="selected">
-        <div v-bind:key="choice.id" v-for="choice in model.choices">
-            <b-form-checkbox :value="choice.text">{{choice.text}}</b-form-checkbox>
-            <b-button class="del-pos-btn"
-                      size="sm"
-                      variant="outline-secondary"
-                      pill v-if="editable"
-                      @click="delPos(choice.id)">x</b-button>
-        </div>
-    </b-form-checkbox-group>
+    <div>
+        <b-form-checkbox-group v-model="selected">
+            <div v-bind:key="choice.id" v-for="choice in model.choices">
+                <b-form-checkbox :value="choice.id">{{choice.text}}</b-form-checkbox>
+                <b-button class="del-pos-btn"
+                          size="sm"
+                          variant="outline-secondary"
+                          pill v-if="editable"
+                          @click="delPos(choice.id)">x</b-button>
+            </div>
+        </b-form-checkbox-group>
+    </div>
 </template>
 
 <script>
@@ -21,9 +23,13 @@
         },
         computed: {
             answer: function() {
+                console.log('hallo: ', this.selected)
                 return {
-                    choices: this.selected.map(choice => choice.id)
+                    choices: this.selected //.map(choice => choice.id)
                 }
+            },
+            textME: function () {
+                return "hiho"
             }
         },
         props: {

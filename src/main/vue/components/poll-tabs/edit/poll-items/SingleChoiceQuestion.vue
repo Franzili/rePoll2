@@ -3,7 +3,7 @@
         <!-- michaels variant with changes variables, works this way but is not a radio component in answer-->
         <b-form-group v-if="model.displayVariant === 'radio'">
             <div v-bind:key="choice.id" v-for="choice in model.choices">
-                <b-form-radio v-model="selected" :value="choice.text">{{choice.text}}</b-form-radio>
+                <b-form-radio v-model="selected" :value="choice.id">{{choice.text}}</b-form-radio>
                 <b-button size="sm"
                           variant="outline-secondary"
                           pill v-if="editing"
@@ -17,7 +17,7 @@
             <b-form-select v-model="selected">
                 <b-form-select-option v-bind:key="choice.id"
                                       v-for="choice in model.choices"
-                                      :value="choice.text">{{choice.text}}</b-form-select-option>
+                                      :value="choice.id">{{choice.text}}</b-form-select-option>
             </b-form-select>
 
             <div v-if="editing">
@@ -51,7 +51,7 @@
         computed: {
             answer: function() {
                 return {
-                    choice: this.selected.id
+                    choice: this.selected
                 }
             }
         },
