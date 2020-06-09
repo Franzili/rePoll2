@@ -1,10 +1,8 @@
 package gpse.repoll.web.command;
 
 import gpse.repoll.domain.Anonymity;
-import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.PollStatus;
 
-import java.util.List;
 
 /**
  * Poll helper object used for JSON serialisation.
