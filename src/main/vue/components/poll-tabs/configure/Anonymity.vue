@@ -14,7 +14,6 @@
             <h6>Anonymity</h6>
 
             <b-form-radio-group
-                v-on:input="changeAnonymityConfirmation"
                 v-model="anonymityChecked">
 
                 <b-form-radio value="ANONYMOUS">
@@ -40,10 +39,10 @@
                 </b-form-radio>
             </b-form-radio-group>
 
-            <b-button class="float-right" v-b-modal.change-anoymity>Apply</b-button>
+            <b-button class="float-right" v-b-modal.change-anonymity>Apply</b-button>
 
             <b-modal v-if="this.poll.anonymity !== anonymityChecked"
-                     id="change-anoymity"
+                     id="change-anonymity"
                      centered
                      @ok="changeAnonymity()">
                 <p>
@@ -62,10 +61,7 @@
         name: "Anonymity",
         data() {
             return {
-                anonymityChecked: '',
-                sureToChangeAnonymity: false,
-                waitingForConfirmation: false,
-                first: ''
+                anonymityChecked: ''
             }
         },
         computed: {
