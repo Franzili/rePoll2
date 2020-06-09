@@ -43,7 +43,7 @@ public class Frequency implements Comparable<Frequency> {
             Integer value = Integer.parseInt(this.choice.getText());
             return Integer.compare(value, Integer.parseInt(frequency.choice.getText()));
         } catch (NumberFormatException e) {
-            throw new InternalServerErrorException();
+            throw new InternalServerErrorException(e.getMessage()); // NOPMD
         }
     }
 }

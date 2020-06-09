@@ -17,7 +17,8 @@ public class CumulativeFrequency {
             List<Frequency> frequencyList = new ArrayList<>(frequencies);
         try {
             frequencyList.sort(Frequency::compareChoicesText);
-        } catch (InternalServerErrorException ignore) {
+        } catch (InternalServerErrorException ignore) { // NOPMD
+            // This is thrown when the Choices were not integers and therefor can be ignored, so the list is not sorted
         }
         this.limit = limit;
         int i = -1;

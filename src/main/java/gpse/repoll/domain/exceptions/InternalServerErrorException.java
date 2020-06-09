@@ -9,4 +9,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class InternalServerErrorException extends RuntimeException {
     public static final long serialVersionUID = 3L;
+
+    public InternalServerErrorException() {
+
+    }
+
+    public InternalServerErrorException(String message) {
+        super(message);
+    }
 }
