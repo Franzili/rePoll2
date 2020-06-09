@@ -39,8 +39,8 @@
         name: "PollTable",
 
         created() {
-            this.loadPolls(),
-            this.loadAssigned()
+            this.loadPolls();
+            this.loadAssigned();
         },
 
         computed: {
