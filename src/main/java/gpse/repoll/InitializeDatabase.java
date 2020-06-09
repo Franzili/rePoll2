@@ -142,11 +142,6 @@ public class InitializeDatabase implements InitializingBean {
 
             Poll poll = pollService.addPoll("Gummibaerchen");
 
-            // Editors
-            List<User> editors = new ArrayList<>();
-            editors.add(participants.get(0));
-            pollEditorsService.updatePollEditors(poll.getId(), editors);
-
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255);
             userService.addOwnedPoll(poll.getId(), user.getUsername());

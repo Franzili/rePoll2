@@ -1,7 +1,5 @@
 package gpse.repoll.web.command;
 
-import gpse.repoll.domain.User;
-
 import java.util.List;
 
 public class PollEditorsCmd {
