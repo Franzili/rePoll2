@@ -1,5 +1,8 @@
 <template>
     <b-container>
+        <p>
+            {{users}}
+        </p>
         <b-row>
             <p style="margin-left: 20vw; margin-top: 2vh"></p>
         </b-row>
@@ -114,7 +117,10 @@
 
                     <!-----Delete and Edit Button--->
                     <template v-slot:cell(actions)="row">
-                        <b-button size="sm" variant="primary" v-b-modal.modal-1 @click="isUpdate=true">
+                        <b-button size="sm"
+                                  variant="primary"
+                                  v-b-modal.modal-1
+                                  @click="isUpdate=true">
                             Edit
                         </b-button>
                         <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1">
@@ -187,11 +193,11 @@
                         this.isUpdate = false;
                         let userCmd = {
                             username: this.username,
-                            password: this.password,
                             fullName: this.fullName,
                             email: this.email,
-                            role: this.role
+                            role: this.role,
                         };
+                        console.log(userCmd);
                         this.updateUser(userCmd);
 
                     }
