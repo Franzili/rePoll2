@@ -49,13 +49,13 @@ public class MailServiceImpl implements MailService {
      */
     @Override
     public String sendPwdGenMail(User user) {
-            // Get the password that was generated for a new user in User.class
-            String password = user.getPassword();
-            // Corresponding E-Mail address
+            // Get the E-Mail address
             String eMail = user.getEmail();
             if (eMail == null) {
                 return "The user has no E-Mail address";
             }
+            // Get the password that was generated for the new user in User.class
+            String password = user.getPassword();
 
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(eMail);
@@ -66,7 +66,6 @@ public class MailServiceImpl implements MailService {
             // Send Message!
             try {
                 this.emailSender.send(message);
-                System.out.println("mail sent actually");
                 return EMAIL_SENT;
             } catch (MailException e) {
                 return FAILURE;
