@@ -31,11 +31,18 @@
                             <b-icon-check/>
                         </b-button>
 
-                        <!-- grab handle -->
-                        <b-button variant="outline-secondary" class="handle">
-                            <b-icon-arrow-up-down />
+                        <b-button variant="outline-secondary" @click="temporaryAlert()">
+                            <b-icon-trash/>
                         </b-button>
+
                     </b-button-group>
+                </span>
+
+                <span v-if="editable">
+                    <!-- grab handle -->
+                    <b-button variant="outline-secondary" class="handle" size="sm">
+                        <b-icon-arrow-up-down />
+                    </b-button>
                 </span>
 
             </p>
@@ -125,6 +132,9 @@
             onEditStarted() {
                 this.$emit('editStarted', this);
                 console.debug(`[RePoll] Poll Item ${this.model.id} started editing.`);
+            },
+            temporaryAlert() {
+                alert("This is to be implemented tonight! :)")
             }
         },
         components: {
@@ -147,8 +157,11 @@
     }
     .question-card-header > .question-card-title {
         flex-grow: 1;
-        margin-right: 20px;
     }
+    .question-card-header > span:not(:first-child) {
+        margin-left: 10px;
+    }
+
 
 
 
