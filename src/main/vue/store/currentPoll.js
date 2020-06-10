@@ -69,19 +69,19 @@ const currentPoll = {
                         let answerAndId = null;
                         switch (associations.associations[prop].type) {
                             case 'TextAnswer':
-                                answerAndId = {answer: associations.associations[prop].text};
+                                answerAndId = {qId: prop, answer: associations.associations[prop].text};
                                 break;
                             case 'SingleChoiceAnswer' :
-                                answerAndId = {answer: associations.associations[prop].choice.text};
+                                answerAndId = {qId: prop, answer: associations.associations[prop].choice.text};
                                 break;
                             case 'MultiChoiceAnswer' :
                                 for (let i = 0; i < associations.associations[prop].choices.length; i++) {
                                     answers.push(associations.associations[prop].choices[i].text);
                                 }
-                                answerAndId = {answer: answers};
+                                answerAndId = {qId: prop, answer: answers};
                                 break;
                             case 'ScaleAnswer' :
-                                answerAndId = {answer: associations.associations[prop].scaleNumber};
+                                answerAndId = {qId: prop, answer: associations.associations[prop].scaleNumber};
                                 break;
                         }
                         orderedAnswers.push(answerAndId);
@@ -91,15 +91,22 @@ const currentPoll = {
 
                 //then get all questions with question ids in one array
                 for (let i = 0; i < state.poll.questions.length; i++) {
-                    //TODO: this only works for questions with ids: 1,2,... !!!!!!!!
-                    let tmpQ = state.poll.questions.find(q => q.id === i+1);
+                    let tmpQ = state.poll.questions[i];
                     let idQObj = {qId: tmpQ.id, question: tmpQ.title};
                     orderedQuestionsWithIds.push(idQObj);
                 }
 
                 //combine the upper two arrays into desired form
                 for (let i = 0; i < orderedAnswers.length; i++) {
-                    let IdQAObj = {qId: orderedQuestionsWithIds[i]['qId'], question: orderedQuestionsWithIds[i]['question'], answer: orderedAnswers[i]['answer']};
+                    let tmpQId = orderedQuestionsWithIds[i]['qId'];
+                    let ans = '';
+                    for (let j = 0; j < orderedAnswers.length; j++) {
+                        if (parseInt(orderedAnswers[j].qId, 10) === parseInt(tmpQId, 10)) {
+                            ans = orderedAnswers[j].answer;
+                            break;
+                        }
+                    }
+                    let IdQAObj = {qId: tmpQId, question: orderedQuestionsWithIds[i]['question'], answer: ans};
                     idQA.push(IdQAObj);
                 }
 
