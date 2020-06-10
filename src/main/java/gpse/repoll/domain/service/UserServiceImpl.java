@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User removeUser(UUID id) {
+    public void removeUser(UUID id) {
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
         Iterable<Poll> listAll = pollService.getAll();
         for(Poll listEle: listAll) {
@@ -135,14 +135,14 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.delete(user);
-        return user;
+        //return user;
     }
 
     @Override
-    public User removeUser(String username) {
+    public void removeUser(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
         userRepository.delete(user);
-        return user;
+        //return user;
     }
 
     /**
