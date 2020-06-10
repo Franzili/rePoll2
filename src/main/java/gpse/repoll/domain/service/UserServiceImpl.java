@@ -4,6 +4,8 @@ import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
+import gpse.repoll.domain.poll.PollEntry;
+import gpse.repoll.domain.repositories.PollEntryRepository;
 import gpse.repoll.domain.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -11,22 +13,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Primary
 public class UserServiceImpl implements UserService {
     private final PollService pollService;
     private final UserRepository userRepository;
+    private final PollEntryRepository pollEntryRepository;
 
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           PollService pollService) {
+                           PollService pollService, PollEntryRepository pollEntryRepository) {
         this.pollService = pollService;
         this.userRepository = userRepository;
+        this.pollEntryRepository = pollEntryRepository;
     }
 
     @Override
@@ -103,6 +105,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public User removeUser(UUID id) {
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        Iterable<Poll> listAll = pollService.getAll();
+        for(Poll listEle: listAll) {
+            //TODO: Liste von Participants auch durchgehen &  Verbindung PollEntrys auf null
+            if (listEle.getCreator() != null && listEle.getCreator().getId() == id) {
+                // et to dummy user
+                listEle.setCreator(null);
+            }
+            if (listEle.getLastEditor() != null && listEle.getLastEditor().getId() == id) {
+                listEle.setLastEditor(null);
+            }
+            if (listEle.getPollEditors() != null) {
+                Collection<User> listeLocalEditor = new ArrayList<>();
+                for(User localEditor: listEle.getPollEditors()) {
+                    // add again only users without uid of remove user
+                    if(localEditor != null && localEditor.getId() != id) {
+                        listeLocalEditor.add(localEditor);
+                    }
+                }
+                listEle.setPollEditors((List<User>) listeLocalEditor);
+            }
+
+        }
+        Iterable<PollEntry> listEntrys = pollEntryRepository.findAll();
+        for(PollEntry listeAllEntrys: listEntrys) {
+            if(listeAllEntrys.getUser() != null && listeAllEntrys.getUser().getId() == id) {
+                listeAllEntrys.setUser(null);
+            }
+        }
+
         userRepository.delete(user);
         return user;
     }
