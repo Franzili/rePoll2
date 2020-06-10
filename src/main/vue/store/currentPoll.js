@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 import api from "../api";
 
 import SectionHeaderModel from "./poll-item-models/SectionHeaderModel";
@@ -138,8 +140,11 @@ const currentPoll = {
         },
 
         updatePollSection(state, pollSectionCmd) {
-            let pollSection = state.poll.pollSections.find(section => section.id === pollSectionCmd.id);
+            let index = state.poll.pollSections.findIndex(section => section.id === pollSectionCmd.id);
+            let pollSection = state.poll.pollSections[index];
             Object.assign(pollSection, pollSectionCmd);
+            // we need to use Vue.set in order to maintain reactivity.
+            Vue.set(state.poll.pollSections, index, pollSection);
         },
 
         updateStructureFromFlat(state, structure) {
@@ -239,6 +244,7 @@ const currentPoll = {
                     title: pollItem.title,
                     description: pollItem.description
                 }
+                console.log(pollSectionCmd);
                 commit('updatePollSection', pollSectionCmd);
                 return new Promise(function(resolve, reject) {
                     api.poll.updatePollSection(state.poll.id, pollSectionCmd).then(() => {
