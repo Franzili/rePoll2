@@ -6,6 +6,7 @@ class SingleChoiceQuestionModel extends PollItemModel {
         this.id = id;
         this.type = "SingleChoiceQuestion";
         this.title = "Single Choice Question";
+        this.displayVariant = "radio";
         this.choices = [
             {
                 text: "Initial Choice 1"
