@@ -16,6 +16,9 @@ export default {
     update(pollCmd) {
         return axios.put('/api/v1/polls/' + pollCmd.id + '/', pollCmd);
     },
+    addQuestion(pollId, questionCmd) {
+        return axios.post('/api/v1/polls/' + pollId + '/questions/', questionCmd);
+    },
     updateQuestion(pollId, question) {
         return axios.put('/api/v1/polls/' + pollId + '/questions/' + question.id + '/', question);
     },

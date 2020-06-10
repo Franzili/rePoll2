@@ -28,11 +28,7 @@
 
         methods: {
             createItem(modelConstructor) {
-                console.log(modelConstructor);
-                let a = new modelConstructor(420, "abcdefg");
-                console.log("a:  ")
-                console.log(a)
-                return a;
+                return new modelConstructor(-1);
             }
         },
 

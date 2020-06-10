@@ -173,7 +173,12 @@ const currentPoll = {
             console.log(pollSections);
 
             state.poll.pollSections = pollSections;
+        },
+
+        addQuestion(state, question) {
+            state.poll.questions.push(question);
         }
+
     },
 
     actions: {
@@ -264,6 +269,24 @@ const currentPoll = {
                 if (newStructure[i].type !== 'SectionHeader') {
                     newStructure[i].questionOrder = i + 1;
                 }
+            }
+
+            /* then, check if there are any new poll items that have not been POSTed yet to the server */
+            let questionPromises = [];
+            let updateIndices = [];
+            for (let i = 0; i < newStructure.length; i++) {
+                if (newStructure[i].id === -1) {
+                    questionPromises.push(api.poll.addQuestion(state.poll.id, newStructure[i]))
+                    updateIndices.push(i);
+                }
+            }
+            /* now update the newly POSTed poll items to have a proper ID */
+            let serverResponse = await Promise.all(questionPromises)
+            for (let i = 0; i < questionPromises.length; i++) {
+                let updateIndex = updateIndices[i];
+                let updatedItem = serverResponse[i].data;
+                newStructure[updateIndex] = updatedItem;
+                commit('addQuestion', updatedItem);
             }
 
             let structureCmd = {};
