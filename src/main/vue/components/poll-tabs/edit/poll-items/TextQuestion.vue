@@ -1,6 +1,10 @@
 <template>
     <div>
-        <b-form-input :maxlength="model.charLimit" v-model="answerText" class="text-box"/>
+        <b-form-input :maxlength="model.charLimit"
+                      :placeholder="editable ? 'Enter some text...' : ''"
+                      :disabled="editable"
+                      v-model="answerText"
+                      class="text-box"/>
 
         <div v-if="editing">
             <b-form-group>

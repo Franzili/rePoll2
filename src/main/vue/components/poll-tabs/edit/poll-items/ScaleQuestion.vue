@@ -13,6 +13,7 @@
             :min="model.min"
             :max="model.max"
             :step="model.stepCount"
+            :disabled="editable"
         ></b-form-input>
         <div>
             <b>Value:</b> {{ selected }}

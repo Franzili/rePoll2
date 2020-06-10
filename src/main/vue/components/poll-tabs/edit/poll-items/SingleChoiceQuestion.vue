@@ -2,7 +2,9 @@
     <div>
         <template v-if="!editing">
             <p>
-                <b-form-group v-if="model.displayVariant === 'radio'" class="radio-group">
+                <b-form-group v-if="model.displayVariant === 'radio'"
+                              class="radio-group"
+                              :disabled="editable">
                     <div v-bind:key="choice.id" v-for="choice in model.choices">
                         <b-form-radio v-model="selected" :value="choice.id">{{choice.text}}</b-form-radio>
                     </div>
@@ -10,7 +12,9 @@
             </p>
 
             <p v-if="model.displayVariant === 'dropdown'">
-                <b-form-select v-model="selected">
+                <b-form-select v-model="selected"
+                               :disabled="editable">
+                    <b-form-select-option :value="null">Select an option</b-form-select-option>
                     <b-form-select-option v-bind:key="choice.id"
                                           v-for="choice in model.choices"
                                           :value="choice.id">{{choice.text}}</b-form-select-option>
@@ -42,7 +46,7 @@
         name: "SingleChoiceQuestion",
         data() {
             return {
-                selected: ""
+                selected: null
             }
         },
         computed: {

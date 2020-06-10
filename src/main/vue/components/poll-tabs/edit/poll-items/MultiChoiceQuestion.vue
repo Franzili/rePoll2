@@ -1,5 +1,7 @@
 <template>
-    <b-form-checkbox-group v-if="!editing" v-model="selected">
+    <b-form-checkbox-group v-if="!editing"
+                           v-model="selected"
+                           :disabled="editable">
         <div v-bind:key="choice.id" v-for="choice in model.choices">
             <b-form-checkbox :value="choice.id">{{choice.text}}</b-form-checkbox>
         </div>
