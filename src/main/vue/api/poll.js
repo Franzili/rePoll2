@@ -13,12 +13,6 @@ export default {
         };
         return axios.post('/api/v1/polls/', pollCmd);
     },
-    answerFirst(pollId, pollEntryCmd, userId) { //saving first time answering the poll
-        return axios.post('api/v1/polls/' + pollId + '/entries/' + userId + '/', pollEntryCmd);
-    },
-    answerAgain(pollId, pollEntryCmd, userId) { //saving every following time changing the answers
-        return axios.put('api/v1/polls/' + pollId + '/entries/' + userId + '/', pollEntryCmd);
-    },
     update(pollCmd) {
         return axios.put('/api/v1/polls/' + pollCmd.id + '/', pollCmd);
     },
