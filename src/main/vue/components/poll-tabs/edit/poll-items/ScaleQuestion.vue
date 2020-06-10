@@ -40,6 +40,7 @@
         computed: {
             answer: function() {
                 return {
+                    type: "ScaleAnswer",
                     scaleNumber: this.selected
                 }
             }

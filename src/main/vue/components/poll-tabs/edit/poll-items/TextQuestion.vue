@@ -32,6 +32,7 @@
         computed: {
             answer: function() {
                 return {
+                    type: "TextAnswer",
                     text: this.answerText
                 }
             }

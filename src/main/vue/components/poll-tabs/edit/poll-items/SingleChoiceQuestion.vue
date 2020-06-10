@@ -51,6 +51,7 @@
         computed: {
             answer: function() {
                 return {
+                    type: "SingleChoiceAnswer",
                     choice: this.selected
                 }
             }
