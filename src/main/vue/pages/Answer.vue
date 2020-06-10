@@ -27,6 +27,8 @@
     import {mapGetters, mapActions} from "vuex"
 
     import PollItem from "../components/poll-tabs/edit/poll-items/PollItem";
+    import currentPoll from "../store/currentPoll";
+    //import api from "../api";
     //import axios from "axios";
 
     export default {
@@ -53,31 +55,61 @@
             answerPoll() {
                 //TODO is this the first time answering this poll, then "answerFirst(poll)" else "answerAgain(poll) in polls.js"
 
-                let pollAnswers = document.querySelectorAll('.question-body') //alle Frage Einträge
+                let pollHTMLAnswers = document.querySelectorAll('.question-body') //alle Frage Einträge
                 //console.log('pollAnswers: ', pollAnswers)
-                for (let i=0; i < pollAnswers.length; i++) {
-                    console.log('pollAnswers i : ', pollAnswers[i].__vue__.answer)
-                    console.log(pollAnswers[0].__vue__.model.id)
+                //console.log('user: ', localStorage.getItem(('username')))
+                //console.log('pollID: ',  currentPoll.state.poll.id)
+                //console.log('Status: ',  currentPoll.state.poll.status)
+                //answerID <Long>
+                //let answerAnswers
+
+                let pollAnswers = Map(pollHTMLAnswers.__vue__.model.id, pollHTMLAnswers.__vue__.answer)
+
+                let Map<Long, String> tmps = new HashMap<>()
+
+                /*for (let i=0; i < pollHTMLAnswers.length; i++) {
+                    //console.log('pollAnswers i : ', pollHTMLAnswers[i].__vue__.answer) //answer
+                    //console.log('id: ', pollHTMLAnswers[i].__vue__.model.id) //id of answer
+                    answerIDs.add(pollHTMLAnswers[i].__vue__.model.id)
+                    answerAnswers.add(pollHTMLAnswers[i].__vue__.answer)
+                }*/
+
+                for (let j=0; j < pollAnswers; j++){
+                    console.log('ID: ', pollAnswers[j])
                 }
-                //das da oben on entry objekt packen nach "(siehe code)" und abspeichern
 
 
-                /*if (!(this.status.equals("filledOut"))) { //first time filling out  //("ready")
-                    this.status.set("filledOut")
+                //rootState.auth.username
+                //übergebe:
+                //              pollId,              <entryId, answer>                     userId,
+                //addPollEntry(final UUID pollId, final Map<Long, Answer> associations, final User user)
+
+
+                let pollThis = currentPoll.state.poll //.id und .status
+                //let userName = localStorage.getItem('username') //der User
+                //let pollAnswers = Map<>
+
+                //nach:
+                //"/api/v1/polls/{pollId}/entries/"
+                if (!(pollThis.status.equals("filledOut"))) { //first time filling out  //eigentlich status.equals("ready")
+                    //pollThis.status.set("filledOut")
                     // write answers
-                    for (let i = 0; i < this.questions.length; i++) {
+                    //api.poll.answerFirst(pollThis.id, , userName)
+                    /*for (let i = 0; i < this.questions.length; i++) {
                         axios.post(
                             '/api/v1/polls/' + this.id + '/entries/' + this.entries[i].id + '/',
                             this.entries[i])
-                    }
-                } else if (this.status.equals("filledOut")) { //every following time filling out
+                    }*/
+                } else if (pollThis.status.equals("filledOut")) { //every following time filling out
                     // update answers
-                    for (let j = 0; j < this.questions.length; j++) {
+                    //api.poll.answerAgain()
+                    /*for (let j = 0; j < this.questions.length; j++) {
                         axios.put(
                             '/api/v1/polls/' + this.id + '/entries/' + this.entries[j].id + '/',
                             this.entries[j])
-                    }
-                */
+                    }*/
+                }
+
             },
         },
         created() {
