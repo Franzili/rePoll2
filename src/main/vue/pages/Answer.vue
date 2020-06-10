@@ -60,12 +60,15 @@
                 //console.log('user: ', localStorage.getItem(('username')))
                 //console.log('pollID: ',  currentPoll.state.poll.id)
                 //console.log('Status: ',  currentPoll.state.poll.status)
+
+
+
                 //answerID <Long>
                 //let answerAnswers
 
-                let pollAnswers = Map(pollHTMLAnswers.__vue__.model.id, pollHTMLAnswers.__vue__.answer)
+                //let pollAnswers = Map(pollHTMLAnswers.__vue__.model.id, pollHTMLAnswers.__vue__.answer)
 
-                let Map<Long, String> tmps = new HashMap<>()
+                //let Map<Long, String> tmps = new HashMap<>()
 
                 /*for (let i=0; i < pollHTMLAnswers.length; i++) {
                     //console.log('pollAnswers i : ', pollHTMLAnswers[i].__vue__.answer) //answer
