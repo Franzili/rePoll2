@@ -33,6 +33,9 @@ export default {
         }
         return axios.put('/api/v1/polls/' + pollId + '/', cmd);
     },
+    addPollSection(pollId, pollSectionCmd) {
+        return axios.post('/api/v1/polls/' + pollId + '/sections/', pollSectionCmd);
+    },
     updatePollSection(pollId, pollSectionCmd) {
         return axios.put('/api/v1/polls/' + pollId + '/sections/' + pollSectionCmd.id + '/', pollSectionCmd)
     },

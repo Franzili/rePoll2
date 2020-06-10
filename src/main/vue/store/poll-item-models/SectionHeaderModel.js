@@ -1,7 +1,7 @@
 import PollItemModel from "./PollItemModel";
 
 class SectionHeaderModel extends PollItemModel {
-    constructor(id, title, description) {
+    constructor(id, title="Section Title", description="Section Description") {
         super()
         this.id = id;
         this.type = "SectionHeader";

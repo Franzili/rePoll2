@@ -133,6 +133,10 @@ const currentPoll = {
             Object.assign(state.poll, pollCmd)
         },
 
+        addPollSection(state, pollSection) {
+            state.poll.pollSections.push(pollSection);
+        },
+
         updatePollSection(state, pollSectionCmd) {
             let pollSection = state.poll.pollSections.find(section => section.id === pollSectionCmd.id);
             Object.assign(pollSection, pollSectionCmd);
@@ -271,22 +275,43 @@ const currentPoll = {
                 }
             }
 
-            /* then, check if there are any new poll items that have not been POSTed yet to the server */
+            /* then, check if there are any new poll items that have not been POSTed to the server yet */
             let questionPromises = [];
-            let updateIndices = [];
+            let questionUpdateIndices = [];
+            let pollSectionPromises = [];
+            let pollSectionUpdateIndices = [];
             for (let i = 0; i < newStructure.length; i++) {
                 if (newStructure[i].id === -1) {
-                    questionPromises.push(api.poll.addQuestion(state.poll.id, newStructure[i]))
-                    updateIndices.push(i);
+                    if (newStructure[i].type === 'SectionHeader') {
+                        pollSectionPromises.push(api.poll.addPollSection(state.poll.id, newStructure[i]))
+                        pollSectionUpdateIndices.push(i);
+                    } else {
+                        questionPromises.push(api.poll.addQuestion(state.poll.id, newStructure[i]))
+                        questionUpdateIndices.push(i);
+                    }
                 }
             }
-            /* now update the newly POSTed poll items to have a proper ID */
-            let serverResponse = await Promise.all(questionPromises)
+
+            /* now update the newly POSTed questions to have a proper ID */
+            let questionsServerResponse = await Promise.all(questionPromises)
             for (let i = 0; i < questionPromises.length; i++) {
-                let updateIndex = updateIndices[i];
-                let updatedItem = serverResponse[i].data;
-                newStructure[updateIndex] = updatedItem;
-                commit('addQuestion', updatedItem);
+                let updateIndex = questionUpdateIndices[i];
+                let updatedQuestion = questionsServerResponse[i].data;
+                newStructure[updateIndex] = updatedQuestion;
+                commit('addQuestion', updatedQuestion);
+            }
+
+            /* ...and also update poll Sections from server responses. */
+            let sectionsServerResponse = await Promise.all(pollSectionPromises);
+            for (let i = 0; i < pollSectionPromises.length; i++) {
+                let updateIndex = pollSectionUpdateIndices[i];
+                let updatedSection = sectionsServerResponse[i].data;
+
+                // adding PollItem type because the backend does not do that for us.
+                updatedSection.type = 'SectionHeader';
+
+                newStructure[updateIndex] = updatedSection;
+                commit('addPollSection', updatedSection);
             }
 
             let structureCmd = {};
