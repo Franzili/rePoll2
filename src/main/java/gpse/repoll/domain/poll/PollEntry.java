@@ -1,5 +1,7 @@
 package gpse.repoll.domain.poll;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.repoll.domain.User;
 import gpse.repoll.domain.poll.answers.Answer;
@@ -26,6 +28,7 @@ public class PollEntry {
     private final Map<Question, Answer> associations = new HashMap<>();
 
     @ManyToOne
+    @JsonIgnoreProperties({"ownPolls", "assignedPolls"}) // to avoids lazy databind exception
     private User user;
 
     public Map<Question, Answer> getAssociations() {
