@@ -1,12 +1,12 @@
 import PollItemModel from "./PollItemModel";
 
 class SectionHeaderModel extends PollItemModel {
-    constructor(id, title="Section Title", description="Section Description") {
+    constructor(id) {
         super()
         this.id = id;
         this.type = "SectionHeader";
-        this.title = title;
-        this.description = description;
+        this.title = "Section Header";
+        this.description = "A description for this Section Header."
     }
 
     static getDisplayType() {
