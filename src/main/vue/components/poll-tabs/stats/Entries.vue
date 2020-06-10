@@ -12,14 +12,23 @@
 
         <div v-if="getEntries(selected)[0]">
             <b-container>
-                <b-row>
+                <!--<b-row>
                     <b-col><h6 class="my-header">Questions</h6></b-col>
                     <b-col><h6 class="my-header">Answers</h6></b-col>
-                </b-row>
+                </b-row>-->
 
                 <div v-bind:key="section.section" v-for="section in getEntries(selected)">
                     <h6 class="section">{{section.section}}</h6>
-                    <div v-if="section.idQA[0]">
+
+                    <b-col>
+                        <div v-if="section.idQA[0]">
+                            <b-table striped hover :fixed="true" :fields="['question', 'answer']" :items="section.idQA"></b-table>
+                        </div>
+                    </b-col>
+
+
+
+                    <!--<div v-if="section.idQA[0]">
                         <div v-bind:key="idQA2.qId" v-for="idQA2 in section.idQA">
                             <b-row>
                                 <b-col>
@@ -37,7 +46,7 @@
                                 </b-col>
                             </b-row>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </b-container>
         </div>
@@ -52,7 +61,13 @@
         data() {
             return {
                 selected: null,
-                structure: []
+                structure: [],
+                items: [
+                    { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
+                    { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
+                    { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
+                    { age: 38, first_name: 'Jami', last_name: 'Carney' }
+                ]
             }
         },
         mounted() {
