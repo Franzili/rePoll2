@@ -1,12 +1,13 @@
 <template>
     <div>
-        <b-form-input :maxlength="model.charLimit"
+        <b-form-input v-if="!editing"
+                      :maxlength="model.charLimit"
                       :placeholder="editable ? 'Enter some text...' : ''"
                       :disabled="editable"
                       v-model="answerText"
                       class="text-box"/>
 
-        <div v-if="editing">
+        <p v-else>
             <b-form-group>
                 <b-row>
                     <b-col cols="3">
@@ -21,7 +22,7 @@
                     </b-col>
                 </b-row>
             </b-form-group>
-        </div>
+        </p>
     </div>
 </template>
 
