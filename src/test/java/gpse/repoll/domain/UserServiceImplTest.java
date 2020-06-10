@@ -4,6 +4,7 @@ import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
 import gpse.repoll.domain.repositories.PollEntryRepository;
 import gpse.repoll.domain.repositories.UserRepository;
+import gpse.repoll.domain.service.PollEntryService;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
 import gpse.repoll.domain.service.UserServiceImpl;
@@ -32,10 +33,12 @@ public class UserServiceImplTest {
 
     private PollEntryRepository pollEntryRepository;
 
+    private PollEntryService pollEntryService;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        userService = new UserServiceImpl(userRepository, pollService, pollEntryRepository);
+        userService = new UserServiceImpl(userRepository, pollService, pollEntryRepository, pollEntryService);
     }
 
     @Test

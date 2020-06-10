@@ -21,14 +21,17 @@ public class UserServiceImpl implements UserService {
     private final PollService pollService;
     private final UserRepository userRepository;
     private final PollEntryRepository pollEntryRepository;
+    private final PollEntryService pollEntryService;
 
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           PollService pollService, PollEntryRepository pollEntryRepository) {
+                           PollService pollService, PollEntryRepository pollEntryRepository,
+                           PollEntryService pollEntryService) {
         this.pollService = pollService;
         this.userRepository = userRepository;
         this.pollEntryRepository = pollEntryRepository;
+        this.pollEntryService = pollEntryService;
     }
 
     @Override
@@ -107,7 +110,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
         Iterable<Poll> listAll = pollService.getAll();
         for(Poll listEle: listAll) {
-            //TODO: Liste von Participants auch durchgehen &  Verbindung PollEntrys auf null
+            //TODO: Liste von Participants auch durchgehen
             if (listEle.getCreator() != null && listEle.getCreator().getId() == id) {
                 // et to dummy user
                 listEle.setCreator(null);
@@ -125,15 +128,14 @@ public class UserServiceImpl implements UserService {
                 }
                 listEle.setPollEditors((List<User>) listeLocalEditor);
             }
-
-        }
-        Iterable<PollEntry> listEntrys = pollEntryRepository.findAll();
-        for(PollEntry listeAllEntrys: listEntrys) {
-            if(listeAllEntrys.getUser() != null && listeAllEntrys.getUser().getId() == id) {
-                listeAllEntrys.setUser(null);
+            Iterable<PollEntry> listEntrys = pollEntryService.getAll(listEle.getId());
+            for(PollEntry listeAllEntrys: listEntrys) {
+                if(listeAllEntrys.getUser() != null && listeAllEntrys.getUser().getId() == id) {
+                    listeAllEntrys.setUser(null);
+                }
             }
-        }
 
+        }
         userRepository.delete(user);
         //return user;
     }
