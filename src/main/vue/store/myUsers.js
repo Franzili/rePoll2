@@ -56,6 +56,7 @@ const myUsers = {
             })
         },
         update({commit}, userCmd) {
+            console.log(userCmd)
             return new Promise((resolve, reject) => {
                 api.users.update(userCmd).then(function (res) {
                     commit('update', res.data);

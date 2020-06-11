@@ -1,5 +1,8 @@
 <template>
     <b-container>
+        <p>
+            {{users}}
+        </p>
         <b-row>
             <p style="margin-left: 20vw; margin-top: 2vh"></p>
         </b-row>
@@ -12,6 +15,7 @@
                  id="modal-1"
                  role="dialog"
                  title="User-Configuration">
+
             <div>
                 <b-form-group
                     label="Username:"
@@ -21,6 +25,16 @@
                         v-model="username">
                     </b-form-input>
                 </b-form-group>
+                <b-form-group
+                    v-if="isUpdate"
+                    label="Click the button to change the password">
+                <b-button size="sm"
+                          v-b-modal.modal-2
+                          @click="updateStart(row.item)">
+                    Change
+                </b-button>
+                </b-form-group>
+
                 <b-form-group
                     v-if="!isUpdate"
                     label="Password:"
@@ -49,8 +63,9 @@
                 <b-form-group
                     label="Role:"
                     label-for="role-input">
-                    <b-form-select v-model="role" id="role-input" :options="options">Role</b-form-select>
+                    <b-form-select v-model="roles" id="role-input" :options="options">Role</b-form-select>
                 </b-form-group>
+                <b-button type="button" class="close" data-dismiss="modal-1">&times;</b-button>
             </div>
         </b-modal>
         <b-col>
@@ -114,7 +129,10 @@
 
                     <!-----Delete and Edit Button--->
                     <template v-slot:cell(actions)="row">
-                        <b-button size="sm" variant="primary" v-b-modal.modal-1 @click="isUpdate=true">
+                        <b-button size="sm"
+                                  variant="primary"
+                                  v-b-modal.modal-1
+                                  @click="updateStart(row.item)">
                             Edit
                         </b-button>
                         <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1">
@@ -130,6 +148,7 @@
         </b-col>
     </b-container>
 
+
 </template>
 
 <script>
@@ -137,19 +156,24 @@
     export default {
         name: "Admin",
         data() {
+            let role_Admin = ['ROLE_ADMIN'];
+            let role_Creator = ['ROLE_POLL_CREATOR'];
+            let role_Editor = ['ROLE_POLL_EDITOR'];
+            let role_Par = ['ROLE_PARTICIPANT']
             return {
                 isUpdate: false,
                 items: [],
                 options: [
-                    { value: 'ROLE_ADMIN', text: 'Admin'},
-                    { value: 'ROLE_POLL_CREATOR', text: 'Creator'},
-                    { value: 'ROLE_POLL_EDITOR', text: 'Editor'}
+                    { value: role_Admin, text: 'Admin'},
+                    { value: role_Creator, text: 'Creator'},
+                    { value: role_Editor, text: 'Editor'},
+                    { value: role_Par, text: 'Participant'}
                 ],
                 username: '',
                 password: '',
                 fullName: '',
                 email: '',
-                role: '',
+                roles: [],
                 fields: [
                     { key: 'username', label: 'Username', sortable: true, sortDirection: 'desc' },
                     { key: 'email', label: 'E-Mail', sortable: true, class: 'text-center' },
@@ -181,17 +205,29 @@
                 deleteuser: 'delete',
                 loadUser: 'load'
             }),
+            updateStart(row) {
+
+                    this.isUpdate="true",
+                    this.id = row.id,
+                    this.username = row.username,
+                    this.fullName = row.fullName,
+                    this.email = row.email,
+                    this.roles = row.roles,
+                    this.password = row.password
+            },
             add_UpdateUser() {
                 // Update user
                     if(this.isUpdate) {
                         this.isUpdate = false;
                         let userCmd = {
+                            id: this.id,
                             username: this.username,
-                            password: this.password,
                             fullName: this.fullName,
                             email: this.email,
-                            role: this.role
+                            password: this.password,
+                            roles: this.roles,
                         };
+                        console.log(userCmd);
                         this.updateUser(userCmd);
 
                     }
@@ -202,7 +238,7 @@
                             password: this.password,
                             fullName: this.fullName,
                             email: this.email,
-                            role: this.role
+                            roles: this.roles
                         };
                         console.log(userCmd);
                         this.createUser(userCmd);
