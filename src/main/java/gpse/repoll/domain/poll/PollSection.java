@@ -115,7 +115,7 @@ public class PollSection {
         return Objects.hash(id);
     }
 
-    private void sortQuestions() {
+    public void sortQuestions() {
         questions.sort(Comparator.comparingInt(Question::getQuestionOrder));
     }
 }

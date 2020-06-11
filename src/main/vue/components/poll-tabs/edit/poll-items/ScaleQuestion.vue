@@ -1,9 +1,10 @@
 <template>
-    <div>
-        <div class="slider">
-            {{ selected }}
+    <div v-if="!editing">
+        <div class="scale-question-legend">
+            <span class="scale-question-legend-left">{{model.scaleNameLeft}} ({{model.min}})</span>
+            <span class="scale-question-legend-spacer"></span>
+            <span class="scale-question-legend-left">{{model.scaleNameRight}} ({{model.max}})</span>
         </div>
-
         <b-form-input
             id="bg-opacity"
             v-model="selected"
@@ -12,20 +13,27 @@
             :min="model.min"
             :max="model.max"
             :step="model.stepCount"
+            :disabled="editable"
         ></b-form-input>
+        <div>
+            <b>Value:</b> {{ selected }}
+        </div>
+        <p/>
+    </div>
 
-        <!--<b-icon-pencil class="my-icon" scale="1.5" v-if="edit && !editSlider" @click="changeEditSlider"></b-icon-pencil>-->
-
-        <div v-if="editing">
+    <div v-else>
+        <b-form>
             Min:
             <b-form-input v-model="model.min"></b-form-input>
             Max:
             <b-form-input v-model="model.max"></b-form-input>
             Step Size:
-            <b-form-input class="my-form" v-model="model.stepCount"></b-form-input>
-
-            <b-icon-check-all class="my-icon" scale="2" animation="fade" @click="changeEditSlider"></b-icon-check-all>
-        </div>
+            <b-form-input v-model="model.stepCount"></b-form-input>
+            Minimum Label:
+            <b-form-input v-model="model.scaleNameLeft"></b-form-input>
+            Maximum Label:
+            <b-form-input v-model="model.scaleNameRight"></b-form-input>
+        </b-form>
     </div>
 </template>
 
@@ -34,7 +42,10 @@
         name: "ScaleQuestion",
         data() {
             return {
-                selected: this.model.min
+                // start value is the average of min and max, rounded to the
+                // nearest multiple of stepCount
+                selected: Math.round(((this.model.min + this.model.max) / 2)
+                    / this.model.stepCount) * this.model.stepCount
             }
         },
         computed: {
@@ -61,8 +72,22 @@
                 default: false
             }
         },
+        watch: {
+            model: {
+                handler: function() {
+                    this.$emit('modelChanged', this.model)
+                },
+                deep: true
+            }
+        }
     }
 </script>
 
 <style lang="scss" scoped>
+    .scale-question-legend {
+        display: flex;
+    }
+    .scale-question-legend-spacer {
+        flex-grow: 1;
+    }
 </style>

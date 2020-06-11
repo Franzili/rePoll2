@@ -1,21 +1,26 @@
 <template>
     <div>
-        <b-form-checkbox-group v-model="selected">
+        <b-form-checkbox-group v-if="!editing"
+                               v-model="selected"
+                               :disabled="editable">
             <div v-bind:key="choice.id" v-for="choice in model.choices">
                 <b-form-checkbox :value="choice.id">{{choice.text}}</b-form-checkbox>
-                <b-button class="del-pos-btn"
-                          size="sm"
-                          variant="outline-secondary"
-                          pill v-if="editable"
-                          @click="delPos(choice.id)">x</b-button>
             </div>
         </b-form-checkbox-group>
+
+        <div v-else>
+            <h6>Choices:</h6>
+            <ChoiceEditor :choices="model.choices"
+                          v-on:choicesChanged="model.choices = $event" />
+        </div>
     </div>
 </template>
 
 <script>
+    import ChoiceEditor from "./ChoiceEditor";
     export default {
         name: "MultiChoiceQuestion",
+        components: {ChoiceEditor},
         data() {
             return {
                 selected: []
@@ -28,9 +33,6 @@
                     choices: this.selected //.map(choice => choice.id)
                 }
             },
-            textME: function () {
-                return "hiho"
-            }
         },
         props: {
             model: {
