@@ -78,7 +78,7 @@ const currentPoll = {
                                 for (let i = 0; i < associations.associations[prop].choices.length; i++) {
                                     answers.push(associations.associations[prop].choices[i].text);
                                 }
-                                answerAndId = {qId: prop, answer: answers};
+                                answerAndId = {qId: prop, answer: answers.toString()};
                                 break;
                             case 'ScaleAnswer' :
                                 answerAndId = {qId: prop, answer: associations.associations[prop].scaleNumber};
