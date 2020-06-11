@@ -54,6 +54,8 @@
 
                 let entryCmd = {}
                 for (let i=0; i < pollHTMLAnswers.length; i++) {
+                    console.log(`ID: ${pollHTMLAnswers[i].__vue__.model.id}`)
+                    console.log(pollHTMLAnswers[i].__vue__.model);
                     entryCmd[pollHTMLAnswers[i].__vue__.model.id] = pollHTMLAnswers[i].__vue__.answer
                 }
 

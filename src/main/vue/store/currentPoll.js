@@ -296,8 +296,11 @@ const currentPoll = {
 
         addQuestion(state, question) {
             state.poll.questions.push(question);
-        }
+        },
 
+        setPollAnswers(state, newPollAnswers) {
+            state.pollAnswers = newPollAnswers
+        }
     },
 
     actions: {

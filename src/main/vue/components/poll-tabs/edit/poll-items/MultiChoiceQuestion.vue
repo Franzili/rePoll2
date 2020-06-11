@@ -1,16 +1,18 @@
 <template>
-    <b-form-checkbox-group v-if="!editing"
-                           v-model="selected"
-                           :disabled="editable">
-        <div v-bind:key="choice.id" v-for="choice in model.choices">
-            <b-form-checkbox :value="choice.id">{{choice.text}}</b-form-checkbox>
-        </div>
-    </b-form-checkbox-group>
+    <div>
+        <b-form-checkbox-group v-if="!editing"
+                               v-model="selected"
+                               :disabled="editable">
+            <div v-bind:key="choice.id" v-for="choice in model.choices">
+                <b-form-checkbox :value="choice.id">{{choice.text}}</b-form-checkbox>
+            </div>
+        </b-form-checkbox-group>
 
-    <div v-else>
-        <h6>Choices:</h6>
-        <ChoiceEditor :choices="model.choices"
-                      v-on:choicesChanged="model.choices = $event" />
+        <div v-else>
+            <h6>Choices:</h6>
+            <ChoiceEditor :choices="model.choices"
+                          v-on:choicesChanged="model.choices = $event" />
+        </div>
     </div>
 </template>
 
