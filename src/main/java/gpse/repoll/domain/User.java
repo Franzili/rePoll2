@@ -34,11 +34,9 @@ public class User implements UserDetails {
     @Column
     private String email;
 
-    @JsonIgnore
     @Column
     private String password;
 
-    @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
     private final List<String> roles = new ArrayList<>();
 

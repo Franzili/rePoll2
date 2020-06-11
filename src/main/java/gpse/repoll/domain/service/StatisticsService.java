@@ -1,6 +1,6 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.statistics.StatisticsQuestion;
+import gpse.repoll.domain.statistics.QuestionStatistics;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,7 +13,7 @@ public interface StatisticsService {
      * @param pollId
      * @return Absolute Frequency.
      */
-    List<StatisticsQuestion> getAll(UUID pollId);
+    List<QuestionStatistics> getAll(UUID pollId);
 
     /**
      * Calculate the absolute frequency of all Choices within a given question.
@@ -22,5 +22,5 @@ public interface StatisticsService {
      * @param questionId
      * @return Absolute Frequency.
      */
-    StatisticsQuestion getStatistics(UUID pollId, Long questionId);
+    QuestionStatistics getStatistics(UUID pollId, Long questionId);
 }

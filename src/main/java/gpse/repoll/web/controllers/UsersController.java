@@ -96,11 +96,11 @@ public class UsersController {
     }
 
     @DeleteMapping("/{userId}/")
-    public User removeUser(@PathVariable String userId) {
+    public void removeUser(@PathVariable String userId) {
         if (isValidUuid(userId)) {
-            return userService.removeUser(UUID.fromString(userId));
+             userService.removeUser(UUID.fromString(userId));
         } else {
-            return userService.removeUser(userId);
+             userService.removeUser(userId);
         }
     }
 

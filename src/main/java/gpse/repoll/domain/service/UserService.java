@@ -17,8 +17,8 @@ public interface UserService extends UserDetailsService {
     User updateUser(UUID userId, String userName, String fullName, String email, String role);
     User updateUser(String oldUsername, String userName, String fullName, String email, String role);
 
-    User removeUser(UUID id);
-    User removeUser(String username);
+    void removeUser(UUID id);
+    void removeUser(String username);
 
     /**
      * gets the UUID List of Polls owned by user.
