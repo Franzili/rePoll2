@@ -16,10 +16,10 @@
                     <b-tab active title="Configure">
                     </b-tab>
 
-                    <b-tab title="Edit">
+                    <b-tab :disabled="poll.status !== 'IN_PROCESS'" title="Edit">
                     </b-tab>
 
-                    <b-tab title="Statistics">
+                    <b-tab :disabled="poll.status === 'IN_PROCESS'" title="Statistics">
                     </b-tab>
 
                 </b-tabs>
@@ -94,6 +94,7 @@
                 TAB_CONFIGURE: 0,
                 TAB_EDIT: 1,
                 TAB_STATISTICS: 2,
+                bla: true
             }
         },
         computed: {
@@ -106,9 +107,9 @@
                 loadPoll: 'load',
             })
         },
-        created() {
+        async mounted() {
             let pollId = this.$route.params.pollId
-            this.loadPoll(pollId)
+            await this.loadPoll(pollId)
         },
         components: {ConfigurePoll, CreatePoll, PollStats}
     }
