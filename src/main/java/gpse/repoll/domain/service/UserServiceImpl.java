@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
     public void removeUser(UUID id) {
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
         Iterable<Poll> listAll = pollService.getAll();
-        for(Poll listEle: listAll) {
+        for (Poll listEle: listAll) {
             //TODO: Liste von Participants auch durchgehen
             if (listEle.getCreator() != null && listEle.getCreator().getId() == id) {
                 // et to dummy user
@@ -124,17 +124,17 @@ public class UserServiceImpl implements UserService {
             }
             if (listEle.getPollEditors() != null) {
                 Collection<User> listeLocalEditor = new ArrayList<>();
-                for(User localEditor: listEle.getPollEditors()) {
+                for (User localEditor: listEle.getPollEditors()) {
                     // add again only users without uid of remove user
-                    if(localEditor != null && localEditor.getId() != id) {
+                    if (localEditor != null && localEditor.getId() != id) {
                         listeLocalEditor.add(localEditor);
                     }
                 }
                 listEle.setPollEditors((List<User>) listeLocalEditor);
             }
             Iterable<PollEntry> listEntrys = pollEntryService.getAll(listEle.getId());
-            for(PollEntry listeAllEntrys: listEntrys) {
-                if(listeAllEntrys.getUser() != null && listeAllEntrys.getUser().getId() == id) {
+            for (PollEntry listeAllEntrys: listEntrys) {
+                if (listeAllEntrys.getUser() != null && listeAllEntrys.getUser().getId() == id) {
                     listeAllEntrys.setUser(null);
                 }
             }
