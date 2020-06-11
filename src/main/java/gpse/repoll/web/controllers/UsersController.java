@@ -1,7 +1,8 @@
 package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
+import gpse.repoll.domain.service.MailService;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
 import gpse.repoll.web.command.UserCmd;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,11 +23,13 @@ import java.util.UUID;
 public class UsersController {
     private final PollService pollService;
     private final UserService userService;
+    private final MailService mailService;
 
     @Autowired
-    public UsersController(PollService pollService, UserService userService) {
+    public UsersController(PollService pollService, UserService userService, MailService mailService) {
         this.pollService = pollService;
         this.userService = userService;
+        this.mailService = mailService;
     }
 
     @GetMapping("/")
@@ -39,13 +41,15 @@ public class UsersController {
 
     @PostMapping("/")
     public User addUser(@RequestBody UserCmd userCmd) {
-        return userService.addUser(
+        User user = userService.addUser(
             userCmd.getUsername(),
             userCmd.getPassword(),
             userCmd.getFullName(),
             userCmd.getEmail(),
             userCmd.getRole()
         );
+        mailService.sendPwdGenMail(user);
+        return user;
     }
 
     /**
@@ -92,11 +96,11 @@ public class UsersController {
     }
 
     @DeleteMapping("/{userId}/")
-    public User removeUser(@PathVariable String userId) {
+    public void removeUser(@PathVariable String userId) {
         if (isValidUuid(userId)) {
-            return userService.removeUser(UUID.fromString(userId));
+             userService.removeUser(UUID.fromString(userId));
         } else {
-            return userService.removeUser(userId);
+             userService.removeUser(userId);
         }
     }
 
@@ -133,7 +137,7 @@ public class UsersController {
     }
 
     /**
-     * Adds polls to the repository of a given user
+     * Adds polls to the repository of a given user.
      * @param pollId UUID identifier of poll to be added
      * @param userId UUID identifier
      * @return modified user
@@ -153,7 +157,7 @@ public class UsersController {
     }
 
     /**
-     * Gets Polls assigned to the given user
+     * Gets Polls assigned to the given user.
      * The user can be referred to either by their username, or by their UUID identifier.
      * @param userId UUID identifier
      * @return List of polls assigned to the user
@@ -175,7 +179,7 @@ public class UsersController {
     }
 
     /**
-     * Adds polls to the repository of a given user
+     * Adds polls to the repository of a given user.
      * @param pollId UUID identifier of poll to be added
      * @param userId UUID identifier
      * @return modified user

@@ -1,9 +1,12 @@
 import Vuex from "vuex";
+
 import currentPoll from "./currentPoll";
 import myPolls from "./myPolls";
 import auth from "./auth";
-import Vue from "vue";
+import myUsers from "./myUsers";
 import myEntries from "./myEntries"
+
+import Vue from "vue";
 
 Vue.use(Vuex);
 
@@ -18,7 +21,8 @@ let store = new Vuex.Store({
         currentPoll: currentPoll,
         myPolls: myPolls,
         auth: auth,
-        myEntries: myEntries
+        myEntries: myEntries,
+        myUsers: myUsers
     }
 })
 

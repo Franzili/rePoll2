@@ -1,6 +1,6 @@
 package gpse.repoll.testutils;
 
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

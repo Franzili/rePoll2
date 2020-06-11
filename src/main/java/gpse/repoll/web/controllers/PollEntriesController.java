@@ -1,6 +1,6 @@
 package gpse.repoll.web.controllers;
 
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.*;

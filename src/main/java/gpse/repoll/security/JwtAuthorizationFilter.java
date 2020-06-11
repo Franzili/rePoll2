@@ -1,6 +1,6 @@
 package gpse.repoll.security;
 
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.exceptions.UnauthorizedException;
 import gpse.repoll.domain.repositories.UserRepository;
 import io.jsonwebtoken.*;

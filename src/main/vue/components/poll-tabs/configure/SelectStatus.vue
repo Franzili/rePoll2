@@ -10,13 +10,13 @@
                     <b-form-radio value="IN_PROCESS"
                                   :disabled="this.pollStatus === 'READY'
                                 || this.pollStatus === 'ACTIVATED'
-                                || this.pollStatus === 'DEACTIVATED'">In Bearbeitung</b-form-radio>
+                                || this.pollStatus === 'DEACTIVATED'">in process</b-form-radio>
                     <b-form-radio value="READY"
                                   :disabled="this.pollStatus === 'ACTIVATED'
-                                || this.pollStatus === 'DEACTIVATED'">Bereit</b-form-radio>
+                                || this.pollStatus === 'DEACTIVATED'">ready</b-form-radio>
                     <b-form-radio value="ACTIVATED"
-                                  :disabled="this.pollStatus === 'DEACTIVATED'">Aktiviert</b-form-radio>
-                    <b-form-radio value="DEACTIVATED">Deaktiviert</b-form-radio>
+                                  :disabled="this.pollStatus === 'DEACTIVATED'">activated</b-form-radio>
+                    <b-form-radio value="DEACTIVATED">deactivated</b-form-radio>
                 </b-form-radio-group>
             </b-col>
 
