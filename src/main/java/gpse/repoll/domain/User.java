@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 public class User implements UserDetails {
     private static final long serialVersionUID = 5L;
+    private static final int PWD_LENGTH = 12;
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -37,7 +38,7 @@ public class User implements UserDetails {
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
+    private final List<String> roles = new ArrayList<>();
 
 
     /*
@@ -51,13 +52,15 @@ public class User implements UserDetails {
 
     @Column
     @ElementCollection
-    private  List<UUID> ownPolls = new ArrayList<>();
+    private final List<UUID> ownPolls = new ArrayList<>();
 
     @Column
     @ElementCollection
-    private List<UUID> assignedPolls = new ArrayList<>();
+    private final List<UUID> assignedPolls = new ArrayList<>();
 
     public User() {
+        // Todo: refine user roles
+        password = createRandomPwd(PWD_LENGTH);
         roles.add(Roles.NO_ROLE);
     }
 
@@ -221,6 +224,22 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    /**
+     * Creates a new random password.
+     * @param length password length.
+     * @return password.
+     */
+    String createRandomPwd(int length) {
+        Random random = new Random();
+        String chars =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
+        char[] text = new char[length];
+        for (int i = 0; i < length; i++) {
+            text[i] = chars.charAt(random.nextInt(chars.length()));
+        }
+        return new String(text);
     }
 
     /**

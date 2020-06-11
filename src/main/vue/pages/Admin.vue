@@ -1,8 +1,5 @@
 <template>
     <b-container>
-        <p>
-            {{users}}
-        </p>
         <b-row>
             <p style="margin-left: 20vw; margin-top: 2vh"></p>
         </b-row>

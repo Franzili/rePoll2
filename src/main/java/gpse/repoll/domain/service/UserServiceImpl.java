@@ -19,6 +19,7 @@ import java.util.*;
 @Primary
 public class UserServiceImpl implements UserService {
     private final PollService pollService;
+    private final MailService mailService;
     private final UserRepository userRepository;
     private final PollEntryRepository pollEntryRepository;
     private final PollEntryService pollEntryService;
@@ -26,9 +27,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           PollService pollService, PollEntryRepository pollEntryRepository,
+                           MailService mailService,
+                           PollService pollService,
+                           PollEntryRepository pollEntryRepository,
                            PollEntryService pollEntryService) {
         this.pollService = pollService;
+        this.mailService = mailService;
         this.userRepository = userRepository;
         this.pollEntryRepository = pollEntryRepository;
         this.pollEntryService = pollEntryService;
