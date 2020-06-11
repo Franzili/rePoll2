@@ -1,5 +1,9 @@
 <template>
     <div>
+        <!--
+        {{getStatStructure}}
+        -->
+
         <b-container style="margin-top: 4rem"
                      v-bind:key="section.id"
                      v-for="section in getStatStructure"
@@ -20,6 +24,7 @@
 
 
         </b-container>
+
     </div>
 </template>
 
