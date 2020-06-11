@@ -1,7 +1,7 @@
 package gpse.repoll.web.controllers;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.poll.answers.Answer;
 import gpse.repoll.domain.serialization.SerializeUser;
 import gpse.repoll.domain.service.QuestionsAnswersService;

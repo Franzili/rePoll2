@@ -1,4 +1,4 @@
-package gpse.repoll.domain;
+package gpse.repoll.domain.poll;
 
 import javax.persistence.*;
 import java.util.*;

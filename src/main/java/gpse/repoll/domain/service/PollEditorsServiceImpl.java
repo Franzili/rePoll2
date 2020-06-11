@@ -1,6 +1,6 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.repositories.PollEditorsRepository;
 import org.springframework.beans.factory.annotation.Autowired;

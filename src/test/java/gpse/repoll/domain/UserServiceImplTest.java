@@ -2,6 +2,7 @@ package gpse.repoll.domain;
 
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.repositories.PollEntryRepository;
 import gpse.repoll.domain.repositories.UserRepository;
 import gpse.repoll.domain.service.PollEntryService;

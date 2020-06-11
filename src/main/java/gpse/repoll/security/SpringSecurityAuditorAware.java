@@ -1,6 +1,6 @@
 package gpse.repoll.security;
 
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,6 +1,6 @@
 package gpse.repoll.web.command;
 
-import gpse.repoll.domain.Anonymity;
+import gpse.repoll.domain.poll.Anonymity;
 import gpse.repoll.domain.poll.PollStatus;
 
 
