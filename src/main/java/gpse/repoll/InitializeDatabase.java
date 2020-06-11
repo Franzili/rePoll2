@@ -100,9 +100,12 @@ public class InitializeDatabase implements InitializingBean {
             //pollEntryRepository.deleteAll();
             //pollRepository.deleteAll();
             //pollSectionRepository.deleteAll();
-
-
             //User user = userService.getUser("JamesBond");
+            Iterable<Poll> polls = pollRepository.findAll();
+            List<Poll> pollList = new ArrayList<>((Collection<? extends Poll>) polls);
+            if (pollList.size() != 0) {
+                return null;
+            }
             User user = userRepository.findByUsername("JamesBond").get();
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user,
                 null,
