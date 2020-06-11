@@ -2,27 +2,31 @@ package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.User;
+import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
-import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.UserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * REST Controller managing /api/v1/users/* entry points.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/users")
-@Secured(Roles.ADMIN)
+//@Secured(Roles.ADMIN)
 public class UsersController {
+    private final PollService pollService;
     private final UserService userService;
 
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersController(PollService pollService, UserService userService) {
+        this.pollService = pollService;
         this.userService = userService;
     }
 
@@ -88,11 +92,11 @@ public class UsersController {
     }
 
     @DeleteMapping("/{userId}/")
-    public User removeUser(@PathVariable String userId) {
+    public void removeUser(@PathVariable String userId) {
         if (isValidUuid(userId)) {
-            return userService.removeUser(UUID.fromString(userId));
+             userService.removeUser(UUID.fromString(userId));
         } else {
-            return userService.removeUser(userId);
+             userService.removeUser(userId);
         }
     }
 
@@ -107,16 +111,86 @@ public class UsersController {
     }
 
     /**
-     * Gets Polls associated with the given user
+     * Gets Polls owned by the given user
      * The user can be referred to either by their username, or by their UUID identifier.
      * @param userId UUID identifier
-     * @return List of polls associated with the user.
+     * @return List of polls owned by the user.
+     */
+    //@PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    @GetMapping("/{userId}/ownPolls/")
+    public List<Poll> getOwnedPolls(@PathVariable  String userId) {
+        List<Poll> ownPolls = new ArrayList<>();
+        if (isValidUuid(userId)) {
+            for (UUID pollId:userService.getOwnedPolls(UUID.fromString(userId))) {
+                ownPolls.add(pollService.getPoll(pollId));
+            }
+        } else {
+            for (UUID pollId:userService.getOwnedPolls(userId)) {
+                ownPolls.add(pollService.getPoll(pollId));
+            }
+        }
+        return ownPolls;
+    }
+
+    /**
+     * Adds polls to the repository of a given user
+     * @param pollId UUID identifier of poll to be added
+     * @param userId UUID identifier
+     * @return modified user
      */
     @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
-    @GetMapping("/{userId}/own-polls/")
-    public List<Poll> getOwnedPolls(@PathVariable UUID userId) {
-        return  userService.getOwnedPolls(userId);
+    @PutMapping("/{userId}/ownPolls/")
+    public User addOwnedPoll(@RequestBody UUID pollId, @PathVariable  String userId) { //PathVariable UUID pollId
+        //public User addOwnedPoll(@RequestBody UUID pollId, @PathVariable UUID userId) {
+
+        if (isValidUuid(userId)) {
+            return userService.addOwnedPoll(pollId, UUID.fromString(userId));
+        } else {
+            return userService.addOwnedPoll(pollId, userId);
+        }
+
+        //return userService.addOwnedPoll(pollId, UUID.fromString(userId));
     }
+
+    /**
+     * Gets Polls assigned to the given user
+     * The user can be referred to either by their username, or by their UUID identifier.
+     * @param userId UUID identifier
+     * @return List of polls assigned to the user
+     */
+    //@PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    @GetMapping("/{userId}/assignedPolls/")
+    public List<Poll> getAssignedPolls(@PathVariable  String userId) {
+        List<Poll> assignedPolls = new ArrayList<>();
+        if (isValidUuid(userId)) {
+            for (UUID pollId:userService.getAssignedPolls(UUID.fromString(userId))) {
+                assignedPolls.add(pollService.getPoll(pollId));
+            }
+        } else {
+            for (UUID pollId:userService.getAssignedPolls(userId)) {
+                assignedPolls.add(pollService.getPoll(pollId));
+            }
+        }
+        return assignedPolls;
+    }
+
+    /**
+     * Adds polls to the repository of a given user
+     * @param pollId UUID identifier of poll to be added
+     * @param userId UUID identifier
+     * @return modified user
+     */
+    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    @PutMapping("/{userId}/assignedPolls/")
+    public User addAssignedPoll(@RequestBody UUID pollId, @PathVariable String userId) {
+        if (isValidUuid(userId)) {
+            return userService.addAssignedPoll(pollId, UUID.fromString(userId));
+        } else {
+            return userService.addAssignedPoll(pollId, userId);
+        }
+        //return userService.addAssignedPoll(pollId, userId);
+    }
+
 
     /**
      * Checks if a String can be parsed into a UUID.

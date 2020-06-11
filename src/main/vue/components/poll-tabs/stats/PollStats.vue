@@ -9,7 +9,7 @@
         </b-tabs>
 
 
-        <b-tabs nav-class="invisible" v-model="activeTab">
+        <b-tabs lazy nav-class="invisible" v-model="activeTab">
             <b-tab><Overview></Overview></b-tab>
             <b-tab><Compare></Compare></b-tab>
             <b-tab><Trends></Trends></b-tab>

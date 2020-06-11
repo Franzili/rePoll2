@@ -11,7 +11,7 @@
                 <h3>Titel: {{ poll.title }}</h3>
             </b-col>
             <b-col>
-                <b-tabs pills align="right" v-model="activeTab">
+                <b-tabs lazy pills align="right" v-model="activeTab">
 
                     <b-tab active title="Configure">
                     </b-tab>
