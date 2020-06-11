@@ -52,7 +52,7 @@
             answer: function() {
                 return {
                     type: "SingleChoiceAnswer",
-                    choice: this.selected
+                    choiceId: this.selected
                 }
             }
         },
