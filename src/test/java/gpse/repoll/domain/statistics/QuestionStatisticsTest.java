@@ -8,14 +8,11 @@ import gpse.repoll.domain.poll.questions.MultiChoiceQuestion;
 import gpse.repoll.domain.poll.questions.Question;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
-class StatisticsQuestionTest {
+class QuestionStatisticsTest {
 
     MultiChoiceQuestion exampleMultiChoiceQuestion() {
         Choice choice1 = new Choice("test1", 1L);
@@ -80,21 +77,6 @@ class StatisticsQuestionTest {
 
     @Test
     void absoluteFrequencies() {
-        MultiChoiceQuestion question = exampleMultiChoiceQuestion();
-        List<PollEntry> pollEntries = examplePollEntriesChoiceQuestion(question);
-
-        Map<Choice, Integer> expected = new HashMap<>();
-        List<Choice> choices = question.getChoices();
-        expected.put(choices.get(0), 0);
-        expected.put(choices.get(1), 1);
-        expected.put(choices.get(2), 2);
-        expected.put(choices.get(3), 1);
-
-        Map<Choice, Integer> actual;
-        StatisticsQuestion statisticsQuestion = new StatisticsQuestion(question, pollEntries);
-        actual = statisticsQuestion.absoluteFrequencies(question, pollEntries);
-
-        assertEquals(expected, actual);
     }
 
     @Test

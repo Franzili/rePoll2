@@ -23,7 +23,8 @@ const currentPoll = {
         /**
          * The statistics belonging to that poll object.
          */
-        statistics: []
+        statistics: [],
+        entries: []
     },
 
     getters: {
@@ -46,6 +47,113 @@ const currentPoll = {
                 result = result.concat(tmp);
             });
             return result;
+        },
+
+
+        /**
+         * return the entries in form: [{section.title, [{questionId, question, answer}]}]
+         * for a given user with a provided user id
+         * */
+        entriesWithSections: (state) => {
+            return (userId) => {
+                let res = [];
+                let userEntry = {entry: state.entries.find(entry => entry.user.id === userId)};
+                let associations = null;
+                let answers = [];       //used in MultiChoiceAnswer
+
+                let orderedAnswers = [];  //ordered answers after questionsIDs
+                let orderedQuestionsWithIds = [];
+                let idQA = [];            //array in form [(questionId, Question, answer)]
+                let sectionsWithQId = []; //array in form [(section.title, [question ids])]
+
+                //first get all answers orderes after question IDs in one array
+                if (userEntry.entry) {
+                    associations = {associations: userEntry.entry.associations};
+
+                    for (var prop in associations.associations) {
+                        let answerAndId = null;
+                        switch (associations.associations[prop].type) {
+                            case 'TextAnswer':
+                                answerAndId = {qId: prop, answer: associations.associations[prop].text};
+                                break;
+                            case 'SingleChoiceAnswer' :
+                                answerAndId = {qId: prop, answer: associations.associations[prop].choice.text};
+                                break;
+                            case 'MultiChoiceAnswer' :
+                                for (let i = 0; i < associations.associations[prop].choices.length; i++) {
+                                    answers.push(associations.associations[prop].choices[i].text);
+                                }
+                                answerAndId = {qId: prop, answer: answers.toString()};
+                                break;
+                            case 'ScaleAnswer' :
+                                answerAndId = {qId: prop, answer: associations.associations[prop].scaleNumber};
+                                break;
+                        }
+                        orderedAnswers.push(answerAndId);
+                    }
+                }
+
+
+                //then get all questions with question ids in one array
+                for (let i = 0; i < state.poll.questions.length; i++) {
+                    let tmpQ = state.poll.questions[i];
+                    let idQObj = {qId: tmpQ.id, question: tmpQ.title};
+                    orderedQuestionsWithIds.push(idQObj);
+                }
+
+                //combine the upper two arrays into desired form
+                for (let i = 0; i < orderedAnswers.length; i++) {
+                    let tmpQId = orderedQuestionsWithIds[i]['qId'];
+                    let ans = '';
+                    for (let j = 0; j < orderedAnswers.length; j++) {
+                        if (parseInt(orderedAnswers[j].qId, 10) === parseInt(tmpQId, 10)) {
+                            ans = orderedAnswers[j].answer;
+                            break;
+                        }
+                    }
+                    let IdQAObj = {qId: tmpQId, question: orderedQuestionsWithIds[i]['question'], answer: ans};
+                    idQA.push(IdQAObj);
+                }
+
+                //here sectionsWithQId is filled with objects of form: {section.title, [question ids]}
+                for (let section in state.poll.pollSections) {
+
+                    let qIds = [];
+
+                    for (let i = 0; i < state.poll.pollSections[section].questions.length; i++) {
+                        qIds.push(state.poll.pollSections[section].questions[i].id);
+                    }
+
+                    let sectionsWithQIdObj = {section: state.poll.pollSections[section].title, qIds: qIds};
+
+                    sectionsWithQId.push(sectionsWithQIdObj);
+                }
+
+                //finally bring all together in the final return form
+                for (let i = 0; i < sectionsWithQId.length; i++) {
+                    let tmpIdQA = [];
+                    for (let j = 0; j < sectionsWithQId[i].qIds.length; j++) {
+                        let idQAObj = idQA.find(idQAObj => idQAObj.qId === sectionsWithQId[i].qIds[j]);
+                        tmpIdQA.push(idQAObj);
+                    }
+                    let finalObj = {section: sectionsWithQId[i].section, idQA: tmpIdQA};
+                    res.push(finalObj);
+                }
+
+                return res;
+            }
+        },
+
+        /**
+         * return every username in entries
+         * */
+        entriesUserNames: state => {
+            let res = [];
+            state.entries.forEach(entry => {
+                let entryUser = {text: entry.user.username, value: entry.user.id};
+                res.push(entryUser)
+            });
+            return res;
         },
 
         statStructureObj: state => {
@@ -115,7 +223,7 @@ const currentPoll = {
                     return tableObj
                 }
             }
-        },
+        }
     },
 
     mutations: {
@@ -124,6 +232,10 @@ const currentPoll = {
          */
         set(state, newPoll) {
             state.poll = newPoll
+        },
+
+        setEntries(state, newEntries) {
+            state.entries = newEntries
         },
 
         /**
@@ -179,8 +291,6 @@ const currentPoll = {
             })
             pollSections.push(currentSection);
 
-            console.log(pollSections);
-
             state.poll.pollSections = pollSections;
         },
 
@@ -198,6 +308,18 @@ const currentPoll = {
             return new Promise((resolve, reject) => {
                 api.poll.get(id).then(function (res) {
                     commit('set', res.data);
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                });
+            });
+        },
+
+        loadEntries({commit}, id) {
+            return new Promise((resolve, reject) => {
+                api.entries.list(id).then(function (res) {
+                    commit('setEntries', res.data);
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);
@@ -244,7 +366,6 @@ const currentPoll = {
                     title: pollItem.title,
                     description: pollItem.description
                 }
-                console.log(pollSectionCmd);
                 commit('updatePollSection', pollSectionCmd);
                 return new Promise(function(resolve, reject) {
                     api.poll.updatePollSection(state.poll.id, pollSectionCmd).then(() => {

@@ -32,7 +32,6 @@
         watch: {
             model: {
                 handler: function() {
-                    console.log("Emitting!");
                     this.$emit('modelChanged', this.model)
                 },
                 deep: true

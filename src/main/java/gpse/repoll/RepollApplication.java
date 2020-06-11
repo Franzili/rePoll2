@@ -1,6 +1,6 @@
 package gpse.repoll;
 
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.security.SpringSecurityAuditorAware;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

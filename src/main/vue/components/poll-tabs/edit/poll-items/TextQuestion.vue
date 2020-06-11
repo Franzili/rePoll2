@@ -35,8 +35,9 @@
             }
         },
         computed: {
-            text: function() {
+            answer: function() {
                 return {
+                    type: "TextAnswer",
                     text: this.answerText
                 }
             }

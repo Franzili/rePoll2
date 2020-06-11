@@ -1,6 +1,6 @@
 package gpse.repoll.domain.statistics;
 
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.poll.answers.Answer;
 import gpse.repoll.domain.poll.questions.Question;
 

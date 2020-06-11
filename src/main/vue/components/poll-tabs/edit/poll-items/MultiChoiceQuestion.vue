@@ -27,9 +27,10 @@
         computed: {
             answer: function() {
                 return {
-                    choices: this.selected.map(choice => choice.id)
+                    type: "MultiChoiceAnswer",
+                    choices: this.selected //.map(choice => choice.id)
                 }
-            }
+            },
         },
         props: {
             model: {

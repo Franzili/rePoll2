@@ -52,7 +52,8 @@
         computed: {
             answer: function() {
                 return {
-                    choice: this.selected.id
+                    type: "SingleChoiceAnswer",
+                    choiceId: this.selected
                 }
             }
         },

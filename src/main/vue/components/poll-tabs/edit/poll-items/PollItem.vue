@@ -49,24 +49,24 @@
 
 
             <TextQuestion v-if="model.type === 'TextQuestion'"
-                          class="question-card-content-area"
                           :model="model"
                           :editing="editing"
+                          class="question-body"
                           v-on:modelChanged="onModelChanged($event)"/>
             <SingleChoiceQuestion v-else-if="model.type === 'SingleChoiceQuestion'"
-                                  class="question-card-content-area"
                                   :model="model"
                                   :editing="editing"
+                                  class="question-body"
                                   v-on:modelChanged="onModelChanged($event)"/>
             <MultiChoiceQuestion v-else-if="model.type === 'MultiChoiceQuestion'"
-                                 class="question-card-content-area"
                                  :model="model"
                                  :editing="editing"
+                                 class="question-body"
                                  v-on:modelChanged="onModelChanged($event)"/>
             <ScaleQuestion v-else-if="model.type === 'ScaleQuestion'"
-                           class="question-card-content-area"
                            :model="model"
                            :editing="editing"
+                           class="question-body"
                            v-on:modelChanged="onModelChanged($event)"/>
             <SectionHeader v-else-if="model.type === 'SectionHeader'"
                            class="question-card-content-area"
@@ -174,7 +174,7 @@
 
 
     /* remove bottom margin from last <p> tag */
-    .question-card-content-area > p:last-child {
+    .question-body > p:last-child {
         margin-bottom: 0;
     }
 </style>

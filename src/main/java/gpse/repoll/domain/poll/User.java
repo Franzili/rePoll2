@@ -1,11 +1,10 @@
-package gpse.repoll.domain;
+package gpse.repoll.domain.poll;
 
 import javax.persistence.*;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import gpse.repoll.domain.exceptions.NoValidRoleException;
-import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.security.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -19,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 public class User implements UserDetails {
     private static final long serialVersionUID = 5L;
+    private static final int PWD_LENGTH = 12;
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -34,19 +34,33 @@ public class User implements UserDetails {
     @Column
     private String email;
 
-    @JsonIgnore
     @Column
     private String password;
 
-    @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
+    private final List<String> roles = new ArrayList<>();
 
+
+    /*
     @Column
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Poll> ownPolls = new ArrayList<>();
 
+    @Column
+    @OneToMany(mappedBy = "owner") //users assigned polls to fill out
+    private List<Poll> assignedPolls = new ArrayList<>();*/
+
+    @Column
+    @ElementCollection
+    private final List<UUID> ownPolls = new ArrayList<>();
+
+    @Column
+    @ElementCollection
+    private final List<UUID> assignedPolls = new ArrayList<>();
+
     public User() {
+        // Todo: refine user roles
+        password = createRandomPwd(PWD_LENGTH);
         roles.add(Roles.NO_ROLE);
     }
 
@@ -84,9 +98,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public void addOwnPoll(Poll poll) {
-        ownPolls.add(poll);
-    }
+    /*public void addOwnPoll(Poll poll) { ownPolls.add(poll); }
 
     public void removeOwnPoll(Poll poll) {
         ownPolls.remove(poll);
@@ -94,6 +106,29 @@ public class User implements UserDetails {
 
     public List<Poll> getOwnPolls() {
         return Collections.unmodifiableList(ownPolls);
+    }*/
+    public void addOwnPoll(UUID pollId) {
+        ownPolls.add(pollId);
+    }
+
+    public void removeOwnPoll(UUID pollId) {
+        ownPolls.remove(pollId);
+    }
+
+    public List<UUID> getOwnPolls() {
+        return Collections.unmodifiableList(ownPolls);
+    }
+
+    public void addAssignedPoll(UUID pollId) {
+        assignedPolls.add(pollId);
+    }
+
+    public void removeAssignedPoll(UUID pollId) {
+        assignedPolls.remove(pollId);
+    }
+
+    public List<UUID> getAssignedPolls() {
+        return Collections.unmodifiableList(assignedPolls);
     }
 
     public List<String> getRoles() {
@@ -189,6 +224,22 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    /**
+     * Creates a new random password.
+     * @param length password length.
+     * @return password.
+     */
+    String createRandomPwd(int length) {
+        Random random = new Random();
+        String chars =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
+        char[] text = new char[length];
+        for (int i = 0; i < length; i++) {
+            text[i] = chars.charAt(random.nextInt(chars.length()));
+        }
+        return new String(text);
     }
 
     /**
