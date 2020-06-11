@@ -40,9 +40,9 @@
 
                 <span v-if="editable">
                     <!-- grab handle -->
-                    <b-button variant="outline-secondary" class="handle" size="sm">
+                    <div class="btn btn-sm btn-outline-secondary handle" size="sm">
                         <b-icon-arrow-up-down />
-                    </b-button>
+                    </div>
                 </span>
 
             </p>
