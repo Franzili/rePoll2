@@ -18,7 +18,8 @@
                          v-bind:key="statistic.question.id"
                          v-for="statistic in section.statistics">
 
-                    <ChartCards v-bind:statistic="statistic"></ChartCards>
+                    <ChartCards v-on:changeTab="$emit('toQuestion', $event)"
+                        v-bind:statistic="statistic"></ChartCards>
                 </b-card>
             </div>
 

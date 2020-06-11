@@ -60,6 +60,7 @@
 
     export default {
         name: "Questions",
+        props:['qId'],
         data() {
             return {
                 //{value: null, text: 'Select a question for display'}
@@ -74,9 +75,12 @@
                 //selQuest: [],
             }
         },
-        mounted() {
+        created() {
             this.loadPollAnswers(this.poll.id)
             this.structure = this.getPollStructure
+            if (this.qId !== 0){
+                this.selected = this.qId
+            }
 
         },
         computed: {

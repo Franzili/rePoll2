@@ -47,7 +47,7 @@
         <b-row v-if="statistic.question.type === 'TextQuestion'">
             <b-col md="3" offset-md="9">
                 Answer count: 四百五十二<br>
-                <b-button>Show Answers</b-button>
+                <b-button @click="$emit('changeTab', statistic.question.id)">Show Answers</b-button>
             </b-col>
         </b-row>
 
