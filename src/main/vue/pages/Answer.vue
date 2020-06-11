@@ -50,27 +50,21 @@
 
             answerPoll() {
                 //TODO is this the first time answering this poll, then "answerFirst(poll)" else "answerAgain(poll) in polls.js"
-
                 let pollHTMLAnswers = document.querySelectorAll('.question-body')
 
                 let entryCmd = {}
                 for (let i=0; i < pollHTMLAnswers.length; i++) {
-
                     entryCmd[pollHTMLAnswers[i].__vue__.model.id] = pollHTMLAnswers[i].__vue__.answer
                 }
 
                 let entrysOfPoll = {pollId: this.$route.params.id, entryCmd: entryCmd}
 
-                console.log(entrysOfPoll)
-
                 this.rootEntry(entrysOfPoll)
-
             },
         },
         created() {
             let pollId = this.$route.params.id
             this.loadPoll(pollId)
-            console.log(this.$route)
         },
         components: { PollItem }
     }

@@ -23,7 +23,6 @@
         },
         computed: {
             answer: function() {
-                console.log('hallo: ', this.selected)
                 return {
                     type: "MultiChoiceAnswer",
                     choices: this.selected //.map(choice => choice.id)

@@ -25,10 +25,3 @@ export default {
     },
     namespaced: true
 }
-
-/*
-auto: {reifen: 4, fenster: 8}
-bau(auto){
-braucheReifen = auto.reifen //=4
-}
- */
