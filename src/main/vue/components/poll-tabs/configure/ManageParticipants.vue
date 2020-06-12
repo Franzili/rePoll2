@@ -71,7 +71,7 @@
                 <b-col cols="6">
                     <h6>Share a link</h6>
                     <b-card align="center">
-                        it's me
+                        http://localhost:8080/poll/{{ id }}/answer
                     </b-card>
 
                     <br/>
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-    // import {mapState} from "vuex";
+    import {mapState} from "vuex";
     export default {
         name: "ManageParticipants",
 
@@ -106,7 +106,7 @@
                 n_participated: 412,
                 n_invites_pending: 32
             }
-        /*},
+        },
 
         computed: {
             ...mapState('currentPoll', {
@@ -115,7 +115,7 @@
         },
 
         created: function() {
-            this.n_invites_pending = this.poll.id;*/
+            this.id = this.$route.params.pollId;
         }
     }
 </script>
