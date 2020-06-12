@@ -1,7 +1,5 @@
 package gpse.repoll.domain.poll;
 
-import gpse.repoll.domain.Anonymity;
-import gpse.repoll.domain.User;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.questions.Question;
@@ -303,5 +301,9 @@ public class Poll extends Auditable<User> {
             pollSection.addAll(movedQuestions); // The questions are moved in the correct section
         }
         sortQuestions();
+
+        for(PollSection section : pollSections) {
+            section.sortQuestions();
+        }
     }
 }

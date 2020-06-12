@@ -34,9 +34,9 @@ public class QuestionStatistics {
 
     private final Double arithmeticMean;
 
-    private final Integer median;
+    private Double median;
 
-    private final Quartiles quartiles;
+    private Boxplot boxplot;
 
     public QuestionStatistics(Question question, List<PollEntry> pollEntries) {
         this.question = question;
@@ -51,13 +51,12 @@ public class QuestionStatistics {
             computeFrequencies(question, answerList);
             computeCumulativeFrequencies(question);
             computeMode();
-            this.median = computeMedian();
-            this.quartiles = computeQuartiles();
+            computeMedianAndQuartiles();
             this.arithmeticMean = arithmeticMean();
         } else {
             answerList.addAll(answers);
             this.median = null;
-            this.quartiles = null;
+            this.boxplot = null;
 
             if (question instanceof SingleChoiceQuestion || question instanceof MultiChoiceQuestion) {
                 computeFrequencies(question, answerList);
@@ -208,37 +207,72 @@ public class QuestionStatistics {
         return values;
     }
 
-    /**
-     * Calculates the median of the absolute frequencies of a question.
-     * The median is the text of a specific choice, with the absolute frequency, that would be in the
-     * middle of a sorted list of the frequencies to all choices.
-     * If the count of choices to the question is even, the lower value is chosen.
-     * @return The value of the number in the middle of the sorted list
-     */
-    private Integer computeMedian() {
+    private void computeMedianAndQuartiles() {
         List<Integer> values = getSortedListIntegers(this.frequencies);
         int sizeVal = values.size();
-        return values.get(sizeVal / 2);
-    }
-
-    /**
-     * Calculates the lower and upper quartile of the frequencies.
-     * @return {@link Quartiles} that contain the first and the third quartile of the frequencies
-     */
-    private Quartiles computeQuartiles() {
-        List<Integer> values = getSortedListIntegers(this.frequencies);
-        int sizeVal = values.size();
+        if (sizeVal == 0) {
+            this.median = null;
+        }
+        int medianIndex;
+        if (sizeVal % 2 == 0) {
+            medianIndex = (sizeVal / 2) - 1;
+            Integer low = values.get(medianIndex);
+            Integer high = values.get(medianIndex + 1);
+            this.median = (double) ((low + high) / 2);
+        } else {
+            medianIndex = sizeVal / 2;
+            this.median = (double) (values.get(medianIndex));
+        }
         int listSize = MIN_LIST_SIZE;
         if (sizeVal == listSize) {
-            return new Quartiles(values.get(1), values.get(1));
+            this.boxplot = new Boxplot(findMinChoice(), (double) values.get(1), (double) values.get(1),
+                    findMaxChoice());
+            return;
         } else if (sizeVal < listSize) {
-            return null;
+            this.boxplot = null;
+            return;
         }
-        List<Integer> firstHalf = values.subList(0, this.median);
-        List<Integer> secondHalf = values.subList(this.median + 1, values.size());
-        int firstQuartile = firstHalf.get(firstHalf.size() / 2);
-        int secondQuartile = secondHalf.get(secondHalf.size() / 2);
-        return new Quartiles(firstQuartile, secondQuartile);
+        List<Integer> firstHalf;
+        List<Integer> secondHalf;
+        if (sizeVal % 2 == 0) {
+            firstHalf = values.subList(0, medianIndex);
+        } else {
+            firstHalf = values.subList(0, medianIndex - 1);
+        }
+        secondHalf = values.subList(medianIndex + 1, sizeVal);
+        double firstQuartile;
+        double thirdQuartile;
+        int firstHalfSize = firstHalf.size();
+        if (firstHalfSize % 2 == 0) {
+            firstQuartile = firstHalf.get((firstHalfSize / 2) - 1);
+        } else {
+            firstQuartile = firstHalf.get(firstHalfSize / 2);
+        }
+        int secondHalfSize = secondHalf.size();
+        if (secondHalfSize % 2 == 0) {
+            thirdQuartile = secondHalf.get((secondHalfSize / 2) - 1);
+        } else {
+            thirdQuartile = secondHalf.get(secondHalfSize / 2);
+        }
+        this.boxplot = new Boxplot(findMinChoice(), firstQuartile, thirdQuartile, findMaxChoice());
+    }
+
+    private int findMinChoice() {
+        if (question instanceof ScaleQuestion) {
+            List<Integer> choices = getSortedListIntegers(frequencies);
+            return Collections.min(choices);
+        } else {
+            throw new InternalServerErrorException();
+        }
+    }
+
+    private int findMaxChoice() {
+        if (question instanceof ScaleQuestion) {
+            List<Integer> choices = getSortedListIntegers(frequencies);
+            return Collections.max(choices);
+        } else {
+            throw new InternalServerErrorException();
+        }
     }
 
     /**
@@ -274,12 +308,12 @@ public class QuestionStatistics {
         return arithmeticMean;
     }
 
-    public Integer getMedian() {
+    public Double getMedian() {
         return median;
     }
 
-    public Quartiles getQuartiles() {
-        return quartiles;
+    public Boxplot getBoxplot() {
+        return boxplot;
     }
 
     public List<Answer> getAnswers() {

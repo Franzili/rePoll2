@@ -1,11 +1,19 @@
 import PollItemModel from "./PollItemModel";
 
 class MultiChoiceQuestionModel extends PollItemModel {
-    constructor(id, title) {
+    constructor(id) {
         super();
         this.id = id;
         this.type = "MultiChoiceQuestion";
-        this.title = title;
+        this.title = "Multi Choice Question";
+        this.choices = [
+            {
+                text: "Initial Choice 1"
+            },
+            {
+                text: "Initial Choice 2"
+            }
+        ]
     }
 
     static getDisplayType() {

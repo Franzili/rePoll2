@@ -1,5 +1,6 @@
 package gpse.repoll.web;
 
+import gpse.repoll.domain.service.MailService;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
@@ -41,12 +42,15 @@ public class UsersControllerTest {
     private PollService pollService;
 
     @Mock
+    private MailService mailService;
+
+    @Mock
     private UsersController usersController;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        usersController = new UsersController(pollService, userService);
+        usersController = new UsersController(pollService, userService, mailService);
     }
 
     @Test

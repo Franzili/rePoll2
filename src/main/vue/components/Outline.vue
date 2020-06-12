@@ -49,7 +49,7 @@
     @import "../assets/stylesheet.scss";
 
     .outline {
-
+        display: block !important;
     }
 
     .outline-item {

@@ -1,7 +1,7 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
 import gpse.repoll.domain.poll.PollEntry;
@@ -19,6 +19,7 @@ import java.util.*;
 @Primary
 public class UserServiceImpl implements UserService {
     private final PollService pollService;
+    private final MailService mailService;
     private final UserRepository userRepository;
     private final PollEntryRepository pollEntryRepository;
     private final PollEntryService pollEntryService;
@@ -26,9 +27,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           PollService pollService, PollEntryRepository pollEntryRepository,
+                           MailService mailService,
+                           PollService pollService,
+                           PollEntryRepository pollEntryRepository,
                            PollEntryService pollEntryService) {
         this.pollService = pollService;
+        this.mailService = mailService;
         this.userRepository = userRepository;
         this.pollEntryRepository = pollEntryRepository;
         this.pollEntryService = pollEntryService;
@@ -109,7 +113,7 @@ public class UserServiceImpl implements UserService {
     public void removeUser(UUID id) {
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
         Iterable<Poll> listAll = pollService.getAll();
-        for(Poll listEle: listAll) {
+        for (Poll listEle: listAll) {
             //TODO: Liste von Participants auch durchgehen
             if (listEle.getCreator() != null && listEle.getCreator().getId() == id) {
                 // et to dummy user
@@ -120,17 +124,17 @@ public class UserServiceImpl implements UserService {
             }
             if (listEle.getPollEditors() != null) {
                 Collection<User> listeLocalEditor = new ArrayList<>();
-                for(User localEditor: listEle.getPollEditors()) {
+                for (User localEditor: listEle.getPollEditors()) {
                     // add again only users without uid of remove user
-                    if(localEditor != null && localEditor.getId() != id) {
+                    if (localEditor != null && localEditor.getId() != id) {
                         listeLocalEditor.add(localEditor);
                     }
                 }
                 listEle.setPollEditors((List<User>) listeLocalEditor);
             }
             Iterable<PollEntry> listEntrys = pollEntryService.getAll(listEle.getId());
-            for(PollEntry listeAllEntrys: listEntrys) {
-                if(listeAllEntrys.getUser() != null && listeAllEntrys.getUser().getId() == id) {
+            for (PollEntry listeAllEntrys: listEntrys) {
+                if (listeAllEntrys.getUser() != null && listeAllEntrys.getUser().getId() == id) {
                     listeAllEntrys.setUser(null);
                 }
             }
@@ -148,7 +152,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * gets the UUID List of Polls owned by user
+     * gets the UUID List of Polls owned by user.
      * @param userId UUID identifier
      * @return UUID List of Polls
      */
@@ -159,7 +163,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * gets the UUID List of Polls owned by user
+     * gets the UUID List of Polls owned by user.
      * @param username String identifier
      * @return UUID List of Polls
      */
@@ -170,7 +174,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * ads poll ID to list of users owned polls
+     * ads poll ID to list of users owned polls.
      * @param pollId UUID identifier for poll
      * @param userId UUID identifier for user
      * @return updated user
@@ -184,7 +188,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * ads poll ID to list of users owned polls
+     * ads poll ID to list of users owned polls.
      * @param pollId UUID identifier for poll
      * @param username String identifier for user
      * @return updated user
@@ -198,7 +202,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * gets the UUID List of Polls assigned to user
+     * gets the UUID List of Polls assigned to user.
      * @param userId UUID identifier
      * @return UUID List of Polls
      */
@@ -209,7 +213,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * gets the UUID List of Polls assigned to by user
+     * gets the UUID List of Polls assigned to by user.
      * @param username String identifier
      * @return UUID List of Polls
      */
@@ -220,7 +224,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * ads poll ID to list of assigned polls for user
+     * ads poll ID to list of assigned polls for user.
      * @param pollId UUID identifier for poll
      * @param userId UUID identifier for user
      * @return updated user
@@ -234,7 +238,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * ads poll ID to list of assigned polls for user
+     * ads poll ID to list of assigned polls for user.
      * @param pollId UUID identifier for poll
      * @param username String identifier for user
      * @return updated user

@@ -1,7 +1,6 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -22,27 +21,28 @@ public interface UserService extends UserDetailsService {
     void removeUser(String username);
 
     /**
-     * gets the UUID List of Polls owned by user
+     * gets the UUID List of Polls owned by user.
      * @param userId UUID identifier
      * @return UUID List of Polls
      */
     List<UUID> getOwnedPolls(UUID userId);
+
     /**
-     * gets the UUID List of Polls owned by user
+     * gets the UUID List of Polls owned by user.
      * @param username String identifier
      * @return UUID List of Polls
      */
     List<UUID> getOwnedPolls(String username);
 
     /**
-     * ads poll ID to list of users owned polls
+     * adds poll ID to list of users owned polls.
      * @param pollId UUID identifier for poll
      * @param userId UUID identifier for user
      * @return updated user
      */
     User addOwnedPoll(UUID pollId, UUID userId);
     /**
-     * ads poll ID to list of users owned polls
+     * adds poll ID to list of users owned polls.
      * @param pollId UUID identifier for poll
      * @param username String identifier for user
      * @return updated user
@@ -50,27 +50,29 @@ public interface UserService extends UserDetailsService {
     User addOwnedPoll(UUID pollId, String username);
 
     /**
-     * gets the UUID List of Polls assigned to user
+     * gets the UUID List of Polls assigned to user.
      * @param userId UUID identifier
      * @return UUID List of Polls
      */
     List<UUID> getAssignedPolls(UUID userId);
+
     /**
-     * gets the UUID List of Polls assigned to user
+     * gets the UUID List of Polls assigned to user.
      * @param username String identifier
      * @return UUID List of Polls
      */
     List<UUID> getAssignedPolls(String username);
 
     /**
-     * ads poll ID to list of assigned polls for user
+     * ads poll ID to list of assigned polls for user.
      * @param pollId UUID identifier for poll
      * @param userId UUID identifier for user
      * @return updated user
      */
     User addAssignedPoll(UUID pollId, UUID userId);
+
     /**
-     * ads poll ID to list of assigned polls for user
+     * ads poll ID to list of assigned polls for user.
      * @param pollId UUID identifier for poll
      * @param username String identifier for user
      * @return updated user

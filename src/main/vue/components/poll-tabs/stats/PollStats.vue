@@ -38,7 +38,8 @@
         },
         methods: {
             ...mapActions('currentPoll', {
-                loadStatistics: 'loadMetaStats'
+                loadStatistics: 'loadMetaStats',
+                loadEntries: 'loadEntries'
             }),
             doSwitch(qId) {
                 this.tmpQID = qId;
@@ -48,6 +49,7 @@
         created() {
             let pollId = this.$route.params.pollId
             this.loadStatistics(pollId)
+            this.loadEntries(pollId)
         },
         components: {Overview, Compare, Trends, Entries, Questions}
     }

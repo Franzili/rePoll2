@@ -269,6 +269,9 @@ public class QuestionServiceImpl implements QuestionService {
             question.setTitle(title);
         }
         if (choices != null) {
+            for (Choice choice : choices) {
+                choiceRepository.save(choice);
+            }
             question.setChoices(choices);
         }
         singleChoiceQuestionRepository.save(question);
@@ -299,6 +302,10 @@ public class QuestionServiceImpl implements QuestionService {
             question.setTitle(title);
         }
         if (choices != null) {
+            // TODO @Luca: is this right?
+            for (Choice choice : choices) {
+                choiceRepository.save(choice);
+            }
             question.setChoices(choices);
         }
         multiChoiceQuestionRepository.save(question);
