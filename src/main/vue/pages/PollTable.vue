@@ -38,9 +38,9 @@
     export default {
         name: "PollTable",
 
-        created() {
-            this.loadPolls();
-            this.loadAssigned();
+        async mounted() {
+            await this.loadPolls();
+            await this.loadAssigned();
         },
 
         computed: {

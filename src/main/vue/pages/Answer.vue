@@ -62,6 +62,7 @@
                 let entrysOfPoll = {pollId: this.$route.params.id, entryCmd: entryCmd}
 
                 this.rootEntry(entrysOfPoll)
+                return this.$router.push('/poll-response/')
             },
         },
         created() {

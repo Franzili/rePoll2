@@ -7,6 +7,7 @@ import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
 import PollTabbed from "./pages/PollTabbed";
 import Admin from "./pages/Admin";
+import PollResponse from "./pages/PollResponse";
 
 import store from "./store/store";
 import TestCharts from "./pages/TestCharts";
@@ -48,8 +49,9 @@ let router = new VueRouter({
             }
         },
         {
-            path: '/poll/:id/answer',
+            path: '/poll/answer',
             component: Answer,
+            name: 'answer',
             meta: {
                 requiresAuth: true
             }
@@ -66,6 +68,13 @@ let router = new VueRouter({
             path: '/admin/',
             component: Admin,
             name: 'admin',
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/poll-response/',
+            component: PollResponse,
             meta: {
                 requiresAuth: true
             }
