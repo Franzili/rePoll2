@@ -11,21 +11,33 @@
                 <h3>Titel: {{ poll.title }}</h3>
             </b-col>
             <b-col>
-                <b-tabs lazy pills align="right" v-model="activeTab">
+                <b-nav pills align="right" v-model="activeTab">
 
-                    <b-tab active title="Configure">
-                    </b-tab>
+                    <b-nav-item exact
+                        to="/poll-tabbed/"
+                        active title="Configure"> Configure
+                    </b-nav-item>
 
-                    <b-tab :disabled="poll.status !== 'IN_PROCESS'" title="Edit">
-                    </b-tab>
+                    <b-nav-item exact
+                        to="/poll-tabbed/edit"
+                        :disabled="poll.status !== 'IN_PROCESS'" title="Edit"> Edit
+                    </b-nav-item>
 
-                    <b-tab :disabled="poll.status === 'IN_PROCESS'" title="Statistics">
-                    </b-tab>
+                    <b-nav-item exact
+                        to="/poll-tabbed/statistics"
+                        :disabled="poll.status === 'IN_PROCESS'" title="Statistics"> Statistics
+                    </b-nav-item>
 
-                </b-tabs>
+                </b-nav>
             </b-col>
         </b-row>
 
+        <b-row>
+            <b-col>
+                <router-view></router-view>
+            </b-col>
+        </b-row>
+        <!--
         <b-row>
             <b-col>
                 <b-tabs lazy nav-class="invisible" v-model="activeTab">
@@ -42,6 +54,7 @@
                 </b-tabs>
             </b-col>
         </b-row>
+        -->
     </b-container>
 </template>
 
@@ -82,9 +95,9 @@
             title:
     */
 
-    import ConfigurePoll from "../components/poll-tabs/configure/ConfigurePoll";
-    import CreatePoll from "../components/poll-tabs/edit/EditPoll";
-    import PollStats from "../components/poll-tabs/stats/PollStats";
+    //import ConfigurePoll from "../components/poll-tabs/configure/ConfigurePoll";
+    //import CreatePoll from "../components/poll-tabs/edit/EditPoll";
+    //import PollStats from "../components/poll-tabs/stats/PollStats";
     import {mapState} from "vuex";
     export default {
         name: "PollTabbed",
@@ -111,7 +124,7 @@
             let pollId = this.$route.params.pollId
             await this.loadPoll(pollId)
         },*/
-        components: {ConfigurePoll, CreatePoll, PollStats}
+        //components: {ConfigurePoll, CreatePoll, PollStats}
     }
 </script>
 

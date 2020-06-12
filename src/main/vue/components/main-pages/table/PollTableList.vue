@@ -37,7 +37,7 @@
                     title: "Unnamed Poll"
                 };
                 this.createPoll(pollCmd);
-                return this.$router.push({name: 'poll-tabbed', params: {tab: '1'}})
+                return this.$router.push('/poll-tabbed/edit')
             }
         },
         components: {

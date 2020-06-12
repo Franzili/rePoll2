@@ -11,6 +11,8 @@ import PollResponse from "./pages/PollResponse";
 
 import store from "./store/store";
 import TestCharts from "./pages/TestCharts";
+import PollStats from "./components/poll-tabs/stats/PollStats";
+import ConfigurePoll from "./components/poll-tabs/configure/ConfigurePoll";
 
 let router = new VueRouter({
     mode: 'history',
@@ -59,10 +61,33 @@ let router = new VueRouter({
         {
             path: '/poll-tabbed/',
             component: PollTabbed,
-            name: 'poll-tabbed',
             meta: {
                 requiresAuth: true
-            }
+            },
+            children: [
+                {
+                    path: '',
+                    component: ConfigurePoll,
+                    meta: {
+                        requiresAuth: true
+                    }
+                },
+                {
+                    path: 'edit',
+                    component: CreatePoll,
+                    meta: {
+                        requiresAuth: true
+                    }
+                },
+                {
+                    path: 'statistics',
+                    component: PollStats,
+                    meta: {
+                        requiresAuth: true
+                    }
+                },
+            ]
+
         },
         {
             path: '/admin/',
