@@ -1,9 +1,13 @@
 <template>
-    <ul class="palette-list">
+    <draggable tag="ul"
+               class="palette-list"
+               :list="pollItemModels"
+               :group="{ name: 'pollEditor', pull: 'clone', put: false }"
+               :clone="createItem">
         <li v-for="itemModel in pollItemModels" v-bind:key="itemModel.index">
             <PaletteItem v-bind:itemModel="itemModel"></PaletteItem>
         </li>
-    </ul>
+    </draggable>
 </template>
 
 <script>
@@ -11,7 +15,7 @@
 
     import PaletteItem from "./PaletteItem";
 
-    //import draggable from "vuedraggable";
+    import draggable from "vuedraggable";
     export default {
 
         name: "QuestionPalette",
@@ -22,10 +26,15 @@
             }
         },
 
-        // after import, components need to be listed here as well
+        methods: {
+            createItem(modelConstructor) {
+                return new modelConstructor(-1);
+            }
+        },
+
         components: {
-            PaletteItem
-            //draggable
+            PaletteItem,
+            draggable
         }
     }
 </script>

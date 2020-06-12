@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 public class SingleChoiceQuestion extends Question {
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     private final List<Choice> choices = new ArrayList<>();
 
     @Column

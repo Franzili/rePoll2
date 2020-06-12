@@ -4,11 +4,13 @@ import statistics from "./statistics";
 import users from "./users";
 import entries from "./entries";
 import "./httpLogger";
+import entry from "./entry";
 
 export default {
     auth,
     poll,
     statistics,
+    entry,
     entries,
     users
 }

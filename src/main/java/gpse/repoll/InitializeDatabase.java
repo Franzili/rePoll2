@@ -148,14 +148,31 @@ public class InitializeDatabase implements InitializingBean {
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255);
             userService.addOwnedPoll(poll.getId(), user.getUsername());
+            userService.addAssignedPoll(poll.getId(), nobody.getUsername());
 
             Poll poll2 = pollService.addPoll("About this App");
-            questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
+            Question question0201 = questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
                 1, 255);
-            questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
+            Question question0202 = questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
                 1000, 255);
+            PollSection section01 = pollSectionService.addPollSection(
+                poll2.getId(),
+                "First i like to know",
+                "Your first question"
+            );
+            PollSection section02 = pollSectionService.addPollSection(
+                poll2.getId(),
+                "By the way",
+                "Something to tell us"
+            );
+            HashMap<UUID, List<Long>> structure2 = new HashMap<>();
+            structure2.put(section01.getId(), List.of(question0201.getId()));
+            structure2.put(section02.getId(), List.of(question0202.getId()));
+            pollService.updatePoll(poll2.getId(), null, null, null, structure2);
+
             userService.addOwnedPoll(poll2.getId(), user.getUsername());
             userService.addAssignedPoll(poll2.getId(), nobody.getUsername());
+
 
             Poll poll3 = pollService.addPoll("Nothing to see here");
             questionService.addTextQuestion(poll3.getId(), "This sentence is false",

@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 import api from "../api";
 
 import SectionHeaderModel from "./poll-item-models/SectionHeaderModel";
@@ -32,16 +34,19 @@ const currentPoll = {
          * in ./poll-item-models/
          */
         pollStructureFlat: state => {
-            let res = [];
+            let result = [];
             state.poll.pollSections.forEach(section => {
-                res.push(new SectionHeaderModel(section.id, section.title, section.description));
+                result.push(new SectionHeaderModel(section.id, section.title, section.description));
+                let tmp = []
                 section.questions.forEach(q => {
                     let questionObject = state.poll.questions.find(item => item.id === q.id);
                     //res.push(makeQuestion(questionObject));
-                    res.push(questionObject);
+                    tmp.push(questionObject);
+                    tmp = tmp.sort((q1, q2) => q1.questionOrder - q2.questionOrder);
                 });
+                result = result.concat(tmp);
             });
-            return res;
+            return result;
         },
 
 
@@ -242,17 +247,55 @@ const currentPoll = {
             Object.assign(state.poll, pollCmd)
         },
 
+        addPollSection(state, pollSection) {
+            state.poll.pollSections.push(pollSection);
+        },
+
         updatePollSection(state, pollSectionCmd) {
-            let pollSection = state.poll.pollSections.find(section => section.id === pollSectionCmd.id);
+            let index = state.poll.pollSections.findIndex(section => section.id === pollSectionCmd.id);
+            let pollSection = state.poll.pollSections[index];
             Object.assign(pollSection, pollSectionCmd);
+            // we need to use Vue.set in order to maintain reactivity.
+            Vue.set(state.poll.pollSections, index, pollSection);
         },
 
-        setMetaStats(state, newMetaStats) {
-            state.statistics = newMetaStats
+        updateStructureFromFlat(state, structure) {
+            /* this is basically a duplicate of the updateStructure action, but because PollStructureCmd.java and
+               state.poll.pollStructure require two slightly different formats, we cannot really avoid it. :(  */
+
+            if (structure[0].type !== 'SectionHeader') {
+                console.warn("[RePoll] Invalid poll structure format: first element needs to be header. abort.");
+                return;
+            }
+
+            // assign the right questionOrders.
+            for (let i = 0; i < structure.length; i++) {
+                if (structure[i].type !== 'SectionHeader') {
+                    structure[i].questionOrder = i + 1;
+                }
+            }
+
+            let pollSections = []
+            let currentSection = null;
+
+            structure.forEach((item) => {
+                if (item.type === 'SectionHeader') {
+                    if (currentSection != null) {
+                        pollSections.push(currentSection);
+                    }
+                    currentSection = item;
+                    currentSection.questions = [];
+                } else {
+                    currentSection.questions.push(item);
+                }
+            })
+            pollSections.push(currentSection);
+
+            state.poll.pollSections = pollSections;
         },
 
-        setAnswersById(state, newAnswers) {
-            state.answers = newAnswers
+        addQuestion(state, question) {
+            state.poll.questions.push(question);
         },
 
         setPollAnswers(state, newPollAnswers) {
@@ -319,23 +362,111 @@ const currentPoll = {
             })
         },
 
-        updatePollItem({commit, state}, pollItemModel) {
-            console.log(pollItemModel);
-            if (pollItemModel.type === 'SectionHeaderModel') {
+        updatePollItem({commit, state}, pollItem) {
+            if (pollItem.type === 'SectionHeader') {
                 let pollSectionCmd = {
-                    id: pollItemModel.id,
-                    title: pollItemModel.title,
-                    description: pollItemModel.description
+                    id: pollItem.id,
+                    title: pollItem.title,
+                    description: pollItem.description
                 }
                 commit('updatePollSection', pollSectionCmd);
                 return new Promise(function(resolve, reject) {
-                    api.poll.updatePollSection(state.poll.id, pollSectionCmd).catch(function(error) {
+                    api.poll.updatePollSection(state.poll.id, pollSectionCmd).then(() => {
+                        resolve();
+                    }).catch(function(error) {
+                        console.log(error);
+                        reject();
+                    })
+                })
+            }
+
+            else {
+                return new Promise(function(resolve, reject) {
+                    api.poll.updateQuestion(state.poll.id, pollItem).then(() => {
+                        resolve();
+                    }).catch(function(error) {
                         console.log(error);
                         reject();
                     })
                 })
             }
         },
+
+        async updateStructure({state, dispatch, commit}, newStructure) {
+            if (newStructure[0].type !== 'SectionHeader') {
+                console.warn("[RePoll] New poll structure does not start with a header. Aborting.");
+                return;
+            }
+
+            /* first, assign question orders */
+            for (let i = 0; i < newStructure.length; i++) {
+                if (newStructure[i].type !== 'SectionHeader') {
+                    newStructure[i].questionOrder = i + 1;
+                }
+            }
+
+            /* then, check if there are any new poll items that have not been POSTed to the server yet */
+            let questionPromises = [];
+            let questionUpdateIndices = [];
+            let pollSectionPromises = [];
+            let pollSectionUpdateIndices = [];
+            for (let i = 0; i < newStructure.length; i++) {
+                if (newStructure[i].id === -1) {
+                    if (newStructure[i].type === 'SectionHeader') {
+                        pollSectionPromises.push(api.poll.addPollSection(state.poll.id, newStructure[i]))
+                        pollSectionUpdateIndices.push(i);
+                    } else {
+                        questionPromises.push(api.poll.addQuestion(state.poll.id, newStructure[i]))
+                        questionUpdateIndices.push(i);
+                    }
+                }
+            }
+
+            /* now update the newly POSTed questions to have a proper ID */
+            let questionsServerResponse = await Promise.all(questionPromises)
+            for (let i = 0; i < questionPromises.length; i++) {
+                let updateIndex = questionUpdateIndices[i];
+                let updatedQuestion = questionsServerResponse[i].data;
+                newStructure[updateIndex] = updatedQuestion;
+                commit('addQuestion', updatedQuestion);
+            }
+
+            /* ...and also update poll Sections from server responses. */
+            let sectionsServerResponse = await Promise.all(pollSectionPromises);
+            for (let i = 0; i < pollSectionPromises.length; i++) {
+                let updateIndex = pollSectionUpdateIndices[i];
+                let updatedSection = sectionsServerResponse[i].data;
+
+                // adding PollItem type because the backend does not do that for us.
+                updatedSection.type = 'SectionHeader';
+
+                newStructure[updateIndex] = updatedSection;
+                commit('addPollSection', updatedSection);
+            }
+
+            let structureCmd = {};
+            let currentSectionId = "";
+
+            newStructure.forEach(function (elem) {
+                if (elem.type === 'SectionHeader') {
+                    currentSectionId = elem.id;
+                    structureCmd[currentSectionId] = [];
+                } else {
+                    structureCmd[currentSectionId].push(elem.id);
+                }
+            });
+
+            commit('updateStructureFromFlat', newStructure)
+
+            // send all questions to the backend to update question order. This is suuuper bad.-
+            let promises = newStructure
+                .filter(item => item.type !== 'SectionHeader')
+                .map(item => dispatch('updatePollItem', item))
+
+            await Promise.all(promises);
+            await api.poll.updateStructure(state.poll.id, structureCmd);
+        },
+
         loadPollAnswers({commit}, id) {
             return new Promise((resolve, reject) => {
                 api.statistics.getPollAnswers(id).then(function (res) {
@@ -347,6 +478,7 @@ const currentPoll = {
                 })
             })
         },
+
         loadAnswersById({commit}, answerCmd) {
             return new Promise((resolve, reject) => {
                 api.statistics.getAnswersById(answerCmd.poll, answerCmd.quest).then(function (res) {

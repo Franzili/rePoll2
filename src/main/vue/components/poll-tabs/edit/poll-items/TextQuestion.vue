@@ -1,8 +1,13 @@
 <template>
     <div>
-        <b-form-input :maxlength="model.charLimit" v-model="answerText" class="text-box"/>
+        <b-form-input v-if="!editing"
+                      :maxlength="model.charLimit"
+                      :placeholder="editable ? 'Enter some text...' : ''"
+                      :disabled="editable"
+                      v-model="answerText"
+                      class="text-box"/>
 
-        <div v-if="editing">
+        <p v-else>
             <b-form-group>
                 <b-row>
                     <b-col cols="3">
@@ -17,7 +22,7 @@
                     </b-col>
                 </b-row>
             </b-form-group>
-        </div>
+        </p>
     </div>
 </template>
 
@@ -30,8 +35,9 @@
             }
         },
         computed: {
-            text: function() {
+            answer: function() {
                 return {
+                    type: "TextAnswer",
                     text: this.answerText
                 }
             }
