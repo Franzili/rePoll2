@@ -68,6 +68,7 @@ let router = new VueRouter({
                 {
                     path: '',
                     component: ConfigurePoll,
+                    name: 'config',
                     meta: {
                         requiresAuth: true
                     }
@@ -75,6 +76,7 @@ let router = new VueRouter({
                 {
                     path: 'edit',
                     component: CreatePoll,
+                    name: 'edit',
                     meta: {
                         requiresAuth: true
                     }
@@ -82,6 +84,7 @@ let router = new VueRouter({
                 {
                     path: 'statistics',
                     component: PollStats,
+                    name: 'statistics',
                     meta: {
                         requiresAuth: true
                     }

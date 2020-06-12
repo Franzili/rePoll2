@@ -5,25 +5,24 @@
              we actually use b-tab Components: one for the navigation,
              and one to actually show the contents. they are coupled
              using v-bind. -->
-
         <b-row class="primary-tab-bar sticky align-items-baseline">
             <b-col>
                 <h3>Titel: {{ poll.title }}</h3>
             </b-col>
             <b-col>
-                <b-nav pills align="right" v-model="activeTab">
+                <b-nav pills align="right">
 
-                    <b-nav-item exact
+                    <b-nav-item :active="$route.name === 'config'"
                         to="/poll-tabbed/"
-                        active title="Configure"> Configure
+                        title="Configure"> Configure
                     </b-nav-item>
 
-                    <b-nav-item exact
+                    <b-nav-item :active="$route.name === 'edit'"
                         to="/poll-tabbed/edit"
                         :disabled="poll.status !== 'IN_PROCESS'" title="Edit"> Edit
                     </b-nav-item>
 
-                    <b-nav-item exact
+                    <b-nav-item :active="$route.name === 'statistics'"
                         to="/poll-tabbed/statistics"
                         :disabled="poll.status === 'IN_PROCESS'" title="Statistics"> Statistics
                     </b-nav-item>
