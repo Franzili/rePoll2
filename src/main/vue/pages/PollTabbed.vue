@@ -85,7 +85,7 @@
     import ConfigurePoll from "../components/poll-tabs/configure/ConfigurePoll";
     import CreatePoll from "../components/poll-tabs/edit/EditPoll";
     import PollStats from "../components/poll-tabs/stats/PollStats";
-    import {mapState, mapActions} from "vuex";
+    import {mapState} from "vuex";
     export default {
         name: "PollTabbed",
         data() {
@@ -102,7 +102,7 @@
                 poll: 'poll'
             })
         },
-        methods: {
+        /*methods: {
             ...mapActions('currentPoll', {
                 loadPoll: 'load',
             })
@@ -110,7 +110,7 @@
         async mounted() {
             let pollId = this.$route.params.pollId
             await this.loadPoll(pollId)
-        },
+        },*/
         components: {ConfigurePoll, CreatePoll, PollStats}
     }
 </script>

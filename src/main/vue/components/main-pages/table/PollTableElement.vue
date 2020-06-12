@@ -12,11 +12,8 @@
             </b-col>
 
             <b-col cols="4" style="text-align: center">
-
-                <router-link class="configLink"
-                             :to="{ name: 'poll-tabbed', params: {pollId: poll.id}}"
-                >Setup
-                </router-link>
+                <span @click="loadTo" class="configLink">Setup
+                </span>
 
             </b-col>
         </b-row>
@@ -25,9 +22,20 @@
 </template>
 
 <script>
+    import {mapActions} from "vuex";
+
     export default {
         name: "PollListElement",
-        props: ["poll"]
+        props: ["poll"],
+        methods: {
+            ...mapActions('currentPoll', {
+                loadPoll: "load"
+            }),
+            async loadTo() {
+                await this.loadPoll(this.poll.id)
+                return this.$router.push('/poll-tabbed/')
+            }
+        }
     }
 </script>
 
@@ -35,6 +43,10 @@
     .configLink {
         font-size: 18px;
         color: #7F7E7F;
+        cursor:pointer;
+    }
+    .configLink:hover {
+        text-decoration: underline
     }
     .status {
         font-size: 14px;
