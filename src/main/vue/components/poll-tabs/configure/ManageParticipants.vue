@@ -92,6 +92,7 @@
 </template>
 
 <script>
+    // import {mapState} from "vuex";
     export default {
         name: "ManageParticipants",
 
@@ -99,11 +100,22 @@
             return {
                 //TODO
                 type: 'anonymous',
+                id: 0,
 
                 //TODO
                 n_participated: 412,
                 n_invites_pending: 32
             }
+        /*},
+
+        computed: {
+            ...mapState('currentPoll', {
+                poll: 'poll'
+            })
+        },
+
+        created: function() {
+            this.n_invites_pending = this.poll.id;*/
         }
     }
 </script>
