@@ -28,6 +28,9 @@
                 default: false
             }
         },
+        created() {
+            this.currentValue = this.value
+        },
         watch: {
             currentValue: function() {
                 this.$emit('valueChanged', this.currentValue)

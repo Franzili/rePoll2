@@ -2,6 +2,7 @@ package gpse.repoll.domain.poll;
 
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
+import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -155,6 +156,20 @@ public class Poll extends Auditable<User> {
     public void addAllQuestions(Collection<Question> questions) {
         this.questions.addAll(questions);
         sortQuestions();
+    }
+
+    public void remove(PollSection section) {
+        boolean res = pollSections.remove(section);
+        if (!res) {
+            throw new NotFoundException("PollSection does not belong to this poll");
+        }
+    }
+
+    public void remove(Question question) {
+        boolean res = questions.remove(question);
+        if (!res) {
+            throw new NotFoundException("Question does not belong to this poll");
+        }
     }
 
     public boolean contains(Question question) {
