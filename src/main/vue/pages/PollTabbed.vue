@@ -7,38 +7,31 @@
              using v-bind. -->
 
         <b-row class="primary-tab-bar sticky align-items-baseline">
-            <b-col>
-                <b-row>
+            <b-col class="poll-title">
 
+                        <h3 v-if="activeTab === TAB_EDIT" class="mr-2">Titel:</h3>
 
-                <b-col cols="9">
-                    <div  style="float: left">
-                        <h3 class="mr-2">Titel:</h3>
-                    </div>
-
-                    <div  style="float: left">
                         <EditableLabel
                             tag="h3"
-                            :value="pollTitle"
+                            :value="poll.title"
                             :editing="editTitle"
                             v-on:valueChanged="pollTitle = $event">
                             <!-- is this applied when submitting poll? -->
                         </EditableLabel>
+
+                    <div v-if="activeTab === TAB_EDIT" class="ml-3">
+                        <b-button-group >
+                            <b-button size="sm" variant="outline-secondary" v-if="!editTitle"
+                                      @click="setEditingTitle(true)">
+                                <b-icon-pencil/>
+                            </b-button>
+                            <b-button variant="outline-secondary" v-else
+                                      @click="setEditingTitle(false)">
+                                <b-icon-check scale="1.2"/>
+                            </b-button>
+                        </b-button-group>
                     </div>
-                </b-col>
-                <b-col>
-                    <div class="ml-5" style="float: left">
-                        <b-button variant="outline-secondary" v-if="!editTitle"
-                                  @click="setEditingTitle(true)">
-                            <b-icon-pencil/>
-                        </b-button>
-                        <b-button variant="outline-secondary" v-else
-                                  @click="setEditingTitle(false)">
-                            <b-icon-check/>
-                        </b-button>
-                    </div>
-                </b-col>
-                </b-row>
+
             </b-col>
             <b-col>
                 <b-tabs lazy pills align="right" v-model="activeTab">
@@ -138,14 +131,23 @@
         methods: {
             ...mapActions('currentPoll', {
                 loadPoll: 'load',
+                update: 'update'
             }),
             setEditingTitle(edit) {
                 this.editTitle = edit;
+                if (!edit) {
+                    this.update({id: this.poll.id, title: this.pollTitle});
+                }
             }
         },
         created() {
             let pollId = this.$route.params.pollId;
             this.loadPoll(pollId)
+        },
+        watch: {
+            activeTab: function () {
+                this.editTitle = false;
+            }
         },
         components: {EditableLabel, ConfigurePoll, CreatePoll, PollStats}
     }
@@ -157,6 +159,11 @@
     .primary-tab-bar {
         top: 80px;
         background-color: $floating-background-color;
+    }
+
+    .poll-title {
+        display: flex;
+        align-items: center;
     }
 
 </style>
