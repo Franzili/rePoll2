@@ -3,7 +3,8 @@
 
         <b-row v-if="chartsObj.qType !== 'TextQuestion' && chartsObj.currentChart === 'boxplot'">
             <b-col cols="12">
-                <BoxplotChart></BoxplotChart>
+                <BoxplotChart :title="chartsObj.label"
+                    :boxplotData="{choice: 'bala', boxplotData: chartsObj.boxplot}"></BoxplotChart>
             </b-col>
         </b-row>
 

@@ -294,6 +294,10 @@ const currentPoll = {
             state.poll.pollSections = pollSections;
         },
 
+        setMetaStats(state, newMetaStats) {
+            state.statistics = newMetaStats
+        },
+
         addQuestion(state, question) {
             state.poll.questions.push(question);
         },

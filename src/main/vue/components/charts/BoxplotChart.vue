@@ -11,7 +11,7 @@
                 type: String
             },
             boxplotData: {
-                type: Array
+                type: Object
             }
         },
         data() {

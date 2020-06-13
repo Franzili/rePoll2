@@ -1,12 +1,12 @@
 <template>
     <b-container>
-        <!-- raw data for illustration
+        <!-- raw data for illustration -->
         <b-row>
             <p>
                 {{statistic}}
             </p>
         </b-row>
-        -->
+
 
         <b-row>
             <b-col cols="8">
@@ -70,7 +70,8 @@
                     labels: [],
                     label: '',
                     qType: '',
-                    currentChart: 'bar'
+                    currentChart: 'bar',
+                    boxplot: []
                 },
                 absFrq: [],
                 //relFrq: []
@@ -83,14 +84,23 @@
         },
         methods: {
             doAmazingStuff(val) {
-                this.chartsObj.label = this.statistic.question.title;
-                this.chartsObj.qType = this.statistic.question.type;
+                this.chartsObj.label = val.question.title;
+                this.chartsObj.qType = val.question.type;
                 for(let i = 0; i < val.frequencies.length; i++) {
                     this.chartsObj.labels.push(val.frequencies[i].choice.text);
                     //this.absFrq[i] = val.frequencies[i].absolute
                     this.chartsObj.data = [...this.chartsObj.data,val.frequencies[i].absolute]
                     //this.relFrq.push(frq[i].relative);
                 }
+                if (this.statistic.question.type === 'ScaleQuestion') {
+                    // dumm, ja ich weiß
+                    this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.boxplot.min]
+                    this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.boxplot.firstQuartile]
+                    this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.median]
+                    this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.boxplot.thirdQuartile]
+                    this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.boxplot.max]
+                }
+                console.log(this.chartsObj.boxplot)
                 //this.chartsObj.data = this.absFrq
             },
         },
