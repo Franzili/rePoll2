@@ -51,8 +51,21 @@ public interface PollSectionService {
      * not be found.
      */
     PollSection updatePollSection(
-            final UUID pollId,
-            final UUID sectionId,
-            final String title,
-            final String description);
+        final UUID pollId,
+        final UUID sectionId,
+        final String title,
+        final String description
+    );
+
+    /**
+     * Deletes a PollSection
+     * @param pollId The Poll's ID
+     * @param sectionId The PollSection's ID
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the PollSection or the corresponding Poll could
+     * not be found.
+     */
+    void deletePollSection(
+        final UUID pollId,
+        final UUID sectionId
+    );
 }

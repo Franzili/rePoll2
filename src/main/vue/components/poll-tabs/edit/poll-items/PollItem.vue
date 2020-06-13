@@ -31,7 +31,7 @@
                             <b-icon-check/>
                         </b-button>
 
-                        <b-button variant="outline-secondary" @click="temporaryAlert()">
+                        <b-button variant="outline-secondary" @click="remove">
                             <b-icon-trash/>
                         </b-button>
 
@@ -115,6 +115,9 @@
             }
         },
         methods: {
+            remove() {
+                this.$emit('remove', this.model);
+            },
             onModelChanged(newModel) {
                 this.model = newModel
             },
@@ -138,9 +141,6 @@
                 this.$emit('editStarted', this);
                 console.debug(`[RePoll] Poll Item ${this.model.id} started editing.`);
             },
-            temporaryAlert() {
-                alert("This is to be implemented tonight! :)")
-            }
         },
         components: {
             TextQuestion,

@@ -2,20 +2,19 @@
     <!--
         Renders a poll.
     -->
-    <div>
-        <draggable tag="ul"
-                   class="poll-main-view"
-                   v-model="pollStructure"
-                   :group="{ name: 'pollEditor' }"
-                   handle=".handle">
-            <PollItem v-for="item in pollStructure"
-                      v-bind:key="item.id"
-                      :model="item"
-                      :id="'pollItem-' + item.id"
-                      v-on:editStarted="onItemEditStarted($event)"
-                      v-on:editFinished="onItemEditFinished($event)"/>
-        </draggable>
-    </div>
+    <draggable tag="ul"
+               class="poll-main-view"
+               v-model="pollStructure"
+               :group="{ name: 'pollEditor' }"
+               handle=".handle">
+        <PollItem v-for="item in pollStructure"
+                  v-bind:key="item.id"
+                  :model="item"
+                  :id="'pollItem-' + item.id"
+                  v-on:editStarted="onItemEditStarted($event)"
+                  v-on:editFinished="onItemEditFinished($event)"
+                  v-on:remove="onRemove($event)"/>
+    </draggable>
 </template>
 
 <script>
@@ -44,7 +43,8 @@
         },
         methods: {
             ...mapActions('currentPoll', {
-                updatePollItem: 'updatePollItem'
+                updatePollItem: 'updatePollItem',
+                removePollItem: 'removePollItem'
             }),
             onItemEditStarted(item) {
                 if (this.currentlyEditing) {
@@ -57,6 +57,9 @@
                     this.currentlyEditing = null
                     this.updatePollItem(item.model);
                 }
+            },
+            onRemove(item) {
+                this.removePollItem(item.id);
             }
         },
         components: { PollItem, draggable }

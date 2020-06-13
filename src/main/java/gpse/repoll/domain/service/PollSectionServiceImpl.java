@@ -4,6 +4,7 @@ import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollSection;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
+import gpse.repoll.domain.repositories.PollRepository;
 import gpse.repoll.domain.repositories.PollSectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,16 @@ public class PollSectionServiceImpl implements PollSectionService {
     private final PollService pollService;
 
     private final PollSectionRepository pollSectionRepository;
+    private final PollRepository pollRepository;
 
     @Autowired
     public PollSectionServiceImpl(
             PollService pollService,
-            PollSectionRepository pollSectionRepository) {
+            PollSectionRepository pollSectionRepository,
+            PollRepository pollRepository) {
         this.pollSectionRepository = pollSectionRepository;
         this.pollService = pollService;
+        this.pollRepository = pollRepository;
     }
 
     /**
@@ -91,5 +95,21 @@ public class PollSectionServiceImpl implements PollSectionService {
         }
         pollService.save(poll);
         return section;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deletePollSection(final UUID pollId, final UUID sectionId) {
+        Poll poll = pollService.getPoll(pollId);
+        PollSection section = findSectionOfPoll(poll, sectionId);
+        if (!section.getQuestions().isEmpty()) {
+            throw new BadRequestException("Cannot delete PollSection because it still contains questions.");
+        } else {
+            poll.remove(section);
+            pollRepository.save(poll);
+            pollSectionRepository.delete(section);
+        }
     }
 }
