@@ -16,6 +16,7 @@
         },
         data() {
             return {
+                displayData: [],
                 datasets: [
                     {
                         label: 'min',
@@ -67,7 +68,8 @@
         },
 
         mounted() {
-            this.fillData(this.boxplotData);
+            this.setDisplayFormat(this.boxplotData);
+            this.fillData(this.displayData);
             this.renderChart({
                     type: 'horizontalBar',
                     labels: [""],
@@ -76,11 +78,18 @@
         },
 
         methods: {
+            setDisplayFormat(boxplotData) {
+                this.displayData[0] = boxplotData.boxplotData[0];
+                for(let i = 1; i <this.datasets.length; i++) {
+                    this.displayData[i] = boxplotData.boxplotData[i] - boxplotData.boxplotData[i-1];
+                }
+            },
+
             fillData (boxplotData) {
                 this.options.title.text = this.title;
 
                 for(let i = 0; i <this.datasets.length; i++) {
-                    this.datasets[i].data[0] = boxplotData.boxplotData[i];
+                    this.datasets[i].data[0] = boxplotData[i];
                 }
             }
         },
