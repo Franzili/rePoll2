@@ -13,6 +13,7 @@ import gpse.repoll.web.command.PollEntryCmd;
 import gpse.repoll.web.command.answers.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,11 +37,13 @@ public class PollEntriesController {
         this.choiceRepository = choiceRepository;
     }
 
+    @Secured(Roles.POLL_CREATOR)
     @GetMapping("/{pollId}/entries/")
     public List<PollEntry> listPollEntries(@PathVariable("pollId") final UUID pollId) {
         return pollEntryService.getAll(pollId);
     }
 
+    @PreAuthorize("@securityService.isActivated(#pollId)")
     @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
@@ -55,6 +58,7 @@ public class PollEntriesController {
         return  pollEntryService.getPollEntry(pollId, Long.valueOf(entryId));
     }
 
+    @PreAuthorize("@securityService.isActivated(#pollId)")
     @PutMapping("/{pollId}/entries/{entryId:\\d+}/")
     public PollEntry updatePollEntry(@PathVariable("pollId") final UUID pollId,
                                      @PathVariable("entryId") final String entryId,
