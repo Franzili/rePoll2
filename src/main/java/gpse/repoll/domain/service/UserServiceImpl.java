@@ -122,16 +122,6 @@ public class UserServiceImpl implements UserService {
             if (listEle.getLastEditor() != null && listEle.getLastEditor().getId() == id) {
                 listEle.setLastEditor(null);
             }
-            if (listEle.getPollEditors() != null) {
-                Collection<User> listeLocalEditor = new ArrayList<>();
-                for (User localEditor: listEle.getPollEditors()) {
-                    // add again only users without uid of remove user
-                    if (localEditor != null && localEditor.getId() != id) {
-                        listeLocalEditor.add(localEditor);
-                    }
-                }
-                listEle.setPollEditors((List<User>) listeLocalEditor);
-            }
             Iterable<PollEntry> listEntrys = pollEntryService.getAll(listEle.getId());
             for (PollEntry listeAllEntrys: listEntrys) {
                 if (listeAllEntrys.getUser() != null && listeAllEntrys.getUser().getId() == id) {
@@ -149,56 +139,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
         userRepository.delete(user);
         //return user;
-    }
-
-    /**
-     * gets the UUID List of Polls owned by user.
-     * @param userId UUID identifier
-     * @return UUID List of Polls
-     */
-    @Override
-    public List<UUID> getOwnedPolls(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
-        return user.getOwnPolls();
-    }
-
-    /**
-     * gets the UUID List of Polls owned by user.
-     * @param username String identifier
-     * @return UUID List of Polls
-     */
-    @Override
-    public List<UUID> getOwnedPolls(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
-        return user.getOwnPolls();
-    }
-
-    /**
-     * ads poll ID to list of users owned polls.
-     * @param pollId UUID identifier for poll
-     * @param userId UUID identifier for user
-     * @return updated user
-     */
-    @Override
-    public User addOwnedPoll(UUID pollId, UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
-        user.addOwnPoll(pollId);
-        userRepository.save(user);
-        return user;
-    }
-
-    /**
-     * ads poll ID to list of users owned polls.
-     * @param pollId UUID identifier for poll
-     * @param username String identifier for user
-     * @return updated user
-     */
-    @Override
-    public User addOwnedPoll(UUID pollId, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
-        user.addOwnPoll(pollId);
-        userRepository.save(user);
-        return user;
     }
 
     /**

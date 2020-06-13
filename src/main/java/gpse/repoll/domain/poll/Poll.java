@@ -44,15 +44,6 @@ public class Poll extends Auditable<User> {
     @OneToMany
     private final List<Question> questions = new ArrayList<>(); // todo sorting
 
-    @OneToMany
-    private final List<User> pollEditors = new ArrayList<>();
-
-    @ManyToOne
-    private User owner;
-
-    /*@ManyToMany
-    private User assigned;*/
-
     protected Poll() {
 
     }
@@ -87,15 +78,6 @@ public class Poll extends Auditable<User> {
 
     public UUID getId() {
         return id;
-    }
-
-    public List<User> getPollEditors() {
-        return pollEditors;
-    }
-
-    public void setPollEditors(List<User> pollEditors) {
-        this.pollEditors.clear();
-        this.pollEditors.addAll(pollEditors);
     }
 
     public List<PollEntry> getPollEntries() {
@@ -145,18 +127,6 @@ public class Poll extends Auditable<User> {
     public void setStatus(PollStatus status) {
         this.status = status;
     }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    /*public User getAssigned() {return assigned; }
-
-    public void setAssigned(User assigned) {this.assigned = assigned; }*/
 
     public Anonymity getAnonymity() {
         return anonymity;
@@ -302,7 +272,7 @@ public class Poll extends Auditable<User> {
         }
         sortQuestions();
 
-        for(PollSection section : pollSections) {
+        for (PollSection section : pollSections) {
             section.sortQuestions();
         }
     }

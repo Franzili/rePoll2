@@ -115,48 +115,6 @@ public class UsersController {
     }
 
     /**
-     * Gets Polls owned by the given user
-     * The user can be referred to either by their username, or by their UUID identifier.
-     * @param userId UUID identifier
-     * @return List of polls owned by the user.
-     */
-    //@PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
-    @GetMapping("/{userId}/ownPolls/")
-    public List<Poll> getOwnedPolls(@PathVariable  String userId) {
-        List<Poll> ownPolls = new ArrayList<>();
-        if (isValidUuid(userId)) {
-            for (UUID pollId:userService.getOwnedPolls(UUID.fromString(userId))) {
-                ownPolls.add(pollService.getPoll(pollId));
-            }
-        } else {
-            for (UUID pollId:userService.getOwnedPolls(userId)) {
-                ownPolls.add(pollService.getPoll(pollId));
-            }
-        }
-        return ownPolls;
-    }
-
-    /**
-     * Adds polls to the repository of a given user.
-     * @param pollId UUID identifier of poll to be added
-     * @param userId UUID identifier
-     * @return modified user
-     */
-    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
-    @PutMapping("/{userId}/ownPolls/")
-    public User addOwnedPoll(@RequestBody UUID pollId, @PathVariable  String userId) { //PathVariable UUID pollId
-        //public User addOwnedPoll(@RequestBody UUID pollId, @PathVariable UUID userId) {
-
-        if (isValidUuid(userId)) {
-            return userService.addOwnedPoll(pollId, UUID.fromString(userId));
-        } else {
-            return userService.addOwnedPoll(pollId, userId);
-        }
-
-        //return userService.addOwnedPoll(pollId, UUID.fromString(userId));
-    }
-
-    /**
      * Gets Polls assigned to the given user.
      * The user can be referred to either by their username, or by their UUID identifier.
      * @param userId UUID identifier
