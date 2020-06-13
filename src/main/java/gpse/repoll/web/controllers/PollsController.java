@@ -3,7 +3,6 @@ package gpse.repoll.web.controllers;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.service.PollService;
-import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +67,7 @@ public class PollsController {
     }
 
     @Secured(Roles.POLL_CREATOR)
-    @DeleteMapping(value = "/{id}/")
+    @DeleteMapping("/{id}/")
     public void removePoll(@PathVariable("id") final UUID id) {
         pollService.removePoll(id);
     }

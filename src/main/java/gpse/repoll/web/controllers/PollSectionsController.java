@@ -2,7 +2,6 @@ package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.PollSection;
 import gpse.repoll.domain.service.PollSectionService;
-import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.PollSectionCmd;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class PollSectionsController {
     private final PollSectionService pollSectionService;
 
     @Autowired
-    public PollSectionsController(PollSectionService pollSectionService, UserService userService) {
+    public PollSectionsController(PollSectionService pollSectionService) {
         this.pollSectionService = pollSectionService;
     }
 
