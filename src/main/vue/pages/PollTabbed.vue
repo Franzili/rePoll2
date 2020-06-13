@@ -4,17 +4,19 @@
             <b-col>
                 <h3>Titel: {{ poll.title }}</h3>
             </b-col>
-            {{ poll.id }}
             <b-col>
-                <b-nav pills exact exact-active-class="active" align="right">
+                <b-nav pills align="right">
 
-                    <b-nav-item :to="{ name: 'edit-poll', params: { pollId: $route.params.pollId }}">
+                    <b-nav-item active-class="active"
+                                :to="{ name: 'edit-poll', params: { pollId: $route.params.pollId }}">
                         Edit
                     </b-nav-item>
-                    <b-nav-item :to="{ name: 'configure-poll', params: { pollId: $route.params.pollId }}">
+                    <b-nav-item active-class="active"
+                                :to="{ name: 'configure-poll', params: { pollId: $route.params.pollId }}">
                         Configure
                     </b-nav-item>
-                    <b-nav-item :to="{ name: 'poll-stats', params: { pollId: $route.params.pollId }}">
+                    <b-nav-item active-class="active"
+                                :to="{ name: 'poll-stats', params: { pollId: $route.params.pollId }}">
                         Stats
                     </b-nav-item>
 
@@ -24,21 +26,6 @@
 
         <b-row>
             <b-col>
-                <!--
-                <b-tabs lazy nav-class="invisible" v-model="activeTab">
-                    <b-tab>
-                        <ConfigurePoll></ConfigurePoll>
-                    </b-tab>
-                    <b-tab>
-                        <CreatePoll></CreatePoll>
-                    </b-tab>
-                    <b-tab>
-                        <PollStats></PollStats>
-                    </b-tab>
-
-                </b-tabs>
-            -->
-
                 <router-view/>
             </b-col>
         </b-row>

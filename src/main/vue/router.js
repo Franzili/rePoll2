@@ -50,15 +50,14 @@ let router = new VueRouter({
                 requiresAuth: true
             }
         },
-        // todo: change this so we can reach all three tabs (edit, configure, stats)
         {
             path: '/poll/:pollId/',
             component: PollTabbed,
-            name: 'poll-tabbed',
             meta: {
                 requiresAuth: true
             },
             children: [
+                { path: '', name: 'poll-tabbed', redirect: 'config'},
                 { path: 'edit', name: 'edit-poll', component: EditPoll },
                 { path: 'config', name: 'configure-poll', component: ConfigurePoll },
                 { path: 'stats', name: 'poll-stats', component: PollStats }
