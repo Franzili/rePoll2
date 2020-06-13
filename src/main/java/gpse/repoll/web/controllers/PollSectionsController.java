@@ -7,6 +7,7 @@ import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.PollSectionCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,8 @@ public class PollSectionsController {
         this.pollSectionService = pollSectionService;
     }
 
-    @Secured(Roles.PARTICIPANT)
+    @PreAuthorize("(@securityService.isActivated(#pollId) and @securityService.isParticipant(principal.username))"
+            + "or @securityService.isEditor(principal.username)")
     @GetMapping("/{pollId}/sections/")
     public List<PollSection> listPollSections(@PathVariable("pollId") final UUID pollId) {
         return pollSectionService.getAllSections(pollId);
@@ -43,7 +45,8 @@ public class PollSectionsController {
                 pollSectionCmd.getDescription());
     }
 
-    @Secured(Roles.PARTICIPANT)
+    @PreAuthorize("(@securityService.isActivated(#pollId) and @securityService.isParticipant(principal.username))"
+            + "or @securityService.isEditor(principal.username)")
     @GetMapping("/{pollId}/sections/{sectionId}/")
     public PollSection getPollSection(@PathVariable("pollId") final UUID pollId,
                                       @PathVariable("sectionId") final UUID sectionId) {

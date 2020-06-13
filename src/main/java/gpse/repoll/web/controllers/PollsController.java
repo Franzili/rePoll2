@@ -8,6 +8,7 @@ import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -21,12 +22,10 @@ import java.util.*;
 public class PollsController {
 
     private final PollService pollService;
-    private final UserService userService;
 
     @Autowired
-    public PollsController(PollService pollService, UserService userService) {
+    public PollsController(PollService pollService) {
         this.pollService = pollService;
-        this.userService = userService;
     }
 
     // todo this has to be fixed in future, now is blocking frontend from accessing the database
@@ -53,7 +52,7 @@ public class PollsController {
         return pollService.getPoll(id);
     }
 
-    @Secured(Roles.POLL_EDITOR)
+    @PreAuthorize("@securityService.isEditor(principal.username) and @securityService.isInProcess(#id)")
     @PutMapping("/{id}/")
     public Poll updatePoll(@PathVariable("id") final UUID id, @RequestBody PollCmd pollCmd) {
         Map<UUID, List<Long>> structure = null;
@@ -68,7 +67,6 @@ public class PollsController {
                 structure);
     }
 
-    // todo creator cannot delete polls he didn't create
     @Secured(Roles.POLL_CREATOR)
     @DeleteMapping(value = "/{id}/")
     public void removePoll(@PathVariable("id") final UUID id) {

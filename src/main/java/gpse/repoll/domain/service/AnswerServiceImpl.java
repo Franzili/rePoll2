@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class QuestionsAnswersServiceImpl implements QuestionsAnswersService {
+public class AnswerServiceImpl implements AnswerService {
     private final PollService pollService;
 
     @Autowired
-    public QuestionsAnswersServiceImpl(PollService pollService) {
+    public AnswerServiceImpl(PollService pollService) {
         this.pollService = pollService;
     }
 

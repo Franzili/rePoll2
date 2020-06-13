@@ -56,7 +56,8 @@ public class UsersController {
      * @param userId a username or UUID identifier
      * @return The user
      */
-    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    @PreAuthorize("@securityService.isCurrentUser(principal.username, #userId)"
+            + "or @securityService.isAdmin(principal.username)")
     @GetMapping("/{userId}/")
     public User getUser(@PathVariable String userId) {
         if (isValidUuid(userId)) {
@@ -103,7 +104,8 @@ public class UsersController {
         }
     }
 
-    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    @PreAuthorize("@securityService.isCurrentUser(principal.username, #userId)"
+            + "or @securityService.isAdmin(principal.username)")
     @GetMapping("/{userId}/profile/")
     public String getRole(@PathVariable String userId) {
         if (isValidUuid(userId)) {

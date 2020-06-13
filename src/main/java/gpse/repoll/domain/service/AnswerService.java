@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public interface QuestionsAnswersService {
+public interface AnswerService {
     Map<User, Answer> getAnswers(UUID pollID, Long questionID);
 
     List<QuestionAnswersSet> getAll(UUID pollId);

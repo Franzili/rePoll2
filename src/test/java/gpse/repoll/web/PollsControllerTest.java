@@ -54,7 +54,7 @@ public class PollsControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new PollsController(pollService, userService);
+        controller = new PollsController(pollService);
 
         // Tie userService mock method calls to our Test User class.
         when(userService.getUser(anyString())).thenAnswer((Answer<UserDetails>) invocationOnMock -> {
