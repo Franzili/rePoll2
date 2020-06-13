@@ -182,4 +182,8 @@
     .question-body > p:last-child {
         margin-bottom: 0;
     }
+
+    .handle {
+        cursor: grab !important;
+    }
 </style>
