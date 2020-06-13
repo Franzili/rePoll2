@@ -115,13 +115,15 @@ public class UserServiceImpl implements UserService {
         Iterable<Poll> listAll = pollService.getAll();
         for (Poll listEle: listAll) {
             //TODO: Liste von Participants auch durchgehen
+            //remove the user as a Creator
             if (listEle.getCreator() != null && listEle.getCreator().getId() == id) {
-                // et to dummy user
                 listEle.setCreator(null);
             }
+            //remove the user as a LastEditor
             if (listEle.getLastEditor() != null && listEle.getLastEditor().getId() == id) {
                 listEle.setLastEditor(null);
             }
+            //remove the user as a PollEditor
             if (listEle.getPollEditors() != null) {
                 Collection<User> listeLocalEditor = new ArrayList<>();
                 for (User localEditor: listEle.getPollEditors()) {
@@ -141,7 +143,6 @@ public class UserServiceImpl implements UserService {
 
         }
         userRepository.delete(user);
-        //return user;
     }
 
     @Override

@@ -1,16 +1,12 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.poll.Anonymity;
+import gpse.repoll.domain.poll.*;
 import gpse.repoll.domain.exceptions.NotFoundException;
-import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.poll.PollStatus;
 import gpse.repoll.domain.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Default implementation of PollService.
@@ -19,10 +15,12 @@ import java.util.UUID;
 public class PollServiceImpl implements PollService {
 
     private final PollRepository pollRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public PollServiceImpl(final PollRepository pollRepository) {
+    public PollServiceImpl(final PollRepository pollRepository, final UserRepository userRepository) {
         this.pollRepository = pollRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -86,6 +84,16 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public void removePoll(final UUID id) {
+        Poll poll = pollRepository.findById(id).orElseThrow(NotFoundException::new);
+        Iterable<User> listAllUser = userRepository.findAll();
+        for (User listEle: listAllUser) {
+            if (listEle.getAssignedPolls() != null) {
+                Collection<UUID> listeAssignedPolls = new ArrayList<>();
+
+            }
+
+         }
+
         pollRepository.deleteById(id);
     }
 }
