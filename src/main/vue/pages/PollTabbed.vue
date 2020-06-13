@@ -6,7 +6,7 @@
              and one to actually show the contents. they are coupled
              using v-bind. -->
 
-        <b-row class="primary-tab-bar sticky align-items-baseline">
+        <b-row v-if="loaded" class="primary-tab-bar sticky align-items-baseline">
             <b-col class="poll-title">
 
                         <h3 v-if="activeTab === TAB_EDIT" class="mr-2">Titel:</h3>
@@ -114,6 +114,7 @@
         name: "PollTabbed",
         data() {
             return {
+                loaded: false,
                 activeTab: 0,
                 TAB_CONFIGURE: 0,
                 TAB_EDIT: 1,
@@ -140,9 +141,15 @@
                 }
             }
         },
-        created() {
+        /*created() {
             let pollId = this.$route.params.pollId;
             this.loadPoll(pollId)
+        },*/
+        async mounted() {
+            this.loaded = false
+            let pollId = this.$route.params.pollId
+            await this.loadPoll(pollId)
+            this.loaded = true
         },
         watch: {
             activeTab: function () {
