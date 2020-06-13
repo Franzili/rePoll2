@@ -6,7 +6,6 @@ import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
-import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.poll.questions.*;
 import gpse.repoll.domain.repositories.*;
@@ -52,6 +51,10 @@ public class PollEntryServiceImpl implements PollEntryService {
             Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
             if (poll.contains(question)) {
                 Answer answer = associations.get(questionId);
+                if (answer == null) {
+                    pollEntry.put(question, null);
+                    continue;
+                }
                 if (answer instanceof TextAnswer && question instanceof TextQuestion) {
                     textAnswerRepository.save((TextAnswer) answer);
                 } else if (answer instanceof ScaleAnswer && question instanceof ScaleQuestion) {
