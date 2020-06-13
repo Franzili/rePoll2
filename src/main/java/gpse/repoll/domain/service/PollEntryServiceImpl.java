@@ -8,7 +8,7 @@ import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.exceptions.NotFoundException;
-import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.poll.questions.*;
 import gpse.repoll.domain.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,16 +52,16 @@ public class PollEntryServiceImpl implements PollEntryService {
             Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
             if (poll.contains(question)) {
                 Answer answer = associations.get(questionId);
-                if (answer instanceof TextAnswer) {
+                if (answer instanceof TextAnswer && question instanceof TextQuestion) {
                     textAnswerRepository.save((TextAnswer) answer);
-                } else if (answer instanceof ScaleAnswer) {
+                } else if (answer instanceof ScaleAnswer && question instanceof ScaleQuestion) {
                     scaleAnswerRepository.save((ScaleAnswer) answer);
-                } else if (answer instanceof SingleChoiceAnswer) {
+                } else if (answer instanceof SingleChoiceAnswer && question instanceof SingleChoiceQuestion) {
                     singleChoiceAnswerRepository.save((SingleChoiceAnswer) answer);
-                } else if (answer instanceof MultiChoiceAnswer) {
+                } else if (answer instanceof MultiChoiceAnswer && question instanceof MultiChoiceQuestion) {
                     multiChoiceAnswerRepository.save((MultiChoiceAnswer) answer);
                 } else {
-                    throw new InternalServerErrorException();
+                    throw new BadRequestException("Incompatible answer type!");
                 }
                 pollEntry.put(question, answer);
             } else {
@@ -120,10 +120,11 @@ public class PollEntryServiceImpl implements PollEntryService {
     /**
      * {@inheritDoc}
      */
-    @Override // Todo delete old answers
+    @Override
     public PollEntry updatePollEntry(UUID pollId, Long entryId, Map<Long, Answer> associations) {
         Poll poll = pollService.getPoll(pollId);
         PollEntry pollEntry = findEntryOfPoll(poll, entryId);
+        pollEntry.deleteAnswers();
         createAnswers(poll, pollEntry, associations);
         pollEntryRepository.save(pollEntry);
         return pollEntry;

@@ -114,45 +114,6 @@ public class UsersController {
         }
     }
 
-    /**
-     * Gets Polls assigned to the given user.
-     * The user can be referred to either by their username, or by their UUID identifier.
-     * @param userId UUID identifier
-     * @return List of polls assigned to the user
-     */
-    //@PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
-    @GetMapping("/{userId}/assignedPolls/")
-    public List<Poll> getAssignedPolls(@PathVariable  String userId) {
-        List<Poll> assignedPolls = new ArrayList<>();
-        if (isValidUuid(userId)) {
-            for (UUID pollId:userService.getAssignedPolls(UUID.fromString(userId))) {
-                assignedPolls.add(pollService.getPoll(pollId));
-            }
-        } else {
-            for (UUID pollId:userService.getAssignedPolls(userId)) {
-                assignedPolls.add(pollService.getPoll(pollId));
-            }
-        }
-        return assignedPolls;
-    }
-
-    /**
-     * Adds polls to the repository of a given user.
-     * @param pollId UUID identifier of poll to be added
-     * @param userId UUID identifier
-     * @return modified user
-     */
-    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
-    @PutMapping("/{userId}/assignedPolls/")
-    public User addAssignedPoll(@RequestBody UUID pollId, @PathVariable String userId) {
-        if (isValidUuid(userId)) {
-            return userService.addAssignedPoll(pollId, UUID.fromString(userId));
-        } else {
-            return userService.addAssignedPoll(pollId, userId);
-        }
-        //return userService.addAssignedPoll(pollId, userId);
-    }
-
 
     /**
      * Checks if a String can be parsed into a UUID.

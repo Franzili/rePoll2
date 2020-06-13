@@ -63,4 +63,8 @@ public class PollEntry {
     public void put(Question question, Answer answer) {
         associations.put(question, answer);
     }
+
+    public void deleteAnswers() {
+        associations.clear();
+    }
 }

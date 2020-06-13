@@ -56,7 +56,6 @@ public class Poll extends Auditable<User> {
         this.title = title;
         this.status = PollStatus.IN_PROCESS;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
-        //this.owner = creator; // in PollsController breaks add(poll) in listpolls() Funktion
     }
 
     @Override

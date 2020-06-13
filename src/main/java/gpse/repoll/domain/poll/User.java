@@ -34,14 +34,12 @@ public class User implements UserDetails {
     @Column
     private String email;
 
+    @JsonIgnore
     @Column
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private final List<String> roles = new ArrayList<>();
-
-    @ElementCollection
-    private final List<UUID> assignedPolls = new ArrayList<>();
 
     public User() {
         // Todo: refine user roles
@@ -81,18 +79,6 @@ public class User implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void addAssignedPoll(UUID pollId) {
-        assignedPolls.add(pollId);
-    }
-
-    public void removeAssignedPoll(UUID pollId) {
-        assignedPolls.remove(pollId);
-    }
-
-    public List<UUID> getAssignedPolls() {
-        return Collections.unmodifiableList(assignedPolls);
     }
 
     public List<String> getRoles() {
