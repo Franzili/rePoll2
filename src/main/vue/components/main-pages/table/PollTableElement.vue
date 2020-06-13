@@ -14,7 +14,7 @@
             <b-col cols="4" style="text-align: center">
 
                 <router-link class="configLink"
-                             :to="{ name: 'poll-tabbed', params: {pollId: poll.id}}"
+                             :to="{ name: 'poll-tabbed', params: { pollId: poll.id } }"
                 >Setup
                 </router-link>
 

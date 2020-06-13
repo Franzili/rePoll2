@@ -2,11 +2,14 @@ import VueRouter from "vue-router";
 import CreatePoll from "./components/poll-tabs/edit/EditPoll";
 import Start from "./pages/Start";
 import Account from "./pages/Account";
-import Poll from "./pages/Poll";
 import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
-import PollTabbed from "./pages/PollTabbed";
 import Admin from "./pages/Admin";
+
+import PollTabbed from "./pages/PollTabbed";
+import EditPoll from "./components/poll-tabs/edit/EditPoll";
+import PollStats from "./components/poll-tabs/stats/PollStats";
+import ConfigurePoll from "./components/poll-tabs/configure/ConfigurePoll";
 
 import store from "./store/store";
 import TestCharts from "./pages/TestCharts";
@@ -41,26 +44,25 @@ let router = new VueRouter({
             }
         },
         {
-            path: '/poll/:id(\\d+)',
-            component: Poll,
-            meta: {
-                requiresAuth: true
-            }
-        },
-        {
             path: '/poll/:id/answer',
             component: Answer,
             meta: {
                 requiresAuth: true
             }
         },
+        // todo: change this so we can reach all three tabs (edit, configure, stats)
         {
-            path: '/poll-tabbed/',
+            path: '/poll/:pollId/',
             component: PollTabbed,
             name: 'poll-tabbed',
             meta: {
                 requiresAuth: true
-            }
+            },
+            children: [
+                { path: 'edit', name: 'edit-poll', component: EditPoll },
+                { path: 'config', name: 'configure-poll', component: ConfigurePoll },
+                { path: 'stats', name: 'poll-stats', component: PollStats }
+            ]
         },
         {
             path: '/admin/',

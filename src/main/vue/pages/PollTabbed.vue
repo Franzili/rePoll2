@@ -1,33 +1,30 @@
 <template>
     <b-container fluid="lg">
-
-        <!-- To make the tab bar fit on the right side of the title,
-             we actually use b-tab Components: one for the navigation,
-             and one to actually show the contents. they are coupled
-             using v-bind. -->
-
         <b-row class="primary-tab-bar sticky align-items-baseline">
             <b-col>
                 <h3>Titel: {{ poll.title }}</h3>
             </b-col>
+            {{ poll.id }}
             <b-col>
-                <b-tabs lazy pills align="right" v-model="activeTab">
+                <b-nav pills exact exact-active-class="active" align="right">
 
-                    <b-tab active title="Configure">
-                    </b-tab>
+                    <b-nav-item :to="{ name: 'edit-poll', params: { pollId: $route.params.pollId }}">
+                        Edit
+                    </b-nav-item>
+                    <b-nav-item :to="{ name: 'configure-poll', params: { pollId: $route.params.pollId }}">
+                        Configure
+                    </b-nav-item>
+                    <b-nav-item :to="{ name: 'poll-stats', params: { pollId: $route.params.pollId }}">
+                        Stats
+                    </b-nav-item>
 
-                    <b-tab title="Edit">
-                    </b-tab>
-
-                    <b-tab title="Statistics">
-                    </b-tab>
-
-                </b-tabs>
+                </b-nav>
             </b-col>
         </b-row>
 
         <b-row>
             <b-col>
+                <!--
                 <b-tabs lazy nav-class="invisible" v-model="activeTab">
                     <b-tab>
                         <ConfigurePoll></ConfigurePoll>
@@ -40,6 +37,9 @@
                     </b-tab>
 
                 </b-tabs>
+            -->
+
+                <router-view/>
             </b-col>
         </b-row>
     </b-container>
@@ -82,20 +82,9 @@
             title:
     */
 
-    import ConfigurePoll from "../components/poll-tabs/configure/ConfigurePoll";
-    import CreatePoll from "../components/poll-tabs/edit/EditPoll";
-    import PollStats from "../components/poll-tabs/stats/PollStats";
     import {mapState, mapActions} from "vuex";
     export default {
         name: "PollTabbed",
-        data() {
-            return {
-                activeTab: 0,
-                TAB_CONFIGURE: 0,
-                TAB_EDIT: 1,
-                TAB_STATISTICS: 2,
-            }
-        },
         computed: {
             ...mapState('currentPoll', {
                 poll: 'poll'
@@ -110,7 +99,6 @@
             let pollId = this.$route.params.pollId
             this.loadPoll(pollId)
         },
-        components: {ConfigurePoll, CreatePoll, PollStats}
     }
 </script>
 
