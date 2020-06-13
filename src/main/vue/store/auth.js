@@ -43,11 +43,16 @@ const auth = {
             })
         },
 
-        /* todo
         logout({commit}) {
-            commit('authenticate', null);
+            return new Promise((resolve) => {
+                commit('logout')
+                localStorage.removeItem('authToken')
+                delete axios.defaults.headers.common['Authorization']
+                resolve()
+            })
+
         },
-         */
+
 
         /**
          * Load a token from Browser localStorage.
@@ -78,6 +83,8 @@ const auth = {
             }
 
             localStorage.setItem('authToken', token);
+
+
         },
         /**
          * sets the username
@@ -87,6 +94,11 @@ const auth = {
 
 
             localStorage.setItem('username', username)
+        },
+        logout(state) {
+            state.status = '';
+            state.username = '';
+            state.token = '';
         }
 
     },
