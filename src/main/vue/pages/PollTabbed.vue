@@ -8,7 +8,37 @@
 
         <b-row class="primary-tab-bar sticky align-items-baseline">
             <b-col>
-                <h3>Titel: {{ poll.title }}</h3>
+                <b-row>
+
+
+                <b-col cols="9">
+                    <div  style="float: left">
+                        <h3 class="mr-2">Titel:</h3>
+                    </div>
+
+                    <div  style="float: left">
+                        <EditableLabel
+                            tag="h3"
+                            :value="pollTitle"
+                            :editing="editTitle"
+                            v-on:valueChanged="pollTitle = $event">
+                            <!-- is this applied when submitting poll? -->
+                        </EditableLabel>
+                    </div>
+                </b-col>
+                <b-col>
+                    <div class="ml-5" style="float: left">
+                        <b-button variant="outline-secondary" v-if="!editTitle"
+                                  @click="setEditingTitle(true)">
+                            <b-icon-pencil/>
+                        </b-button>
+                        <b-button variant="outline-secondary" v-else
+                                  @click="setEditingTitle(false)">
+                            <b-icon-check/>
+                        </b-button>
+                    </div>
+                </b-col>
+                </b-row>
             </b-col>
             <b-col>
                 <b-tabs lazy pills align="right" v-model="activeTab">
@@ -86,6 +116,7 @@
     import CreatePoll from "../components/poll-tabs/edit/EditPoll";
     import PollStats from "../components/poll-tabs/stats/PollStats";
     import {mapState, mapActions} from "vuex";
+    import EditableLabel from "../components/EditableLabel";
     export default {
         name: "PollTabbed",
         data() {
@@ -94,6 +125,9 @@
                 TAB_CONFIGURE: 0,
                 TAB_EDIT: 1,
                 TAB_STATISTICS: 2,
+
+                pollTitle: '',
+                editTitle: false
             }
         },
         computed: {
@@ -104,13 +138,16 @@
         methods: {
             ...mapActions('currentPoll', {
                 loadPoll: 'load',
-            })
+            }),
+            setEditingTitle(edit) {
+                this.editTitle = edit;
+            }
         },
         created() {
-            let pollId = this.$route.params.pollId
+            let pollId = this.$route.params.pollId;
             this.loadPoll(pollId)
         },
-        components: {ConfigurePoll, CreatePoll, PollStats}
+        components: {EditableLabel, ConfigurePoll, CreatePoll, PollStats}
     }
 </script>
 
