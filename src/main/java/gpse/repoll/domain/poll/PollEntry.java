@@ -2,7 +2,7 @@ package gpse.repoll.domain.poll;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.repoll.domain.poll.answers.Answer;
-import gpse.repoll.domain.serialization.SerializePollEntry;
+import gpse.repoll.domain.serialization.SerializeQuestion;
 import gpse.repoll.domain.poll.questions.Question;
 
 import javax.persistence.*;
@@ -21,7 +21,7 @@ public class PollEntry {
     private Long id;
 
     @ManyToMany
-    @JsonSerialize(keyUsing = SerializePollEntry.class)
+    @JsonSerialize(keyUsing = SerializeQuestion.class)
     private final Map<Question, Answer> associations = new HashMap<>();
 
     @ManyToOne
