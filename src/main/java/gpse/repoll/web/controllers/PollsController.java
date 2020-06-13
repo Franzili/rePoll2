@@ -27,8 +27,7 @@ public class PollsController {
         this.pollService = pollService;
     }
 
-    // todo this has to be fixed in future, now is blocking frontend from accessing the database
-    //@Secured(Roles.POLL_CREATOR)
+    @Secured(Roles.POLL_CREATOR)
     @GetMapping("/")
     public List<Poll> listPolls() {
         List<Poll> polls = new ArrayList<>();
