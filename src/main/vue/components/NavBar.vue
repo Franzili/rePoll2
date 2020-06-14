@@ -45,11 +45,8 @@
                 return this.$router.push('/');
             },
             logOutUser: function () {
-                this.logout()
-                    .then(() => {
-                        this.$router.push('/');
-                    })
-                this.toStart();
+                this.logout();
+                location.reload();
             }
         }
     }
