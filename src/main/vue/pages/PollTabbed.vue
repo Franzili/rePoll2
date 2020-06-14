@@ -6,9 +6,32 @@
              and one to actually show the contents. they are coupled
              using v-bind. -->
 
-        <b-row class="primary-tab-bar sticky align-items-baseline">
-            <b-col>
-                <h3>Titel: {{ poll.title }}</h3>
+        <b-row v-if="loaded" class="primary-tab-bar sticky align-items-baseline">
+            <b-col class="poll-title">
+
+                        <h3 v-if="activeTab === TAB_EDIT" class="mr-2">Titel:</h3>
+
+                        <EditableLabel
+                            tag="h3"
+                            :value="poll.title"
+                            :editing="editTitle"
+                            v-on:valueChanged="pollTitle = $event">
+                            <!-- is this applied when submitting poll? -->
+                        </EditableLabel>
+
+                    <div v-if="activeTab === TAB_EDIT" class="ml-3">
+                        <b-button-group >
+                            <b-button size="sm" variant="outline-secondary" v-if="!editTitle"
+                                      @click="setEditingTitle(true)">
+                                <b-icon-pencil/>
+                            </b-button>
+                            <b-button variant="outline-secondary" v-else
+                                      @click="setEditingTitle(false)">
+                                <b-icon-check scale="1.2"/>
+                            </b-button>
+                        </b-button-group>
+                    </div>
+
             </b-col>
             <b-col>
                 <b-tabs lazy pills align="right" v-model="activeTab">
@@ -86,14 +109,19 @@
     import CreatePoll from "../components/poll-tabs/edit/EditPoll";
     import PollStats from "../components/poll-tabs/stats/PollStats";
     import {mapState, mapActions} from "vuex";
+    import EditableLabel from "../components/EditableLabel";
     export default {
         name: "PollTabbed",
         data() {
             return {
+                loaded: false,
                 activeTab: 0,
                 TAB_CONFIGURE: 0,
                 TAB_EDIT: 1,
                 TAB_STATISTICS: 2,
+
+                pollTitle: '',
+                editTitle: false
             }
         },
         computed: {
@@ -104,13 +132,31 @@
         methods: {
             ...mapActions('currentPoll', {
                 loadPoll: 'load',
-            })
+                update: 'update'
+            }),
+            setEditingTitle(edit) {
+                this.editTitle = edit;
+                if (!edit) {
+                    this.update({id: this.poll.id, title: this.pollTitle});
+                }
+            }
         },
-        created() {
-            let pollId = this.$route.params.pollId
+        /*created() {
+            let pollId = this.$route.params.pollId;
             this.loadPoll(pollId)
+        },*/
+        async mounted() {
+            this.loaded = false
+            let pollId = this.$route.params.pollId
+            await this.loadPoll(pollId)
+            this.loaded = true
         },
-        components: {ConfigurePoll, CreatePoll, PollStats}
+        watch: {
+            activeTab: function () {
+                this.editTitle = false;
+            }
+        },
+        components: {EditableLabel, ConfigurePoll, CreatePoll, PollStats}
     }
 </script>
 
@@ -120,6 +166,11 @@
     .primary-tab-bar {
         top: 80px;
         background-color: $floating-background-color;
+    }
+
+    .poll-title {
+        display: flex;
+        align-items: center;
     }
 
 </style>

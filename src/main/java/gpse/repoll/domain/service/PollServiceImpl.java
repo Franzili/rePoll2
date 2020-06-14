@@ -84,16 +84,6 @@ public class PollServiceImpl implements PollService {
      */
     @Override
     public void removePoll(final UUID id) {
-        Poll poll = pollRepository.findById(id).orElseThrow(NotFoundException::new);
-        Iterable<User> listAllUser = userRepository.findAll();
-        for (User listEle: listAllUser) {
-            if (listEle.getAssignedPolls() != null) {
-                Collection<UUID> listeAssignedPolls = new ArrayList<>();
-
-            }
-
-         }
-
         pollRepository.deleteById(id);
     }
 }

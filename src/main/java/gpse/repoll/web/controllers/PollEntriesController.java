@@ -41,7 +41,6 @@ public class PollEntriesController {
         return pollEntryService.getAll(pollId);
     }
 
-    //todo handling wrong answer type
     @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
@@ -71,6 +70,10 @@ public class PollEntriesController {
         Map<Long, Answer> answers = new HashMap<>();
         for (Long key : pollEntryCmd.getAnswers().keySet()) {
             AnswerCmd answerCmd = pollEntryCmd.getAnswers().get(key);
+            if (answerCmd == null) {
+                answers.put(key, null);
+                continue;
+            }
             Answer answer;
             if (answerCmd instanceof TextAnswerCmd) {
                 answer = new TextAnswer();
@@ -78,11 +81,15 @@ public class PollEntriesController {
                 ((TextAnswer) answer).setText(text);
             } else if (answerCmd instanceof ScaleAnswerCmd) {
                 answer = new ScaleAnswer();
-                int scaleNumber = ((ScaleAnswerCmd) answerCmd).getScaleNumber();
+                Integer scaleNumber = ((ScaleAnswerCmd) answerCmd).getScaleNumber();
                 ((ScaleAnswer) answer).setScaleNumber(scaleNumber);
             } else if (answerCmd instanceof SingleChoiceAnswerCmd) {
                 answer = new SingleChoiceAnswer();
                 Long choiceId = ((SingleChoiceAnswerCmd) answerCmd).getChoiceId();
+                if (choiceId == null) {
+                    answers.put(key, null);
+                    continue;
+                }
                 Choice choice = choiceRepository.findById(choiceId).orElseThrow(() -> {
                     throw new BadRequestException("The choice does not exist!");
                 });
@@ -90,6 +97,10 @@ public class PollEntriesController {
             } else if (answerCmd instanceof MultiChoiceAnswerCmd) {
                 answer = new MultiChoiceAnswer();
                 List<Long> choiceIds = ((MultiChoiceAnswerCmd) answerCmd).getChoiceIds();
+                if (choiceIds.isEmpty()) {
+                    answers.put(key, null);
+                    continue;
+                }
                 List<Choice> choices = new ArrayList<>();
                 for (Long choiceId : choiceIds) {
                     choices.add(choiceRepository.findById(choiceId).orElseThrow(() -> {

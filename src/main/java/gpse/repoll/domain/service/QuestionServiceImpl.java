@@ -4,7 +4,6 @@ import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
-import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.questions.*;
 import gpse.repoll.domain.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,6 @@ public class QuestionServiceImpl implements QuestionService {
     private final MultiChoiceQuestionRepository multiChoiceQuestionRepository;
     private final ChoiceRepository choiceRepository;
     private final QuestionBaseRepository<Question> questionBaseRepository;
-    private final PollRepository pollRepository;
-    private final PollEntryRepository pollEntryRepository;
 
     @Autowired
     public QuestionServiceImpl(
@@ -37,9 +34,7 @@ public class QuestionServiceImpl implements QuestionService {
             SingleChoiceQuestionRepository singleChoiceQuestionRepository,
             MultiChoiceQuestionRepository multiChoiceQuestionRepository,
             ChoiceRepository choiceRepository,
-            QuestionBaseRepository<Question> questionBaseRepository,
-            PollRepository pollRepository,
-            PollEntryRepository pollEntryRepository) {
+            QuestionBaseRepository<Question> questionBaseRepository) {
         this.pollService = pollService;
         this.textQuestionRepository = textQuestionRepository;
         this.scaleQuestionRepository = scaleQuestionRepository;
@@ -47,8 +42,6 @@ public class QuestionServiceImpl implements QuestionService {
         this.multiChoiceQuestionRepository = multiChoiceQuestionRepository;
         this.choiceRepository = choiceRepository;
         this.questionBaseRepository = questionBaseRepository;
-        this.pollRepository = pollRepository;
-        this.pollEntryRepository = pollEntryRepository;
     }
 
     /**
@@ -329,7 +322,7 @@ public class QuestionServiceImpl implements QuestionService {
         Question question = getQuestion(pollId, questionId);
         poll.remove(question);
 
-        pollRepository.save(poll);
+        pollService.save(poll);
         questionBaseRepository.delete(question);
     }
 }
