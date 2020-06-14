@@ -1,7 +1,8 @@
 package gpse.repoll.web.command;
 
-import gpse.repoll.domain.Anonymity;
+import gpse.repoll.domain.poll.Anonymity;
 import gpse.repoll.domain.poll.PollStatus;
+
 
 /**
  * Poll helper object used for JSON serialisation.
@@ -12,6 +13,15 @@ public class PollCmd {
     private PollStructureCmd structure;
     private PollStatus status;
     private Anonymity anonymity;
+    private PollEditorsCmd editors;
+
+    public PollEditorsCmd getEditors() {
+        return editors;
+    }
+
+    public void setEditors(PollEditorsCmd editors) {
+        this.editors = editors;
+    }
 
     public Anonymity getAnonymity() {
         return anonymity;

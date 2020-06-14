@@ -52,6 +52,7 @@ const auth = {
         /**
          * Load a token from Browser localStorage.
          */
+
         loadFromStorage({commit}) {
             let token = localStorage.getItem('authToken');
             commit('authenticate', token);

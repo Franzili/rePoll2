@@ -1,6 +1,6 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.Anonymity;
+import gpse.repoll.domain.poll.Anonymity;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollStatus;
