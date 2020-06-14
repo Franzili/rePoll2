@@ -2,24 +2,25 @@
     <b-container>
         <!-- make both collapsalbe items, with polls to Fill out expandet -->
 
-        <!-- users Polls  to fill out-->
+        <!-- users Polls  to fill out -->
         <b-container class="my-container">
             <b-row align-h="center">
                 <h2>Your polls to fill out</h2>
             </b-row>
             <b-row style="text-align: center" class="my-row">
                 <b-col >
-                    <AnswerPollTableList v-bind:polls="assigned"/>
+                    <AnswerPollTableList v-bind:polls="polls"/>
                 </b-col>
             </b-row>
         </b-container>
 
+
         <!-- users own Polls -->
         <b-container class="my-container">
             <b-row align-h="center">
-                <h2>Your own Polls</h2>
+                <h2>Poll Table</h2>
             </b-row>
-            <b-row style="text-align: center" class="my-row">
+            <b-row>
                 <b-col >
                     <PollTableList v-bind:polls="polls"/>
                 </b-col>
@@ -38,21 +39,21 @@
     export default {
         name: "PollTable",
 
-        created() {
-            this.loadPolls();
-            this.loadAssigned();
+        async mounted() {
+            await this.loadPolls();
+            // this.loadAssigned();
         },
 
         computed: {
             ...mapState('myPolls', {
                 polls: 'polls',
-                assigned: 'assigned'
+                //assigned: 'assigned'
             })
         },
         methods: {
             ...mapActions('myPolls', {
                 loadPolls: 'load',
-                loadAssigned: 'loadAssigned',
+                //loadAssigned: 'loadAssigned',
             })
         },
         components: {

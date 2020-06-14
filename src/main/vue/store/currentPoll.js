@@ -291,7 +291,11 @@ const currentPoll = {
             })
             pollSections.push(currentSection);
 
-            state.poll.pollSections = pollSections;
+            Vue.set(state.poll, 'pollSections', pollSections);
+        },
+
+        setMetaStats(state, newMetaStats) {
+            state.statistics = newMetaStats
         },
 
         addQuestion(state, question) {
@@ -300,7 +304,7 @@ const currentPoll = {
 
         setPollAnswers(state, newPollAnswers) {
             state.pollAnswers = newPollAnswers
-        }
+        },
     },
 
     actions: {
@@ -465,6 +469,38 @@ const currentPoll = {
 
             await Promise.all(promises);
             await api.poll.updateStructure(state.poll.id, structureCmd);
+        },
+
+        async removePollItem({state, getters, dispatch}, id) {
+            let structure = getters.pollStructureFlat;
+            let index = structure.findIndex(item => item.id === id);
+            let item = structure[index]
+            if (index === 0) {
+                console.warn("[RePoll] Attempting to remove first Item which is probably a Section Header. Aborting.");
+                return new Promise((resolve) => resolve());
+            }
+            structure.splice(index, 1);
+            await dispatch('updateStructure', structure);
+
+            if (item.type === 'SectionHeader') {
+                return new Promise((resolve, reject) => {
+                    api.poll.removePollSection(state.poll.id, id).then(function () {
+                        resolve();
+                    }).catch(function(err) {
+                        console.log(err);
+                        reject(err);
+                    });
+                });
+            } else {
+                return new Promise((resolve, reject) => {
+                    api.poll.removeQuestion(state.poll.id, id).then(function() {
+                        resolve();
+                    }).catch(function(err) {
+                        console.log(err);
+                        reject(err);
+                    });
+                });
+            }
         },
 
         loadPollAnswers({commit}, id) {

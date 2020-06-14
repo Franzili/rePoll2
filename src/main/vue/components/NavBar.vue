@@ -26,6 +26,9 @@
                     <b-nav-item>
                         <router-link class="link" :to="'/create/'">Create Poll</router-link>
                     </b-nav-item>
+                    <b-nav-item>
+                        <b-button variant="danger" @click="logOutUser">Logout</b-button>
+                    </b-nav-item>
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
@@ -33,11 +36,17 @@
 </template>
 
 <script>
+    import {mapActions} from "vuex";
     export default {
         name: "NavBar",
         methods: {
+            ...mapActions('auth', ['logout']),
             toStart() {
                 return this.$router.push('/');
+            },
+            logOutUser: function () {
+                this.logout();
+                location.reload();
             }
         }
     }

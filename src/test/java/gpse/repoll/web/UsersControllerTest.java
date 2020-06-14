@@ -50,7 +50,7 @@ public class UsersControllerTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        usersController = new UsersController(pollService, userService, mailService);
+        usersController = new UsersController(userService, mailService);
     }
 
     @Test

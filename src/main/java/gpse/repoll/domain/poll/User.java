@@ -34,29 +34,12 @@ public class User implements UserDetails {
     @Column
     private String email;
 
+    @JsonIgnore
     @Column
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private final List<String> roles = new ArrayList<>();
-
-
-    /*
-    @Column
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private List<Poll> ownPolls = new ArrayList<>();
-
-    @Column
-    @OneToMany(mappedBy = "owner") //users assigned polls to fill out
-    private List<Poll> assignedPolls = new ArrayList<>();*/
-
-    @Column
-    @ElementCollection
-    private final List<UUID> ownPolls = new ArrayList<>();
-
-    @Column
-    @ElementCollection
-    private final List<UUID> assignedPolls = new ArrayList<>();
 
     public User() {
         // Todo: refine user roles
@@ -98,41 +81,13 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    /*public void addOwnPoll(Poll poll) { ownPolls.add(poll); }
-
-    public void removeOwnPoll(Poll poll) {
-        ownPolls.remove(poll);
-    }
-
-    public List<Poll> getOwnPolls() {
-        return Collections.unmodifiableList(ownPolls);
-    }*/
-    public void addOwnPoll(UUID pollId) {
-        ownPolls.add(pollId);
-    }
-
-    public void removeOwnPoll(UUID pollId) {
-        ownPolls.remove(pollId);
-    }
-
-    public List<UUID> getOwnPolls() {
-        return Collections.unmodifiableList(ownPolls);
-    }
-
-    public void addAssignedPoll(UUID pollId) {
-        assignedPolls.add(pollId);
-    }
-
-    public void removeAssignedPoll(UUID pollId) {
-        assignedPolls.remove(pollId);
-    }
-
-    public List<UUID> getAssignedPolls() {
-        return Collections.unmodifiableList(assignedPolls);
-    }
-
     public List<String> getRoles() {
         return Collections.unmodifiableList(roles);
+    }
+
+    @JsonIgnore
+    public String getHighestRole() {
+        return roles.get(0); // roles is always not empty and 0 is the highest role
     }
 
     public void setRoles(String role) throws NoValidRoleException {
@@ -255,5 +210,23 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return username;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(id, user.id)
+                && Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username);
     }
 }

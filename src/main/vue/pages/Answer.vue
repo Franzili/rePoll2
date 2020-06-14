@@ -57,11 +57,13 @@
                     console.log(`ID: ${pollHTMLAnswers[i].__vue__.model.id}`)
                     console.log(pollHTMLAnswers[i].__vue__.model);
                     entryCmd[pollHTMLAnswers[i].__vue__.model.id] = pollHTMLAnswers[i].__vue__.answer
+                    console.log(pollHTMLAnswers[i].__vue__.answer)
                 }
 
                 let entrysOfPoll = {pollId: this.$route.params.id, entryCmd: entryCmd}
 
                 this.rootEntry(entrysOfPoll)
+                return this.$router.push('/poll-response/')
             },
         },
         created() {

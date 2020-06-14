@@ -20,65 +20,6 @@ public interface UserService extends UserDetailsService {
     void removeUser(UUID id);
     void removeUser(String username);
 
-    /**
-     * gets the UUID List of Polls owned by user.
-     * @param userId UUID identifier
-     * @return UUID List of Polls
-     */
-    List<UUID> getOwnedPolls(UUID userId);
-
-    /**
-     * gets the UUID List of Polls owned by user.
-     * @param username String identifier
-     * @return UUID List of Polls
-     */
-    List<UUID> getOwnedPolls(String username);
-
-    /**
-     * adds poll ID to list of users owned polls.
-     * @param pollId UUID identifier for poll
-     * @param userId UUID identifier for user
-     * @return updated user
-     */
-    User addOwnedPoll(UUID pollId, UUID userId);
-    /**
-     * adds poll ID to list of users owned polls.
-     * @param pollId UUID identifier for poll
-     * @param username String identifier for user
-     * @return updated user
-     */
-    User addOwnedPoll(UUID pollId, String username);
-
-    /**
-     * gets the UUID List of Polls assigned to user.
-     * @param userId UUID identifier
-     * @return UUID List of Polls
-     */
-    List<UUID> getAssignedPolls(UUID userId);
-
-    /**
-     * gets the UUID List of Polls assigned to user.
-     * @param username String identifier
-     * @return UUID List of Polls
-     */
-    List<UUID> getAssignedPolls(String username);
-
-    /**
-     * ads poll ID to list of assigned polls for user.
-     * @param pollId UUID identifier for poll
-     * @param userId UUID identifier for user
-     * @return updated user
-     */
-    User addAssignedPoll(UUID pollId, UUID userId);
-
-    /**
-     * ads poll ID to list of assigned polls for user.
-     * @param pollId UUID identifier for poll
-     * @param username String identifier for user
-     * @return updated user
-     */
-    User addAssignedPoll(UUID pollId, String username);
-
     List<String> getRoles(UUID userId);
     List<String> getRoles(String username);
 
