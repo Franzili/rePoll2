@@ -45,6 +45,13 @@
                 },
             }
         },
+        created() {
+            this.pressKeyEnter = this.pressKeyEnter.bind(this);
+            document.addEventListener('keypress', this.pressKeyEnter)
+        },
+        destroyed() {
+            document.removeEventListener('keypress', this.pressKeyEnter)
+        },
         computed: {
             ...mapState('auth', ['authenticated'])
         },
@@ -57,8 +64,18 @@
                     })
                     .catch(() => {
                     })
+            },
+            pressKeyEnter(e) {
+                    if (e.key === 'Enter') {
+                        this.requestToken(this.auth)
+                            .then(() => {
+                                this.$router.push("/polls");
+                            })
+                            .catch(() => {
+                            })
+                    }
             }
-        },
+        }
     }
 </script>
 
