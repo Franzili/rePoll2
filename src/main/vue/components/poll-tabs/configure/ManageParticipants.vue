@@ -53,42 +53,46 @@
         </div>
 
         <b-row v-if="type === 'anonymous'">
-            <b-row>
-                <b-col cols="6">
-                <h6>Invite new participants</h6>
-                    <p>
-                        <b-form-textarea
-                            placeholder="Enter E-Mail addresses to invite."
-                            size="sm"
-                            rows="10"
-                        ></b-form-textarea>
-                    </p>
-                    <p>
-                        <b-button class="float-right" variant="primary">Invite</b-button>
-                    </p>
-                </b-col>
+            <b-container>
+                <b-row align-h="between">
+                    <b-col cols="6">
+                    <h6>Invite new participants</h6>
+                        <p>
+                            <b-form-textarea
+                                placeholder="Enter E-Mail addresses to invite."
+                                size="sm"
+                                rows="10"
+                            ></b-form-textarea>
+                        </p>
+                        <p>
+                            <b-button class="float-right" variant="primary">Invite</b-button>
+                        </p>
+                    </b-col>
 
-                <b-col cols="6">
-                    <h6>Share a link</h6>
-                    <b-card align="center">
-                        <a v-bind:href="''">
-                            {{ link }}
-                        </a>
-                    </b-card>
+                    <b-col cols="6">
+                        <h6>Share a link</h6>
+                        <b-card align="center">
+                            <b-card-text>
+                                <a v-bind:href="''">
+                                    {{ link }}
+                                </a>
+                            </b-card-text>
+                        </b-card>
 
-                    <br/>
-                    <br/>
+                        <br/>
+                        <br/>
 
-                    <p>
-                        If you add E-Mail addresses to the invite box, the participants will receive a generic link
-                        to the poll automatically.
-                    </p>
-                    <p>
-                        You also have the possibility to share the link above via other platforms.
-                    </p>
+                        <p>
+                            If you add E-Mail addresses to the invite box, the participants will receive a generic link
+                            to the poll automatically.
+                        </p>
+                        <p>
+                            You also have the possibility to share the link above via other platforms.
+                        </p>
 
-                </b-col>
-            </b-row>
+                    </b-col>
+                </b-row>
+            </b-container>
         </b-row>
     </b-card>
 </template>
