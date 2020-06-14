@@ -30,7 +30,4 @@
 </script>
 
 <style scoped>
-    .poll-mode-indicator {
-
-    }
 </style>

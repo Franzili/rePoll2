@@ -43,11 +43,16 @@ const auth = {
             })
         },
 
-        /* todo
         logout({commit}) {
-            commit('authenticate', null);
+            return new Promise((resolve) => {
+                commit('logOut')
+                localStorage.removeItem('authToken')
+                localStorage.removeItem('username')
+                resolve()
+            })
+
         },
-         */
+
 
         /**
          * Load a token from Browser localStorage.
@@ -78,6 +83,8 @@ const auth = {
             }
 
             localStorage.setItem('authToken', token);
+
+
         },
         /**
          * sets the username
@@ -87,6 +94,10 @@ const auth = {
 
 
             localStorage.setItem('username', username)
+        },
+        logOut(state) {
+            state.username = '';
+            state.token = '';
         }
 
     },

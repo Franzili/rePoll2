@@ -169,4 +169,13 @@ public interface QuestionService {
             int questionOrder,
             String questionTitle,
             List<Choice> choices);
+
+    /**
+     * Remove a Question.
+     * @param pollId The Poll's ID
+     * @param questionId The Question's ID
+     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll could
+     * not be found.
+     */
+    void removeQuestion(UUID pollId, Long questionId);
 }

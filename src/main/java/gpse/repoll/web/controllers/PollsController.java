@@ -3,11 +3,11 @@ package gpse.repoll.web.controllers;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.service.PollService;
-import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -21,16 +21,13 @@ import java.util.*;
 public class PollsController {
 
     private final PollService pollService;
-    private final UserService userService;
 
     @Autowired
-    public PollsController(PollService pollService, UserService userService) {
+    public PollsController(PollService pollService) {
         this.pollService = pollService;
-        this.userService = userService;
     }
 
-    // todo this has to be fixed in future, now is blocking frontend from accessing the database
-    //@Secured(Roles.POLL_CREATOR)
+    @Secured(Roles.POLL_CREATOR)
     @GetMapping("/")
     public List<Poll> listPolls() {
         List<Poll> polls = new ArrayList<>();
@@ -53,7 +50,7 @@ public class PollsController {
         return pollService.getPoll(id);
     }
 
-    @Secured(Roles.POLL_EDITOR)
+    @PreAuthorize("@securityService.isEditor(principal.username)")
     @PutMapping("/{id}/")
     public Poll updatePoll(@PathVariable("id") final UUID id, @RequestBody PollCmd pollCmd) {
         Map<UUID, List<Long>> structure = null;
@@ -68,9 +65,8 @@ public class PollsController {
                 structure);
     }
 
-    // todo creator cannot delete polls he didn't create
     @Secured(Roles.POLL_CREATOR)
-    @DeleteMapping(value = "/{id}/")
+    @DeleteMapping("/{id}/")
     public void removePoll(@PathVariable("id") final UUID id) {
         pollService.removePoll(id);
     }

@@ -2,11 +2,11 @@ package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.PollSection;
 import gpse.repoll.domain.service.PollSectionService;
-import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.PollSectionCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +23,12 @@ public class PollSectionsController {
     private final PollSectionService pollSectionService;
 
     @Autowired
-    public PollSectionsController(PollSectionService pollSectionService, UserService userService) {
+    public PollSectionsController(PollSectionService pollSectionService) {
         this.pollSectionService = pollSectionService;
     }
 
-    @Secured(Roles.PARTICIPANT)
+    @PreAuthorize("(@securityService.isActivated(#pollId) and @securityService.isParticipant(principal.username))"
+            + "or @securityService.isEditor(principal.username)")
     @GetMapping("/{pollId}/sections/")
     public List<PollSection> listPollSections(@PathVariable("pollId") final UUID pollId) {
         return pollSectionService.getAllSections(pollId);
@@ -43,7 +44,8 @@ public class PollSectionsController {
                 pollSectionCmd.getDescription());
     }
 
-    @Secured(Roles.PARTICIPANT)
+    @PreAuthorize("(@securityService.isActivated(#pollId) and @securityService.isParticipant(principal.username))"
+            + "or @securityService.isEditor(principal.username)")
     @GetMapping("/{pollId}/sections/{sectionId}/")
     public PollSection getPollSection(@PathVariable("pollId") final UUID pollId,
                                       @PathVariable("sectionId") final UUID sectionId) {
@@ -60,5 +62,12 @@ public class PollSectionsController {
                 sectionId,
                 pollSectionCmd.getTitle(),
                 pollSectionCmd.getDescription());
+    }
+
+    @Secured(Roles.POLL_EDITOR)
+    @DeleteMapping("/{pollId}/sections/{sectionId}/")
+    public void deletePollSection(@PathVariable("pollId") final UUID pollId,
+                                  @PathVariable("sectionId") final UUID sectionId) {
+         pollSectionService.deletePollSection(pollId, sectionId);
     }
 }

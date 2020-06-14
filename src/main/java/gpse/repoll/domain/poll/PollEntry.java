@@ -1,10 +1,8 @@
 package gpse.repoll.domain.poll;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.repoll.domain.poll.answers.Answer;
-import gpse.repoll.domain.serialization.SerializePollEntry;
+import gpse.repoll.domain.serialization.SerializeQuestion;
 import gpse.repoll.domain.poll.questions.Question;
 
 import javax.persistence.*;
@@ -23,11 +21,10 @@ public class PollEntry {
     private Long id;
 
     @ManyToMany
-    @JsonSerialize(keyUsing = SerializePollEntry.class)
+    @JsonSerialize(keyUsing = SerializeQuestion.class)
     private final Map<Question, Answer> associations = new HashMap<>();
 
     @ManyToOne
-    @JsonIgnoreProperties({"ownPolls", "assignedPolls"}) // to avoids lazy databind exception
     private User user;
 
     public Map<Question, Answer> getAssociations() {
@@ -65,5 +62,9 @@ public class PollEntry {
 
     public void put(Question question, Answer answer) {
         associations.put(question, answer);
+    }
+
+    public void deleteAnswers() {
+        associations.clear();
     }
 }

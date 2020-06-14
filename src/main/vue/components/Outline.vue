@@ -50,6 +50,8 @@
 
     .outline {
         display: block !important;
+        overflow-y: auto;
+        max-height: calc(100vh - 150px);
     }
 
     .outline-item {

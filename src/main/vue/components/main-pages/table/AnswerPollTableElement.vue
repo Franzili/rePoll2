@@ -14,7 +14,7 @@
             <b-col cols="4" style="text-align: center">
 
                 <router-link class="configLink"
-                             :to="'/poll/' + poll.id + '/answer/'"
+                             :to="{ name: 'answer', params: {id: poll.id}}"
                 >Fill Out
                 </router-link>
 
