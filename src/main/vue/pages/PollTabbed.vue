@@ -8,16 +8,16 @@
                 <b-nav pills align="right">
 
                     <b-nav-item active-class="active"
-                                :to="{ name: 'edit-poll', params: { pollId: $route.params.pollId }}">
-                        Edit
-                    </b-nav-item>
-                    <b-nav-item active-class="active"
                                 :to="{ name: 'configure-poll', params: { pollId: $route.params.pollId }}">
                         Configure
                     </b-nav-item>
                     <b-nav-item active-class="active"
+                                :to="{ name: 'edit-poll', params: { pollId: $route.params.pollId }}">
+                        Edit
+                    </b-nav-item>
+                    <b-nav-item active-class="active"
                                 :to="{ name: 'poll-stats', params: { pollId: $route.params.pollId }}">
-                        Stats
+                        Statistics
                     </b-nav-item>
 
                 </b-nav>
