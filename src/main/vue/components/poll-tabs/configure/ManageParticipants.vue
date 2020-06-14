@@ -71,7 +71,7 @@
                 <b-col cols="6">
                     <h6>Share a link</h6>
                     <b-card align="center">
-                        http://localhost:8080/poll/{{ id }}/answer
+                        {{ domain }}/poll/{{ id }}/answer
                     </b-card>
 
                     <br/>
@@ -98,9 +98,11 @@
 
         data() {
             return {
+                domain: '',
+                id: 0,
+
                 //TODO
                 type: 'anonymous',
-                id: 0,
 
                 //TODO
                 n_participated: 412,
@@ -116,6 +118,7 @@
 
         created: function() {
             this.id = this.$route.params.pollId;
+            this.domain = window.location.origin;
         }
     }
 </script>
