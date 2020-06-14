@@ -50,7 +50,7 @@ public class PollsController {
         return pollService.getPoll(id);
     }
 
-    @PreAuthorize("@securityService.isEditor(principal.username) and @securityService.isInProcess(#id)")
+    @PreAuthorize("@securityService.isEditor(principal.username)")
     @PutMapping("/{id}/")
     public Poll updatePoll(@PathVariable("id") final UUID id, @RequestBody PollCmd pollCmd) {
         Map<UUID, List<Long>> structure = null;
