@@ -49,6 +49,7 @@
                     .then(() => {
                         this.$router.push('/');
                     })
+                this.toStart();
             }
         }
     }

@@ -47,6 +47,7 @@ const auth = {
             return new Promise((resolve) => {
                 commit('logout')
                 localStorage.removeItem('authToken')
+                localStorage.removeItem('username')
                 delete axios.defaults.headers.common['Authorization']
                 resolve()
             })
@@ -96,7 +97,6 @@ const auth = {
             localStorage.setItem('username', username)
         },
         logout(state) {
-            state.status = '';
             state.username = '';
             state.token = '';
         }
