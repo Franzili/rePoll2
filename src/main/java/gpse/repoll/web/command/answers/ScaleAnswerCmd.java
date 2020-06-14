@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("ScaleAnswer")
 public class ScaleAnswerCmd extends AnswerCmd {
 
-    private int scaleNumber;
+    private Integer scaleNumber;
 
-    public int getScaleNumber() {
+    public Integer getScaleNumber() {
         return scaleNumber;
     }
 
-    public void setScaleNumber(int scaleNumber) {
+    public void setScaleNumber(Integer scaleNumber) {
         this.scaleNumber = scaleNumber;
     }
 }

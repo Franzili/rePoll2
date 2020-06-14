@@ -14,6 +14,7 @@ export default {
         rootEntry({commit}, entrysOfPoll) {
             return new Promise((resolve, reject) => {
                 api.entry.answerFirst(entrysOfPoll).then(function (res) {
+                    console.log(res.data)
                     commit('setEntry', res.data);
                     resolve(res.data);
                 }).catch(function (error) {

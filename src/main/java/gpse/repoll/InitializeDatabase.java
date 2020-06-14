@@ -32,13 +32,11 @@ public class InitializeDatabase implements InitializingBean {
     private final QuestionService questionService;
     private final PollEntryService pollEntryService;
     private final UserService userService;
-    private final PollEditorsService pollEditorsService;
     private final TransactionTemplate transactionTemplate;
     private final PollEntryRepository pollEntryRepository;
     private final PollRepository pollRepository;
     private final PollSectionRepository pollSectionRepository;
     private final UserRepository userRepository;
-    private final PollEditorsRepository pollEditorsRepository;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
@@ -46,16 +44,13 @@ public class InitializeDatabase implements InitializingBean {
                               QuestionService questionService,
                               PollEntryService pollEntryService,
                               UserService userService,
-                              PollEditorsService pollEditorsService,
                               PlatformTransactionManager transactionManager,
                               final PollEntryRepository pollEntryRepository,
                               final PollSectionService pollSectionService,
                               final PollRepository pollRepository,
                               final PollSectionRepository pollSectionRepository,
-                              final UserRepository userRepository,
-                              final PollEditorsRepository pollEditorsRepository) {
+                              final UserRepository userRepository) {
         this.pollService = pollService;
-        this.pollEditorsService = pollEditorsService;
         this.pollSectionService = pollSectionService;
         this.questionService = questionService;
         this.pollEntryService = pollEntryService;
@@ -65,7 +60,6 @@ public class InitializeDatabase implements InitializingBean {
         this.pollRepository = pollRepository;
         this.pollSectionRepository = pollSectionRepository;
         this.userRepository = userRepository;
-        this.pollEditorsRepository = pollEditorsRepository;
     }
 
     /**
@@ -147,8 +141,6 @@ public class InitializeDatabase implements InitializingBean {
 
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255);
-            userService.addOwnedPoll(poll.getId(), user.getUsername());
-            userService.addAssignedPoll(poll.getId(), nobody.getUsername());
 
             Poll poll2 = pollService.addPoll("About this App");
             Question question0201 = questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
@@ -170,15 +162,12 @@ public class InitializeDatabase implements InitializingBean {
             structure2.put(section02.getId(), List.of(question0202.getId()));
             pollService.updatePoll(poll2.getId(), null, null, null, structure2);
 
-            userService.addOwnedPoll(poll2.getId(), user.getUsername());
-            userService.addAssignedPoll(poll2.getId(), nobody.getUsername());
 
 
             Poll poll3 = pollService.addPoll("Nothing to see here");
             questionService.addTextQuestion(poll3.getId(), "This sentence is false",
                 100, 255);
             //add poll3 to nobody's ownedPolls
-            userService.addOwnedPoll(poll3.getId(), nobody.getUsername());
 
 
 

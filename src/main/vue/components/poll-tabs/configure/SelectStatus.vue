@@ -51,6 +51,9 @@
                 statusSelected: "",
             }
         },
+        created() {
+            this.statusSelected = this.pollStatus
+        },
         computed: {
             ...mapState('currentPoll', {
                 pollId: state => state.poll.id,

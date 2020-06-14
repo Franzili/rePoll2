@@ -58,7 +58,7 @@ public interface PollSectionService {
     );
 
     /**
-     * Deletes a PollSection
+     * Deletes a PollSection.
      * @param pollId The Poll's ID
      * @param sectionId The PollSection's ID
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the PollSection or the corresponding Poll could
