@@ -53,24 +53,74 @@
         </div>
 
         <b-row v-if="type === 'anonymous'">
+            <b-row>
+                <b-col cols="6">
+                <h6>Invite new participants</h6>
+                    <p>
+                        <b-form-textarea
+                            placeholder="Enter E-Mail addresses to invite."
+                            size="sm"
+                            rows="10"
+                        ></b-form-textarea>
+                    </p>
+                    <p>
+                        <b-button class="float-right" variant="primary">Invite</b-button>
+                    </p>
+                </b-col>
 
+                <b-col cols="6">
+                    <h6>Share a link</h6>
+                    <b-card align="center">
+                        <a v-bind:href="''">
+                            {{ link }}
+                        </a>
+                    </b-card>
+
+                    <br/>
+                    <br/>
+
+                    <p>
+                        If you add E-Mail addresses to the invite box, the participants will receive a generic link
+                        to the poll automatically.
+                    </p>
+                    <p>
+                        You also have the possibility to share the link above via other platforms.
+                    </p>
+
+                </b-col>
+            </b-row>
         </b-row>
     </b-card>
 </template>
 
 <script>
+    import {mapState} from "vuex";
     export default {
         name: "ManageParticipants",
 
         data() {
             return {
+                link: '',
+
                 //TODO
-                type: 'pseudo',
+                type: 'anonymous',
 
                 //TODO
                 n_participated: 412,
                 n_invites_pending: 32
             }
+        },
+
+        computed: {
+            ...mapState('currentPoll', {
+                poll: 'poll'
+            })
+        },
+
+        created: function() {
+            let id = this.$route.params.pollId;
+            let domain = window.location.origin;
+            this.link = domain + '/poll/' + id + '/answer';
         }
     }
 </script>

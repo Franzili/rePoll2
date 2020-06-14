@@ -39,12 +39,11 @@
                 </b-form-radio>
             </b-form-radio-group>
 
-            <b-button class="float-right" v-b-modal.change-anonymity>Apply</b-button>
-
-            <b-modal v-if="this.poll.anonymity !== anonymityChecked"
-                     id="change-anonymity"
+            <b-modal ref="modalAnonymity"
                      centered
-                     @ok="changeAnonymity()">
+                     @ok="changeAnonymity()"
+                     @close="dontChangeAnonymity()"
+                     @cancel="dontChangeAnonymity()">
                 <p>
                     Are you sure you want to change poll anonymity?
                 </p>
@@ -69,6 +68,13 @@
                 poll: 'poll',
             })
         },
+        watch: {
+            anonymityChecked() {
+                if(this.anonymityChecked !== this.poll.anonymity) {
+                    this.$refs.modalAnonymity.show()
+                }
+            }
+        },
         created: function() {
             this.anonymityChecked = this.poll.anonymity;
         },
@@ -83,6 +89,9 @@
                     anonymity: this.poll.anonymity
                 };
                 this.updatePoll(pollCmd);
+            },
+            dontChangeAnonymity() {
+                this.anonymityChecked = this.poll.anonymity
             }
         }
     }
