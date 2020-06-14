@@ -36,8 +36,13 @@
                 let pollCmd = {
                     title: "Unnamed Poll"
                 };
-                await this.createPoll(pollCmd);
-                return this.$router.push('/poll-tabbed/edit')
+                let newPoll = await this.createPoll(pollCmd);
+                return this.$router.push({
+                    name: 'edit-poll',
+                    params: {
+                        pollId: newPoll.id
+                    }
+                })
             }
         },
         components: {
