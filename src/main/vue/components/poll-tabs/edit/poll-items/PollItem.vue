@@ -31,7 +31,7 @@
                             <b-icon-check/>
                         </b-button>
 
-                        <b-button variant="outline-secondary" @click="temporaryAlert()">
+                        <b-button variant="outline-secondary" @click="remove">
                             <b-icon-trash/>
                         </b-button>
 
@@ -40,9 +40,9 @@
 
                 <span v-if="editable">
                     <!-- grab handle -->
-                    <b-button variant="outline-secondary" class="handle" size="sm">
+                    <div class="btn btn-sm btn-outline-secondary handle" size="sm">
                         <b-icon-arrow-up-down />
-                    </b-button>
+                    </div>
                 </span>
 
             </p>
@@ -115,6 +115,9 @@
             }
         },
         methods: {
+            remove() {
+                this.$emit('remove', this.model);
+            },
             onModelChanged(newModel) {
                 this.model = newModel
             },
@@ -138,9 +141,6 @@
                 this.$emit('editStarted', this);
                 console.debug(`[RePoll] Poll Item ${this.model.id} started editing.`);
             },
-            temporaryAlert() {
-                alert("This is to be implemented tonight! :)")
-            }
         },
         components: {
             TextQuestion,
@@ -181,5 +181,9 @@
     /* remove bottom margin from last <p> tag */
     .question-body > p:last-child {
         margin-bottom: 0;
+    }
+
+    .handle {
+        cursor: grab !important;
     }
 </style>

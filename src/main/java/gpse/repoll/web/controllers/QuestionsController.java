@@ -152,4 +152,11 @@ public class QuestionsController {
         // This should never happen
         throw new InternalServerErrorException();
     }
+
+    @Secured(Roles.POLL_EDITOR)
+    @DeleteMapping("/{pollId}/questions/{questionId}/")
+    public void removeQuestion(@PathVariable("pollId") final UUID pollId,
+                               @PathVariable("questionId") final Long questionId) {
+        questionService.removeQuestion(pollId, questionId);
+    }
 }
