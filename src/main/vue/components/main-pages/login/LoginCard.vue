@@ -56,7 +56,6 @@
                         this.$router.push("/polls");
                     })
                     .catch(() => {
-
                     })
             }
         },
