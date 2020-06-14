@@ -7,9 +7,12 @@ import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
 import PollTabbed from "./pages/PollTabbed";
 import Admin from "./pages/Admin";
+import PollResponse from "./pages/PollResponse";
 
 import store from "./store/store";
 import TestCharts from "./pages/TestCharts";
+import PollStats from "./components/poll-tabs/stats/PollStats";
+import ConfigurePoll from "./components/poll-tabs/configure/ConfigurePoll";
 
 let router = new VueRouter({
     mode: 'history',
@@ -48,8 +51,9 @@ let router = new VueRouter({
             }
         },
         {
-            path: '/poll/:id/answer',
+            path: '/poll/answer',
             component: Answer,
+            name: 'answer',
             meta: {
                 requiresAuth: true
             }
@@ -57,15 +61,48 @@ let router = new VueRouter({
         {
             path: '/poll-tabbed/',
             component: PollTabbed,
-            name: 'poll-tabbed',
             meta: {
                 requiresAuth: true
-            }
+            },
+            children: [
+                {
+                    path: '',
+                    component: ConfigurePoll,
+                    name: 'config',
+                    meta: {
+                        requiresAuth: true
+                    }
+                },
+                {
+                    path: 'edit',
+                    component: CreatePoll,
+                    name: 'edit',
+                    meta: {
+                        requiresAuth: true
+                    }
+                },
+                {
+                    path: 'statistics',
+                    component: PollStats,
+                    name: 'statistics',
+                    meta: {
+                        requiresAuth: true
+                    }
+                },
+            ]
+
         },
         {
             path: '/admin/',
             component: Admin,
             name: 'admin',
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/poll-response/',
+            component: PollResponse,
             meta: {
                 requiresAuth: true
             }

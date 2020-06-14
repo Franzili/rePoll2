@@ -10,6 +10,7 @@ import gpse.repoll.web.command.ChoiceCmd;
 import gpse.repoll.web.command.questions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,14 +24,14 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
-public class QuestionsController {
+public class AnswersController {
 
     private static final String NO_CHOICES = "No choices given for the question!";
 
     private final QuestionService questionService;
 
     @Autowired
-    public QuestionsController(QuestionService questionService) {
+    public AnswersController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
@@ -88,13 +89,15 @@ public class QuestionsController {
         throw new InternalServerErrorException();
     }
 
-    @Secured(Roles.ADMIN)
+    @PreAuthorize("(@securityService.isActivated(#pollId) and hasRole('Roles.PARTICIPANT'))"
+            + "or hasRole('Roles.POLL_EDITOR')")
     @GetMapping("/{pollId}/questions/")
     public List<Question> listQuestions(@PathVariable("pollId") final UUID pollId) {
         return questionService.getAllQuestions(pollId);
     }
 
-    @Secured(Roles.PARTICIPANT)
+    @PreAuthorize("(@securityService.isActivated(#pollId) and hasRole('Roles.PARTICIPANT'))"
+            + "or hasRole('Roles.POLL_EDITOR')")
     @GetMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question getQuestion(@PathVariable("pollId") final UUID pollId,
                                 @PathVariable("questionId") final String questionId) {

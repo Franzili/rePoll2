@@ -104,12 +104,12 @@ public class PollSectionServiceImpl implements PollSectionService {
     public void deletePollSection(final UUID pollId, final UUID sectionId) {
         Poll poll = pollService.getPoll(pollId);
         PollSection section = findSectionOfPoll(poll, sectionId);
-        if (!section.getQuestions().isEmpty()) {
-            throw new BadRequestException("Cannot delete PollSection because it still contains questions.");
-        } else {
+        if (section.getQuestions().isEmpty()) {
             poll.remove(section);
             pollRepository.save(poll);
             pollSectionRepository.delete(section);
+        } else {
+            throw new BadRequestException("Cannot delete PollSection because it still contains questions.");
         }
     }
 }

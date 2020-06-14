@@ -9,20 +9,16 @@
             title: {
                 type: String
             },
-            choiceFreqPairs: {
+            chartData: {
+                type: Array
+            },
+            chartLabels: {
                 type: Array
             }
         },
         data() {
             return {
-                myChoices: [],
-                datasets: [
-                    {
-                        label: '',
-                        backgroundColor: [],
-                        data: []
-                    }
-                ],
+                backgroundColor: [],
                 backgroundColors: ['#56a137',
                     '#cb4b16',
                     '#02a097',
@@ -41,40 +37,37 @@
         },
 
         mounted() {
-            this.fillData();
+            this.getMoreColors();
             this.renderChart({
-                    labels: this.myChoices,
-                    datasets: this.datasets},
+                    labels: this.chartLabels,
+                    datasets: [{
+                        label: this.title,
+                        backgroundColor: this.backgroundColor,
+                        data: this.chartData
+                    }]},
                 this.options);
         },
 
         methods: {
-            fillData() {
-                this.options.title.text = this.title;
-
-                for(let i = 0; i < this.choiceFreqPairs.length; i++) {
-                    this.myChoices[i] = this.choiceFreqPairs[i].choice;
-                    this.datasets[0].data[i] = this.choiceFreqPairs[i].absFreq;
-                }
-
+            getMoreColors() {
                 //setting different background colors of choices
-                if (this.choiceFreqPairs.length > this.backgroundColors.length){
+                if (this.chartData.length > this.backgroundColors.length){
 
                     //first use the default colors
                     for(let i = 0; i < this.backgroundColors.length; i++) {
-                        this.datasets[0].backgroundColor[i] = this.backgroundColors[i];
+                        this.backgroundColor[i] = this.backgroundColors[i];
                     }
 
                     //then generate random colors
-                    for(let i = this.backgroundColors.length; i < this.datasets[0].data.length; i++) {
+                    for(let i = this.backgroundColors.length; i < this.chartData.length; i++) {
                         //                                                                    FFFFFF in dec
-                        this.datasets[0].backgroundColor[i] = '#' + Math.floor(Math.random()*16777215).toString(16);
+                        this.backgroundColor[i] = '#' + Math.floor(Math.random()*16777215).toString(16);
                     }
 
                 } else {
                     //only use the default colors
-                    for(let i = 0; i < this.datasets[0].data.length; i++) {
-                        this.datasets[0].backgroundColor[i] = this.backgroundColors[i];
+                    for(let i = 0; i < this.chartData.length; i++) {
+                        this.backgroundColor[i] = this.backgroundColors[i];
                     }
                 }
             }

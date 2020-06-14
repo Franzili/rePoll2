@@ -157,8 +157,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getRole(UUID userId) {
-        List<String> roles = getRoles(userId);
-        return roles.get(0); // roles is always not empty and 0 is the highest role
+        return getUser(userId).getHighestRole();
     }
 
     @Override

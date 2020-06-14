@@ -52,7 +52,7 @@ public class QuestionStatistics {
             computeCumulativeFrequencies(question);
             computeMode();
             computeMedianAndQuartiles();
-            this.arithmeticMean = arithmeticMean();
+            this.arithmeticMean = computeArithmeticMean();
         } else {
             answerList.addAll(answers);
             this.median = null;
@@ -62,7 +62,7 @@ public class QuestionStatistics {
                 computeFrequencies(question, answerList);
                 computeMode();
                 computeCumulativeFrequencies(question);
-                this.arithmeticMean = arithmeticMean();
+                this.arithmeticMean = computeArithmeticMean();
             } else {
                 this.arithmeticMean = null;
             }
@@ -279,7 +279,7 @@ public class QuestionStatistics {
      * Calculates the arithmetic mean for ScaleQuestions.
      * @return arithmetic mean of the corresponding question entries
      */
-    private Double arithmeticMean() {
+    private Double computeArithmeticMean() {
         try {
             final int[] value = {0};
             frequencies.forEach(frequency -> value[0] += frequency.getAbsolute()
