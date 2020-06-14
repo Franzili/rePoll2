@@ -71,7 +71,9 @@
                 <b-col cols="6">
                     <h6>Share a link</h6>
                     <b-card align="center">
-                        {{ domain }}/poll/{{ id }}/answer
+                        <a v-bind:href="''">
+                            {{ link }}
+                        </a>
                     </b-card>
 
                     <br/>
@@ -98,8 +100,7 @@
 
         data() {
             return {
-                domain: '',
-                id: 0,
+                link: '',
 
                 //TODO
                 type: 'anonymous',
@@ -117,8 +118,9 @@
         },
 
         created: function() {
-            this.id = this.$route.params.pollId;
-            this.domain = window.location.origin;
+            let id = this.$route.params.pollId;
+            let domain = window.location.origin;
+            this.link = domain + '/poll/' + id + '/answer';
         }
     }
 </script>
