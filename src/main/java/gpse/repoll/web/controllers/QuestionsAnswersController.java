@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.poll.answers.Answer;
 import gpse.repoll.domain.serialization.SerializeUser;
-import gpse.repoll.domain.service.QuestionsAnswersService;
+import gpse.repoll.domain.service.AnswerService;
 import gpse.repoll.domain.statistics.QuestionAnswersSet;
+import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,22 +18,23 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
+@Secured(Roles.POLL_CREATOR)
 public class QuestionsAnswersController {
-    private final QuestionsAnswersService questionsAnswersService;
+    private final AnswerService answerService;
 
     @Autowired
-    public QuestionsAnswersController(QuestionsAnswersService questionsAnswersService) {
-        this.questionsAnswersService = questionsAnswersService;
+    public QuestionsAnswersController(AnswerService answerService) {
+        this.answerService = answerService;
     }
 
     @JsonSerialize(keyUsing = SerializeUser.class)
-    @GetMapping("/{pollID}/statistics/questions/{questionID:\\d+}/answers/")
+    @GetMapping("/{pollID}/answers/{questionID:\\d+}/")
     public Map<User, Answer> listEntriesAnswers(@PathVariable UUID pollID, @PathVariable String questionID) {
-        return questionsAnswersService.getAnswers(pollID, Long.valueOf(questionID));
+        return answerService.getAnswers(pollID, Long.valueOf(questionID));
     }
 
     @GetMapping("/{pollID}/answers/")
     public List<QuestionAnswersSet> listAnswersToQuestion(@PathVariable UUID pollID) {
-        return questionsAnswersService.getAll(pollID);
+        return answerService.getAll(pollID);
     }
 }

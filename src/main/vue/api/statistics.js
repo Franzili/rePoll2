@@ -8,6 +8,6 @@ export default {
         return axios.get('/api/v1/polls/' + id + '/answers/')
     },
     getAnswersById(pollId, questionId) {
-        return axios.get('/api/v1/polls/' + pollId + '/statistics/questions/' + questionId + '/answers/');
+        return axios.get('/api/v1/polls/' + pollId + '/answers/' + questionId + '/');
     }
 }
