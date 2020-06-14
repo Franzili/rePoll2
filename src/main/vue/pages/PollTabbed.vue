@@ -1,10 +1,5 @@
 <template>
     <b-container fluid="lg">
-
-        <!-- To make the tab bar fit on the right side of the title,
-             we actually use b-tab Components: one for the navigation,
-             and one to actually show the contents. they are coupled
-             using v-bind. -->
         <b-row v-if="loaded" class="primary-tab-bar sticky align-items-baseline">
             <b-col class="poll-title">
 
@@ -18,7 +13,7 @@
                             <!-- is this applied when submitting poll? -->
                         </EditableLabel>
 
-                    <div v-if="$route.name === 'edit'" class="ml-3">
+                    <div v-if="$route.name === 'edit-poll'" class="ml-3">
                         <b-button-group >
                             <b-button size="sm" variant="outline-secondary" v-if="!editTitle"
                                       @click="setEditingTitle(true)">
@@ -31,31 +26,31 @@
                         </b-button-group>
                     </div>
             </b-col>
+
+
             <b-col>
                 <b-nav pills align="right">
-
-                    <b-nav-item :active="$route.name === 'config'"
-                        to="/poll-tabbed/"
-                        title="Configure"> Configure
+                    <b-nav-item active-class="active"
+                                :to="{ name: 'configure-poll', params: { pollId: $route.params.pollId }}">
+                        Configure
                     </b-nav-item>
-
-                    <b-nav-item :active="$route.name === 'edit'"
-                        to="/poll-tabbed/edit"
-                        :disabled="poll.status !== 'IN_PROCESS'" title="Edit"> Edit
+                    <b-nav-item active-class="active"
+                                :to="{ name: 'edit-poll', params: { pollId: $route.params.pollId }}"
+                                :disabled="poll.status !== 'IN_PROCESS'">
+                        Edit
                     </b-nav-item>
-
-                    <b-nav-item :active="$route.name === 'statistics'"
-                        to="/poll-tabbed/statistics"
-                        :disabled="poll.status === 'IN_PROCESS'" title="Statistics"> Statistics
+                    <b-nav-item active-class="active"
+                                :to="{ name: 'poll-stats', params: { pollId: $route.params.pollId }}"
+                                :disabled="poll.status === 'IN_PROCESS'">
+                        Statistics
                     </b-nav-item>
-
                 </b-nav>
             </b-col>
         </b-row>
 
         <b-row>
             <b-col>
-                <router-view></router-view>
+                <router-view/>
             </b-col>
         </b-row>
 
@@ -63,7 +58,6 @@
 </template>
 
 <script>
-
     import {mapActions, mapState} from "vuex";
     import EditableLabel from "../components/EditableLabel";
     export default {
@@ -95,8 +89,8 @@
         },
         async mounted() {
             this.loaded = false
-            //let pollId = this.$route.params.pollId
-            await this.loadPoll(this.poll.id)
+            let pollId = this.$route.params.pollId
+            await this.loadPoll(pollId)
             this.loaded = true
         },
         watch: {
@@ -123,4 +117,8 @@
         align-items: center;
     }
 
+    .nav-link.disabled {
+        text-decoration: line-through;
+        font-style: italic;
+    }
 </style>

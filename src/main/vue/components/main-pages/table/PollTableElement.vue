@@ -20,7 +20,6 @@
             <b-col cols="4" style="text-align: center">
                 <span @click="loadTo" class="configLink">Setup
                 </span>
-
             </b-col>
         </b-row>
 
@@ -62,7 +61,12 @@
             }),
             async loadTo() {
                 await this.loadPoll(this.poll.id)
-                return this.$router.push('/poll-tabbed/')
+                return this.$router.push({
+                    name: 'poll-tabbed',
+                    params: {
+                        pollId: this.poll.id
+                    }
+                })
             }
         }
     }

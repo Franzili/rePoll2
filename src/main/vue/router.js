@@ -2,12 +2,13 @@ import VueRouter from "vue-router";
 import CreatePoll from "./components/poll-tabs/edit/EditPoll";
 import Start from "./pages/Start";
 import Account from "./pages/Account";
-import Poll from "./pages/Poll";
 import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
-import PollTabbed from "./pages/PollTabbed";
 import Admin from "./pages/Admin";
 import PollResponse from "./pages/PollResponse";
+
+import PollTabbed from "./pages/PollTabbed";
+import EditPoll from "./components/poll-tabs/edit/EditPoll";
 
 import store from "./store/store";
 import TestCharts from "./pages/TestCharts";
@@ -44,14 +45,7 @@ let router = new VueRouter({
             }
         },
         {
-            path: '/poll/:id(\\d+)',
-            component: Poll,
-            meta: {
-                requiresAuth: true
-            }
-        },
-        {
-            path: '/poll/answer',
+            path: '/poll/:id/answer',
             component: Answer,
             name: 'answer',
             meta: {
@@ -59,7 +53,7 @@ let router = new VueRouter({
             }
         },
         {
-            path: '/poll-tabbed/',
+            path: '/poll/:pollId/',
             component: PollTabbed,
             meta: {
                 requiresAuth: true
@@ -67,30 +61,37 @@ let router = new VueRouter({
             children: [
                 {
                     path: '',
-                    component: ConfigurePoll,
-                    name: 'config',
+                    name: 'poll-tabbed',
+                    redirect: 'config',
                     meta: {
                         requiresAuth: true
                     }
                 },
                 {
                     path: 'edit',
-                    component: CreatePoll,
-                    name: 'edit',
+                    name: 'edit-poll',
+                    component: EditPoll,
                     meta: {
                         requiresAuth: true
                     }
                 },
                 {
-                    path: 'statistics',
-                    component: PollStats,
-                    name: 'statistics',
+                    path: 'config',
+                    name: 'configure-poll',
+                    component: ConfigurePoll,
                     meta: {
                         requiresAuth: true
                     }
                 },
+                {
+                    path: 'stats',
+                    name: 'poll-stats',
+                    component: PollStats,
+                    meta: {
+                        requiresAuth: true
+                    }
+                }
             ]
-
         },
         {
             path: '/admin/',
