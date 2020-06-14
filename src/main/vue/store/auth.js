@@ -37,7 +37,7 @@ const auth = {
                     })
                     .catch(function () {
                         console.log("Authentication failed. Clearing tokens.")
-                        commit('authenticate', null)
+                        commit('authenticate', false) //set to false insted of null for error message
                         reject()
                     });
             })
@@ -76,10 +76,19 @@ const auth = {
             state.token = token;
             axios.defaults.headers['Authorization'] = token
 
-            if (!token) {
+            /*if (!token) {
                 state.authenticated = false;
             } else {
                 state.authenticated = true;
+            }*/
+            if (token === null) {
+                state.authenticated = null; //not yet tried to login
+                console.log('null')
+            } else if (!token) {
+                state.authenticated = false; //failed login
+                console.log('false')
+            } else {
+                state.authenticated = true; //successfull login
             }
 
             localStorage.setItem('authToken', token);
