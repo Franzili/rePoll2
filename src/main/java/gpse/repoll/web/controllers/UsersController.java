@@ -2,10 +2,11 @@ package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.service.MailService;
-import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
+import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.UserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,15 +19,14 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/users")
-//@Secured(Roles.ADMIN)
+@Secured(Roles.ADMIN)
 public class UsersController {
-    private final PollService pollService;
+
     private final UserService userService;
     private final MailService mailService;
 
     @Autowired
-    public UsersController(PollService pollService, UserService userService, MailService mailService) {
-        this.pollService = pollService;
+    public UsersController(UserService userService, MailService mailService) {
         this.userService = userService;
         this.mailService = mailService;
     }
