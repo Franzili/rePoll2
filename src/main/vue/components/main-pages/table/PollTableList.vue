@@ -32,11 +32,11 @@
             ...mapActions('myPolls', {
                 createPoll: "create"
             }),
-            addNewPoll() {
+            async addNewPoll() {
                 let pollCmd = {
                     title: "Unnamed Poll"
                 };
-                this.createPoll(pollCmd);
+                await this.createPoll(pollCmd);
                 return this.$router.push('/poll-tabbed/edit')
             }
         },

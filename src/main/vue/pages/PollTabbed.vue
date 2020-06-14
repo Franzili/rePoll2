@@ -8,7 +8,7 @@
         <b-row v-if="loaded" class="primary-tab-bar sticky align-items-baseline">
             <b-col class="poll-title">
 
-                        <h3 v-if="activeTab === TAB_EDIT" class="mr-2">Titel:</h3>
+                        <h3 v-if="$route.name === 'edit'" class="mr-2">Titel:</h3>
 
                         <EditableLabel
                             tag="h3"
@@ -18,7 +18,7 @@
                             <!-- is this applied when submitting poll? -->
                         </EditableLabel>
 
-                    <div v-if="activeTab === TAB_EDIT" class="ml-3">
+                    <div v-if="$route.name === 'edit'" class="ml-3">
                         <b-button-group >
                             <b-button size="sm" variant="outline-secondary" v-if="!editTitle"
                                       @click="setEditingTitle(true)">
@@ -95,8 +95,8 @@
         },
         async mounted() {
             this.loaded = false
-            let pollId = this.$route.params.pollId
-            await this.loadPoll(pollId)
+            //let pollId = this.$route.params.pollId
+            await this.loadPoll(this.poll.id)
             this.loaded = true
         },
         watch: {
