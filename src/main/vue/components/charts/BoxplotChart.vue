@@ -19,34 +19,35 @@
                 displayData: [],
                 datasets: [
                     {
-                        label: 'min',
+                        label: 'min: ',
                         backgroundColor: 'rgba(0,0,0,0)',
                         data: []
                     },
                     {
-                        label: 'q1',
+                        label: 'q1: ',
                         backgroundColor: '#aeaeae',
                         barThickness: 5,
                         data: []
                     },
                     {
-                        label: 'median',
+                        label: 'median: ',
                         backgroundColor: '#02a097',
                         barThickness: 60,
                         data: []
                     },
                     {
-                        label: 'q3',
+                        label: 'q3: ',
                         backgroundColor: '#3eab37',
                         barThickness: 60,
                         data: []
                     },
                     {
-                        label: 'max',
+                        label: 'max: ',
                         backgroundColor: '#aeaeae',
                         barThickness: 5,
                         data: []
                     }
+
                 ],
                 options: {
                     responsive: true,
@@ -60,9 +61,11 @@
                         }]
                     },
                     title: {
-                        display: true,
+                        display: false,
                         text: ''
-                    }
+                    },
+                    tooltips: {enabled: false},
+                    hover: {mode: null},
                 },
             }
         },
@@ -90,6 +93,7 @@
 
                 for(let i = 0; i <this.datasets.length; i++) {
                     this.datasets[i].data[0] = boxplotData[i];
+                    this.datasets[i].label =  this.datasets[i].label + this.boxplotData.boxplotData[i];
                 }
             }
         },

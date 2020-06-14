@@ -1,13 +1,12 @@
 <template>
     <b-container>
-        <!-- raw data for illustration -->
+        <!-- raw data for illustration
         <b-row>
             <p>
                 {{statistic}}
             </p>
         </b-row>
-
-
+        -->
         <b-row>
             <b-col cols="8">
                 <h5>{{statistic.question.title}}</h5>
@@ -43,10 +42,10 @@
             </b-col>
         </b-row>
 
-
+        <!-- 四百五十二 answer count is not completely right-->
         <b-row v-if="statistic.question.type === 'TextQuestion'">
             <b-col md="3" offset-md="9">
-                Answer count: 四百五十二<br>
+                Answer count: {{poll.pollEntries}}<br>
                 <b-button @click="$emit('changeTab', statistic.question.id)">Show Answers</b-button>
             </b-col>
         </b-row>
@@ -59,6 +58,7 @@
 <script>
 
     import ChartsInlay from "./ChartsInlay";
+    import {mapState} from "vuex";
 
     export default {
         name: "ChartCards",
@@ -73,17 +73,21 @@
                     currentChart: 'bar',
                     boxplot: []
                 },
-                absFrq: [],
+                //absFrq: [],
                 //relFrq: []
             }
         },
+        computed: {
+            ...mapState('currentPoll', {
+                poll: 'poll'
+            })
+        },
         created() {
             let value = this.statistic
-            this.doAmazingStuff(value);
-            console.log('warum bin ich undefinded?', this.absFreq)
+            this.transformChartData(value);
         },
         methods: {
-            doAmazingStuff(val) {
+            transformChartData(val) {
                 this.chartsObj.label = val.question.title;
                 this.chartsObj.qType = val.question.type;
                 for(let i = 0; i < val.frequencies.length; i++) {
@@ -100,7 +104,6 @@
                     this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.boxplot.thirdQuartile]
                     this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.boxplot.max]
                 }
-                console.log(this.chartsObj.boxplot)
                 //this.chartsObj.data = this.absFrq
             },
         },
