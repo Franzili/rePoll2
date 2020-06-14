@@ -10,11 +10,11 @@
 
 
         <b-tabs lazy nav-class="invisible" v-model="activeTab">
-            <b-tab><Overview></Overview></b-tab>
+            <b-tab><Overview v-on:toQuestion="doSwitch($event)"></Overview></b-tab>
             <b-tab><Compare></Compare></b-tab>
             <b-tab><Trends></Trends></b-tab>
             <b-tab><Entries></Entries></b-tab>
-            <b-tab><Questions></Questions></b-tab>
+            <b-tab><Questions :qId="tmpQID"></Questions></b-tab>
         </b-tabs>
     </div>
 </template>
@@ -33,6 +33,7 @@
             return {
                 activeTab: 0,
                 pollId: 0,
+                tmpQID: 0
             }
         },
         computed: {
@@ -44,7 +45,11 @@
             ...mapActions('currentPoll', {
                 loadStatistics: 'loadMetaStats',
                 loadEntries: 'loadEntries'
-            })
+            }),
+            doSwitch(qId) {
+                this.tmpQID = qId;
+                this.activeTab = 4
+            }
         },
         async mounted() {
             this.loadStatistics(this.poll.id)

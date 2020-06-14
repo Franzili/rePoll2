@@ -7,8 +7,14 @@
     >
         <b-row>
 
-            <b-col cols="8">
-                <p class="status">{{poll.status}}</p>
+            <b-col align-self="start">
+                <p class="status">{{this.pollStatus}}</p>
+            </b-col>
+
+            <b-col
+                align-self="center">
+                <p v-show="poll.status !== 'IN_PROCESS'&& poll.status !== 'READY'"
+                ><span class="participants">Participants: </span>{{poll.pollEntries}}</p>
             </b-col>
 
             <b-col cols="4" style="text-align: center">
@@ -27,6 +33,29 @@
     export default {
         name: "PollListElement",
         props: ["poll"],
+        data() {
+            return {
+                pollStatus: ''
+            }
+        },
+        beforeMount() {
+            switch (this.poll.status) {
+                case 'IN_PROCESS':
+                    this.pollStatus = 'in process';
+                    break;
+                case 'READY':
+                    this.pollStatus = 'ready';
+                    break;
+                case 'ACTIVATED':
+                    this.pollStatus = 'activated';
+                    break;
+                case 'DEACTIVATED':
+                    this.pollStatus = 'deactivated';
+                    break;
+                case null:
+                    this.pollStatus = ''
+            }
+        },
         methods: {
             ...mapActions('currentPoll', {
                 loadPoll: "load"
@@ -49,7 +78,12 @@
         text-decoration: underline
     }
     .status {
-        font-size: 14px;
+        font-size: 18px;
         font-style: italic;
+        color: #3eab37;
+    }
+    .participants {
+        font-style: italic;
+        color: #3eab37;
     }
 </style>

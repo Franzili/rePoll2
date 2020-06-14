@@ -11,41 +11,43 @@
                 type: String
             },
             boxplotData: {
-                type: Array
+                type: Object
             }
         },
         data() {
             return {
+                displayData: [],
                 datasets: [
                     {
-                        label: 'min',
+                        label: 'min: ',
                         backgroundColor: 'rgba(0,0,0,0)',
                         data: []
                     },
                     {
-                        label: 'q1',
+                        label: 'q1: ',
                         backgroundColor: '#aeaeae',
                         barThickness: 5,
                         data: []
                     },
                     {
-                        label: 'median',
+                        label: 'median: ',
                         backgroundColor: '#02a097',
                         barThickness: 60,
                         data: []
                     },
                     {
-                        label: 'q3',
+                        label: 'q3: ',
                         backgroundColor: '#3eab37',
                         barThickness: 60,
                         data: []
                     },
                     {
-                        label: 'max',
+                        label: 'max: ',
                         backgroundColor: '#aeaeae',
                         barThickness: 5,
                         data: []
                     }
+
                 ],
                 options: {
                     responsive: true,
@@ -59,15 +61,18 @@
                         }]
                     },
                     title: {
-                        display: true,
+                        display: false,
                         text: ''
-                    }
+                    },
+                    tooltips: {enabled: false},
+                    hover: {mode: null},
                 },
             }
         },
 
         mounted() {
-            this.fillData(this.boxplotData);
+            this.setDisplayFormat(this.boxplotData);
+            this.fillData(this.displayData);
             this.renderChart({
                     type: 'horizontalBar',
                     labels: [""],
@@ -76,11 +81,19 @@
         },
 
         methods: {
+            setDisplayFormat(boxplotData) {
+                this.displayData[0] = boxplotData.boxplotData[0];
+                for(let i = 1; i <this.datasets.length; i++) {
+                    this.displayData[i] = boxplotData.boxplotData[i] - boxplotData.boxplotData[i-1];
+                }
+            },
+
             fillData (boxplotData) {
                 this.options.title.text = this.title;
 
                 for(let i = 0; i <this.datasets.length; i++) {
-                    this.datasets[i].data[0] = boxplotData.boxplotData[i];
+                    this.datasets[i].data[0] = boxplotData[i];
+                    this.datasets[i].label =  this.datasets[i].label + this.boxplotData.boxplotData[i];
                 }
             }
         },

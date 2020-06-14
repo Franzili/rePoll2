@@ -85,6 +85,11 @@ public class User implements UserDetails {
         return Collections.unmodifiableList(roles);
     }
 
+    @JsonIgnore
+    public String getHighestRole() {
+        return roles.get(0); // roles is always not empty and 0 is the highest role
+    }
+
     public void setRoles(String role) throws NoValidRoleException {
         roles.clear();
         if (role == null) {
@@ -205,5 +210,23 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return username;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(id, user.id)
+                && Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username);
     }
 }
