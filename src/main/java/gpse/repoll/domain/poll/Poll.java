@@ -1,8 +1,11 @@
 package gpse.repoll.domain.poll;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
+import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -35,6 +38,7 @@ public class Poll extends Auditable<User> {
     @NotEmpty
     private String title;
 
+    @JsonSerialize(using = SerializePollEntries.class)
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
@@ -43,15 +47,6 @@ public class Poll extends Auditable<User> {
 
     @OneToMany
     private final List<Question> questions = new ArrayList<>(); // todo sorting
-
-    @OneToMany
-    private final List<User> pollEditors = new ArrayList<>();
-
-    @ManyToOne
-    private User owner;
-
-    /*@ManyToMany
-    private User assigned;*/
 
     protected Poll() {
 
@@ -65,7 +60,6 @@ public class Poll extends Auditable<User> {
         this.title = title;
         this.status = PollStatus.IN_PROCESS;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
-        //this.owner = creator; // in PollsController breaks add(poll) in listpolls() Funktion
     }
 
     @Override
@@ -87,15 +81,6 @@ public class Poll extends Auditable<User> {
 
     public UUID getId() {
         return id;
-    }
-
-    public List<User> getPollEditors() {
-        return pollEditors;
-    }
-
-    public void setPollEditors(List<User> pollEditors) {
-        this.pollEditors.clear();
-        this.pollEditors.addAll(pollEditors);
     }
 
     public List<PollEntry> getPollEntries() {
@@ -146,18 +131,6 @@ public class Poll extends Auditable<User> {
         this.status = status;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    /*public User getAssigned() {return assigned; }
-
-    public void setAssigned(User assigned) {this.assigned = assigned; }*/
-
     public Anonymity getAnonymity() {
         return anonymity;
     }
@@ -186,6 +159,20 @@ public class Poll extends Auditable<User> {
     public void addAllQuestions(Collection<Question> questions) {
         this.questions.addAll(questions);
         sortQuestions();
+    }
+
+    public void remove(PollSection section) {
+        boolean res = pollSections.remove(section);
+        if (!res) {
+            throw new NotFoundException("PollSection does not belong to this poll");
+        }
+    }
+
+    public void remove(Question question) {
+        boolean res = questions.remove(question);
+        if (!res) {
+            throw new NotFoundException("Question does not belong to this poll");
+        }
     }
 
     public boolean contains(Question question) {
@@ -302,7 +289,7 @@ public class Poll extends Auditable<User> {
         }
         sortQuestions();
 
-        for(PollSection section : pollSections) {
+        for (PollSection section : pollSections) {
             section.sortQuestions();
         }
     }

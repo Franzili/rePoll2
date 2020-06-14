@@ -61,4 +61,11 @@ public class PollSectionsController {
                 pollSectionCmd.getTitle(),
                 pollSectionCmd.getDescription());
     }
+
+    @Secured(Roles.POLL_EDITOR)
+    @DeleteMapping("/{pollId}/sections/{sectionId}/")
+    public void deletePollSection(@PathVariable("pollId") final UUID pollId,
+                                  @PathVariable("sectionId") final UUID sectionId) {
+         pollSectionService.deletePollSection(pollId, sectionId);
+    }
 }

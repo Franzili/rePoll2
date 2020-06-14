@@ -30,7 +30,7 @@
             answer: function() {
                 return {
                     type: "MultiChoiceAnswer",
-                    choices: this.selected //.map(choice => choice.id)
+                    choiceIds: this.selected //.map(choice => choice.id)
                 }
             },
         },

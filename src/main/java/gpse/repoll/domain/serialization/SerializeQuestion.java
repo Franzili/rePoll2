@@ -7,7 +7,7 @@ import gpse.repoll.domain.poll.questions.Question;
 
 import java.io.IOException;
 
-public class SerializePollEntry extends JsonSerializer<Question> {
+public class SerializeQuestion extends JsonSerializer<Question> {
 
     @Override
     public void serialize(

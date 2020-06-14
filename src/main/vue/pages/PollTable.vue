@@ -9,7 +9,7 @@
             </b-row>
             <b-row style="text-align: center" class="my-row">
                 <b-col >
-                    <AnswerPollTableList v-bind:polls="assigned"/>
+                    <AnswerPollTableList v-bind:polls="polls"/>
                 </b-col>
             </b-row>
         </b-container>
@@ -40,19 +40,19 @@
 
         async mounted() {
             await this.loadPolls();
-            await this.loadAssigned();
+            // this.loadAssigned();
         },
 
         computed: {
             ...mapState('myPolls', {
                 polls: 'polls',
-                assigned: 'assigned'
+                //assigned: 'assigned'
             })
         },
         methods: {
             ...mapActions('myPolls', {
                 loadPolls: 'load',
-                loadAssigned: 'loadAssigned',
+                //loadAssigned: 'loadAssigned',
             })
         },
         components: {

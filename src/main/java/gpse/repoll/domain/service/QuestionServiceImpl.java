@@ -311,4 +311,18 @@ public class QuestionServiceImpl implements QuestionService {
         multiChoiceQuestionRepository.save(question);
         return question;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeQuestion(final UUID pollId, final Long questionId) {
+        Poll poll = pollService.getPoll(pollId);
+
+        Question question = getQuestion(pollId, questionId);
+        poll.remove(question);
+
+        pollService.save(poll);
+        questionBaseRepository.delete(question);
+    }
 }
