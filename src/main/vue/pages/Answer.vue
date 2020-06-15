@@ -2,7 +2,7 @@
     <!--
         Renders a poll.
     -->
-    <b-container>
+    <b-container v-if="loaded">
         <ul class="poll-main-view">
             <PollItem v-for="item in pollStructure"
                       v-bind:key="item.id"
@@ -32,7 +32,8 @@
         name: "Answer",
         data() {
             return {
-                currentlyEditing: null
+                currentlyEditing: null,
+                loaded: false
             }
         },
         computed: {
@@ -66,9 +67,11 @@
                 return this.$router.push('/poll-response/')
             },
         },
-        created() {
+        async mounted() {
+            this.loaded = false
             let pollId = this.$route.params.id
-            this.loadPoll(pollId)
+            await this.loadPoll(pollId)
+            this.loaded = true
         },
         components: { PollItem }
     }

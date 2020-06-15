@@ -132,7 +132,11 @@
                                   @click="updateStart(row.item)">
                             Edit
                         </b-button>
-                        <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1">
+                        <b-button
+                            :disabled="username1===row.item.username"
+                            size="sm" variant="danger"
+                            v-b-modal.delete-modal
+                            @click="startDelete(row.item)">
                             Delete
                         </b-button>
                     </template>
@@ -141,9 +145,15 @@
                 <b-col >
                     <b-button class="addButton" v-b-modal.modal-1 @click="isUpdate=false">+</b-button>
                 </b-col>
+                <b-modal id="delete-modal"
+                         centered
+                         title="Are you sure you want to delete this User?"
+                         @ok="deleteUser">
+                </b-modal>
             </b-card>
         </b-col>
     </b-container>
+
 
 
 </template>
@@ -156,10 +166,11 @@
             let role_Admin = ['ROLE_ADMIN'];
             let role_Creator = ['ROLE_POLL_CREATOR'];
             let role_Editor = ['ROLE_POLL_EDITOR'];
-            let role_Par = ['ROLE_PARTICIPANT']
+            let role_Par = ['ROLE_PARTICIPANT'];
             return {
                 isUpdate: false,
                 items: [],
+                //options for the drop-down
                 options: [
                     { value: role_Admin, text: 'Admin'},
                     { value: role_Creator, text: 'Creator'},
@@ -185,9 +196,8 @@
             }
         },
         computed: {
-            ...mapState('myUsers', {
-                users: 'users'
-            })
+            ...mapState('myUsers', {users: 'users'}),
+            ...mapState('auth',{ username1: 'username'})
         },
         mounted() {
             // Set the initial number of items
@@ -242,10 +252,19 @@
                     }
 
             },
-            deleteUser(row) {
-                console.log(row);
-                this.deleteuser(row.id);
-                this.loadUser();
+            startDelete(row) {
+                this.id = row.id;
+                this.username = row.username;
+            },
+            deleteUser() {
+                if (this.username !== this.username1) {
+                    console.debug("[Repoll] Attempting to delete user " + this.username);
+                    this.deleteuser(this.id);
+                    this.loadUser();
+                } else {
+                    console.debug("[Repoll] " + this.username + " is the current user.");
+                }
+
             },
             onFiltered(filteredItems) {
                 this.totalRows = filteredItems.length

@@ -5,7 +5,8 @@
                 <img v-on:click="toStart" src="../assets/logo.png" width="123" height="27" alt>
             </b-navbar-brand>
 
-            <b-navbar-toggle target="navbar-toggle-collapse">
+            <b-navbar-toggle @click="doFunny"
+                target="navbar-toggle-collapse">
                 <template v-slot:default="{ expanded }">
                     <b-icon class='my-icon' v-if="expanded" icon="caret-up-fill"></b-icon>
                     <b-icon class="my-icon" v-else icon="caret-down-fill"></b-icon>
@@ -24,9 +25,6 @@
                         <router-link class="link" :to="'/polls/'">Polls</router-link>
                     </b-nav-item>
                     <b-nav-item>
-                        <router-link class="link" :to="'/create/'">Create Poll</router-link>
-                    </b-nav-item>
-                    <b-nav-item>
                         <b-button variant="danger" @click="logOutUser">Logout</b-button>
                     </b-nav-item>
                 </b-navbar-nav>
@@ -39,6 +37,11 @@
     import {mapActions} from "vuex";
     export default {
         name: "NavBar",
+        data() {
+            return {
+                count: 0
+            }
+        },
         methods: {
             ...mapActions('auth', ['logout']),
             toStart() {
@@ -47,9 +50,18 @@
             logOutUser: function () {
                 this.logout();
                 location.reload();
+            },
+            doFunny() {
+                if (this.count === 10) {
+                    doABarrelRoll()
+                    this.count = 0
+                } else {
+                    this.count++
+                }
             }
         }
     }
+    let doABarrelRoll = function(){var a="-webkit-",b='transform:rotate(1turn);',c='transition:4s;';document.head.innerHTML+='<style>body{'+a+b+a+c+b+c}
 </script>
 
 <style lang="scss" scoped>

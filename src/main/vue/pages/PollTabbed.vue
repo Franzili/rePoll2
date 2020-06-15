@@ -1,5 +1,5 @@
 <template>
-    <b-container fluid="lg">
+    <b-container fluid="lg" v-if="loaded">
         <b-row v-if="loaded" class="primary-tab-bar sticky align-items-baseline">
             <b-col class="poll-title">
 
