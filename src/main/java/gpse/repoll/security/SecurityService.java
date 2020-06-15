@@ -27,6 +27,10 @@ public class SecurityService {
         this.userService = userService;
     }
 
+    public boolean isAllowed(String username, UUID pollId) {
+        return true;
+    }
+
     public boolean isActivated(UUID pollID) {
         Poll poll = pollService.getPoll(pollID);
         return poll.getStatus().equals(PollStatus.ACTIVATED);

@@ -44,7 +44,7 @@ public class PollsController {
         return pollService.addPoll(pollCmd.getTitle());
     }
 
-    @Secured(Roles.POLL_EDITOR)
+    //@Secured(Roles.POLL_EDITOR)
     @GetMapping("/{id}/")
     public Poll getPoll(@PathVariable("id") final UUID id) {
         return pollService.getPoll(id);

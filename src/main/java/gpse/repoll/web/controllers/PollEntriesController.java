@@ -1,13 +1,15 @@
 package gpse.repoll.web.controllers;
 
-import gpse.repoll.domain.poll.User;
-import gpse.repoll.domain.poll.Choice;
-import gpse.repoll.domain.poll.PollEntry;
+import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
+import gpse.repoll.domain.poll.*;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.repositories.ChoiceRepository;
+import gpse.repoll.domain.repositories.UserRepository;
 import gpse.repoll.domain.service.PollEntryService;
+import gpse.repoll.domain.service.PollService;
+import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.PollEntryCmd;
 import gpse.repoll.web.command.answers.*;
@@ -25,16 +27,23 @@ import java.util.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
-@Secured(Roles.PARTICIPANT)
+//@Secured(Roles.PARTICIPANT)
 public class PollEntriesController {
 
     private final PollEntryService pollEntryService;
+    private final PollService pollService;
     private final ChoiceRepository choiceRepository;
+    private final UserService userService;
 
     @Autowired
-    public PollEntriesController(PollEntryService pollEntryService, ChoiceRepository choiceRepository) {
+    public PollEntriesController(PollEntryService pollEntryService,
+                                 PollService pollService,
+                                 ChoiceRepository choiceRepository,
+                                 UserService userService) {
         this.pollEntryService = pollEntryService;
+        this.pollService = pollService;
         this.choiceRepository = choiceRepository;
+        this.userService = userService;
     }
 
     @Secured(Roles.POLL_CREATOR)
@@ -43,12 +52,34 @@ public class PollEntriesController {
         return pollEntryService.getAll(pollId);
     }
 
-    @PreAuthorize("@securityService.isActivated(#pollId) and @securityService.isParticipant(principal.username)")
+    //@PreAuthorize("@securityService.isActivated(#pollId) and @securityService.isParticipant(principal.username)")
     @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
         Map<Long, Answer> answers = createAnswers(pollEntryCmd);
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Poll poll = pollService.getPoll(pollId);
+
+        User user;
+        if (poll.getAnonymity().equals(Anonymity.ANONYMOUS)) {
+            String id = UUID.randomUUID().toString();
+            try {
+                user = userService.addUser(
+                    "Anonymous-" + id,
+                    null,
+                    null,
+                    null,
+                    Roles.PARTICIPANT
+                );
+            } catch (UserNameAlreadyTakenException e) {
+                throw new InternalServerErrorException();
+            }
+        } else if (poll.getAnonymity().equals(Anonymity.PSEUDONYMOUS)) {
+            // TODO
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } else {
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        }
+
         return pollEntryService.addPollEntry(pollId, answers, user);
     }
 

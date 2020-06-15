@@ -1,5 +1,6 @@
 package gpse.repoll.security;
 
+import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.exceptions.UnauthorizedException;
 import gpse.repoll.domain.repositories.UserRepository;
@@ -100,7 +101,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 LOG.warn("Request to parse empty or null JWT : {} failed : {}", token, exception.getMessage());
             }
         }
-
         return null;
     }
 }

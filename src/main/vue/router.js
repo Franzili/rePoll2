@@ -40,7 +40,7 @@ let router = new VueRouter({
             component: Answer,
             name: 'answer',
             meta: {
-                requiresAuth: true
+                requiresAuth: false
             }
         },
         {
@@ -97,7 +97,7 @@ let router = new VueRouter({
             component: PollResponse,
             name: 'response',
             meta: {
-                requiresAuth: true
+                requiresAuth: false
             }
         },
         //for Charts testing

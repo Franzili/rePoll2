@@ -85,6 +85,18 @@ public class InitializeDatabase implements InitializingBean {
                         Roles.ADMIN
                 );
             }
+
+            try {
+                userService.getUser("AnonymousUser");
+            } catch (UsernameNotFoundException e) {
+                final User user = userService.addUser(
+                    "AnonymousUser",
+                    "",
+                    "Anon", "ymous",
+                    Roles.PARTICIPANT
+                );
+            }
+
             return null;
 
         });
