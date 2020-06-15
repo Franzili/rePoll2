@@ -56,23 +56,18 @@ public class PollEntriesController {
     @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
-        Map<Long, Answer> answers = createAnswers(pollEntryCmd);
         Poll poll = pollService.getPoll(pollId);
 
         User user;
         if (poll.getAnonymity().equals(Anonymity.ANONYMOUS)) {
             String id = UUID.randomUUID().toString();
-            try {
-                user = userService.addUser(
-                    "Anonymous-" + id,
-                    null,
-                    null,
-                    null,
-                    Roles.PARTICIPANT
-                );
-            } catch (UserNameAlreadyTakenException e) {
-                throw new InternalServerErrorException();
-            }
+            user = userService.addUser(
+                "Anonymous-" + id,
+                null,
+                null,
+                null,
+                Roles.PARTICIPANT
+            );
         } else if (poll.getAnonymity().equals(Anonymity.PSEUDONYMOUS)) {
             // TODO
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -80,6 +75,7 @@ public class PollEntriesController {
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }
 
+        Map<Long, Answer> answers = createAnswers(pollEntryCmd);
         return pollEntryService.addPollEntry(pollId, answers, user);
     }
 
