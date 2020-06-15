@@ -1,5 +1,4 @@
 import VueRouter from "vue-router";
-import CreatePoll from "./components/poll-tabs/edit/EditPoll";
 import Start from "./pages/Start";
 import Account from "./pages/Account";
 import Answer from "./pages/Answer";
@@ -21,14 +20,6 @@ let router = new VueRouter({
         {
             path: '/',
             component: Start
-        },
-        {
-            path: '/create/',
-            name: 'create',
-            component: CreatePoll,
-            meta: {
-                requiresAuth: true
-            }
         },
         {
             path: '/account/',
@@ -104,6 +95,7 @@ let router = new VueRouter({
         {
             path: '/poll-response/',
             component: PollResponse,
+            name: 'response',
             meta: {
                 requiresAuth: true
             }

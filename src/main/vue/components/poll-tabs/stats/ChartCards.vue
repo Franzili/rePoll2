@@ -15,13 +15,16 @@
             <b-col align-self="end" v-if="statistic.mode[0] !== undefined">
                 <b-button-toolbar class="float-right">
                     <b-button-group class="mr-1">
-                        <b-button title="Bar Chart" v-on:click="chartsObj.currentChart = 'bar'">
+                        <b-button variant="outline-secondary"
+                            title="Bar Chart" v-on:click="chartsObj.currentChart = 'bar'">
                             <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon>
                         </b-button>
-                        <b-button title="Bar Chart" v-on:click="chartsObj.currentChart = 'donut'">
+                        <b-button variant="outline-secondary"
+                            title="Bar Chart" v-on:click="chartsObj.currentChart = 'donut'">
                             <b-icon icon="pie-chart-fill" aria-hidden="true"></b-icon>
                         </b-button>
-                        <b-button v-if="this.statistic.question.type === 'ScaleQuestion'"
+                        <b-button variant="outline-secondary"
+                            v-if="this.statistic.question.type === 'ScaleQuestion'"
                             title="Boxplot"
                             v-on:click="chartsObj.currentChart = 'boxplot'">
                             <b-iconstack>

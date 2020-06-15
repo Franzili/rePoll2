@@ -15,7 +15,7 @@
                                   :disabled="this.pollStatus === 'ACTIVATED'
                                 || this.pollStatus === 'DEACTIVATED'">ready</b-form-radio>
                     <b-form-radio value="ACTIVATED"
-                                  :disabled="this.pollStatus === 'DEACTIVATED'">activated</b-form-radio>
+                                  >activated</b-form-radio>
                     <b-form-radio value="DEACTIVATED">deactivated</b-form-radio>
                 </b-form-radio-group>
             </b-col>
@@ -28,11 +28,14 @@
                          title="Are you sure you want to change poll status?"
                          header-bg-variant="danger"
                          @ok="doUpdate()">
-                    <p v-if="this.pollStatus === 'IN_PROCESS'">
+                    <p v-if="pollStatus === 'ACTIVATED' && statusSelected === 'DEACTIVATED'
+                        || pollStatus === 'DEACTIVATED' && statusSelected === 'ACTIVATED'">
+                    </p>
+                    <p v-else-if="this.pollStatus === 'IN_PROCESS'">
                         If you proceed you won't be able to change the degree of anonymity anymore
                         and the status can no longer be changed in a previous one.
                     </p>
-                    <p class="my-4" v-else>
+                    <p v-else>
                         If you proceed the status can no longer be changed in a previous one.
                     </p>
                 </b-modal>

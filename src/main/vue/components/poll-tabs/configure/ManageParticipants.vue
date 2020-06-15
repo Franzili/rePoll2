@@ -73,7 +73,7 @@
                         <h6>Share a link</h6>
                         <b-card align="center">
                             <b-card-text>
-                                <a v-bind:href="''">
+                                <a v-bind:href="link">
                                     {{ link }}
                                 </a>
                             </b-card-text>
