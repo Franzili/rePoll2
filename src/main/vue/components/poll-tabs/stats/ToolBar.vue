@@ -3,8 +3,9 @@
         <b-button-toolbar v-if="actives !== undefined">
 
             <b-form-group>
+                <!-- && choices !== undefined-->
                 <b-form-select
-                    v-if="actives[4] === true && choices !== undefined"
+                    v-if="actives[4] === true"
                     style="max-width: 30rem; min-width: 20rem"
                     v-model="selected.question"
                     :options="choices"
@@ -29,18 +30,21 @@
                     style="margin-left: 0.5rem"
                     class="mr-1">
                     <b-button
+                        variant="outline-secondary"
                         v-on:click="$emit('chart', 'bar')"
                         v-if="actives[1] === true"
                         title="bar-chart">
                         <b-icon icon="bar-chart-fill"></b-icon>
                     </b-button>
                     <b-button
+                        variant="outline-secondary"
                         v-on:click="$emit('chart', 'donut')"
                         v-if="actives[2] === true"
                         title="donut-chart">
                         <b-icon icon="pie-chart-fill"></b-icon>
                     </b-button>
                     <b-button
+                        variant="outline-secondary"
                         v-on:click="$emit('chart', 'boxplot')"
                         v-if="actives[3] === true"
                         title="boxplot">
@@ -55,6 +59,7 @@
 
             <b-form-group>
                 <b-button
+                    variant="outline-secondary"
                     v-if="actives[5] === true"
                     title="mege tables"
                     v-on:click="setMergeState">
@@ -65,11 +70,12 @@
 
             <b-form-group>
                 <b-button
+                    variant="outline-secondary"
                     v-on:click="$emit('close')"
                     style="margin-left: 0.5rem"
                     v-if="actives[6] === true"
                     title="close comparision">
-                    <b-icon icon="x-circle-fill"></b-icon>
+                    <b-icon icon="trash"></b-icon>
                 </b-button>
             </b-form-group>
 
@@ -80,6 +86,7 @@
 <script>
     export default {
         name: "ToolBar",
+        // actives: dataChange, bar, donut, boxplot, question, merge, delete
         props: ['actives','choices'],
         data() {
             return {

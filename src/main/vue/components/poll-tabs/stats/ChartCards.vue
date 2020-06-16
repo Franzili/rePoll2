@@ -12,9 +12,9 @@
                 <h5>{{statistic.question.title}}</h5>
             </b-col>
 
-            <b-col cols="6" v-if="statistic.modalValue !== null">
+            <b-col cols="6" v-if="statistic.mode[0] !== undefined">
                 <ToolBar
-                    v-bind:actives="[true,true,true,true]"
+                    v-bind:actives="actives"
                     v-on:chart="chartsObj.currentChart = $event"
                     v-on:frequency="frequency = $event"
                     class="float-right"></ToolBar>
@@ -89,6 +89,7 @@
                 },
                 //absFrq: [],
                 //relFrq: []
+                actives: [],
                 frequency: 'abs'
             }
         },
@@ -109,6 +110,11 @@
         created() {
             let value = this.statistic
             this.transformChartData(value);
+            if (value.question.type !== 'ScaleQuestion') {
+                this.actives = [false,true,true,false]
+            } else {
+                this.actives = [false,true,true,true]
+            }
             /*
             let absFreq = Object.entries(this.statistic.absoluteFrequencies)
             this.absolute = this.convertStatsToCharts(absFreq)

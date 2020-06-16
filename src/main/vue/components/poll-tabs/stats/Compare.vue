@@ -1,5 +1,8 @@
 <template>
     <b-container>
+        <p>
+            <ToolBar v-bind:actives="[true,true,true,true,true,true,true]"></ToolBar>
+        </p>
 
         <p>
             {{cardList}}
@@ -36,6 +39,7 @@
     import {mapGetters, mapState} from "vuex";
     import myModal from "./myModal";
     import ChartCards from "./ChartCards";
+    import ToolBar from "./ToolBar";
 
     export default {
         name: "Compare",
@@ -70,6 +74,7 @@
         components: {
             myModal,
             ChartCards,
+            ToolBar
         }
     }
 </script>
