@@ -20,33 +20,6 @@
                     class="float-right"></ToolBar>
             </b-col>
 
-            <!--
-            <b-col align-self="end" v-if="statistic.mode[0] !== undefined">
-                <b-button-toolbar class="float-right">
-                    <b-button-group class="mr-1">
-                        <b-button variant="outline-secondary"
-                            title="Bar Chart" v-on:click="chartsObj.currentChart = 'bar'">
-                            <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon>
-                        </b-button>
-                        <b-button variant="outline-secondary"
-                            title="Bar Chart" v-on:click="chartsObj.currentChart = 'donut'">
-                            <b-icon icon="pie-chart-fill" aria-hidden="true"></b-icon>
-                        </b-button>
-                        <b-button variant="outline-secondary"
-                            v-if="this.statistic.question.type === 'ScaleQuestion'"
-                            title="Boxplot"
-                            v-on:click="chartsObj.currentChart = 'boxplot'">
-                            <b-iconstack>
-                                <b-icon stacked shift-h="10" icon="dash"></b-icon>
-                                <b-icon stacked shift-h="" icon="vr"></b-icon>
-                                <b-icon stacked shift-h="-10" icon="dash"></b-icon>
-                            </b-iconstack>
-                        </b-button>
-                    </b-button-group>
-                </b-button-toolbar>
-            </b-col>
-            -->
-
         </b-row>
 
         <b-row>
@@ -87,8 +60,8 @@
                     currentChart: 'bar',
                     boxplot: []
                 },
-                //absFrq: [],
-                //relFrq: []
+                absFrq: [],
+                relFrq: [],
                 actives: [],
                 frequency: 'abs'
             }
@@ -101,9 +74,11 @@
         watch: {
             frequency: function (val) {
                 if (val === 'abs') {
-                    this.chartsObj.match = this.absolute
+                    this.chartsObj.data = this.absFrq
+                    console.log('hallo?')
                 } else {
-                    this.chartsObj.match = this.relative
+                    this.chartsObj.data = this.relFrq
+                    console.log(' hi :D')
                 }
             }
         },
@@ -111,52 +86,31 @@
             let value = this.statistic
             this.transformChartData(value);
             if (value.question.type !== 'ScaleQuestion') {
-                this.actives = [false,true,true,false]
+                this.actives = [true, true, true, false]
             } else {
-                this.actives = [false,true,true,true]
+                this.actives = [false, true, true, true]
             }
-            /*
-            let absFreq = Object.entries(this.statistic.absoluteFrequencies)
-            this.absolute = this.convertStatsToCharts(absFreq)
-            let relFreq = Object.entries(this.statistic.relativeFrequencies)
-            this.relative = this.convertStatsToCharts(relFreq)
-            this.chartsObj.match = this.absolute
-            */
+            console.log('abs', this.absFrq)
+            console.log('rel', this.relFrq)
         },
         methods: {
+            // Transforms statistic data into chart data
             transformChartData(val) {
                 this.chartsObj.label = val.question.title;
                 this.chartsObj.qType = val.question.type;
-                for(let i = 0; i < val.frequencies.length; i++) {
+                for (let i = 0; i < val.frequencies.length; i++) {
                     this.chartsObj.labels.push(val.frequencies[i].choice.text);
-                    //this.absFrq[i] = val.frequencies[i].absolute
-                    this.chartsObj.data = [...this.chartsObj.data,val.frequencies[i].absolute]
-                    //this.relFrq.push(frq[i].relative);
+                    this.absFrq.push(val.frequencies[i].absolute)
+                    this.relFrq.push(val.frequencies[i].relative);
                 }
+                this.chartsObj.data = this.absFrq
                 if (this.statistic.question.type === 'ScaleQuestion') {
-                    // dumm, ja ich weiß
-                    this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.boxplot.min]
-                    this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.boxplot.firstQuartile]
-                    this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.median]
-                    this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.boxplot.thirdQuartile]
-                    this.chartsObj.boxplot = [...this.chartsObj.boxplot, val.boxplot.max]
-                }
-                //this.chartsObj.data = this.absFrq
-            },
-            convertStatsToCharts(aFrq) {
-                let abs = []
-                this.chartsObj.question = this.statistic.question
-                for (let i = 0; i < aFrq.length; i++) {
-                    for (let j = 0; j < this.statistic.question.choices.length; j++) {
-                        if(aFrq[i][0] === this.statistic.question.choices[j].text) {
-                            let newMatch = {choice: aFrq[i][0], freq: aFrq[i][1]}
-                            abs = [...abs, newMatch]
-                        }
-
+                    for (let item in val.boxplot) {
+                        this.chartsObj.boxplot.push(val.boxplot[item])
                     }
+                    this.chartsObj.boxplot.splice(2, 0, val.median)
                 }
-                return abs
-            }
+            },
         },
         components: {
             ChartsInlay,

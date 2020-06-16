@@ -45,6 +45,7 @@
         },
         watch: {
             chartData() {
+                console.log('BAAARRRRCHART')
                 this.renderChart({
                         labels: this.chartLabels,
                         datasets: [{

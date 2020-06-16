@@ -26,20 +26,6 @@
             </b-col>
         </b-row>
 
-        <!--
-        <b-row class="text-center" v-if="chartsObj.qType === 'ScaleQuestion'">
-            <b-col>
-                <b-icon icon="graph-up" animation="spin" font-scale="4"></b-icon>
-            </b-col>
-            <b-col>
-                <b-icon icon="graph-up" animation="spin" font-scale="4"></b-icon>
-            </b-col>
-            <b-col>
-                <b-icon icon="graph-up" animation="spin" font-scale="4"></b-icon>
-            </b-col>
-        </b-row>
-        -->
-
 
     </b-container>
 </template>

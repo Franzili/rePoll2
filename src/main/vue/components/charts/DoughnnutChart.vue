@@ -74,6 +74,8 @@
         },
         watch: {
             chartData() {
+                console.log('DOOONUT')
+
                 console.log('hallo bums')
                 this.getMoreColors();
                 this.renderChart({
