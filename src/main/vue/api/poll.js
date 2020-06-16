@@ -16,10 +16,42 @@ export default {
     update(pollCmd) {
         return axios.put('/api/v1/polls/' + pollCmd.id + '/', pollCmd);
     },
+    addQuestion(pollId, questionCmd) {
+        return axios.post('/api/v1/polls/' + pollId + '/questions/', questionCmd);
+    },
+    removeQuestion(pollId, questionId) {
+        return axios.delete('/api/v1/polls/' + pollId + '/questions/' + questionId + '/');
+    },
+    updateQuestion(pollId, question) {
+        return axios.put('/api/v1/polls/' + pollId + '/questions/' + question.id + '/', question);
+    },
+    updateStructure(pollId, structureCmd) {
+        let cmd = {
+            id: pollId,
+            structure: {
+                sectionToQuestions: {
+                    ...structureCmd
+                }
+            }
+        }
+        return axios.put('/api/v1/polls/' + pollId + '/', cmd);
+    },
+    addPollSection(pollId, pollSectionCmd) {
+        return axios.post('/api/v1/polls/' + pollId + '/sections/', pollSectionCmd);
+    },
     updatePollSection(pollId, pollSectionCmd) {
         return axios.put('/api/v1/polls/' + pollId + '/sections/' + pollSectionCmd.id + '/', pollSectionCmd)
     },
+    removePollSection(pollId, pollSectionId) {
+        return axios.delete('/api/v1/polls/' + pollId + '/sections/' + pollSectionId + '/')
+    },
     delete(id) {
         return axios.delete('/api/v1/polls/' + id + '/')
+    },
+    listOwn(userId) {
+        return axios.get('/api/v1/users/' + userId + '/ownPolls/')
+    },
+    listAssigned(userId) {
+        return axios.get('/api/v1/users/' + userId + '/assignedPolls/')
     }
 }

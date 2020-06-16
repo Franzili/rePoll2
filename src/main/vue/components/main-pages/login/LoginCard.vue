@@ -18,6 +18,7 @@
 
                 <b-form-group label="Password" label-for="input-2">
                     <b-form-input
+                        type="password"
                         required
                         placeholder="Enter password"
                         v-model="auth.password"
@@ -44,6 +45,13 @@
                 },
             }
         },
+        created() {
+            this.pressKeyEnter = this.pressKeyEnter.bind(this);
+            document.addEventListener('keypress', this.pressKeyEnter)
+        },
+        destroyed() {
+            document.removeEventListener('keypress', this.pressKeyEnter)
+        },
         computed: {
             ...mapState('auth', ['authenticated'])
         },
@@ -55,10 +63,19 @@
                         this.$router.push("/polls");
                     })
                     .catch(() => {
-
                     })
+            },
+            pressKeyEnter(e) {
+                    if (e.key === 'Enter') {
+                        this.requestToken(this.auth)
+                            .then(() => {
+                                this.$router.push("/polls");
+                            })
+                            .catch(() => {
+                            })
+                    }
             }
-        },
+        }
     }
 </script>
 

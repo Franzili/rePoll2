@@ -1,9 +1,11 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.UserNameAlreadyTakenException;
+import gpse.repoll.domain.poll.PollEntry;
+import gpse.repoll.domain.repositories.PollEntryRepository;
 import gpse.repoll.domain.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -11,22 +13,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Primary
 public class UserServiceImpl implements UserService {
     private final PollService pollService;
+    private final MailService mailService;
     private final UserRepository userRepository;
+    private final PollEntryRepository pollEntryRepository;
+    private final PollEntryService pollEntryService;
 
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           PollService pollService) {
+                           MailService mailService,
+                           PollService pollService,
+                           PollEntryRepository pollEntryRepository,
+                           PollEntryService pollEntryService) {
         this.pollService = pollService;
+        this.mailService = mailService;
         this.userRepository = userRepository;
+        this.pollEntryRepository = pollEntryRepository;
+        this.pollEntryService = pollEntryService;
     }
 
     @Override
@@ -101,23 +110,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User removeUser(UUID id) {
+    public void removeUser(UUID id) {
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        Iterable<Poll> listAll = pollService.getAll();
+        for (Poll listEle: listAll) {
+            //TODO: Liste von Participants auch durchgehen
+            if (listEle.getCreator() != null && listEle.getCreator().getId() == id) {
+                listEle.setCreator(null);
+            }
+            if (listEle.getLastEditor() != null && listEle.getLastEditor().getId() == id) {
+                listEle.setLastEditor(null);
+            }
+            Iterable<PollEntry> listEntrys = pollEntryService.getAll(listEle.getId());
+            for (PollEntry listeAllEntrys: listEntrys) {
+                if (listeAllEntrys.getUser() != null && listeAllEntrys.getUser().getId() == id) {
+                    listeAllEntrys.setUser(null);
+                }
+            }
+
+        }
         userRepository.delete(user);
-        return user;
     }
 
     @Override
-    public User removeUser(String username) {
+    public void removeUser(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
         userRepository.delete(user);
-        return user;
-    }
-
-    @Override
-    public List<Poll> getOwnedPolls(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
-        return user.getOwnPolls();
     }
 
     @Override
@@ -139,8 +157,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getRole(UUID userId) {
-        List<String> roles = getRoles(userId);
-        return roles.get(0); // roles is always not empty and 0 is the highest role
+        return getUser(userId).getHighestRole();
     }
 
     @Override

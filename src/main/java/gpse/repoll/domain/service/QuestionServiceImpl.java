@@ -269,6 +269,9 @@ public class QuestionServiceImpl implements QuestionService {
             question.setTitle(title);
         }
         if (choices != null) {
+            for (Choice choice : choices) {
+                choiceRepository.save(choice);
+            }
             question.setChoices(choices);
         }
         singleChoiceQuestionRepository.save(question);
@@ -299,9 +302,27 @@ public class QuestionServiceImpl implements QuestionService {
             question.setTitle(title);
         }
         if (choices != null) {
+            // TODO @Luca: is this right?
+            for (Choice choice : choices) {
+                choiceRepository.save(choice);
+            }
             question.setChoices(choices);
         }
         multiChoiceQuestionRepository.save(question);
         return question;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeQuestion(final UUID pollId, final Long questionId) {
+        Poll poll = pollService.getPoll(pollId);
+
+        Question question = getQuestion(pollId, questionId);
+        poll.remove(question);
+
+        pollService.save(poll);
+        questionBaseRepository.delete(question);
     }
 }

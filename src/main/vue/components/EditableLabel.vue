@@ -1,6 +1,6 @@
 <template>
     <component v-if="!editing" :is="tag">{{value}}</component>
-    <input v-else v-model="currentValue"/>
+    <b-input v-else v-model="currentValue" />
 </template>
 
 <script>
@@ -28,6 +28,9 @@
                 default: false
             }
         },
+        created() {
+            this.currentValue = this.value
+        },
         watch: {
             currentValue: function() {
                 this.$emit('valueChanged', this.currentValue)
@@ -37,5 +40,7 @@
 </script>
 
 <style scoped>
-
+    h1, h2, h3, h4, h5, h6 {
+        margin-bottom: 0;
+    }
 </style>

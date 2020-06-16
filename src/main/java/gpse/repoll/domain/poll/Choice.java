@@ -4,6 +4,7 @@ import gpse.repoll.domain.exceptions.BadRequestException;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.Objects;
 
 /**
  * A choice for a question.
@@ -45,6 +46,23 @@ public class Choice {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Choice choice = (Choice) o;
+        return Objects.equals(id, choice.id) && Objects.equals(text, choice.text);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, text);
     }
 }
 

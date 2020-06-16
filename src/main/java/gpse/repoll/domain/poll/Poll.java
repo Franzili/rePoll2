@@ -1,10 +1,11 @@
 package gpse.repoll.domain.poll;
 
-import gpse.repoll.domain.Anonymity;
-import gpse.repoll.domain.User;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
+import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -37,6 +38,7 @@ public class Poll extends Auditable<User> {
     @NotEmpty
     private String title;
 
+    @JsonSerialize(using = SerializePollEntries.class)
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
@@ -45,9 +47,6 @@ public class Poll extends Auditable<User> {
 
     @OneToMany
     private final List<Question> questions = new ArrayList<>(); // todo sorting
-
-    @ManyToOne
-    private User owner;
 
     protected Poll() {
 
@@ -132,14 +131,6 @@ public class Poll extends Auditable<User> {
         this.status = status;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
     public Anonymity getAnonymity() {
         return anonymity;
     }
@@ -168,6 +159,20 @@ public class Poll extends Auditable<User> {
     public void addAllQuestions(Collection<Question> questions) {
         this.questions.addAll(questions);
         sortQuestions();
+    }
+
+    public void remove(PollSection section) {
+        boolean res = pollSections.remove(section);
+        if (!res) {
+            throw new NotFoundException("PollSection does not belong to this poll");
+        }
+    }
+
+    public void remove(Question question) {
+        boolean res = questions.remove(question);
+        if (!res) {
+            throw new NotFoundException("Question does not belong to this poll");
+        }
     }
 
     public boolean contains(Question question) {
@@ -283,5 +288,9 @@ public class Poll extends Auditable<User> {
             pollSection.addAll(movedQuestions); // The questions are moved in the correct section
         }
         sortQuestions();
+
+        for (PollSection section : pollSections) {
+            section.sortQuestions();
+        }
     }
 }

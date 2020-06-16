@@ -4,7 +4,7 @@ import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.testutils.MockTestUsers;
 import gpse.repoll.web.command.PollCmd;
 import gpse.repoll.web.controllers.PollsController;
@@ -54,7 +54,7 @@ public class PollsControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new PollsController(pollService, userService);
+        controller = new PollsController(pollService);
 
         // Tie userService mock method calls to our Test User class.
         when(userService.getUser(anyString())).thenAnswer((Answer<UserDetails>) invocationOnMock -> {

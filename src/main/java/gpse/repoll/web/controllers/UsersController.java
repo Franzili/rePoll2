@@ -1,7 +1,7 @@
 package gpse.repoll.web.controllers;
 
-import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
+import gpse.repoll.domain.service.MailService;
 import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.UserCmd;
@@ -13,17 +13,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * REST Controller managing /api/v1/users/* entry points.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/users")
 @Secured(Roles.ADMIN)
 public class UsersController {
+
     private final UserService userService;
+    private final MailService mailService;
 
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersController(UserService userService, MailService mailService) {
         this.userService = userService;
+        this.mailService = mailService;
     }
 
     @GetMapping("/")
@@ -35,13 +40,15 @@ public class UsersController {
 
     @PostMapping("/")
     public User addUser(@RequestBody UserCmd userCmd) {
-        return userService.addUser(
+        User user = userService.addUser(
             userCmd.getUsername(),
             userCmd.getPassword(),
             userCmd.getFullName(),
             userCmd.getEmail(),
             userCmd.getRole()
         );
+        mailService.sendPwdGenMail(user);
+        return user;
     }
 
     /**
@@ -49,7 +56,8 @@ public class UsersController {
      * @param userId a username or UUID identifier
      * @return The user
      */
-    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    @PreAuthorize("@securityService.isCurrentUser(principal.username, #userId)"
+            + "or @securityService.isAdmin(principal.username)")
     @GetMapping("/{userId}/")
     public User getUser(@PathVariable String userId) {
         if (isValidUuid(userId)) {
@@ -88,15 +96,16 @@ public class UsersController {
     }
 
     @DeleteMapping("/{userId}/")
-    public User removeUser(@PathVariable String userId) {
+    public void removeUser(@PathVariable String userId) {
         if (isValidUuid(userId)) {
-            return userService.removeUser(UUID.fromString(userId));
+             userService.removeUser(UUID.fromString(userId));
         } else {
-            return userService.removeUser(userId);
+             userService.removeUser(userId);
         }
     }
 
-    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
+    @PreAuthorize("@securityService.isCurrentUser(principal.username, #userId)"
+            + "or @securityService.isAdmin(principal.username)")
     @GetMapping("/{userId}/profile/")
     public String getRole(@PathVariable String userId) {
         if (isValidUuid(userId)) {
@@ -106,17 +115,6 @@ public class UsersController {
         }
     }
 
-    /**
-     * Gets Polls associated with the given user
-     * The user can be referred to either by their username, or by their UUID identifier.
-     * @param userId UUID identifier
-     * @return List of polls associated with the user.
-     */
-    @PreAuthorize("#userId == principal.username or hasRole('Roles.ADMIN')")
-    @GetMapping("/{userId}/own-polls/")
-    public List<Poll> getOwnedPolls(@PathVariable UUID userId) {
-        return  userService.getOwnedPolls(userId);
-    }
 
     /**
      * Checks if a String can be parsed into a UUID.

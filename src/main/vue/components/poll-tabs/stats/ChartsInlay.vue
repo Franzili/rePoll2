@@ -1,6 +1,33 @@
 <template>
     <b-container>
-        <b-row class="text-center" v-if="chartsObj.question.type === 'ScaleQuestion'">
+
+        <b-row v-if="chartsObj.qType !== 'TextQuestion' && chartsObj.currentChart === 'boxplot'">
+            <b-col cols="12">
+                <BoxplotChart :title="chartsObj.label"
+                    :boxplotData="{choice: 'bala', boxplotData: chartsObj.boxplot}"></BoxplotChart>
+            </b-col>
+        </b-row>
+
+        <b-row v-else-if="chartsObj.qType !== 'TextQuestion' && chartsObj.currentChart === 'bar'">
+            <b-col cols="12">
+                <BarChart
+                    :chartData="chartsObj.data"
+                    :title="chartsObj.label"
+                    :chartLabels="chartsObj.labels"></BarChart>
+            </b-col>
+        </b-row>
+
+        <b-row v-else-if="chartsObj.qType !== 'TextQuestion' && chartsObj.currentChart === 'donut'">
+            <b-col cols="12">
+                <DoughnnutChart
+                    :chartData="chartsObj.data"
+                    :title="chartsObj.label"
+                    :chartLabels="chartsObj.labels"></DoughnnutChart>
+            </b-col>
+        </b-row>
+
+        <!--
+        <b-row class="text-center" v-if="chartsObj.qType === 'ScaleQuestion'">
             <b-col>
                 <b-icon icon="graph-up" animation="spin" font-scale="4"></b-icon>
             </b-col>
@@ -11,24 +38,9 @@
                 <b-icon icon="graph-up" animation="spin" font-scale="4"></b-icon>
             </b-col>
         </b-row>
+        -->
 
-        <b-row v-else-if="chartsObj.question.type !== 'TextQuestion' && chartsObj.currentChart === 'bar'">
-            <b-col cols="12">
-                <BarChart :choiceFreqPairs="chartsObj.match" :title="chartsObj.question.title"></BarChart>
-            </b-col>
-        </b-row>
 
-        <b-row v-else-if="chartsObj.question.type !== 'TextQuestion' && chartsObj.currentChart === 'donut'">
-            <b-col cols="12">
-                <DoughnnutChart :choiceFreqPairs="chartsObj.match" :title="chartsObj.question.title"></DoughnnutChart>
-            </b-col>
-        </b-row>
-
-        <b-row v-else-if="chartsObj.question.type !== 'TextQuestion' && chartsObj.currentChart === 'boxplot'">
-            <b-col cols="12">
-                <BoxplotChart></BoxplotChart>
-            </b-col>
-        </b-row>
     </b-container>
 </template>
 

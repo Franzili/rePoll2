@@ -1,6 +1,6 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.Answer;
 import gpse.repoll.domain.poll.questions.Question;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class QuestionsAnswersServiceImpl implements QuestionsAnswersService {
+public class AnswerServiceImpl implements AnswerService {
     private final PollService pollService;
 
     @Autowired
-    public QuestionsAnswersServiceImpl(PollService pollService) {
+    public AnswerServiceImpl(PollService pollService) {
         this.pollService = pollService;
     }
 

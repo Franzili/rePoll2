@@ -1,7 +1,6 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -18,10 +17,8 @@ public interface UserService extends UserDetailsService {
     User updateUser(UUID userId, String userName, String fullName, String email, String role);
     User updateUser(String oldUsername, String userName, String fullName, String email, String role);
 
-    User removeUser(UUID id);
-    User removeUser(String username);
-
-    List<Poll> getOwnedPolls(UUID userId);
+    void removeUser(UUID id);
+    void removeUser(String username);
 
     List<String> getRoles(UUID userId);
     List<String> getRoles(String username);

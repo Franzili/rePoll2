@@ -1,11 +1,10 @@
-package gpse.repoll.domain;
+package gpse.repoll.domain.poll;
 
 import javax.persistence.*;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import gpse.repoll.domain.exceptions.NoValidRoleException;
-import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.security.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -19,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 public class User implements UserDetails {
     private static final long serialVersionUID = 5L;
+    private static final int PWD_LENGTH = 12;
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -38,15 +38,12 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-    @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
-
-    @Column
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private List<Poll> ownPolls = new ArrayList<>();
+    private final List<String> roles = new ArrayList<>();
 
     public User() {
+        // Todo: refine user roles
+        password = createRandomPwd(PWD_LENGTH);
         roles.add(Roles.NO_ROLE);
     }
 
@@ -84,20 +81,13 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public void addOwnPoll(Poll poll) {
-        ownPolls.add(poll);
-    }
-
-    public void removeOwnPoll(Poll poll) {
-        ownPolls.remove(poll);
-    }
-
-    public List<Poll> getOwnPolls() {
-        return Collections.unmodifiableList(ownPolls);
-    }
-
     public List<String> getRoles() {
         return Collections.unmodifiableList(roles);
+    }
+
+    @JsonIgnore
+    public String getHighestRole() {
+        return roles.get(0); // roles is always not empty and 0 is the highest role
     }
 
     public void setRoles(String role) throws NoValidRoleException {
@@ -192,6 +182,22 @@ public class User implements UserDetails {
     }
 
     /**
+     * Creates a new random password.
+     * @param length password length.
+     * @return password.
+     */
+    String createRandomPwd(int length) {
+        Random random = new Random();
+        String chars =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
+        char[] text = new char[length];
+        for (int i = 0; i < length; i++) {
+            text[i] = chars.charAt(random.nextInt(chars.length()));
+        }
+        return new String(text);
+    }
+
+    /**
      * Just gets the username.
      *
      * Used if a controller needs to get a user from an authentication token:
@@ -204,5 +210,23 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return username;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(id, user.id)
+                && Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username);
     }
 }

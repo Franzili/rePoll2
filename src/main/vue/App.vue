@@ -1,7 +1,10 @@
 <template>
   <div id="app">
-
-      <NavBar v-if="this.$router.currentRoute.path !== '/'"></NavBar>
+      <!-- not good but rare -->
+      <NavBar v-show="
+      this.$router.currentRoute.path !== '/'
+      && $route.name !== 'answer'
+      && $route.name !== 'response'"></NavBar>
       <router-view></router-view>
   </div>
 </template>
@@ -13,7 +16,7 @@
         name: 'App',
         components: {
             NavBar
-        }
+        },
     }
 </script>
 

@@ -1,12 +1,12 @@
 import PollItemModel from "./PollItemModel";
 
 class TextQuestionModel extends PollItemModel {
-    constructor(id, title, charLimit = 255) {
+    constructor(id) {
         super();
         this.id = id;
         this.type = "TextQuestion";
-        this.title = title;
-        this.charLimit = charLimit;
+        this.title = "Text Question";
+        this.charLimit = 256;
     }
 
     static getDisplayType() {

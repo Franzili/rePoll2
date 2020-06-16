@@ -1,6 +1,6 @@
 package gpse.repoll;
 
-import gpse.repoll.domain.User;
+import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollSection;
@@ -60,7 +60,6 @@ public class InitializeDatabase implements InitializingBean {
         this.pollRepository = pollRepository;
         this.pollSectionRepository = pollSectionRepository;
         this.userRepository = userRepository;
-
     }
 
     /**
@@ -95,11 +94,31 @@ public class InitializeDatabase implements InitializingBean {
             //pollEntryRepository.deleteAll();
             //pollRepository.deleteAll();
             //pollSectionRepository.deleteAll();
+            //User user = userService.getUser("JamesBond");
+            Iterable<Poll> polls = pollRepository.findAll();
+            List<Poll> pollList = new ArrayList<>((Collection<? extends Poll>) polls);
+            if (pollList.size() != 0) {
+                return null;
+            }
             User user = userRepository.findByUsername("JamesBond").get();
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user,
-                                                                                     null,
-                                                                                     null);
+                null,
+                null);
             SecurityContextHolder.getContext().setAuthentication(auth);
+
+            //dummy user as creator
+            User nobody;
+            try {
+                nobody = userService.getUser("Nemo");
+            } catch (UsernameNotFoundException e) {
+                nobody = userService.addUser(
+                        "Nemo",
+                        // Passwort: GutenTag
+                        "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                        "Cpt Nemo",
+                        "x@404.com",
+                        Roles.POLL_CREATOR);
+            }
 
             List<User> participants = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
@@ -119,8 +138,38 @@ public class InitializeDatabase implements InitializingBean {
             }
 
             Poll poll = pollService.addPoll("Gummibaerchen");
+
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255);
+
+            Poll poll2 = pollService.addPoll("About this App");
+            Question question0201 = questionService.addTextQuestion(poll2.getId(), "What do you like about RePoll ?",
+                1, 255);
+            Question question0202 = questionService.addTextQuestion(poll2.getId(), "Things do improve RePoll ?",
+                1000, 255);
+            PollSection section01 = pollSectionService.addPollSection(
+                poll2.getId(),
+                "First i like to know",
+                "Your first question"
+            );
+            PollSection section02 = pollSectionService.addPollSection(
+                poll2.getId(),
+                "By the way",
+                "Something to tell us"
+            );
+            HashMap<UUID, List<Long>> structure2 = new HashMap<>();
+            structure2.put(section01.getId(), List.of(question0201.getId()));
+            structure2.put(section02.getId(), List.of(question0202.getId()));
+            pollService.updatePoll(poll2.getId(), null, null, null, structure2);
+
+
+
+            Poll poll3 = pollService.addPoll("Nothing to see here");
+            questionService.addTextQuestion(poll3.getId(), "This sentence is false",
+                100, 255);
+            //add poll3 to nobody's ownedPolls
+
+
 
             List<Choice> choicesRadioButtonList = new ArrayList<>();
             Choice choice5 = new Choice("0-20");
