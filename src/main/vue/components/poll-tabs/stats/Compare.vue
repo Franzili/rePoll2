@@ -1,7 +1,8 @@
 <template>
     <b-container>
         <p>
-            <ToolBar v-bind:actives="[true,true,true,true,true,true,true]"></ToolBar>
+            <ToolBar style="float: right"
+                v-bind:actives="[true,true,true,true,false,false,true]"></ToolBar>
         </p>
 
         <p>
@@ -9,11 +10,19 @@
         </p>
 
         <div>
+            <!--
             <b-container v-bind:key="card.id" v-for="card in cardList">
                 <b-card>
                     <b-container v-bind:key="statistic.question.id" v-for="statistic in card.compSet">
                         <ChartCards v-bind:statistic="statistic"></ChartCards>
                     </b-container>
+                </b-card>
+            </b-container>
+            -->
+
+            <b-container v-bind:key="card.id" v-for="card in cardList">
+                <b-card>
+                    <CompareCards v-bind:compareData="card"></CompareCards>
                 </b-card>
             </b-container>
         </div>
@@ -38,9 +47,10 @@
 <script>
     import {mapGetters, mapState} from "vuex";
     import myModal from "./utils/myModal";
-    import ChartCards from "./utils/ChartCards";
+    //import ChartCards from "./utils/ChartCards";
     import ToolBar from "./utils/ToolBar";
-    
+    import CompareCards from "./utils/CompareCards";
+
     // TODO persistence functionality
     export default {
         name: "Compare",
@@ -67,15 +77,16 @@
             },
             fillCompares(compSet) {
                 if (compSet.length > 0) {
-                    let cardObj = {id: Date.now(), compSet}
+                    let cardObj = {id: Date.now() + Math.random(), compSet}
                     this.cardList.push(cardObj)
                 }
             }
         },
         components: {
             myModal,
-            ChartCards,
-            ToolBar
+            //ChartCards,
+            ToolBar,
+            CompareCards
         }
     }
 </script>

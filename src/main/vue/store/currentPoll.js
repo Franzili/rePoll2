@@ -223,6 +223,36 @@ const currentPoll = {
                     return tableObj
                 }
             }
+        },
+        transformToChartData: () => {
+            return (val) => {
+                let labels = []
+                let absFrq = []
+                let relFrq = []
+                for (let i = 0; i < val.frequencies.length; i++) {
+                    labels.push(val.frequencies[i].choice.text);
+                    absFrq.push(val.frequencies[i].absolute)
+                    let rawRelFrq = val.frequencies[i].relative
+                    relFrq.push(Math.round(rawRelFrq * 100));
+                }
+                let boxplot = []
+                if (val.question.type === 'ScaleQuestion') {
+                    for (let item in val.boxplot) {
+                        boxplot.push(val.boxplot[item])
+                    }
+                    boxplot.splice(2, 0, val.median)
+                }
+                return {
+                    label: val.question.title,
+                    qType: val.question.type,
+                    labels: labels,
+                    data: absFrq,
+                    absFrq: absFrq,
+                    relFrq: relFrq,
+                    boxplot: boxplot,
+                    currentChart: 'bar'
+                }
+            }
         }
     },
 
