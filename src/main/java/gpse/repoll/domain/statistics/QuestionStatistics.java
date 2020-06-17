@@ -122,8 +122,11 @@ public class QuestionStatistics {
 
     private void computeFrequencies(Question question, List<Answer> answers) {
         int countAllChoices = 0;
-        Map<Choice, Integer> choiceCountMap = new HashMap<>();
+        Map<Choice, Integer> choiceCountMap = new LinkedHashMap<>();
         if (question instanceof SingleChoiceQuestion) {
+            for (Choice choice : ((SingleChoiceQuestion) question).getChoices()) {
+                choiceCountMap.put(choice, 0);
+            }
             for (Answer answer : answers) {
                 if (answer instanceof SingleChoiceAnswer) {
                     SingleChoiceAnswer singleChoiceAnswer = (SingleChoiceAnswer) answer;
@@ -145,6 +148,9 @@ public class QuestionStatistics {
                 }
             }
         } else if (question instanceof MultiChoiceQuestion) {
+            for (Choice choice : ((MultiChoiceQuestion) question).getChoices()) {
+                choiceCountMap.put(choice, 0);
+            }
             for (Answer answer : answers) {
                 if (answer instanceof MultiChoiceAnswer) {
                     MultiChoiceAnswer multiChoiceAnswer = (MultiChoiceAnswer) answer;
@@ -160,11 +166,6 @@ public class QuestionStatistics {
                     }
                 } else {
                     throw  new InternalServerErrorException();
-                }
-            }
-            for (Choice choice : ((MultiChoiceQuestion) question).getChoices()) {
-                if (!choiceCountMap.containsKey(choice)) {
-                    choiceCountMap.put(choice, 0);
                 }
             }
         } else {
