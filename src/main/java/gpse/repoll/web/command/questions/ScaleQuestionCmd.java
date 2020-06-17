@@ -2,7 +2,6 @@ package gpse.repoll.web.command.questions;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-// CPD-OFF
 @JsonTypeName("ScaleQuestion")
 public class ScaleQuestionCmd extends QuestionCmd {
 
@@ -51,5 +50,4 @@ public class ScaleQuestionCmd extends QuestionCmd {
     public void setMax(int max) {
         this.max = max;
     }
-    // CPD-ON
 }

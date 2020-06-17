@@ -107,6 +107,7 @@ public class QuestionsController {
         );
     }
 
+    // CPD-OFF
     @Secured(Roles.POLL_EDITOR)
     @PutMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question updateQuestion(@PathVariable("pollId") final UUID pollId,
@@ -157,6 +158,7 @@ public class QuestionsController {
         // This should never happen
         throw new InternalServerErrorException();
     }
+    // CPD-ON
 
     @Secured(Roles.POLL_EDITOR)
     @DeleteMapping("/{pollId}/questions/{questionId}/")
