@@ -64,8 +64,8 @@ public class QuestionsController {
                 choices.add(new Choice(choiceCmd.getText()));
             }
             if (singleChoiceQuestionCmd.getDisplayVariant() == null
-                    || (!singleChoiceQuestionCmd.getDisplayVariant().equals("radio")
-                    && !singleChoiceQuestionCmd.getDisplayVariant().equals("dropdown"))) {
+                    || !singleChoiceQuestionCmd.getDisplayVariant().equals("radio")
+                    && !singleChoiceQuestionCmd.getDisplayVariant().equals("dropdown")) {
                 throw new BadRequestException("No display variant given for the question!");
             }
             return questionService.addSingleChoiceQuestion(

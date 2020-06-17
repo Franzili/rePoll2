@@ -208,7 +208,7 @@ public class QuestionStatistics {
         }
         int medianIndex;
         if (sizeVal % 2 == 0) {
-            medianIndex = (sizeVal / 2) - 1;
+            medianIndex = sizeVal / 2 - 1;
             Integer low = values.get(medianIndex);
             Integer high = values.get(medianIndex + 1);
             this.median = (double) ((low + high) / 2);
@@ -237,13 +237,13 @@ public class QuestionStatistics {
         double thirdQuartile;
         int firstHalfSize = firstHalf.size();
         if (firstHalfSize % 2 == 0) {
-            firstQuartile = firstHalf.get((firstHalfSize / 2) - 1);
+            firstQuartile = firstHalf.get(firstHalfSize / 2 - 1);
         } else {
             firstQuartile = firstHalf.get(firstHalfSize / 2);
         }
         int secondHalfSize = secondHalf.size();
         if (secondHalfSize % 2 == 0) {
-            thirdQuartile = secondHalf.get((secondHalfSize / 2) - 1);
+            thirdQuartile = secondHalf.get(secondHalfSize / 2 - 1);
         } else {
             thirdQuartile = secondHalf.get(secondHalfSize / 2);
         }
