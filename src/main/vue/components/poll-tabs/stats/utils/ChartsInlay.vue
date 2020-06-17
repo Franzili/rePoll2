@@ -31,9 +31,9 @@
 </template>
 
 <script>
-    import BarChart from "../../charts/BarChart";
-    import DoughnnutChart from "../../charts/DoughnnutChart";
-    import BoxplotChart from "../../charts/BoxplotChart";
+    import BarChart from "../../../charts/BarChart";
+    import DoughnnutChart from "../../../charts/DoughnnutChart";
+    import BoxplotChart from "../../../charts/BoxplotChart";
 
     export default {
         name: "ChartsInlay",

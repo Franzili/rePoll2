@@ -46,7 +46,6 @@
     import ChartsInlay from "./ChartsInlay";
     import {mapState} from "vuex";
     import ToolBar from "./ToolBar";
-
     export default {
         name: "ChartCards",
         props: ['statistic'],
@@ -75,10 +74,8 @@
             frequency: function (val) {
                 if (val === 'abs') {
                     this.chartsObj.data = this.absFrq
-                    console.log('hallo?')
                 } else {
                     this.chartsObj.data = this.relFrq
-                    console.log(' hi :D')
                 }
             }
         },
@@ -90,8 +87,6 @@
             } else {
                 this.actives = [false, true, true, true]
             }
-            console.log('abs', this.absFrq)
-            console.log('rel', this.relFrq)
         },
         methods: {
             // Transforms statistic data into chart data
@@ -101,7 +96,8 @@
                 for (let i = 0; i < val.frequencies.length; i++) {
                     this.chartsObj.labels.push(val.frequencies[i].choice.text);
                     this.absFrq.push(val.frequencies[i].absolute)
-                    this.relFrq.push(val.frequencies[i].relative);
+                    let rawRelFrq = val.frequencies[i].relative
+                    this.relFrq.push(Math.round(rawRelFrq * 100));
                 }
                 this.chartsObj.data = this.absFrq
                 if (this.statistic.question.type === 'ScaleQuestion') {

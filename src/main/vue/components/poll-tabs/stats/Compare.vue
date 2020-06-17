@@ -37,10 +37,11 @@
 
 <script>
     import {mapGetters, mapState} from "vuex";
-    import myModal from "./myModal";
-    import ChartCards from "./ChartCards";
-    import ToolBar from "./ToolBar";
-
+    import myModal from "./utils/myModal";
+    import ChartCards from "./utils/ChartCards";
+    import ToolBar from "./utils/ToolBar";
+    
+    // TODO persistence functionality
     export default {
         name: "Compare",
         data() {

@@ -87,12 +87,13 @@
     export default {
         name: "ToolBar",
         // actives: dataChange, bar, donut, boxplot, question, merge, delete
-        props: ['actives','choices'],
+        // TODO prop to parse frequency choice
+        props: ['actives', 'choices'],
         data() {
             return {
                 selected: {
                     question: '',
-                    frequency: ''
+                    frequency: 'abs'
                 },
                 merged: true,
             }
