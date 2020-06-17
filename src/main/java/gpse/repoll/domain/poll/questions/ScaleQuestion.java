@@ -1,5 +1,7 @@
 package gpse.repoll.domain.poll.questions;
 
+import gpse.repoll.domain.exceptions.InvalidScaleException;
+
 import javax.persistence.*;
 
 /**
@@ -23,6 +25,21 @@ public class ScaleQuestion extends Question {
     @Column
     private int max;
 
+    public ScaleQuestion() {
+
+    }
+
+    public ScaleQuestion(String scaleNameLeft, String scaleNameRight, int stepCount, int min, int max) {
+        if (max < min || stepCount <= 0) {
+            throw new InvalidScaleException();
+        }
+        this.scaleNameLeft = scaleNameLeft;
+        this.scaleNameRight = scaleNameRight;
+        this.stepCount = stepCount;
+        this.min = min;
+        this.max = max - (max - min) % stepCount;
+    }
+
     public String getScaleNameLeft() {
         return scaleNameLeft;
     }
@@ -43,23 +60,20 @@ public class ScaleQuestion extends Question {
         return stepCount;
     }
 
-    public void setStepCount(int stepCount) {
-        this.stepCount = stepCount;
-    }
-
     public int getMin() {
         return min;
-    }
-
-    public void setMin(int min) {
-        this.min = min;
     }
 
     public int getMax() {
         return max;
     }
 
-    public void setMax(int max) {
-        this.max = max;
+    public void setScale(int stepCount, int min, int max) {
+        if (max < min || stepCount <= 0) {
+            throw new InvalidScaleException();
+        }
+        this.stepCount = stepCount;
+        this.min = min;
+        this.max = max - (max - min) % stepCount;
     }
 }

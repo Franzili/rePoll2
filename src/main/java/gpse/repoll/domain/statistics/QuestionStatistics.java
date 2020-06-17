@@ -78,9 +78,6 @@ public class QuestionStatistics {
         int min = question.getMin();
         int max = question.getMax();
         int stepCount = question.getStepCount();
-
-        // ToDo:  if (!(max % stepCount == 0)), the maximum is not included in the statistics :(
-
         List<Choice> choices = new ArrayList<>();
         for (int i = min; i <= max; i += stepCount) {
             choices.add(new Choice(String.valueOf(i)));

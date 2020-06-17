@@ -52,6 +52,9 @@
                 }
                 this.currentlyEditing = item
             },
+            /* Todo: Make sure that all choices are send together when updating ChoiceQuestions.
+            Todo: This is necessary for correct integration of the backend
+            */
             onItemEditFinished(item) {
                 if (this.currentlyEditing === item) {
                     this.currentlyEditing = null

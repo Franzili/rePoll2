@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public abstract class QuestionCmd {
 
     private String title;
-    private int questionOrder;
+    private Integer questionOrder;
 
     public String getTitle() {
         return title;

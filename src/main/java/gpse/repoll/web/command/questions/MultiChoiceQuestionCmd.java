@@ -9,7 +9,7 @@ import java.util.List;
 @JsonTypeName("MultiChoiceQuestion")
 public class MultiChoiceQuestionCmd extends QuestionCmd {
 
-    private List<ChoiceCmd> choices = new ArrayList<>();
+    private final List<ChoiceCmd> choices = new ArrayList<>();
 
     public List<ChoiceCmd> getChoices() {
         return choices;

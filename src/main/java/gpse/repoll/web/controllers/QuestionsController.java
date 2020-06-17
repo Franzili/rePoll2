@@ -24,14 +24,14 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
-public class AnswersController {
+public class QuestionsController {
 
     private static final String NO_CHOICES = "No choices given for the question!";
 
     private final QuestionService questionService;
 
     @Autowired
-    public AnswersController(QuestionService questionService) {
+    public QuestionsController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
@@ -129,7 +129,9 @@ public class AnswersController {
                     title,
                     scaleQuestionCmd.getScaleNameLeft(),
                     scaleQuestionCmd.getScaleNameRight(),
-                    scaleQuestionCmd.getStepCount());
+                    scaleQuestionCmd.getStepCount(),
+                    scaleQuestionCmd.getMin(),
+                    scaleQuestionCmd.getMax());
         } else if (questionCmd instanceof SingleChoiceQuestionCmd) {
             SingleChoiceQuestionCmd singleChoiceQuestionCmd = (SingleChoiceQuestionCmd) questionCmd;
             if (singleChoiceQuestionCmd.getChoices() == null) {
