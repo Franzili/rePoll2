@@ -79,6 +79,17 @@
                 </b-button>
             </b-form-group>
 
+            <b-form-group>
+                <b-button
+                    variant="outline-secondary"
+                    v-on:click="$emit('edit')"
+                    style="margin-left: 0.5rem"
+                    v-if="actives[7] === true"
+                    title="edit comparision">
+                    <b-icon icon="pencil"></b-icon>
+                </b-button>
+            </b-form-group>
+
         </b-button-toolbar>
     </div>
 </template>

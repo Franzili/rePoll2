@@ -22,19 +22,19 @@
 
             <b-container v-bind:key="card.id" v-for="card in cardList">
                 <b-card>
-                    <CompareCards v-bind:compareData="card"></CompareCards>
+                    <CompareCards
+                        v-on:close="deleteCard($event)"
+                        v-bind:compareData="card"></CompareCards>
                 </b-card>
             </b-container>
         </div>
 
-        <b-button @click="showModal" > lalaa</b-button>
+        <b-button @click="showModal([])" > lalaa</b-button>
         <!-- TODO v-on with funtion-->
-        <myModal
-
+        <CheckModal
             v-on:getSelected="fillCompares($event)"
             ref="mymodal"
-            v-bind:modalObj="getPollStructure"
-        ></myModal>
+        ></CheckModal>
         <b-button @click="cardList = []">
             kill
         </b-button>
@@ -46,7 +46,7 @@
 
 <script>
     import {mapGetters, mapState} from "vuex";
-    import myModal from "./utils/myModal";
+    import CheckModal from "./utils/CheckModal";
     //import ChartCards from "./utils/ChartCards";
     import ToolBar from "./utils/ToolBar";
     import CompareCards from "./utils/CompareCards";
@@ -63,6 +63,7 @@
             ...mapState('currentPoll', {
                 statistics: 'statistics'
             }),
+            //TODO only for show
             ...mapGetters('currentPoll', {
                 getPollStructure: 'statStructureObj'
             })
@@ -72,18 +73,21 @@
             //console.log(this.getPollStructure)
         },
         methods: {
-            showModal() {
-                this.$refs.mymodal.show()
+            showModal(list) {
+                this.$refs.mymodal.show(list)
             },
             fillCompares(compSet) {
                 if (compSet.length > 0) {
                     let cardObj = {id: Date.now() + Math.random(), compSet}
                     this.cardList.push(cardObj)
                 }
+            },
+            deleteCard(id) {
+                this.cardList = this.cardList.filter(set => set.id !== id)
             }
         },
         components: {
-            myModal,
+            CheckModal,
             //ChartCards,
             ToolBar,
             CompareCards

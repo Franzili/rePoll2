@@ -9,7 +9,7 @@
         @ok="$emit('getSelected', selected)"
         >
         <div class="d-block text-center">
-            <b-container  v-bind:key="section.id" v-for="section in modalObj">
+            <b-container  v-bind:key="section.id" v-for="section in getPollStructure">
                 <b-row>
                     <h5>Section: {{section.title}}</h5>
                 </b-row>
@@ -32,22 +32,28 @@
 </template>
 
 <script>
+    import {mapGetters} from "vuex";
+
     export default {
-        name: "myModal",
-        props:['modalObj'],
+        name: "CheckModal",
         data() {
             return {
                 showModal: true,
                 selected: [],
             }
         },
+        computed: {
+            ...mapGetters('currentPoll', {
+                getPollStructure: 'statStructureObj'
+            })
+        },
         created() {
             //console.log('im modal: ')
             //console.log(this.modalObj)
         },
         methods: {
-            show() {
-                this.selected = []
+            show(list) {
+                this.selected = list
                 this.$refs.modal.show()
             },
             hide() {
