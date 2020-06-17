@@ -48,6 +48,9 @@ public class Poll extends Auditable<User> {
     @OneToMany
     private final List<Question> questions = new ArrayList<>(); // todo sorting
 
+    @OneToMany
+    private final List<Participant> participants = new ArrayList<>();
+
     protected Poll() {
 
     }
@@ -109,6 +112,19 @@ public class Poll extends Auditable<User> {
         this.questions.clear();
         this.questions.addAll(questions);
         sortQuestions();
+    }
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants.clear();
+        this.participants.addAll(participants);
+    }
+
+    public void addParticipant(Participant participant) {
+        this.participants.add(participant);
     }
 
     private void sortQuestions() {

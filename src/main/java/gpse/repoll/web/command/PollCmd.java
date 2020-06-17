@@ -3,6 +3,8 @@ package gpse.repoll.web.command;
 import gpse.repoll.domain.poll.Anonymity;
 import gpse.repoll.domain.poll.PollStatus;
 
+import java.util.List;
+
 
 /**
  * Poll helper object used for JSON serialisation.
@@ -14,6 +16,7 @@ public class PollCmd {
     private PollStatus status;
     private Anonymity anonymity;
     private PollEditorsCmd editors;
+    private List<ParticipantCmd> participants;
 
     public PollEditorsCmd getEditors() {
         return editors;
@@ -21,6 +24,14 @@ public class PollCmd {
 
     public void setEditors(PollEditorsCmd editors) {
         this.editors = editors;
+    }
+
+    public List<ParticipantCmd> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<ParticipantCmd> participants) {
+        this.participants = participants;
     }
 
     public Anonymity getAnonymity() {

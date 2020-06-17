@@ -1,9 +1,6 @@
 package gpse.repoll;
 
-import gpse.repoll.domain.poll.User;
-import gpse.repoll.domain.poll.Choice;
-import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.poll.PollSection;
+import gpse.repoll.domain.poll.*;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.repositories.*;
@@ -37,6 +34,8 @@ public class InitializeDatabase implements InitializingBean {
     private final PollRepository pollRepository;
     private final PollSectionRepository pollSectionRepository;
     private final UserRepository userRepository;
+    private final ParticipantRepository participantRepository;
+    private final ParticipantService participantService;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
@@ -49,7 +48,9 @@ public class InitializeDatabase implements InitializingBean {
                               final PollSectionService pollSectionService,
                               final PollRepository pollRepository,
                               final PollSectionRepository pollSectionRepository,
-                              final UserRepository userRepository) {
+                              final UserRepository userRepository,
+                              final ParticipantRepository participantRepository,
+                              final ParticipantService participantService) {
         this.pollService = pollService;
         this.pollSectionService = pollSectionService;
         this.questionService = questionService;
@@ -60,6 +61,8 @@ public class InitializeDatabase implements InitializingBean {
         this.pollRepository = pollRepository;
         this.pollSectionRepository = pollSectionRepository;
         this.userRepository = userRepository;
+        this.participantRepository = participantRepository;
+        this.participantService = participantService;
     }
 
     /**
@@ -120,24 +123,27 @@ public class InitializeDatabase implements InitializingBean {
                         Roles.POLL_CREATOR);
             }
 
-            List<User> participants = new ArrayList<>();
+            Poll poll = pollService.addPoll("Gummibaerchen");
+
+            List<Participant> participants = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
-                User tmpUser;
-                try {
-                    tmpUser = userService.getUser("Patti" + i);
-                } catch (UsernameNotFoundException e) {
-                    tmpUser = userService.addUser(
+                Participant tmpUser;
+                    tmpUser = participantService.addParticipant(
                         "Patti" + i,
                         // Passwort: GutenTag
-                        "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
-                        "Privat Patti" + i,
+                        //"{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                        //"Privat Patti" + i,
                         "x@404.com",
-                        Roles.PARTICIPANT);
-                }
+                        poll.getId()
+                        );
+                        //Roles.PARTICIPANT);
+
                 participants.add(tmpUser);
             }
 
-            Poll poll = pollService.addPoll("Gummibaerchen");
+
+
+
 
             Question question1 = questionService.addTextQuestion(poll.getId(), "Warum magst du Gummibaerchen?",
                                         1, 255);
@@ -378,6 +384,7 @@ public class InitializeDatabase implements InitializingBean {
             textMap10.put(question2.getId(), singleChoiceAnswer10);
             textMap10.put(question3.getId(), multiChoiceAnswer10);
             textMap10.put(question4.getId(), scaleAnswer10);
+
 
             pollEntryService.addPollEntry(poll.getId(), textMap1, participants.get(0));
             pollEntryService.addPollEntry(poll.getId(), textMap2, participants.get(1));

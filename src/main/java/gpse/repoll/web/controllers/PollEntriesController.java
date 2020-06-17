@@ -1,5 +1,6 @@
 package gpse.repoll.web.controllers;
 
+import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.PollEntry;
@@ -7,6 +8,8 @@ import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.repositories.ChoiceRepository;
+import gpse.repoll.domain.repositories.ParticipantRepository;
+import gpse.repoll.domain.service.ParticipantService;
 import gpse.repoll.domain.service.PollEntryService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.PollEntryCmd;
@@ -30,11 +33,14 @@ public class PollEntriesController {
 
     private final PollEntryService pollEntryService;
     private final ChoiceRepository choiceRepository;
+    private final ParticipantService participantService;
 
     @Autowired
-    public PollEntriesController(PollEntryService pollEntryService, ChoiceRepository choiceRepository) {
+    public PollEntriesController(PollEntryService pollEntryService, ChoiceRepository choiceRepository,
+                                 ParticipantService participantService) {
         this.pollEntryService = pollEntryService;
         this.choiceRepository = choiceRepository;
+        this.participantService = participantService;
     }
 
     @Secured(Roles.POLL_CREATOR)
@@ -43,13 +49,14 @@ public class PollEntriesController {
         return pollEntryService.getAll(pollId);
     }
 
-    @PreAuthorize("@securityService.isActivated(#pollId) and @securityService.isParticipant(principal.username)")
-    @PostMapping("/{pollId}/entries/")
+    @PreAuthorize("@securityService.isActivated(#pollId)") //and @securityService.isParticipant(principal.username)")
+    @PostMapping("/{pollId}/entries/{participantID}")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
-                                  @RequestBody PollEntryCmd pollEntryCmd) {
+                                  @RequestBody PollEntryCmd pollEntryCmd, @PathVariable UUID participantID) {
         Map<Long, Answer> answers = createAnswers(pollEntryCmd);
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return pollEntryService.addPollEntry(pollId, answers, user);
+        //User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Participant participant = participantService.getParticipant(participantID);
+        return pollEntryService.addPollEntry(pollId, answers, participant);
     }
 
     @PreAuthorize("@securityService.isOwnEntry(principal.username, #entryId)"
