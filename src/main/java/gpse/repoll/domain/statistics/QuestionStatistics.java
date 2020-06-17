@@ -142,11 +142,6 @@ public class QuestionStatistics {
                     throw new InternalServerErrorException();
                 }
             }
-            for (Choice choice : ((SingleChoiceQuestion) question).getChoices()) {
-                if (!choiceCountMap.containsKey(choice)) {
-                    choiceCountMap.put(choice, 0);
-                }
-            }
         } else if (question instanceof MultiChoiceQuestion) {
             for (Choice choice : ((MultiChoiceQuestion) question).getChoices()) {
                 choiceCountMap.put(choice, 0);
