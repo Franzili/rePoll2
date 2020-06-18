@@ -178,7 +178,7 @@ const currentPoll = {
                     let choice = {text: q.title, value: q.id}
                     qObjList.push(choice)
                 })
-                let secObj = {label: section.title, options: qObjList}
+                let secObj = {label: section.title, options: qObjList, sId: section.id}
                 strObj.push(secObj)
             })
             return strObj
