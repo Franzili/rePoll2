@@ -1,12 +1,14 @@
 <template>
     <b-modal
         scrollable
+        hide-header-close
+        id="edit-modal"
         title="Add or remove Questions:"
         ref="modal"
         header-border-variant="dark"
         footer-border-variant="dark"
         v-if="showModal"
-        @ok="$emit('getSelected', selected)"
+        @ok="prevent"
         >
         <div class="d-block text-center">
             <b-container  v-bind:key="section.id" v-for="section in getPollStructure">
@@ -27,6 +29,19 @@
                 </b-form-checkbox-group>
             </b-container>
         </div>
+        <b-modal
+            header-border-variant="dark"
+            footer-border-variant="dark"
+            button-size="sm"
+            header-bg-variant="info"
+            hide-header-close
+            no-close-on-backdrop
+            ok-only
+            size="sm"
+            id="warn-modal">
+            For comparison purpose you will need at least two Questions.
+        </b-modal>
+
         <div>Selected: <strong>{{ selected }}</strong></div>
     </b-modal>
 </template>
@@ -47,18 +62,25 @@
                 getPollStructure: 'statStructureObj'
             })
         },
-        created() {
-            //console.log('im modal: ')
-            //console.log(this.modalObj)
-        },
         methods: {
             show(list) {
                 this.selected = list
                 this.$refs.modal.show()
             },
-            hide() {
-                this.$refs.modal.hide()
+            prevent(bvModalEvt) {
+                bvModalEvt.preventDefault()
+                this.handleSubmit()
             },
+            handleSubmit() {
+                if (this.selected.length < 2) {
+                    this.$bvModal.show('warn-modal')
+                    return
+                }
+                this.$emit('getSelected', this.selected)
+                this.$nextTick(() => {
+                    this.$bvModal.hide('edit-modal')
+                })
+            }
         }
     }
 </script>
