@@ -359,6 +359,7 @@ const currentPoll = {
                 api.statistics.get(id).then(function (res) {
                     commit('setMetaStats', res.data);
                     resolve(res.data);
+                    console.log("load Stats")
                 }).catch(function (error) {
                     console.log(error);
                     reject();
