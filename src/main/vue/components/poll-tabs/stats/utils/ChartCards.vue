@@ -15,6 +15,7 @@
             <b-col cols="6" v-if="statistic.mode[0] !== undefined">
                 <ToolBar
                     v-bind:actives="actives"
+                    v-bind:frequency="frequency"
                     v-on:chart="chartsObj.currentChart = $event"
                     v-on:frequency="frequency = $event"
                     class="float-right"></ToolBar>
@@ -52,7 +53,7 @@
         data() {
             return {
                 chartsObj: {},
-                actives: [],
+                actives: [true,true,true,true,null,null,null,null],
                 frequency: 'abs'
             }
         },
@@ -76,11 +77,8 @@
         created() {
             let value = this.statistic
             this.chartsObj = this.getChartData(value)
-            console.log(this.chartsObj)
             if (value.question.type !== 'ScaleQuestion') {
-                this.actives = [true, true, true, false]
-            } else {
-                this.actives = [false, true, true, true]
+                this.actives[3] = null
             }
         },
         components: {

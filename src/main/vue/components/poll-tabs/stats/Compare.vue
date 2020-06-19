@@ -10,16 +10,6 @@
         </p>
 
         <div>
-            <!--
-            <b-container v-bind:key="card.id" v-for="card in cardList">
-                <b-card>
-                    <b-container v-bind:key="statistic.question.id" v-for="statistic in card.compSet">
-                        <ChartCards v-bind:statistic="statistic"></ChartCards>
-                    </b-container>
-                </b-card>
-            </b-container>
-            -->
-
             <b-container v-bind:key="card.id" v-for="card in cardList">
                 <b-card>
                     <CompareCards
@@ -47,7 +37,6 @@
 <script>
     import {mapGetters, mapState} from "vuex";
     import CheckModal from "./utils/CheckModal";
-    //import ChartCards from "./utils/ChartCards";
     import ToolBar from "./utils/ToolBar";
     import CompareCards from "./utils/CompareCards";
 
@@ -78,7 +67,11 @@
             },
             fillCompares(compSet) {
                 if (compSet.length > 0) {
-                    let cardObj = {id: Date.now() + Math.random(), compSet}
+                    let statSet = []
+                    compSet.forEach(entry => {
+                        statSet.push(this.statistics.find(stat => stat.question.id === entry))
+                    })
+                    let cardObj = {id: Date.now() + Math.random(),compSet: statSet}
                     this.cardList.push(cardObj)
                 }
             },
@@ -88,7 +81,6 @@
         },
         components: {
             CheckModal,
-            //ChartCards,
             ToolBar,
             CompareCards
         }
