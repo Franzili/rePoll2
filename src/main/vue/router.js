@@ -1,4 +1,5 @@
 import VueRouter from "vue-router";
+
 import Start from "./pages/Start";
 import Account from "./pages/Account";
 import Answer from "./pages/Answer";
@@ -6,13 +7,17 @@ import PollTable from "./pages/PollTable";
 import Admin from "./pages/Admin";
 import PollResponse from "./pages/PollResponse";
 
+import TestCharts from "./pages/TestCharts";
+
 import PollTabbed from "./pages/PollTabbed";
 import EditPoll from "./components/poll-tabs/edit/EditPoll";
-
-import store from "./store/store";
-import TestCharts from "./pages/TestCharts";
 import PollStats from "./components/poll-tabs/stats/PollStats";
 import ConfigurePoll from "./components/poll-tabs/configure/ConfigurePoll";
+
+import Forbidden from "./pages/error/Forbidden";
+//import NotFound from "./pages/error/NotFound";
+
+import store from "./store/store";
 
 let router = new VueRouter({
     mode: 'history',
