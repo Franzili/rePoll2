@@ -14,7 +14,8 @@ const auth = {
          */
         authenticated: null,
         token: null,
-        username: null
+        username: null,
+        role: null
     },
 
     getters: {
@@ -24,23 +25,22 @@ const auth = {
     actions: {
         /**
          * Try to authenticate using a username and a password.
-         * This will set the token and the 'authenticated' state.
+         * This will set the token, the user's current role and the 'authenticated' state.
          */
-        requestToken({commit}, credentials) {
-            commit('setUsername',credentials.username)
-            return new Promise((resolve, reject) => {
-                api.auth.login(credentials.username, credentials.password)
-                    .then(function (res) {
-                        let token = res.headers.authorization
-                        commit('authenticate', token)
-                        resolve()
-                    })
-                    .catch(function () {
-                        console.log("Authentication failed. Clearing tokens.")
-                        commit('authenticate', false)
-                        reject()
-                    });
-            })
+        async requestToken({commit}, credentials) {
+            commit('setUsername', credentials.username)
+            try {
+                let result = await api.auth.login(credentials.username, credentials.password);
+                let token = result.headers.authorization;
+                commit('authenticate', token);
+            } catch(err) {
+                console.warn("[RePoll] Authentication failed. Clearing tokens.")
+                commit('authenticate', false);
+                return;
+            }
+
+            let roleResponse = await api.auth.getRole(credentials.username);
+            commit('setRole', roleResponse.data);
         },
 
         logout({commit}) {
@@ -50,20 +50,34 @@ const auth = {
                 localStorage.removeItem('username')
                 resolve()
             })
-
         },
 
 
         /**
          * Load a token from Browser localStorage.
+         * Also gets the user's current role from the server.
          */
-
-        loadFromStorage({commit}) {
+        loadFromStorage({commit, dispatch}) {
             let token = localStorage.getItem('authToken');
             commit('authenticate', token);
 
             let username = localStorage.getItem('username');
-            commit('setUsername', username)
+            commit('setUsername', username);
+
+            // load role from server as it might have changed since
+            // the last time we checked.
+            return dispatch('loadRole');
+        },
+
+        loadRole({state, commit}) {
+            return new Promise(function(resolve, reject) {
+                api.auth.getRole(state.username).then((result) => {
+                    commit('setRole', result.data);
+                    resolve();
+                }).catch((error) => {
+                    reject(error);
+                })
+            })
         }
     },
 
@@ -78,32 +92,31 @@ const auth = {
 
             if (token === null) {
                 state.authenticated = null; //not yet tried to login
-                console.log('null')
             } else if (!token) {
                 state.authenticated = false; //failed login
-                console.log('false')
             } else {
                 state.authenticated = true; //successfull login
             }
 
             localStorage.setItem('authToken', token);
-
-
         },
+
         /**
          * sets the username
          */
         setUsername(state, username) {
             state.username = username;
-
-
             localStorage.setItem('username', username)
         },
+
+        setRole(state, role) {
+            state.role = role;
+        },
+
         logOut(state) {
             state.username = '';
             state.token = '';
         }
-
     },
 
     namespaced: true
