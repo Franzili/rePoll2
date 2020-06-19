@@ -5,6 +5,7 @@ import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.poll.Design;
 import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,6 +34,9 @@ public class Poll extends Auditable<User> {
     @Column
     private Anonymity anonymity;
 
+    @OneToOne
+    private Design design;
+
     @Column
     @Lob
     @NotEmpty
@@ -60,6 +64,7 @@ public class Poll extends Auditable<User> {
         this.title = title;
         this.status = PollStatus.IN_PROCESS;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
+       // this.design = new Design();
     }
 
     @Override
@@ -77,6 +82,14 @@ public class Poll extends Auditable<User> {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    public Design getDesign() {
+        return design;
+    }
+
+    public void setDesign(Design design) {
+        this.design = design;
     }
 
     public UUID getId() {
