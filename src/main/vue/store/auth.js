@@ -83,22 +83,8 @@ const auth = {
 
             let username = localStorage.getItem('username');
             commit('setUsername', username);
-
-            // load role from server as it might have changed since
-            // the last time we checked.
-            return dispatch('loadRole');
         },
 
-        loadRole({state, commit}) {
-            return new Promise(function(resolve, reject) {
-                api.auth.getRole(state.username).then((result) => {
-                    commit('setRole', result.data);
-                    resolve();
-                }).catch((error) => {
-                    reject(error);
-                })
-            })
-        }
     },
 
     mutations: {
@@ -118,7 +104,21 @@ const auth = {
                 state.authenticated = true; //successfull login
             }
 
-            localStorage.setItem('authToken', token);
+            if (token) {
+                localStorage.setItem('authToken', token);
+
+                // parse JWT token to get role.
+                try {
+                    let tokenStr = atob(token.split('.')[1]);
+                    let tokenObj = JSON.parse(tokenStr);
+                    state.role = tokenObj.rol[0];
+                } catch {
+                    console.warn("[RePoll] Could not parse token from Server!");
+                }
+
+            } else {
+                localStorage.removeItem('authToken');
+            }
         },
 
         /**
@@ -126,16 +126,18 @@ const auth = {
          */
         setUsername(state, username) {
             state.username = username;
-            localStorage.setItem('username', username)
-        },
-
-        setRole(state, role) {
-            state.role = role;
+            if (username) {
+                localStorage.setItem('username', username)
+            } else {
+                localStorage.removeItem('username');
+            }
         },
 
         logOut(state) {
-            state.username = '';
-            state.token = '';
+            state.username = null;
+            state.token = null;
+            localStorage.removeItem('username');
+            localStorage.removeItem('authToken')
         }
     },
 
