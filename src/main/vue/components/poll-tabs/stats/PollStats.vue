@@ -1,7 +1,7 @@
 <template>
     <div>
-        <b-tabs small lazy class="sticky stats-tab-bar" v-model="activeTab">
-            <b-tab v-if="renderComponent" title="Overview"> </b-tab>
+        <b-tabs v-if="renderComponent" small lazy class="sticky stats-tab-bar" v-model="activeTab">
+            <b-tab title="Overview"> </b-tab>
             <b-tab title="Compare"> </b-tab>
             <b-tab title="Trends"> </b-tab>
             <b-tab title="Entries"> </b-tab>
@@ -9,8 +9,8 @@
         </b-tabs>
 
 
-        <b-tabs lazy nav-class="invisible" v-model="activeTab">
-            <b-tab><Overview v-if="renderComponent" v-on:toQuestion="doSwitch($event)"></Overview></b-tab>
+        <b-tabs v-if="renderComponent" lazy nav-class="invisible" v-model="activeTab">
+            <b-tab><Overview v-on:toQuestion="doSwitch($event)"></Overview></b-tab>
             <b-tab><Compare></Compare></b-tab>
             <b-tab><Trends></Trends></b-tab>
             <b-tab><Entries></Entries></b-tab>
@@ -42,8 +42,7 @@
         watch: {
             stats: function (oldVale, newVal) {
                 this.forceRerender()
-                console.log(oldVale + newVal)
-                console.log("alles kagge")
+                console.log("Update statistics: " + oldVale + newVal)
             }
         },
         computed: {
@@ -58,21 +57,15 @@
                 loadEntries: 'loadEntries'
             }),
             equalStats(a, b) {
-                if (a === b) return true;
-                if (a == null || b == null) return false;
-                if (a.length != b.length) return false;
-                for (var i = 0; i < a.length; ++i) {
-                    if (!Object.is(a[i], b[i])) return false;
-                }
-                return true;
+                const a1 = JSON.stringify(a)
+                const b1 = JSON.stringify(b)
+                if (a1.length === b1.length) return true;
             },
             fetchEventList() {
                 this.loadStatistics(this.poll.id)
                 if (!this.equalStats(this.stats, this.statistics)) {
-                    console.log("not equal")
                     this.stats = this.statistics
                 }
-                console.log("funzt")
             },
             cancelAutoUpdate () {
                 clearInterval(this.timer)
@@ -90,7 +83,8 @@
         },
         created() {
             this.fetchEventList()
-            this.timer = setInterval(this.fetchEventList, 3000)
+            const timeout = 5000; // update statistics every 5 minutes
+            this.timer = setInterval(this.fetchEventList, timeout)
         },
         async mounted() {
             this.loadStatistics(this.poll.id)
