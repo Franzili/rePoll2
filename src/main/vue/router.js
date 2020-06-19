@@ -30,7 +30,8 @@ let router = new VueRouter({
             path: '/account/',
             component: Account,
             meta: {
-                requiresPrivileges: "ROLE_POLL_EDITOR"
+                requiresPrivileges: "ROLE_POLL_EDITOR",
+                title: "My Account | RePoll"
             }
         },
         {
@@ -38,7 +39,8 @@ let router = new VueRouter({
             name: 'polls',
             component: PollTable,
             meta: {
-                requiresPrivileges: "ROLE_POLL_EDITOR"
+                requiresPrivileges: "ROLE_POLL_EDITOR",
+                title: "My Polls | RePoll"
             }
         },
         {
@@ -50,7 +52,7 @@ let router = new VueRouter({
             path: '/poll/:pollId/',
             component: PollTabbed,
             meta: {
-                requiresPrivileges: "ROLE_POLL_EDITOR"
+                requiresPrivileges: "ROLE_POLL_EDITOR",
             },
             children: [
                 {
@@ -92,13 +94,17 @@ let router = new VueRouter({
             component: Admin,
             name: 'admin',
             meta: {
-                requiresPrivileges: "ROLE_ADMIN"
+                requiresPrivileges: "ROLE_ADMIN",
+                title: "Server Administration | RePoll"
             }
         },
         {
             path: '/poll-response/',
             component: PollResponse,
             name: 'response',
+            meta: {
+                title: "Thank you for participating | RePoll"
+            }
         },
         //for Charts testing
         {
@@ -108,12 +114,18 @@ let router = new VueRouter({
         {
             name: 'not-found',
             path: '/error/not-found',
-            component: NotFound
+            component: NotFound,
+            meta: {
+                title: "Not found | RePoll"
+            }
         },
         {
             name: 'forbidden',
             path: '/error/forbidden',
-            component: Forbidden
+            component: Forbidden,
+            meta: {
+                title: "Forbidden | RePoll"
+            }
         },
         {
             path: '*',
