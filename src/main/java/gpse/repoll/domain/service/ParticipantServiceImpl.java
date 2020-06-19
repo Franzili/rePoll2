@@ -58,11 +58,9 @@ public class ParticipantServiceImpl implements ParticipantService{
     /**
      * {@inheritDoc}
      */
-    //TODO
     @Override
     public Participant updateParticipant(UUID pollId,UUID id, String fullName, String email) {
         Participant participant = participantRepository.findById(id).orElseThrow(NotFoundException::new);
-        Poll poll = pollRepository.findById(pollId).orElseThrow(NotFoundException::new);
         if (fullName != null) {
             participant.setFullName(fullName);
         }
@@ -76,7 +74,6 @@ public class ParticipantServiceImpl implements ParticipantService{
     /**
      * {@inheritDoc}
      */
-    //TODO
     @Override
     public void removeParticipant(UUID id, UUID pollId) {
         Participant participant = participantRepository.findById(id).orElseThrow(NotFoundException::new);

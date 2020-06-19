@@ -28,7 +28,6 @@ import java.util.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
-//@Secured(Roles.PARTICIPANT)
 public class PollEntriesController {
 
     private final PollEntryService pollEntryService;
@@ -54,7 +53,6 @@ public class PollEntriesController {
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd, @PathVariable UUID participantID) {
         Map<Long, Answer> answers = createAnswers(pollEntryCmd);
-        //User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Participant participant = participantService.getParticipant(participantID);
         return pollEntryService.addPollEntry(pollId, answers, participant);
     }

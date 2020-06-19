@@ -12,7 +12,7 @@ import participants from "./participants";
  * exactly one poll.
  */
 const currentPoll = {
-    modules: [participants],
+    modules: {participants: participants},
     state: {
         /**
          * The current poll object.

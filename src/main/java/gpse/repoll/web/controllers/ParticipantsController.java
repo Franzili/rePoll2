@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * REST Controller managing /api/v1/polls/{pollID}/participants/*
+ * controller managing /api/v1/polls/{pollID}/participants/*
  */
 
 @CrossOrigin
@@ -24,25 +24,26 @@ public class ParticipantsController {
     private final ParticipantService participantService;
 
     @Autowired
-    public ParticipantsController(ParticipantService participantService) {
+    public ParticipantsController(final ParticipantService participantService) {
         this.participantService = participantService;
     }
 
     @Secured(Roles.POLL_CREATOR)
     @GetMapping("/")
-    public List<Participant> participantsList(@PathVariable UUID pollId) {
-        List<Participant> participants = new ArrayList<>();
+    public List<Participant> participantsList(@PathVariable final UUID pollId) {
+        final List<Participant> participants = new ArrayList<>();
         participantService.getAll(pollId).forEach(participants::add);
         return participants;
     }
 
     @Secured(Roles.POLL_CREATOR)
     @PostMapping("/")
-    public Participant addParticipant(@RequestBody ParticipantCmd participantCmd, @PathVariable UUID pollId) {
-        Participant participant = participantService.addParticipant(
-            participantCmd.getFullName(),
-            participantCmd.getEmail(),
-            pollId
+    public Participant addParticipant(@RequestBody final ParticipantCmd participantCmd,
+                                      @PathVariable final UUID pollId) {
+        final Participant participant = participantService.addParticipant(
+                participantCmd.getFullName(),
+                participantCmd.getEmail(),
+                pollId
         );
 
         return participant;
@@ -50,15 +51,15 @@ public class ParticipantsController {
 
     @Secured(Roles.POLL_CREATOR)
     @PutMapping("/{participantId}/")
-    public Participant updateParticipant(@PathVariable UUID pollId, @PathVariable UUID participantId,
-                                         @RequestBody ParticipantCmd participantCmd) {
+    public Participant updateParticipant(@PathVariable final UUID pollId, @PathVariable final UUID participantId,
+                                         @RequestBody final ParticipantCmd participantCmd) {
         return participantService.updateParticipant(pollId, participantId, participantCmd.getFullName(),
             participantCmd.getEmail());
     }
 
     @Secured(Roles.POLL_CREATOR)
     @DeleteMapping("/{participantId}/")
-    public void removeParticipant(@PathVariable UUID participantId, @PathVariable UUID pollId) {
+    public void removeParticipant(@PathVariable final UUID participantId, @PathVariable final UUID pollId) {
          participantService.removeParticipant(participantId, pollId);
     }
 

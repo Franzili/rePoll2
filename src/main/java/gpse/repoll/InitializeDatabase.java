@@ -30,26 +30,20 @@ public class InitializeDatabase implements InitializingBean {
     private final PollEntryService pollEntryService;
     private final UserService userService;
     private final TransactionTemplate transactionTemplate;
-    private final PollEntryRepository pollEntryRepository;
     private final PollRepository pollRepository;
-    private final PollSectionRepository pollSectionRepository;
     private final UserRepository userRepository;
-    private final ParticipantRepository participantRepository;
     private final ParticipantService participantService;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
-    public InitializeDatabase(PollService pollService,
-                              QuestionService questionService,
-                              PollEntryService pollEntryService,
-                              UserService userService,
-                              PlatformTransactionManager transactionManager,
-                              final PollEntryRepository pollEntryRepository,
+    public InitializeDatabase(final PollService pollService,
+                              final QuestionService questionService,
+                              final PollEntryService pollEntryService,
+                              final UserService userService,
+                              final PlatformTransactionManager transactionManager,
                               final PollSectionService pollSectionService,
                               final PollRepository pollRepository,
-                              final PollSectionRepository pollSectionRepository,
                               final UserRepository userRepository,
-                              final ParticipantRepository participantRepository,
                               final ParticipantService participantService) {
         this.pollService = pollService;
         this.pollSectionService = pollSectionService;
@@ -57,11 +51,8 @@ public class InitializeDatabase implements InitializingBean {
         this.pollEntryService = pollEntryService;
         this.userService = userService;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
-        this.pollEntryRepository = pollEntryRepository;
         this.pollRepository = pollRepository;
-        this.pollSectionRepository = pollSectionRepository;
         this.userRepository = userRepository;
-        this.participantRepository = participantRepository;
         this.participantService = participantService;
     }
 
