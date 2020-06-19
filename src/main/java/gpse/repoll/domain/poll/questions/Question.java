@@ -1,6 +1,7 @@
 package gpse.repoll.domain.poll.questions;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import gpse.repoll.domain.exceptions.NoOrderDefinedException;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -43,7 +44,10 @@ public abstract class Question {
         return questionOrder;
     }
 
-    public void setQuestionOrder(int questionOrder) {
+    public void setQuestionOrder(Integer questionOrder) {
+        if (questionOrder == null) {
+            throw new NoOrderDefinedException();
+        }
         this.questionOrder = questionOrder;
     }
 

@@ -78,9 +78,6 @@ public class QuestionStatistics {
         int min = question.getMin();
         int max = question.getMax();
         int stepCount = question.getStepCount();
-
-        // ToDo:  if (!(max % stepCount == 0)), the maximum is not included in the statistics :(
-
         List<Choice> choices = new ArrayList<>();
         for (int i = min; i <= max; i += stepCount) {
             choices.add(new Choice(String.valueOf(i)));
@@ -211,7 +208,7 @@ public class QuestionStatistics {
         }
         int medianIndex;
         if (sizeVal % 2 == 0) {
-            medianIndex = (sizeVal / 2) - 1;
+            medianIndex = sizeVal / 2 - 1;
             Integer low = values.get(medianIndex);
             Integer high = values.get(medianIndex + 1);
             this.median = (double) ((low + high) / 2);
@@ -240,13 +237,13 @@ public class QuestionStatistics {
         double thirdQuartile;
         int firstHalfSize = firstHalf.size();
         if (firstHalfSize % 2 == 0) {
-            firstQuartile = firstHalf.get((firstHalfSize / 2) - 1);
+            firstQuartile = firstHalf.get(firstHalfSize / 2 - 1);
         } else {
             firstQuartile = firstHalf.get(firstHalfSize / 2);
         }
         int secondHalfSize = secondHalf.size();
         if (secondHalfSize % 2 == 0) {
-            thirdQuartile = secondHalf.get((secondHalfSize / 2) - 1);
+            thirdQuartile = secondHalf.get(secondHalfSize / 2 - 1);
         } else {
             thirdQuartile = secondHalf.get(secondHalfSize / 2);
         }

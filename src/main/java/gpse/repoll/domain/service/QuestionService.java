@@ -20,7 +20,7 @@ public interface QuestionService {
      * @return The newly created TextQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
-    TextQuestion addTextQuestion(UUID pollId, String questionTitle, int questionOrder, int charLimit);
+    TextQuestion addTextQuestion(UUID pollId, String questionTitle, Integer questionOrder, int charLimit);
 
     /**
      * Add a new ScaleQuestion to a Poll.
@@ -39,12 +39,12 @@ public interface QuestionService {
     ScaleQuestion addScaleQuestion(
             UUID pollId,
             String questionTitle,
-            int questionOrder,
+            Integer questionOrder,
             String scaleNameLeft,
             String scaleNameRight,
-            int stepCount,
-            int min,
-            int max);
+            Integer stepCount,
+            Integer min,
+            Integer max);
 
     /**
      * Add a new SingleChoiceQuestion to a Poll.
@@ -59,7 +59,7 @@ public interface QuestionService {
     SingleChoiceQuestion addSingleChoiceQuestion(
             UUID pollId,
             String questionTitle,
-            int questionOrder,
+            Integer questionOrder,
             List<Choice> choices,
             String displayVariant);
 
@@ -75,7 +75,7 @@ public interface QuestionService {
     MultiChoiceQuestion addMultiChoiceQuestion(
             UUID pollId,
             String questionTitle,
-            int questionOrder,
+            Integer questionOrder,
             List<Choice> choices);
 
     /**
@@ -109,7 +109,7 @@ public interface QuestionService {
     TextQuestion updateTextQuestion(
             UUID pollId,
             Long questionId,
-            int questionOrder,
+            Integer questionOrder,
             String questionTitle,
             int charLimit);
 
@@ -122,18 +122,23 @@ public interface QuestionService {
      * @param scaleNameLeft The name of the left part of the scale
      * @param scaleNameRight The name of the right part of the scale
      * @param stepCount The number of steps the scale has
+     * @param min The minimum of the scale
+     * @param max The maximum of the scale
      * @return The changed ScaleQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     ScaleQuestion updateScaleQuestion(
             UUID pollId,
             Long questionId,
-            int questionOrder,
+            Integer questionOrder,
             String questionTitle,
             String scaleNameLeft,
             String scaleNameRight,
-            int stepCount);
+            Integer stepCount,
+            Integer min,
+            Integer max);
 
     /**
      * Update a SingleChoiceQuestion.
@@ -149,7 +154,7 @@ public interface QuestionService {
     SingleChoiceQuestion updateSingleChoiceQuestion(
             UUID pollId,
             Long questionId,
-            int questionOrder,
+            Integer questionOrder,
             String questionTitle,
             List<Choice> choices);
     /**
@@ -166,7 +171,7 @@ public interface QuestionService {
     MultiChoiceQuestion updateMultiChoiceQuestion(
             UUID pollId,
             Long questionId,
-            int questionOrder,
+            Integer questionOrder,
             String questionTitle,
             List<Choice> choices);
 
