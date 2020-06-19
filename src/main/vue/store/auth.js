@@ -19,7 +19,28 @@ const auth = {
     },
 
     getters: {
-        authenticated: state => state.authenticated
+        authenticated: state => state.authenticated,
+
+        hasPrivileges(state) {
+            return required => {
+                switch(required) {
+                    case undefined:
+                        return true;
+                    case "ROLE_ADMIN":
+                        return this.hasAdminPrivileges(state);
+                    case "ROLE_POLL_CREATOR":
+                        return this.hasCreatorPrivileges(state);
+                    case "ROLE_POLL_EDITOR":
+                        return this.hasEditorPrivileges(state);
+                    default:
+                        console.warn(`[RePoll] Unknown role ${required}`);
+                        return false;
+                }
+            }
+        },
+        hasEditorPrivileges:  state => state.role in ["ROLE_ADMIN", "ROLE_POLL_CREATOR", "ROLE_POLL_EDITOR"],
+        hasCreatorPrivileges: state => state.role in ["ROLE_ADMIN", "ROLE_POLL_CREATOR"],
+        hasAdminPrivileges:   state => state.role in ["ROLE_ADMIN"]
     },
 
     actions: {
