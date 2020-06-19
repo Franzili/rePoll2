@@ -15,7 +15,7 @@ import PollStats from "./components/poll-tabs/stats/PollStats";
 import ConfigurePoll from "./components/poll-tabs/configure/ConfigurePoll";
 
 import Forbidden from "./pages/error/Forbidden";
-//import NotFound from "./pages/error/NotFound";
+import NotFound from "./pages/error/NotFound";
 
 import store from "./store/store";
 
@@ -104,6 +104,20 @@ let router = new VueRouter({
         {
             path: '/test/',
             component: TestCharts
+        },
+        {
+            name: 'not-found',
+            path: '/error/not-found',
+            component: NotFound
+        },
+        {
+            name: 'forbidden',
+            path: '/error/forbidden',
+            component: Forbidden
+        },
+        {
+            path: '*',
+            redirect: { name: 'not-found' }
         }
     ]
 });
@@ -134,8 +148,7 @@ router.beforeEach((to, from , next) => {
     if (store.getters['auth/hasPrivileges'](required)) {
         next();
     } else {
-        // TODO: redirect to 403 page
-        next("/polls/");
+        next("/error/forbidden/");
     }
 });
 
