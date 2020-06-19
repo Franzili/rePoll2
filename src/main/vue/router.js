@@ -25,29 +25,27 @@ let router = new VueRouter({
             path: '/account/',
             component: Account,
             meta: {
-                requiresAuth: true
+                requiresPrivileges: "ROLE_POLL_EDITOR"
             }
         },
         {
             path: '/polls/',
+            name: 'polls',
             component: PollTable,
             meta: {
-                requiresAuth: true
+                requiresPrivileges: "ROLE_POLL_EDITOR"
             }
         },
         {
             path: '/poll/:id/answer',
             component: Answer,
             name: 'answer',
-            meta: {
-                requiresAuth: true
-            }
         },
         {
             path: '/poll/:pollId/',
             component: PollTabbed,
             meta: {
-                requiresAuth: true
+                requiresPrivileges: "ROLE_POLL_EDITOR"
             },
             children: [
                 {
@@ -55,7 +53,7 @@ let router = new VueRouter({
                     name: 'poll-tabbed',
                     redirect: 'config',
                     meta: {
-                        requiresAuth: true
+                        requiresPrivileges: "ROLE_POLL_EDITOR"
                     }
                 },
                 {
@@ -63,7 +61,7 @@ let router = new VueRouter({
                     name: 'edit-poll',
                     component: EditPoll,
                     meta: {
-                        requiresAuth: true
+                        requiresPrivileges: "ROLE_POLL_EDITOR"
                     }
                 },
                 {
@@ -71,7 +69,7 @@ let router = new VueRouter({
                     name: 'configure-poll',
                     component: ConfigurePoll,
                     meta: {
-                        requiresAuth: true
+                        requiresPrivileges: "ROLE_POLL_EDITOR"
                     }
                 },
                 {
@@ -79,7 +77,7 @@ let router = new VueRouter({
                     name: 'poll-stats',
                     component: PollStats,
                     meta: {
-                        requiresAuth: true
+                        requiresPrivileges: "ROLE_POLL_EDITOR"
                     }
                 }
             ]
@@ -89,16 +87,13 @@ let router = new VueRouter({
             component: Admin,
             name: 'admin',
             meta: {
-                requiresAuth: true
+                requiresPrivileges: "ROLE_ADMIN"
             }
         },
         {
             path: '/poll-response/',
             component: PollResponse,
             name: 'response',
-            meta: {
-                requiresAuth: true
-            }
         },
         //for Charts testing
         {
@@ -108,26 +103,41 @@ let router = new VueRouter({
     ]
 });
 
+router.beforeEach((to, from, next) => {
+    console.debug("[RePoll] Requested route: " + to.path);
+    next();
+})
 
-// Route Guard. Run before each routing.
-router.beforeEach((to, from , next) => {
-    // if we are not authenticated, redirect to login page.
-
-    // if auth is needed
-    if (to.matched.some(route => route.meta.requiresAuth)) {
-        // if auth is correct proceed to destination
-        if (store.state.auth.authenticated) {
-            next()
-        } else {
-            next("/");
-        }
-    // if auth is not needed but acquired go to polls if '/' is requested
-    } else if (store.state.auth.authenticated && to.path === "/") {
-        next("/polls/");
-    // base case if nothing is needed and acquired
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresPrivileges && !store.state.auth.authenticated) {
+        next('/');
     } else {
-        next()
+        next();
+    }
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.path === '/' && store.state.auth.authenticated) {
+        next('/polls');
+    } else {
+        next();
+    }
+})
+
+router.beforeEach((to, from , next) => {
+    let required = to.meta.requiresPrivileges;
+    if (store.getters['auth/hasPrivileges'](required)) {
+        next();
+    } else {
+        // TODO: redirect to 403 page
+        next("/polls/");
     }
 });
 
+router.beforeEach((to, from, next) => {
+    console.debug("[RePoll] Routing to " + to.path);
+    next();
+})
+
 export default router;
+
