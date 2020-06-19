@@ -28,7 +28,7 @@ import java.util.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
-@Secured(Roles.PARTICIPANT)
+//@Secured(Roles.PARTICIPANT)
 public class PollEntriesController {
 
     private final PollEntryService pollEntryService;

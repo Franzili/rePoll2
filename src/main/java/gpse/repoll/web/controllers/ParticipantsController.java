@@ -30,9 +30,9 @@ public class ParticipantsController {
 
     @Secured(Roles.POLL_CREATOR)
     @GetMapping("/")
-    public List<Participant> participantsList() {
+    public List<Participant> participantsList(@PathVariable UUID pollId) {
         List<Participant> participants = new ArrayList<>();
-        participantService.getAll().forEach(participants::add);
+        participantService.getAll(pollId).forEach(participants::add);
         return participants;
     }
 
@@ -50,8 +50,9 @@ public class ParticipantsController {
 
     @Secured(Roles.POLL_CREATOR)
     @PutMapping("/{participantId}/")
-    public Participant updateParticipant(@PathVariable UUID participantId, @RequestBody ParticipantCmd participantCmd) {
-        return participantService.updateParticipant(participantId, participantCmd.getFullName(),
+    public Participant updateParticipant(@PathVariable UUID pollId, @PathVariable UUID participantId,
+                                         @RequestBody ParticipantCmd participantCmd) {
+        return participantService.updateParticipant(pollId, participantId, participantCmd.getFullName(),
             participantCmd.getEmail());
     }
 

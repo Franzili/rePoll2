@@ -191,6 +191,13 @@ public class Poll extends Auditable<User> {
         }
     }
 
+    public void remove(Participant participant) {
+        boolean res = participants.remove(participant);
+        if (!res) {
+            throw new NotFoundException("Participant does not belong to this poll.");
+        }
+    }
+
     public boolean contains(Question question) {
         return questions.contains(question);
     }
