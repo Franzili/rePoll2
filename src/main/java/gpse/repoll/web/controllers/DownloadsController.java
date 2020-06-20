@@ -1,11 +1,9 @@
 package gpse.repoll.web.controllers;
 
 import org.springframework.web.bind.annotation.*;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+
+import java.io.*;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 
 /**
  * REST Controller managing /download/* entry points.
@@ -14,8 +12,7 @@ import java.io.File;
 @RestController
 @RequestMapping("/api/v1/download")
 public class DownloadsController {
-
-    //String folderPath="C:\\Users\\Michi\\Desktop\\Projekt\\gp-se-ss-2020-team4-1\\src\\main\\vue\\assets\\";
+    
     String folderPath="/src/main/vue/assets/";
 
     @RequestMapping("/")
@@ -35,8 +32,16 @@ public class DownloadsController {
             e.printStackTrace();
         }
 
-        //TODO write file
-
+        //write to file
+        try {
+            FileWriter myWriter = new FileWriter("./src/main/resources/testfile.txt");
+            myWriter.write("Here will be all your data you ever wanted");
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
 
         //download file
         response.setContentType("application/png");
