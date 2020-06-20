@@ -35,7 +35,7 @@ public class Poll extends Auditable<User> {
     private Anonymity anonymity;
 
     @OneToOne
-    private Design design;
+    private Design design;// = new Design(); //TODO
 
     @Column
     @Lob
@@ -88,9 +88,12 @@ public class Poll extends Auditable<User> {
         return design;
     }
 
+
     public void setDesign(Design design) {
         this.design = design;
     }
+
+
 
     public UUID getId() {
         return id;

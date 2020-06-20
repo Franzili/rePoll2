@@ -1,14 +1,21 @@
 package gpse.repoll.domain.poll;
 
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
-public class Design extends Poll {
+public class Design {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private Long id;
+
+    @Column
     private String font;
 
     public Design() {
+        this.font = "hallo";
     }
 
     public String getFont() {
