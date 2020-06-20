@@ -37,6 +37,8 @@ public class InitializeDatabase implements InitializingBean {
     private final PollRepository pollRepository;
     private final PollSectionRepository pollSectionRepository;
     private final UserRepository userRepository;
+    private final DesignService designService;
+    private final DesignRepository designRepository;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
@@ -49,7 +51,7 @@ public class InitializeDatabase implements InitializingBean {
                               final PollSectionService pollSectionService,
                               final PollRepository pollRepository,
                               final PollSectionRepository pollSectionRepository,
-                              final UserRepository userRepository) {
+                              final UserRepository userRepository, DesignService designService, DesignRepository designRepository) {
         this.pollService = pollService;
         this.pollSectionService = pollSectionService;
         this.questionService = questionService;
@@ -60,6 +62,8 @@ public class InitializeDatabase implements InitializingBean {
         this.pollRepository = pollRepository;
         this.pollSectionRepository = pollSectionRepository;
         this.userRepository = userRepository;
+        this.designService = designService;
+        this.designRepository = designRepository;
     }
 
     /**

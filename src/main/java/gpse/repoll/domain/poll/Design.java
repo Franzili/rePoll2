@@ -1,5 +1,6 @@
 package gpse.repoll.domain.poll;
 
+
 import javax.persistence.Entity;
 
 @Entity
