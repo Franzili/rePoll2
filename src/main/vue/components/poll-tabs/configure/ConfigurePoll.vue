@@ -8,6 +8,10 @@
         </p>
 
         <p>
+            <Iteration></Iteration>
+        </p>
+
+        <p>
             <ManageParticipants></ManageParticipants>
         </p>
 
@@ -22,10 +26,11 @@
     import ManageParticipants from "./ManageParticipants";
     import DeletePoll from "./DeletePoll";
     import Anonymity from "./Anonymity";
+    import Iteration from "./Iteration";
 
     export default {
         name: "ConfigurePoll",
-        components: {Anonymity, SelectStatus, ManageParticipants, DeletePoll }
+        components: {Anonymity, SelectStatus, ManageParticipants, DeletePoll, Iteration }
     }
 </script>
 
