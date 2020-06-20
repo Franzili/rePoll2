@@ -14,57 +14,77 @@ const auth = {
          */
         authenticated: null,
         token: null,
-        username: null
+        username: null,
+        role: null
     },
 
     getters: {
-        authenticated: state => state.authenticated
+        authenticated: state => state.authenticated,
+
+        hasPrivileges(state, getters) {
+            return function(required) {
+                switch(required) {
+                    case undefined:
+                        return true;
+                    case "ROLE_ADMIN":
+                        return getters.hasAdminPrivileges;
+                    case "ROLE_POLL_CREATOR":
+                        return getters.hasCreatorPrivileges;
+                    case "ROLE_POLL_EDITOR":
+                        return getters.hasEditorPrivileges;
+                    default:
+                        console.warn(`[RePoll] Unknown role ${required}`);
+                        return false;
+                }
+            }
+        },
+        hasEditorPrivileges:  state => ["ROLE_ADMIN", "ROLE_POLL_CREATOR", "ROLE_POLL_EDITOR"]
+                                        .indexOf(state.role) !== -1,
+        hasCreatorPrivileges: state => ["ROLE_ADMIN", "ROLE_POLL_CREATOR"]
+                                        .indexOf(state.role) !== -1,
+        hasAdminPrivileges:   state => ["ROLE_ADMIN"]
+                                        .indexOf(state.role) !== -1,
     },
 
     actions: {
         /**
          * Try to authenticate using a username and a password.
-         * This will set the token and the 'authenticated' state.
+         * This will set the token, the user's current role and the 'authenticated' state.
          */
-        requestToken({commit}, credentials) {
-            commit('setUsername',credentials.username)
-            return new Promise((resolve, reject) => {
-                api.auth.login(credentials.username, credentials.password)
-                    .then(function (res) {
-                        let token = res.headers.authorization
-                        commit('authenticate', token)
-                        resolve()
-                    })
-                    .catch(function () {
-                        console.log("Authentication failed. Clearing tokens.")
-                        commit('authenticate', false)
-                        reject()
-                    });
-            })
+        async requestToken({commit}, credentials) {
+            console.log("[RePoll] Requesting auth token.")
+            commit('setUsername', credentials.username)
+            try {
+                let result = await api.auth.login(credentials.username, credentials.password);
+                let token = result.headers.authorization;
+                commit('authenticate', token);
+            } catch(err) {
+                console.warn("[RePoll] Authentication failed. Clearing tokens.")
+                commit('authenticate', false);
+                return;
+            }
         },
 
         logout({commit}) {
             return new Promise((resolve) => {
                 commit('logOut')
-                localStorage.removeItem('authToken')
-                localStorage.removeItem('username')
                 resolve()
             })
-
         },
 
 
         /**
          * Load a token from Browser localStorage.
+         * Also gets the user's current role from the server.
          */
-
-        loadFromStorage({commit}) {
+        async loadFromStorage({commit}) {
             let token = localStorage.getItem('authToken');
             commit('authenticate', token);
 
             let username = localStorage.getItem('username');
-            commit('setUsername', username)
-        }
+            commit('setUsername', username);
+        },
+
     },
 
     mutations: {
@@ -78,32 +98,47 @@ const auth = {
 
             if (token === null) {
                 state.authenticated = null; //not yet tried to login
-                console.log('null')
             } else if (!token) {
                 state.authenticated = false; //failed login
-                console.log('false')
             } else {
                 state.authenticated = true; //successfull login
             }
 
-            localStorage.setItem('authToken', token);
+            if (token) {
+                localStorage.setItem('authToken', token);
 
+                // parse JWT token to get role.
+                try {
+                    let tokenStr = atob(token.split('.')[1]);
+                    let tokenObj = JSON.parse(tokenStr);
+                    state.role = tokenObj.rol[0];
+                } catch {
+                    console.warn("[RePoll] Could not parse token from Server!");
+                }
 
+            } else {
+                localStorage.removeItem('authToken');
+            }
         },
+
         /**
          * sets the username
          */
         setUsername(state, username) {
             state.username = username;
-
-
-            localStorage.setItem('username', username)
+            if (username) {
+                localStorage.setItem('username', username)
+            } else {
+                localStorage.removeItem('username');
+            }
         },
-        logOut(state) {
-            state.username = '';
-            state.token = '';
-        }
 
+        logOut(state) {
+            state.username = null;
+            state.token = null;
+            localStorage.removeItem('username');
+            localStorage.removeItem('authToken')
+        }
     },
 
     namespaced: true
