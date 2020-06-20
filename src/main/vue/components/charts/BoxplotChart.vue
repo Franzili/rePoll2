@@ -64,6 +64,9 @@
                         display: false,
                         text: ''
                     },
+                    legend: {
+                        onClick: (e) => e.stopPropagation()
+                    },
                     tooltips: {enabled: false},
                     hover: {mode: null},
                 },
