@@ -4,12 +4,15 @@ import api from "../api";
 
 import SectionHeaderModel from "./poll-item-models/SectionHeaderModel";
 
+import participants from "./participants";
+
 /**
  * currentPoll holds the state of the Poll that is currently open, or otherwise in focus.
  * Can be used for PollTabbed pages (Config, Edit, Stats), and other pages that focus on
  * exactly one poll.
  */
 const currentPoll = {
+    modules: {participants: participants},
     state: {
         /**
          * The current poll object.

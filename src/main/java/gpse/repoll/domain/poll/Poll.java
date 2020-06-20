@@ -42,11 +42,17 @@ public class Poll extends Auditable<User> {
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
+    @OneToMany(orphanRemoval = true)
+    private final List<PollIteration> pollIterations = new ArrayList<>();
+
     @OneToMany
     private final List<PollSection> pollSections = new ArrayList<>();
 
     @OneToMany
-    private final List<Question> questions = new ArrayList<>(); // todo sorting
+    private final List<Question> questions = new ArrayList<>();
+
+    @OneToMany
+    private final List<Participant> participants = new ArrayList<>();
 
     protected Poll() {
 
@@ -92,6 +98,15 @@ public class Poll extends Auditable<User> {
         this.pollEntries.addAll(pollEntries);
     }
 
+    public List<PollIteration> getPollIterations() {
+        return Collections.unmodifiableList(pollIterations);
+    }
+
+    public void setPollIterations(List<PollIteration> pollIterations) {
+        this.pollIterations.clear();
+        this.pollIterations.addAll(pollIterations);
+    }
+
     public List<PollSection> getPollSections() {
         return Collections.unmodifiableList(pollSections);
     }
@@ -109,6 +124,19 @@ public class Poll extends Auditable<User> {
         this.questions.clear();
         this.questions.addAll(questions);
         sortQuestions();
+    }
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants.clear();
+        this.participants.addAll(participants);
+    }
+
+    public void addParticipant(Participant participant) {
+        this.participants.add(participant);
     }
 
     private void sortQuestions() {
@@ -175,6 +203,13 @@ public class Poll extends Auditable<User> {
         }
     }
 
+    public void remove(Participant participant) {
+        boolean res = participants.remove(participant);
+        if (!res) {
+            throw new NotFoundException("Participant does not belong to this poll.");
+        }
+    }
+
     public boolean contains(Question question) {
         return questions.contains(question);
     }
@@ -189,6 +224,14 @@ public class Poll extends Auditable<User> {
 
     public boolean contains(PollEntry pollEntry) {
         return pollEntries.contains(pollEntry);
+    }
+
+    public void add(PollIteration pollIteration) {
+        pollIterations.add(pollIteration);
+    }
+
+    public void remove(PollIteration pollIteration) {
+        pollIterations.remove(pollIteration);
     }
 
     private PollSection getSection(UUID sectionId) {
