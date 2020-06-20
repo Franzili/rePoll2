@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+// CPD-OFF
 /**
  * A question that can be answered with a @link{ChoiceAnswer}.
  */
@@ -63,3 +63,4 @@ public class MultiChoiceQuestion extends Question {
         this.bonusChoices.addAll(bonusChoices);
     }
 }
+// CPD-ON
