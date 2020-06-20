@@ -1,5 +1,6 @@
 <template>
     <b-container>
+
         <p>
             <ToolBar style="float: right"
                 v-bind:actives="[true,true,true,true,false,false,true]"></ToolBar>

@@ -1,6 +1,5 @@
 <template>
     <b-row>
-
         <b-button-toolbar v-if="actives !== undefined">
             <b-form-group>
                 <b-form-select
@@ -73,7 +72,7 @@
         </b-button-toolbar>
 
 
-        <b-button-toolbar v-if="actives !== undefined">
+        <b-button-toolbar style="margin-left: auto" v-if="actives !== undefined">
             <b-form-group>
                 <b-button-group>
                     <b-button
@@ -93,8 +92,6 @@
                 </b-button-group>
             </b-form-group>
         </b-button-toolbar>
-
-
     </b-row>
 </template>
 
@@ -102,7 +99,6 @@
     export default {
         name: "ToolBar",
         // actives: dataChange, bar, donut, boxplot, question, merge, delete
-        // TODO prop to parse frequency choice
         props: ['actives', 'choices', 'frequency', 'question'],
         data() {
             return {

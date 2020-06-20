@@ -6,24 +6,29 @@
         </p>
         -->
 
-        <b-row>
-            <ToolBar
-                v-on:chart="changeChart($event)"
-                v-on:edit="showModal(compareData.compSet)"
-                v-on:close="$emit('close', compareData.id)"
-                v-on:frequency="frequency = $event"
-                v-on:question="question = $event"
-                v-bind:question="question"
-                v-bind:frequency="frequency"
-                v-bind:choices="getChoices(compareData.compSet)"
-                v-bind:actives="actives" >
-            </ToolBar>
-        </b-row>
+        <ToolBar
+            v-on:chart="changeChart($event)"
+            v-on:edit="showModal(compareData.compSet)"
+            v-on:close="$emit('close', compareData.id)"
+            v-on:frequency="frequency = $event"
+            v-on:question="question = $event"
+            v-bind:question="question"
+            v-bind:frequency="frequency"
+            v-bind:choices="getChoices(compareData.compSet)"
+            v-bind:actives="actives">
+        </ToolBar>
+
 
         <b-row>
             <b-container v-bind:key="item.qId"
                          v-for="item in chartObjs">
-                <ChartsInlay v-bind:chartsObj="item.chartObj"></ChartsInlay>
+                <b-row>
+                    <span>{{item.chartObj.label}}</span>
+                </b-row>
+                <b-row>
+                    <ChartsInlay v-bind:chartsObj="item.chartObj"></ChartsInlay>
+
+                </b-row>
 
             </b-container>
         </b-row>
@@ -65,14 +70,14 @@
             this.fillChartObjs()
         },
         methods: {
-            showModal (list) {
+            showModal(list) {
                 let selectSet = []
                 list.forEach(entry => {
                     selectSet.push(entry.question.id)
                 })
                 this.$refs.mymodal.show(selectSet)
             },
-            fillCompares (newList) {
+            fillCompares(newList) {
                 let statSet = []
                 newList.forEach(entry => {
                     statSet.push(this.statistics.find(stat => stat.question.id === entry))
@@ -87,7 +92,7 @@
                 })
 
             },
-            getChoices () {
+            getChoices() {
                 let choices = []
                 this.compareData.compSet.forEach(set => {
                     choices.push({text: set.question.title, value: set.question.id})
@@ -109,6 +114,7 @@
                 }
             },
             question: function (id) {
+                // TODO check if frequency or adjust selected
                 let obj = this.chartObjs.find(obj => obj.qId === id)
                 switch (obj.chartObj.qType) {
                     case 'TextQuestion':
