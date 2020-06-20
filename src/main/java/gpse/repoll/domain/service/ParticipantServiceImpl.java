@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class ParticipantServiceImpl implements ParticipantService{
+public class ParticipantServiceImpl implements ParticipantService {
     private final ParticipantRepository participantRepository;
     private final PollRepository pollRepository;
 
@@ -59,7 +59,7 @@ public class ParticipantServiceImpl implements ParticipantService{
      * {@inheritDoc}
      */
     @Override
-    public Participant updateParticipant(UUID pollId,UUID id, String fullName, String email) {
+    public Participant updateParticipant(UUID pollId, UUID id, String fullName, String email) {
         Participant participant = participantRepository.findById(id).orElseThrow(NotFoundException::new);
         if (fullName != null) {
             participant.setFullName(fullName);

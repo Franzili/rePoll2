@@ -63,7 +63,9 @@ public class PollEntry {
         this.user = user;
     }
 
-    public Participant getParticipant() {return participant;}
+    public Participant getParticipant() {
+        return participant;
+    }
 
     public void setParticipant(Participant participant) {
         this.participant = participant;

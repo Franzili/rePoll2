@@ -83,7 +83,9 @@ public class PollEntryServiceImpl implements PollEntryService {
      * {@inheritDoc}
      */
     @Override
-    public PollEntry addPollEntry(final UUID pollId, final Map<Long, Answer> associations, final Participant participant) {
+    public PollEntry addPollEntry(final UUID pollId,
+                                  final Map<Long, Answer> associations,
+                                  final Participant participant) {
         Poll poll = pollService.getPoll(pollId);
         PollEntry pollEntry = new PollEntry();
         if (poll.getAnonymity().equals(Anonymity.NON_ANONYMOUS)) {

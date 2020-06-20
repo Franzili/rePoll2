@@ -1,14 +1,12 @@
 package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.Participant;
-import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.repositories.ChoiceRepository;
-import gpse.repoll.domain.repositories.ParticipantRepository;
 import gpse.repoll.domain.service.ParticipantService;
 import gpse.repoll.domain.service.PollEntryService;
 import gpse.repoll.security.Roles;
@@ -17,7 +15,6 @@ import gpse.repoll.web.command.answers.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;

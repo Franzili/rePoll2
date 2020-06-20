@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * controller managing /api/v1/polls/{pollID}/participants/*
+ * controller managing /api/v1/polls/{pollID}/participants/*.
  */
 
 @CrossOrigin

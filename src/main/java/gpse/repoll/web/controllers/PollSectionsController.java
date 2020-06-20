@@ -6,7 +6,6 @@ import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.PollSectionCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
