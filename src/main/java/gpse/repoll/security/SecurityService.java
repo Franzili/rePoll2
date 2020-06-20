@@ -47,14 +47,6 @@ public class SecurityService {
         return user.getUsername().equals(username);
     }
 
-    public boolean isOwnEntry(String username, Long entryID) {
-        User user = userService.getUser(username);
-        PollEntry pollEntry = pollEntryRepository.findById(entryID).orElseThrow(() -> {
-            throw new NotFoundException("The entry does not exist!");
-        });
-        return pollEntry.getUser().equals(user);
-    }
-
     public boolean isAdmin(String username) {
         User user = userService.getUser(username);
         return user.getHighestRole().equals(Roles.ADMIN);

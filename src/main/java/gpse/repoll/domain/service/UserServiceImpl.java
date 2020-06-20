@@ -121,12 +121,6 @@ public class UserServiceImpl implements UserService {
             if (listEle.getLastEditor() != null && listEle.getLastEditor().getId() == id) {
                 listEle.setLastEditor(null);
             }
-            Iterable<PollEntry> listEntrys = pollEntryService.getAll(listEle.getId());
-            for (PollEntry listeAllEntrys: listEntrys) {
-                if (listeAllEntrys.getUser() != null && listeAllEntrys.getUser().getId() == id) {
-                    listeAllEntrys.setUser(null);
-                }
-            }
 
         }
         userRepository.delete(user);
