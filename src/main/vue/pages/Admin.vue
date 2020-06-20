@@ -152,14 +152,14 @@
                 </b-modal>
             </b-card>
         </b-col>
+        <MailServerConfigs></MailServerConfigs>
     </b-container>
-
-
 
 </template>
 
 <script>
     import {mapActions, mapState} from "vuex";
+    import MailServerConfigs from "../components/MailServerConfigs";
     export default {
         name: "Admin",
         data() {
@@ -271,7 +271,7 @@
             }
         },
         components:{
-
+            MailServerConfigs
         }
     }
 </script>
