@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 public class MultiChoiceQuestion extends Question {
 
+    // Todo test orphan removal
     @OneToMany(orphanRemoval = true)
     @JoinColumn
     private final List<Choice> choices = new ArrayList<>();

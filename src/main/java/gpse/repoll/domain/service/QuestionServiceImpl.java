@@ -50,11 +50,8 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public TextQuestion addTextQuestion(final UUID pollId,
                                         final String questionTitle,
-                                        final int questionOrder,
+                                        final Integer questionOrder,
                                         final int charLimit) {
-        /*if (lastEditor == null) {
-            throw new UnauthorizedException();
-        }*/
         Poll poll = pollService.getPoll(pollId);
         TextQuestion question = new TextQuestion();
         question.setTitle(questionTitle);
@@ -73,21 +70,16 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public ScaleQuestion addScaleQuestion(final UUID pollId,
                                           final String questionTitle,
-                                          final int questionOrder,
+                                          final Integer questionOrder,
                                           final String scaleNameLeft,
                                           final String scaleNameRight,
-                                          final int stepCount,
-                                          final int min,
-                                          final int max) {
+                                          final Integer stepCount,
+                                          final Integer min,
+                                          final Integer max) {
         Poll poll = pollService.getPoll(pollId);
-        ScaleQuestion question = new ScaleQuestion();
+        ScaleQuestion question = new ScaleQuestion(scaleNameLeft, scaleNameRight, stepCount, min, max);
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
-        question.setScaleNameLeft(scaleNameLeft);
-        question.setScaleNameRight(scaleNameRight);
-        question.setStepCount(stepCount);
-        question.setMin(min);
-        question.setMax(max);
         scaleQuestionRepository.save(question);
         poll.add(question);
         pollService.save(poll);
@@ -100,12 +92,9 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public SingleChoiceQuestion addSingleChoiceQuestion(final UUID pollId,
                                                         final String questionTitle,
-                                                        final int questionOrder,
+                                                        final Integer questionOrder,
                                                         final List<Choice> choices,
                                                         final String displayVariant) {
-        /*if (lastEditor == null) {
-            throw new UnauthorizedException();
-        }*/
         Poll poll = pollService.getPoll(pollId);
         SingleChoiceQuestion question = new SingleChoiceQuestion();
         for (Choice choice : choices) {
@@ -127,11 +116,8 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public MultiChoiceQuestion addMultiChoiceQuestion(final UUID pollId,
                                                       final String questionTitle,
-                                                      final int questionOrder,
+                                                      final Integer questionOrder,
                                                       final List<Choice> choices) {
-        /*if (lastEditor == null) {
-            throw new UnauthorizedException();
-        }*/
         Poll poll = pollService.getPoll(pollId);
         for (Choice choice : choices) {
             choiceRepository.save(choice);
@@ -186,20 +172,15 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public TextQuestion updateTextQuestion(final UUID pollId,
                                            final Long questionId,
-                                           final int questionOrder,
+                                           final Integer questionOrder,
                                            final String title,
                                            final int charLimit) {
-        /*if (lastEditor == null) {
-            throw new UnauthorizedException();
-        }*/
         Poll poll = pollService.getPoll(pollId);
         TextQuestion question = textQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
         });
         testQuestion(poll, question);
-        if (questionOrder > 0) {
-            question.setQuestionOrder(questionOrder);
-        }
+        question.setQuestionOrder(questionOrder);
         if (title != null) {
             question.setTitle(title);
         }
@@ -213,22 +194,23 @@ public class QuestionServiceImpl implements QuestionService {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @Override
     public ScaleQuestion updateScaleQuestion(final UUID pollId,
                                              final Long questionId,
-                                             final int questionOrder,
+                                             final Integer questionOrder,
                                              final String title,
                                              final String scaleNameLeft,
                                              final String scaleNameRight,
-                                             final int stepCount) {
+                                             Integer stepCount,
+                                             Integer min,
+                                             Integer max) {
         Poll poll = pollService.getPoll(pollId);
         ScaleQuestion question = scaleQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
         });
         testQuestion(poll, question);
-        if (questionOrder > 0) {
-            question.setQuestionOrder(questionOrder);
-        }
+        question.setQuestionOrder(questionOrder);
         if (title != null) {
             question.setTitle(title);
         }
@@ -238,8 +220,17 @@ public class QuestionServiceImpl implements QuestionService {
         if (scaleNameRight != null) {
             question.setScaleNameRight(scaleNameRight);
         }
-        if (stepCount > 0) {
-            question.setStepCount(stepCount);
+        if (stepCount != null || min != null || max != null) {
+            if (stepCount == null) {
+                stepCount = question.getStepCount();
+            }
+            if (min == null) {
+                min = question.getMin();
+            }
+            if (max == null) {
+                max = question.getMax();
+            }
+            question.setScale(stepCount, min, max);
         }
         scaleQuestionRepository.save(question);
         return question;
@@ -251,20 +242,15 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public SingleChoiceQuestion updateSingleChoiceQuestion(final UUID pollId,
                                                            final Long questionId,
-                                                           final int questionOrder,
+                                                           final Integer questionOrder,
                                                            final String title,
                                                            final List<Choice> choices) {
-        /*if (lastEditor == null) {
-            throw new UnauthorizedException();
-        }*/
         Poll poll = pollService.getPoll(pollId);
         SingleChoiceQuestion question = singleChoiceQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
         });
         testQuestion(poll, question);
-        if (questionOrder > 0) {
-            question.setQuestionOrder(questionOrder);
-        }
+        question.setQuestionOrder(questionOrder);
         if (title != null) {
             question.setTitle(title);
         }
@@ -284,25 +270,19 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public MultiChoiceQuestion updateMultiChoiceQuestion(final UUID pollId,
                                                          final Long questionId,
-                                                         final int questionOrder,
+                                                         final Integer questionOrder,
                                                          final String title,
                                                          final List<Choice> choices) {
-        /*if (lastEditor == null) {
-            throw new UnauthorizedException();
-        }*/
         Poll poll = pollService.getPoll(pollId);
         MultiChoiceQuestion question = multiChoiceQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
         });
         testQuestion(poll, question);
-        if (questionOrder > 0) {
-            question.setQuestionOrder(questionOrder);
-        }
+        question.setQuestionOrder(questionOrder);
         if (title != null) {
             question.setTitle(title);
         }
-        if (choices != null) {
-            // TODO @Luca: is this right?
+        if (!choices.isEmpty()) {
             for (Choice choice : choices) {
                 choiceRepository.save(choice);
             }
