@@ -6,16 +6,16 @@ import javax.persistence.Entity;
 @Entity
 public class Design extends Poll {
 
-    private String schriftart;
+    private String font;
 
     public Design() {
     }
 
-    public String getSchriftart() {
-        return schriftart;
+    public String getFont() {
+        return font;
     }
 
-    public void setSchriftart(String schriftart) {
-        this.schriftart = schriftart;
+    public void setFont(String font) {
+        this.font = font;
     }
 }
