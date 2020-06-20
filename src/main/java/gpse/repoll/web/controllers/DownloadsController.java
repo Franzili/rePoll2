@@ -1,14 +1,11 @@
 package gpse.repoll.web.controllers;
 
-//import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-//import java.io.InputStream;
-
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 
 /**
  * REST Controller managing /download/* entry points.
@@ -18,37 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/api/v1/download")
 public class DownloadsController {
 
-    /*@GetMapping("/")
-    public void download() {
-        @PathVariable("file_name") String fileName,
-        HttpServletResponse response) {
-            try {
-                // get your file as InputStream
-                InputStream is = ...;
-                // copy it to response's OutputStream
-                org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
-                response.flushBuffer();
-            } catch (IOException ex) {
-                log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
-                throw new RuntimeException("IOError writing file to output stream");
-            }
-    }*/
-
-    //for testing download logo
-    /*@GetMapping(
-        value = "/",
-        produces = MediaType.IMAGE_PNG_VALUE
-    )
-    public @ResponseBody byte[] getData() throws IOException {
-        System.out.println("test");
-        InputStream in = this.getClass()
-            .getResourceAsStream("/logo.png");  //path starts at src/main/resources !!! TODO get out of this directory
-        System.out.println(in);
-        //return "test";
-        return IOUtils.toByteArray(in);
-    }*/
-
-    //if you want to test it change path and filename to any path to png
     //String folderPath="C:\\Users\\Michi\\Desktop\\Projekt\\gp-se-ss-2020-team4-1\\src\\main\\vue\\assets\\";
     String folderPath="/src/main/vue/assets/";
 
@@ -56,6 +22,23 @@ public class DownloadsController {
     @ResponseBody
     public void show(HttpServletResponse response) {
 
+        //create file
+        try {
+            File myObj = new File("./src/main/resources/testfile.txt");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        //TODO write file
+
+
+        //download file
         response.setContentType("application/png");
         response.setHeader("Content-Disposition", "attachment; filename=" +"logo.png");
         response.setHeader("Content-Transfer-Encoding", "binary");
@@ -72,10 +55,8 @@ public class DownloadsController {
         }
         catch(IOException e) {
             e.printStackTrace();
-
         }
     }
-
 }
 
 
