@@ -48,7 +48,8 @@ public class PollEntriesController {
         return pollEntryService.getAll(pollId);
     }
 
-    @PreAuthorize("@securityService.isActivated(#pollId)") //and @securityService.isParticipant(principal.username)")
+    // todo @securityService.isParticipant(principal.username)
+    @PreAuthorize("@securityService.hasStatusLaunched(#pollId)")
     @PostMapping("/{pollId}/entries/{participantID}")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd, @PathVariable UUID participantID) {
@@ -65,7 +66,8 @@ public class PollEntriesController {
         return  pollEntryService.getPollEntry(pollId, Long.valueOf(entryId));
     }
 
-    @PreAuthorize("@securityService.isActivated(#pollId) and @securityService.isOwnEntry(principal.username, #entryId)")
+    // todo @securityService.isOwnEntry(principal.username, #entryId)
+    @PreAuthorize("@securityService.hasStatusLaunched(#pollId)")
     @PutMapping("/{pollId}/entries/{entryId:\\d+}/")
     public PollEntry updatePollEntry(@PathVariable("pollId") final UUID pollId,
                                      @PathVariable("entryId") final String entryId,

@@ -1,7 +1,7 @@
 package gpse.repoll.web.command;
 
 import gpse.repoll.domain.poll.Anonymity;
-import gpse.repoll.domain.poll.PollStatus;
+import gpse.repoll.domain.poll.PollEditStatus;
 
 import java.util.List;
 
@@ -13,26 +13,8 @@ public class PollCmd {
 
     private String title;
     private PollStructureCmd structure;
-    private PollStatus status;
+    private PollEditStatus status;
     private Anonymity anonymity;
-    private PollEditorsCmd editors;
-    private List<ParticipantCmd> participants;
-
-    public PollEditorsCmd getEditors() {
-        return editors;
-    }
-
-    public void setEditors(PollEditorsCmd editors) {
-        this.editors = editors;
-    }
-
-    public List<ParticipantCmd> getParticipants() {
-        return participants;
-    }
-
-    public void setParticipants(List<ParticipantCmd> participants) {
-        this.participants = participants;
-    }
 
     public Anonymity getAnonymity() {
         return anonymity;
@@ -58,11 +40,11 @@ public class PollCmd {
         this.structure = structure;
     }
 
-    public PollStatus getStatus() {
+    public PollEditStatus getStatus() {
         return status;
     }
 
-    public void setStatus(PollStatus status) {
+    public void setStatus(PollEditStatus status) {
         this.status = status;
     }
 

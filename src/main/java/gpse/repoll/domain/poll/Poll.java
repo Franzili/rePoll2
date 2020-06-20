@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.exceptions.NotFoundException;
+import gpse.repoll.domain.exceptions.PollAlreadyLaunchedException;
 import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
@@ -28,7 +29,7 @@ public class Poll extends Auditable<User> {
     private UUID id;
 
     @Column
-    private PollStatus status;
+    private PollEditStatus status;
 
     @Column
     private Anonymity anonymity;
@@ -64,7 +65,7 @@ public class Poll extends Auditable<User> {
      */
     public Poll(String title) {
         this.title = title;
-        this.status = PollStatus.IN_PROCESS;
+        this.status = PollEditStatus.EDITING;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
     }
 
@@ -127,7 +128,7 @@ public class Poll extends Auditable<User> {
     }
 
     public List<Participant> getParticipants() {
-        return participants;
+        return Collections.unmodifiableList(participants);
     }
 
     public void setParticipants(List<Participant> participants) {
@@ -151,11 +152,14 @@ public class Poll extends Auditable<User> {
         return title;
     }
 
-    public PollStatus getStatus() {
+    public PollEditStatus getStatus() {
         return status;
     }
 
-    public void setStatus(PollStatus status) {
+    public void setStatus(PollEditStatus status) {
+        if (this.status.equals(PollEditStatus.LAUNCHED) && status.equals(PollEditStatus.EDITING)) {
+            throw new PollAlreadyLaunchedException();
+        }
         this.status = status;
     }
 
@@ -164,6 +168,9 @@ public class Poll extends Auditable<User> {
     }
 
     public void setAnonymity(Anonymity anonymity) {
+        if (status.equals(PollEditStatus.LAUNCHED)) {
+            throw new PollAlreadyLaunchedException();
+        }
         this.anonymity = anonymity;
     }
 

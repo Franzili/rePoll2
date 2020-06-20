@@ -16,6 +16,9 @@ public class PollIteration {
     private Long id;
 
     @Column
+    private PollIterationStatus status;
+
+    @Column
     private LocalDateTime start;
 
     @Column
@@ -23,6 +26,11 @@ public class PollIteration {
 
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
+
+    public PollIteration(LocalDateTime start, LocalDateTime end) {
+        this.start = start;
+        this.end = end;
+    }
 
 
     public Long getId() {
@@ -52,6 +60,14 @@ public class PollIteration {
     public void setPollEntries(List<PollEntry> pollEntries) {
         this.pollEntries.clear();
         this.pollEntries.addAll(pollEntries);
+    }
+
+    public PollIterationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PollIterationStatus status) {
+        this.status = status;
     }
 
     @Override

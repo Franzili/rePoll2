@@ -27,8 +27,6 @@ public class PollSectionsController {
         this.pollSectionService = pollSectionService;
     }
 
-    @PreAuthorize("(@securityService.isActivated(#pollId) and @securityService.isParticipant(principal.username))"
-            + "or @securityService.isEditor(principal.username)")
     @GetMapping("/{pollId}/sections/")
     public List<PollSection> listPollSections(@PathVariable("pollId") final UUID pollId) {
         return pollSectionService.getAllSections(pollId);
@@ -44,8 +42,6 @@ public class PollSectionsController {
                 pollSectionCmd.getDescription());
     }
 
-    @PreAuthorize("(@securityService.isActivated(#pollId) and @securityService.isParticipant(principal.username))"
-            + "or @securityService.isEditor(principal.username)")
     @GetMapping("/{pollId}/sections/{sectionId}/")
     public PollSection getPollSection(@PathVariable("pollId") final UUID pollId,
                                       @PathVariable("sectionId") final UUID sectionId) {

@@ -71,7 +71,7 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Poll updatePoll(final UUID id, final String title, final PollStatus status,
+    public Poll updatePoll(final UUID id, final String title, final PollEditStatus status,
                            final Anonymity anonymity,
                            final Map<UUID, List<Long>> structure) {
         Poll poll = getPoll(id);
@@ -81,7 +81,7 @@ public class PollServiceImpl implements PollService {
         if (status != null) {
             poll.setStatus(status);
         }
-        if (poll.getStatus().equals(PollStatus.IN_PROCESS) && anonymity != null) {
+        if (anonymity != null) {
             poll.setAnonymity(anonymity);
         }
         if (structure != null) {
