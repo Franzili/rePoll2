@@ -9,15 +9,15 @@
             {{cardList}}
         </p>
 
-        <div>
+        <b-row>
             <b-container v-bind:key="card.id" v-for="card in cardList">
-                <b-card>
+                <b-card border-variant="dark">
                     <CompareCards
                         v-on:close="deleteCard($event)"
                         v-bind:compareData="card"></CompareCards>
                 </b-card>
             </b-container>
-        </div>
+        </b-row>
 
         <b-button @click="showModal([])" > lalaa</b-button>
         <!-- TODO v-on with funtion-->

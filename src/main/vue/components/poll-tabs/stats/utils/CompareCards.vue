@@ -1,32 +1,38 @@
 <template>
     <b-container>
-        <!-- raw data -->
+        <!-- raw data
         <p>
             {{compareData}}
         </p>
+        -->
 
+        <b-row>
+            <ToolBar
+                v-on:chart="changeChart($event)"
+                v-on:edit="showModal(compareData.compSet)"
+                v-on:close="$emit('close', compareData.id)"
+                v-on:frequency="frequency = $event"
+                v-on:question="question = $event"
+                v-bind:question="question"
+                v-bind:frequency="frequency"
+                v-bind:choices="getChoices(compareData.compSet)"
+                v-bind:actives="actives" >
+            </ToolBar>
+        </b-row>
 
-        <ToolBar
-            v-on:chart="changeChart($event)"
-            v-on:edit="showModal(compareData.compSet)"
-            v-on:close="$emit('close', compareData.id)"
-            v-on:frequency="frequency = $event"
-            v-on:question="question = $event"
-            v-bind:frequency="frequency"
-            v-bind:choices="getChoices(compareData.compSet)"
-            v-bind:actives="actives" >
-        </ToolBar>
+        <b-row>
+            <b-container v-bind:key="item.qId"
+                         v-for="item in chartObjs">
+                <ChartsInlay v-bind:chartsObj="item.chartObj"></ChartsInlay>
+
+            </b-container>
+        </b-row>
 
         <CheckModal
             v-on:getSelected="fillCompares($event)"
             ref="mymodal">
         </CheckModal>
 
-        <b-container v-bind:key="item.qId"
-                     v-for="item in chartObjs">
-            <ChartsInlay v-bind:chartsObj="item.chartObj"></ChartsInlay>
-
-        </b-container>
     </b-container>
 </template>
 
@@ -89,7 +95,35 @@
                 return choices
             },
             changeChart(chart) {
-                console.log('ob das wohl klappt',chart, this.question)
+                let index = this.chartObjs.findIndex(objs => objs.qId === this.question)
+                this.chartObjs[index].chartObj.currentChart = chart
+            }
+        },
+        watch: {
+            frequency: function (freq) {
+                let index = this.chartObjs.findIndex(objs => objs.qId === this.question)
+                if (freq === 'abs') {
+                    this.chartObjs[index].chartObj.data = this.chartObjs[index].chartObj.absFrq
+                } else {
+                    this.chartObjs[index].chartObj.data = this.chartObjs[index].chartObj.relFrq
+                }
+            },
+            question: function (id) {
+                let obj = this.chartObjs.find(obj => obj.qId === id)
+                switch (obj.chartObj.qType) {
+                    case 'TextQuestion':
+                        this.actives = [false, false, false, false, true, null, true, true];
+                        break;
+                    case 'SingleChoiceQuestion':
+                        this.actives = [true, true, true, false, true, null, true, true];
+                        break;
+                    case 'MultiChoiceQuestion':
+                        this.actives = [true, true, true, false, true, null, true, true];
+                        break;
+                    case 'ScaleQuestion':
+                        this.actives = [true, true, true, true, true, null, true, true];
+                        break;
+                }
             }
         },
         components: {
