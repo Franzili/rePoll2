@@ -10,7 +10,6 @@ import gpse.repoll.web.command.ChoiceCmd;
 import gpse.repoll.web.command.questions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -24,14 +23,14 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
-public class AnswersController {
+public class QuestionsController {
 
     private static final String NO_CHOICES = "No choices given for the question!";
 
     private final QuestionService questionService;
 
     @Autowired
-    public AnswersController(QuestionService questionService) {
+    public QuestionsController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
@@ -64,8 +63,8 @@ public class AnswersController {
                 choices.add(new Choice(choiceCmd.getText()));
             }
             if (singleChoiceQuestionCmd.getDisplayVariant() == null
-                    || (!singleChoiceQuestionCmd.getDisplayVariant().equals("radio")
-                    && !singleChoiceQuestionCmd.getDisplayVariant().equals("dropdown"))) {
+                    || !singleChoiceQuestionCmd.getDisplayVariant().equals("radio")
+                    && !singleChoiceQuestionCmd.getDisplayVariant().equals("dropdown")) {
                 throw new BadRequestException("No display variant given for the question!");
             }
             return questionService.addSingleChoiceQuestion(
@@ -89,15 +88,11 @@ public class AnswersController {
         throw new InternalServerErrorException();
     }
 
-    @PreAuthorize("(@securityService.isActivated(#pollId) and hasRole('Roles.PARTICIPANT'))"
-            + "or hasRole('Roles.POLL_EDITOR')")
     @GetMapping("/{pollId}/questions/")
     public List<Question> listQuestions(@PathVariable("pollId") final UUID pollId) {
         return questionService.getAllQuestions(pollId);
     }
 
-    @PreAuthorize("(@securityService.isActivated(#pollId) and hasRole('Roles.PARTICIPANT'))"
-            + "or hasRole('Roles.POLL_EDITOR')")
     @GetMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question getQuestion(@PathVariable("pollId") final UUID pollId,
                                 @PathVariable("questionId") final String questionId) {
@@ -107,6 +102,7 @@ public class AnswersController {
         );
     }
 
+    // CPD-OFF
     @Secured(Roles.POLL_EDITOR)
     @PutMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question updateQuestion(@PathVariable("pollId") final UUID pollId,
@@ -129,7 +125,9 @@ public class AnswersController {
                     title,
                     scaleQuestionCmd.getScaleNameLeft(),
                     scaleQuestionCmd.getScaleNameRight(),
-                    scaleQuestionCmd.getStepCount());
+                    scaleQuestionCmd.getStepCount(),
+                    scaleQuestionCmd.getMin(),
+                    scaleQuestionCmd.getMax());
         } else if (questionCmd instanceof SingleChoiceQuestionCmd) {
             SingleChoiceQuestionCmd singleChoiceQuestionCmd = (SingleChoiceQuestionCmd) questionCmd;
             if (singleChoiceQuestionCmd.getChoices() == null) {
@@ -155,6 +153,7 @@ public class AnswersController {
         // This should never happen
         throw new InternalServerErrorException();
     }
+    // CPD-ON
 
     @Secured(Roles.POLL_EDITOR)
     @DeleteMapping("/{pollId}/questions/{questionId}/")

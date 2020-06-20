@@ -1,14 +1,12 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.poll.Anonymity;
+import gpse.repoll.domain.poll.*;
 import gpse.repoll.domain.exceptions.NotFoundException;
-import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.poll.PollSection;
-import gpse.repoll.domain.poll.PollStatus;
 import gpse.repoll.domain.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -49,10 +47,12 @@ public class PollServiceImpl implements PollService {
     public Poll addPoll(final String title) {
         final Poll poll = new Poll(title);
         final PollSection section = new PollSection();
+        final ArrayList<Participant> participants = new ArrayList<>();
         section.setTitle("First Section Title");
         section.setDescription("You can now add some questions!");
         pollSectionRepository.save(section);
         poll.add(section);
+        poll.setParticipants(participants);
         pollRepository.save(poll);
         return poll;
     }
@@ -71,8 +71,9 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
-    public Poll updatePoll(final UUID id, final String title, final PollStatus status,
-                           final Anonymity anonymity, final Map<UUID, List<Long>> structure) {
+    public Poll updatePoll(final UUID id, final String title, final PollEditStatus status,
+                           final Anonymity anonymity,
+                           final Map<UUID, List<Long>> structure) {
         Poll poll = getPoll(id);
         if (title != null) {
             poll.setTitle(title);
@@ -80,7 +81,7 @@ public class PollServiceImpl implements PollService {
         if (status != null) {
             poll.setStatus(status);
         }
-        if (poll.getStatus().equals(PollStatus.IN_PROCESS) && anonymity != null) {
+        if (anonymity != null) {
             poll.setAnonymity(anonymity);
         }
         if (structure != null) {

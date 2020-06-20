@@ -16,8 +16,15 @@ Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 Vue.use(Vuex)
 
-new Vue({
-    render: h => h(App),
-    router,
-    store: store,
-}).$mount('#app');
+async function main() {
+    // load auth from storage so we don't need to login if there is a token already set.
+    await store.dispatch('auth/loadFromStorage');
+
+    new Vue({
+        render: h => h(App),
+        router,
+        store: store,
+    }).$mount('#app');
+}
+
+main();

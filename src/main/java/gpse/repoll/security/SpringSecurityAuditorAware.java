@@ -18,6 +18,6 @@ public class SpringSecurityAuditorAware implements AuditorAware<User> {
             return Optional.empty();
         }
 
-        return Optional.of(((User) authentication.getPrincipal()));
+        return Optional.of((User) authentication.getPrincipal());
     }
 }

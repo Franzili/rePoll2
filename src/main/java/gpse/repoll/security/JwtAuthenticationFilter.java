@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     /**
      * Attempt to authenticate a User.
      * @param request The Request the user sent.
-     * @param response The Respose to send to the user
+     * @param response The Response to send to the user
      * @return An Authentication
      */
     @Override
