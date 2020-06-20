@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Secured(Roles.POLL_CREATOR)
 public class MailController {
 
-    public static final String ACCOUNT = "zizimeyer4@gmail.com";
+    private static final String ACCOUNT = "zizimeyer4@gmail.com";
+    private static final String TEST = "zizimeyer4@gmail.com,zizimeyer3@gmail.com";
     MailService mailService;
 
     @Autowired
