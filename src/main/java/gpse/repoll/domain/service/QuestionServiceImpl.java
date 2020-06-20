@@ -1,5 +1,6 @@
 package gpse.repoll.domain.service;
 
+import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.exceptions.BadRequestException;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class QuestionServiceImpl implements QuestionService {
 
     private static final String NO_QUESTION_FOUND = "The question does not exist!";
-    private static final String MAX_NUMBER_OF_CHOICES_REACHED = "The maximum number of choices is reached!";
+    private static final String TOO_MANY_BONUS_CHOICES = "Not so many bonus choices allowed!";
 
     private final PollService pollService;
 
@@ -95,7 +96,7 @@ public class QuestionServiceImpl implements QuestionService {
                                                         final String questionTitle,
                                                         final Integer questionOrder,
                                                         final List<Choice> choices,
-                                                        final Integer maxNumberOfChoices,
+                                                        final Integer numberOfBonusChoices,
                                                         final String displayVariant) {
         Poll poll = pollService.getPoll(pollId);
         for (Choice choice : choices) {
@@ -104,8 +105,8 @@ public class QuestionServiceImpl implements QuestionService {
         SingleChoiceQuestion question = new SingleChoiceQuestion();
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
-        question.addAll(choices);
-        question.setMaxNumberOfChoices(maxNumberOfChoices);
+        question.setChoices(choices);
+        question.setNumberOfBonusChoices(numberOfBonusChoices);
         question.setDisplayVariant(displayVariant);
         singleChoiceQuestionRepository.save(question);
         poll.add(question);
@@ -121,7 +122,7 @@ public class QuestionServiceImpl implements QuestionService {
                                                       final String questionTitle,
                                                       final Integer questionOrder,
                                                       final List<Choice> choices,
-                                                      final Integer maxNumberOfChoices) {
+                                                      final Integer numberOfBonusChoices) {
         Poll poll = pollService.getPoll(pollId);
         for (Choice choice : choices) {
             choiceRepository.save(choice);
@@ -129,8 +130,8 @@ public class QuestionServiceImpl implements QuestionService {
         MultiChoiceQuestion question = new MultiChoiceQuestion();
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
-        question.addAll(choices);
-        question.setMaxNumberOfChoices(maxNumberOfChoices);
+        question.setChoices(choices);
+        question.setNumberOfBonusChoices(numberOfBonusChoices);
         multiChoiceQuestionRepository.save(question);
         poll.add(question);
         pollService.save(poll);
@@ -250,7 +251,7 @@ public class QuestionServiceImpl implements QuestionService {
                                                            final Integer questionOrder,
                                                            final String title,
                                                            final List<Choice> choices,
-                                                           final Integer maxNumberOfChoices) {
+                                                           final Integer numberOfBonusChoices) {
         Poll poll = pollService.getPoll(pollId);
         SingleChoiceQuestion question = singleChoiceQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
@@ -266,8 +267,8 @@ public class QuestionServiceImpl implements QuestionService {
             }
             question.setChoices(choices);
         }
-        if (maxNumberOfChoices != null) {
-            question.setMaxNumberOfChoices(maxNumberOfChoices);
+        if (numberOfBonusChoices != null) {
+            question.setNumberOfBonusChoices(numberOfBonusChoices);
         }
         singleChoiceQuestionRepository.save(question);
         return question;
@@ -282,7 +283,7 @@ public class QuestionServiceImpl implements QuestionService {
                                                          final Integer questionOrder,
                                                          final String title,
                                                          final List<Choice> choices,
-                                                         final Integer maxNumberOfChoices) {
+                                                         final Integer numberOfBonusChoices) {
         Poll poll = pollService.getPoll(pollId);
         MultiChoiceQuestion question = multiChoiceQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
@@ -298,8 +299,8 @@ public class QuestionServiceImpl implements QuestionService {
             }
             question.setChoices(choices);
         }
-        if (maxNumberOfChoices != null) {
-            question.setMaxNumberOfChoices(maxNumberOfChoices);
+        if (numberOfBonusChoices != null) {
+            question.setNumberOfBonusChoices(numberOfBonusChoices);
         }
         multiChoiceQuestionRepository.save(question);
         return question;
@@ -320,28 +321,23 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question addChoice(UUID pollID, Long questionID, String text) {
+    public void addBonusChoice(final UUID pollID, final Long questionID, final Choice bonusChoice) {
         Question question = getQuestion(pollID, questionID);
-        Choice choice = new Choice(text);
         if (question instanceof SingleChoiceQuestion) {
-            SingleChoiceQuestion singleChoiceQuestion = (SingleChoiceQuestion) question;
-            if (singleChoiceQuestion.getChoices().size() < singleChoiceQuestion.getMaxNumberOfChoices()) {
-                singleChoiceQuestion.add(choice);
-            } else {
-                throw new BadRequestException(MAX_NUMBER_OF_CHOICES_REACHED);
-            }
-        } else if (question instanceof MultiChoiceQuestion) {
-            MultiChoiceQuestion multiChoiceQuestion = (MultiChoiceQuestion) question;
-            if (multiChoiceQuestion.getChoices().size() < multiChoiceQuestion.getMaxNumberOfChoices()) {
-                multiChoiceQuestion.add(choice);
-            } else {
-                throw new BadRequestException(MAX_NUMBER_OF_CHOICES_REACHED);
-            }
+            ((SingleChoiceQuestion) question).addAllBonusChoices(List.of(bonusChoice));
         } else {
-            throw new BadRequestException("This question does not have any choices!");
+            throw new InternalServerErrorException();
         }
-        choiceRepository.save(choice);
+    }
+
+    @Override
+    public void addAllBonusChoices(final UUID pollID, final Long questionID, final List<Choice> bonusChoices) {
+        Question question = getQuestion(pollID, questionID);
+        if (question instanceof MultiChoiceQuestion) {
+            ((MultiChoiceQuestion) question).addAllBonusChoices(bonusChoices);
+        } else {
+            throw new InternalServerErrorException();
+        }
         questionBaseRepository.save(question);
-        return question;
     }
 }

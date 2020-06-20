@@ -10,7 +10,7 @@ import java.util.Map;
 public class QuestionAnswersSet {
 
     private Question question;
-    private final Map<User, Answer> userAnswerMap = new HashMap<>();
+    private final Map<User, Answer> userAnswerMap = new HashMap<>(); // Todo participant instead of user
 
     public QuestionAnswersSet(Map<User, Answer> userAnswerMap, Question question) {
         this.question = question;

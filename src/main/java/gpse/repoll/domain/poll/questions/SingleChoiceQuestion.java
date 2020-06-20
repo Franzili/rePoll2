@@ -18,7 +18,10 @@ public class SingleChoiceQuestion extends Question {
     private final List<Choice> choices = new ArrayList<>();
 
     @Column
-    private int maxNumberOfChoices;
+    private int numberOfBonusChoices;
+
+    @OneToMany(orphanRemoval = true)
+    private final List<Choice> bonusChoices = new ArrayList<>();
 
     @Column
     private String displayVariant = "radio";
@@ -40,23 +43,28 @@ public class SingleChoiceQuestion extends Question {
         this.choices.addAll(choices);
     }
 
-    public void add(Choice choice) {
-        this.choices.add(choice);
-    }
-
-    public void addAll(List<Choice> choices) {
-        this.choices.addAll(choices);
-    }
-
-    public int getMaxNumberOfChoices() {
-        return maxNumberOfChoices;
-    }
-
-    public void setMaxNumberOfChoices(int maxNumberOfChoices) {
-        if (maxNumberOfChoices < choices.size()) {
-            throw new BadRequestException("Maximum number of choices must not be lower than"
-                    + "the number of available choices");
+    public void addAllBonusChoices(List<Choice> choices) {
+        if (choices.size() <= numberOfBonusChoices) {
+            this.choices.addAll(choices);
+        } else {
+            throw new BadRequestException("Not so many bonus choices allowed");
         }
-        this.maxNumberOfChoices = maxNumberOfChoices;
+    }
+
+    public int getNumberOfBonusChoices() {
+        return numberOfBonusChoices;
+    }
+
+    public void setNumberOfBonusChoices(int numberOfBonusChoices) {
+        this.numberOfBonusChoices = numberOfBonusChoices;
+    }
+
+    public List<Choice> getBonusChoices() {
+        return bonusChoices;
+    }
+
+    public void setBonusChoices(List<Choice> bonusChoices) {
+        this.bonusChoices.clear();
+        this.bonusChoices.addAll(bonusChoices);
     }
 }
