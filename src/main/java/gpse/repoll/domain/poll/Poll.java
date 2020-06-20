@@ -51,6 +51,9 @@ public class Poll extends Auditable<User> {
     @OneToMany
     private final List<Question> questions = new ArrayList<>();
 
+    @OneToMany
+    private final List<Participant> participants = new ArrayList<>();
+
     protected Poll() {
 
     }
@@ -123,6 +126,19 @@ public class Poll extends Auditable<User> {
         sortQuestions();
     }
 
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants.clear();
+        this.participants.addAll(participants);
+    }
+
+    public void addParticipant(Participant participant) {
+        this.participants.add(participant);
+    }
+
     private void sortQuestions() {
         questions.sort(Comparator.comparingInt(Question::getQuestionOrder));
     }
@@ -184,6 +200,13 @@ public class Poll extends Auditable<User> {
         boolean res = questions.remove(question);
         if (!res) {
             throw new NotFoundException("Question does not belong to this poll");
+        }
+    }
+
+    public void remove(Participant participant) {
+        boolean res = participants.remove(participant);
+        if (!res) {
+            throw new NotFoundException("Participant does not belong to this poll.");
         }
     }
 

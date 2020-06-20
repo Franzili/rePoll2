@@ -27,6 +27,9 @@ public class PollEntry {
     @ManyToOne
     private User user;
 
+    @OneToOne
+    private Participant participant;
+
     public Map<Question, Answer> getAssociations() {
         return Collections.unmodifiableMap(associations);
     }
@@ -58,6 +61,12 @@ public class PollEntry {
      */
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Participant getParticipant() {return participant;}
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
     public void put(Question question, Answer answer) {

@@ -70,4 +70,6 @@ public class PollsController {
     public void removePoll(@PathVariable("id") final UUID id) {
         pollService.removePoll(id);
     }
+
+
 }

@@ -45,6 +45,18 @@ export default {
     removePollSection(pollId, pollSectionId) {
         return axios.delete('/api/v1/polls/' + pollId + '/sections/' + pollSectionId + '/')
     },
+    listParticipants(pollId) {
+        return axios.get('/api/v1/polls/' + pollId + '/participants/');
+    },
+    addParticipant(pollId, participantCmd) {
+        return axios.post('/api/v1/polls/' + pollId + '/participants/', participantCmd);
+    },
+    updateParticipant(pollId, participantCmd) {
+      return axios.put('/api/v1/pools/' + pollId + '/participants/' + participantCmd.id + '/', participantCmd);
+    },
+    removeParticipant(pollId, participantId) {
+        return axios.delete('/api/v1/polls/' + pollId + '/participants/' + participantId + '/');
+    },
     delete(id) {
         return axios.delete('/api/v1/polls/' + id + '/')
     },

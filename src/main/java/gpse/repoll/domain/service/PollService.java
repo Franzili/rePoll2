@@ -1,6 +1,7 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.Anonymity;
+import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollStatus;
 
