@@ -179,7 +179,7 @@ public class InitializeDatabase implements InitializingBean {
             choicesRadioButtonList.add(choice7);
             choicesRadioButtonList.add(choice8);
             Question question2 = questionService.addSingleChoiceQuestion(poll.getId(), "How old are you?",
-                3, choicesRadioButtonList, displayVariant);
+                3, choicesRadioButtonList, 4, displayVariant);
 
             List<Choice> choicesChoiceQuestionList = new ArrayList<>();
             Choice choice1 = new Choice("Avicii");
@@ -192,7 +192,7 @@ public class InitializeDatabase implements InitializingBean {
             choicesChoiceQuestionList.add(choice4);
             Question question3 = questionService.addMultiChoiceQuestion(poll.getId(),
                 "Which artist do yo like the most?",
-                4, choicesChoiceQuestionList);
+                4, choicesChoiceQuestionList, 4);
 
             Question question4 = questionService.addScaleQuestion(poll.getId(),
                 "How satisfied are you with our services?",

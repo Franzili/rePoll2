@@ -1,5 +1,6 @@
 package gpse.repoll.domain.poll.questions;
 
+import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Choice;
 
 import javax.persistence.*;
@@ -15,6 +16,9 @@ public class SingleChoiceQuestion extends Question {
 
     @OneToMany(orphanRemoval = true)
     private final List<Choice> choices = new ArrayList<>();
+
+    @Column
+    private int maxNumberOfChoices;
 
     @Column
     private String displayVariant = "radio";
@@ -42,5 +46,17 @@ public class SingleChoiceQuestion extends Question {
 
     public void addAll(List<Choice> choices) {
         this.choices.addAll(choices);
+    }
+
+    public int getMaxNumberOfChoices() {
+        return maxNumberOfChoices;
+    }
+
+    public void setMaxNumberOfChoices(int maxNumberOfChoices) {
+        if (maxNumberOfChoices < choices.size()) {
+            throw new BadRequestException("Maximum number of choices must not be lower than"
+                    + "the number of available choices");
+        }
+        this.maxNumberOfChoices = maxNumberOfChoices;
     }
 }

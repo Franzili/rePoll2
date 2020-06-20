@@ -2,6 +2,7 @@ package gpse.repoll.domain.poll.questions;
 
 import gpse.repoll.domain.poll.Choice;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -21,6 +22,9 @@ public class MultiChoiceQuestion extends Question {
     @JoinColumn
     private final List<Choice> choices = new ArrayList<>();
 
+    @Column
+    private int maxNumberOfChoices;
+
     public List<Choice> getChoices() {
         return Collections.unmodifiableList(choices);
     }
@@ -36,5 +40,13 @@ public class MultiChoiceQuestion extends Question {
 
     public void addAll(List<Choice> choices) {
         this.choices.addAll(choices);
+    }
+
+    public int getMaxNumberOfChoices() {
+        return maxNumberOfChoices;
+    }
+
+    public void setMaxNumberOfChoices(int maxNumberOfChoices) {
+        this.maxNumberOfChoices = maxNumberOfChoices;
     }
 }

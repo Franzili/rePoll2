@@ -10,6 +10,7 @@ import java.util.List;
 public class MultiChoiceQuestionCmd extends QuestionCmd {
 
     private final List<ChoiceCmd> choices = new ArrayList<>();
+    private Integer maxNumberOfChoices;
 
     public List<ChoiceCmd> getChoices() {
         return choices;
@@ -18,5 +19,13 @@ public class MultiChoiceQuestionCmd extends QuestionCmd {
     public void setChoices(List<ChoiceCmd> choices) {
         this.choices.clear();
         this.choices.addAll(choices);
+    }
+
+    public Integer getMaxNumberOfChoices() {
+        return maxNumberOfChoices;
+    }
+
+    public void setMaxNumberOfChoices(Integer maxNumberOfChoices) {
+        this.maxNumberOfChoices = maxNumberOfChoices;
     }
 }

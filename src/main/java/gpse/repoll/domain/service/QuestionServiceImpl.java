@@ -16,6 +16,7 @@ import java.util.UUID;
 public class QuestionServiceImpl implements QuestionService {
 
     private static final String NO_QUESTION_FOUND = "The question does not exist!";
+    private static final String MAX_NUMBER_OF_CHOICES_REACHED = "The maximum number of choices is reached!";
 
     private final PollService pollService;
 
@@ -94,15 +95,17 @@ public class QuestionServiceImpl implements QuestionService {
                                                         final String questionTitle,
                                                         final Integer questionOrder,
                                                         final List<Choice> choices,
+                                                        final Integer maxNumberOfChoices,
                                                         final String displayVariant) {
         Poll poll = pollService.getPoll(pollId);
-        SingleChoiceQuestion question = new SingleChoiceQuestion();
         for (Choice choice : choices) {
             choiceRepository.save(choice);
         }
+        SingleChoiceQuestion question = new SingleChoiceQuestion();
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
         question.addAll(choices);
+        question.setMaxNumberOfChoices(maxNumberOfChoices);
         question.setDisplayVariant(displayVariant);
         singleChoiceQuestionRepository.save(question);
         poll.add(question);
@@ -117,7 +120,8 @@ public class QuestionServiceImpl implements QuestionService {
     public MultiChoiceQuestion addMultiChoiceQuestion(final UUID pollId,
                                                       final String questionTitle,
                                                       final Integer questionOrder,
-                                                      final List<Choice> choices) {
+                                                      final List<Choice> choices,
+                                                      final Integer maxNumberOfChoices) {
         Poll poll = pollService.getPoll(pollId);
         for (Choice choice : choices) {
             choiceRepository.save(choice);
@@ -126,6 +130,7 @@ public class QuestionServiceImpl implements QuestionService {
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
         question.addAll(choices);
+        question.setMaxNumberOfChoices(maxNumberOfChoices);
         multiChoiceQuestionRepository.save(question);
         poll.add(question);
         pollService.save(poll);
@@ -244,7 +249,8 @@ public class QuestionServiceImpl implements QuestionService {
                                                            final Long questionId,
                                                            final Integer questionOrder,
                                                            final String title,
-                                                           final List<Choice> choices) {
+                                                           final List<Choice> choices,
+                                                           final Integer maxNumberOfChoices) {
         Poll poll = pollService.getPoll(pollId);
         SingleChoiceQuestion question = singleChoiceQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
@@ -260,6 +266,9 @@ public class QuestionServiceImpl implements QuestionService {
             }
             question.setChoices(choices);
         }
+        if (maxNumberOfChoices != null) {
+            question.setMaxNumberOfChoices(maxNumberOfChoices);
+        }
         singleChoiceQuestionRepository.save(question);
         return question;
     }
@@ -272,7 +281,8 @@ public class QuestionServiceImpl implements QuestionService {
                                                          final Long questionId,
                                                          final Integer questionOrder,
                                                          final String title,
-                                                         final List<Choice> choices) {
+                                                         final List<Choice> choices,
+                                                         final Integer maxNumberOfChoices) {
         Poll poll = pollService.getPoll(pollId);
         MultiChoiceQuestion question = multiChoiceQuestionRepository.findById(questionId).orElseThrow(() -> {
             throw new NotFoundException(NO_QUESTION_FOUND);
@@ -287,6 +297,9 @@ public class QuestionServiceImpl implements QuestionService {
                 choiceRepository.save(choice);
             }
             question.setChoices(choices);
+        }
+        if (maxNumberOfChoices != null) {
+            question.setMaxNumberOfChoices(maxNumberOfChoices);
         }
         multiChoiceQuestionRepository.save(question);
         return question;
@@ -304,5 +317,31 @@ public class QuestionServiceImpl implements QuestionService {
 
         pollService.save(poll);
         questionBaseRepository.delete(question);
+    }
+
+    @Override
+    public Question addChoice(UUID pollID, Long questionID, String text) {
+        Question question = getQuestion(pollID, questionID);
+        Choice choice = new Choice(text);
+        if (question instanceof SingleChoiceQuestion) {
+            SingleChoiceQuestion singleChoiceQuestion = (SingleChoiceQuestion) question;
+            if (singleChoiceQuestion.getChoices().size() < singleChoiceQuestion.getMaxNumberOfChoices()) {
+                singleChoiceQuestion.add(choice);
+            } else {
+                throw new BadRequestException(MAX_NUMBER_OF_CHOICES_REACHED);
+            }
+        } else if (question instanceof MultiChoiceQuestion) {
+            MultiChoiceQuestion multiChoiceQuestion = (MultiChoiceQuestion) question;
+            if (multiChoiceQuestion.getChoices().size() < multiChoiceQuestion.getMaxNumberOfChoices()) {
+                multiChoiceQuestion.add(choice);
+            } else {
+                throw new BadRequestException(MAX_NUMBER_OF_CHOICES_REACHED);
+            }
+        } else {
+            throw new BadRequestException("This question does not have any choices!");
+        }
+        choiceRepository.save(choice);
+        questionBaseRepository.save(question);
+        return question;
     }
 }
