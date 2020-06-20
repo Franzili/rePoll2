@@ -7,13 +7,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
+    private static final String FORWARD = "forward:/index.html";
+
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
         registry.addViewController("/{spring:\\w+}")
-            .setViewName("forward:/index.html");
+            .setViewName(FORWARD);
         registry.addViewController("/**/{spring:\\w+}")
-            .setViewName("forward:/index.html");
+            .setViewName(FORWARD);
         registry.addViewController("/{spring:\\w+}/**{spring:?!(\\.js|\\.css)$}")
-            .setViewName("forward:/index.html");
+            .setViewName(FORWARD);
     }
 }

@@ -42,11 +42,14 @@ public class Poll extends Auditable<User> {
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
+    @OneToMany(orphanRemoval = true)
+    private final List<PollIteration> pollIterations = new ArrayList<>();
+
     @OneToMany
     private final List<PollSection> pollSections = new ArrayList<>();
 
     @OneToMany
-    private final List<Question> questions = new ArrayList<>(); // todo sorting
+    private final List<Question> questions = new ArrayList<>();
 
     protected Poll() {
 
@@ -90,6 +93,15 @@ public class Poll extends Auditable<User> {
     public void setPollEntries(List<PollEntry> pollEntries) {
         this.pollEntries.clear();
         this.pollEntries.addAll(pollEntries);
+    }
+
+    public List<PollIteration> getPollIterations() {
+        return Collections.unmodifiableList(pollIterations);
+    }
+
+    public void setPollIterations(List<PollIteration> pollIterations) {
+        this.pollIterations.clear();
+        this.pollIterations.addAll(pollIterations);
     }
 
     public List<PollSection> getPollSections() {
@@ -189,6 +201,14 @@ public class Poll extends Auditable<User> {
 
     public boolean contains(PollEntry pollEntry) {
         return pollEntries.contains(pollEntry);
+    }
+
+    public void add(PollIteration pollIteration) {
+        pollIterations.add(pollIteration);
+    }
+
+    public void remove(PollIteration pollIteration) {
+        pollIterations.remove(pollIteration);
     }
 
     private PollSection getSection(UUID sectionId) {
