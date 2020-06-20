@@ -1,9 +1,6 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.poll.Anonymity;
-import gpse.repoll.domain.poll.User;
-import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.poll.PollEntry;
+import gpse.repoll.domain.poll.*;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
@@ -86,11 +83,13 @@ public class PollEntryServiceImpl implements PollEntryService {
      * {@inheritDoc}
      */
     @Override
-    public PollEntry addPollEntry(final UUID pollId, final Map<Long, Answer> associations, final User user) {
+    public PollEntry addPollEntry(final UUID pollId,
+                                  final Map<Long, Answer> associations,
+                                  final Participant participant) {
         Poll poll = pollService.getPoll(pollId);
         PollEntry pollEntry = new PollEntry();
         if (poll.getAnonymity().equals(Anonymity.NON_ANONYMOUS)) {
-            pollEntry.setUser(user);
+            pollEntry.setParticipant(participant);
             createAnswers(poll, pollEntry, associations);
             pollEntryRepository.save(pollEntry);
             poll.add(pollEntry);

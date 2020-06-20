@@ -4,7 +4,7 @@ import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.security.Roles;
-import gpse.repoll.web.command.*;
+import gpse.repoll.web.command.PollCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -70,4 +70,6 @@ public class PollsController {
     public void removePoll(@PathVariable("id") final UUID id) {
         pollService.removePoll(id);
     }
+
+
 }

@@ -18,7 +18,7 @@
                     <b-nav-item>
                         <router-link class="link" :to="'/account/'">Account</router-link>
                     </b-nav-item>
-                    <b-nav-item>
+                    <b-nav-item v-if="hasAdminPrivileges">
                         <router-link class="link" :to="'/admin/'">Admin</router-link>
                     </b-nav-item>
                     <b-nav-item>
@@ -34,13 +34,18 @@
 </template>
 
 <script>
-    import {mapActions} from "vuex";
+    import {mapActions, mapGetters} from "vuex";
     export default {
         name: "NavBar",
         data() {
             return {
                 count: 0
             }
+        },
+        computed: {
+            ...mapGetters('auth', {
+                hasAdminPrivileges: 'hasAdminPrivileges'
+            })
         },
         methods: {
             ...mapActions('auth', ['logout']),

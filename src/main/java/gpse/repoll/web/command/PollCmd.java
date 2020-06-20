@@ -1,8 +1,7 @@
 package gpse.repoll.web.command;
 
 import gpse.repoll.domain.poll.Anonymity;
-import gpse.repoll.domain.poll.PollStatus;
-
+import gpse.repoll.domain.poll.PollEditStatus;
 
 /**
  * Poll helper object used for JSON serialisation.
@@ -11,10 +10,9 @@ public class PollCmd {
 
     private String title;
     private PollStructureCmd structure;
-    private PollStatus status;
+    private PollEditStatus status;
     private Anonymity anonymity;
     private DesignCmd design;
-    private PollEditorsCmd editors;
 
     public DesignCmd getDesign() {
         return design;
@@ -22,14 +20,6 @@ public class PollCmd {
 
     public void setDesign(DesignCmd design) {
         this.design = design;
-    }
-
-    public PollEditorsCmd getEditors() {
-        return editors;
-    }
-
-    public void setEditors(PollEditorsCmd editors) {
-        this.editors = editors;
     }
 
     public Anonymity getAnonymity() {
@@ -56,11 +46,11 @@ public class PollCmd {
         this.structure = structure;
     }
 
-    public PollStatus getStatus() {
+    public PollEditStatus getStatus() {
         return status;
     }
 
-    public void setStatus(PollStatus status) {
+    public void setStatus(PollEditStatus status) {
         this.status = status;
     }
 

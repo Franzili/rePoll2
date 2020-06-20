@@ -10,7 +10,6 @@ import gpse.repoll.web.command.ChoiceCmd;
 import gpse.repoll.web.command.questions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -89,15 +88,11 @@ public class QuestionsController {
         throw new InternalServerErrorException();
     }
 
-    @PreAuthorize("(@securityService.isActivated(#pollId) and hasRole('Roles.PARTICIPANT'))"
-            + "or hasRole('Roles.POLL_EDITOR')")
     @GetMapping("/{pollId}/questions/")
     public List<Question> listQuestions(@PathVariable("pollId") final UUID pollId) {
         return questionService.getAllQuestions(pollId);
     }
 
-    @PreAuthorize("(@securityService.isActivated(#pollId) and hasRole('Roles.PARTICIPANT'))"
-            + "or hasRole('Roles.POLL_EDITOR')")
     @GetMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question getQuestion(@PathVariable("pollId") final UUID pollId,
                                 @PathVariable("questionId") final String questionId) {

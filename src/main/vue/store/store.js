@@ -26,7 +26,4 @@ let store = new Vuex.Store({
     }
 })
 
-// load auth from storage so we don't need to login if there is a token already set.
-store.dispatch('auth/loadFromStorage');
-
 export default store;

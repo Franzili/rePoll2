@@ -118,6 +118,9 @@
         computed: {
             ...mapState('currentPoll', {
                 poll: 'poll'
+            }),
+            ...mapState('participants', {
+                participants: 'participants'
             })
         },
 
