@@ -7,6 +7,7 @@
         -->
 
         <ToolBar
+            ref="changeQuestions"
             v-on:chart="changeChart($event)"
             v-on:edit="showModal(compareData.compSet)"
             v-on:close="$emit('close', compareData.id)"
@@ -84,6 +85,7 @@
                 })
                 this.compareData.compSet = statSet
                 this.fillChartObjs()
+                this.$refs.changeQuestions.setFirst(this.chartObjs[0].qId)
             },
             fillChartObjs() {
                 this.chartObjs = []

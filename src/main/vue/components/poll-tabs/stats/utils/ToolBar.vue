@@ -120,12 +120,16 @@
             setMergeState() {
                 this.$emit('merge', this.merged)
                 this.merged = this.merged !== true
+            },
+            setFirst(qId) {
+                this.selected.question = qId
+                this.$emit('question', this.selected.question)
             }
         },
         watch: {
             question: function (newQuestion) {
                 this.selected.question = newQuestion
-            }
+            },
         }
     }
 </script>
