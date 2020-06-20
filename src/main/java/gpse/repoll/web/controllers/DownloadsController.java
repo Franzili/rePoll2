@@ -49,7 +49,8 @@ public class DownloadsController {
     }*/
 
     //if you want to test it change path and filename to any path to png
-    String folderPath="C:\\Users\\Michi\\Desktop\\Projekt\\gp-se-ss-2020-team4-1\\src\\main\\vue\\assets\\";
+    //String folderPath="C:\\Users\\Michi\\Desktop\\Projekt\\gp-se-ss-2020-team4-1\\src\\main\\vue\\assets\\";
+    String folderPath="/src/main/vue/assets/";
 
     @RequestMapping("/")
     @ResponseBody
