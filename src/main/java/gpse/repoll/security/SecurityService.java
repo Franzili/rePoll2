@@ -1,8 +1,6 @@
 package gpse.repoll.security;
 
-import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.PollEditStatus;
 import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.repositories.PollEntryRepository;
