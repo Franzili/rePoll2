@@ -1,8 +1,11 @@
 package gpse.repoll.web.controllers;
 
+import gpse.repoll.domain.service.PollService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -12,12 +15,20 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/v1/download")
 public class DownloadsController {
-    
-    String folderPath="/src/main/vue/assets/";
 
-    @RequestMapping("/")
+    private final PollService pollService;
+
+    //TODO folder should be set by user?
+    String folderPath="./src/main/resources/";
+
+    @Autowired
+    public DownloadsController(PollService pollService) {
+        this.pollService = pollService;
+    }
+
+    @RequestMapping("/{id}/")
     @ResponseBody
-    public void show(HttpServletResponse response) {
+    public void show(@PathVariable("id") final UUID id, HttpServletResponse response) {
 
         //create file
         try {
@@ -35,7 +46,7 @@ public class DownloadsController {
         //write to file
         try {
             FileWriter myWriter = new FileWriter("./src/main/resources/testfile.txt");
-            myWriter.write("Here will be all your data you ever wanted");
+            myWriter.write("PollId: " + pollService.getPoll(id).getId().toString());
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
@@ -45,13 +56,13 @@ public class DownloadsController {
 
         //download file
         response.setContentType("application/png");
-        response.setHeader("Content-Disposition", "attachment; filename=" +"logo.png");
+        response.setHeader("Content-Disposition", "attachment; filename=" +"testfile.txt");
         response.setHeader("Content-Transfer-Encoding", "binary");
         try {
             BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
-            FileInputStream fis = new FileInputStream(folderPath+"logo.png");
+            FileInputStream fis = new FileInputStream(folderPath+"testfile.txt");
             int len;
-            byte[] buf = new byte[1024];
+            byte[] buf = new byte[1024];  //TODO whats that number
             while((len = fis.read(buf)) > 0) {
                 bos.write(buf,0,len);
             }
@@ -61,6 +72,8 @@ public class DownloadsController {
         catch(IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println(pollService.getPoll(id).getId());
     }
 }
 
