@@ -54,15 +54,20 @@ public class PollsController {
     @PutMapping("/{id}/")
     public Poll updatePoll(@PathVariable("id") final UUID id, @RequestBody PollCmd pollCmd) {
         Map<UUID, List<Long>> structure = null;
+        Map<UUID, List<Long>> consistencies = null;
         if (pollCmd.getStructure() != null) {
             structure = pollCmd.getStructure().getSectionToQuestions();
+        }
+        if (pollCmd.getConsistencies() != null) {
+            consistencies = pollCmd.getConsistencies().getConsistencyToQuestions();
         }
         return pollService.updatePoll(
                 id,
                 pollCmd.getTitle(),
                 pollCmd.getStatus(),
                 pollCmd.getAnonymity(),
-                structure);
+                structure,
+                consistencies);
     }
 
     @Secured(Roles.POLL_CREATOR)

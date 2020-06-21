@@ -50,6 +50,9 @@ public class Poll extends Auditable<User> {
     private final List<PollSection> pollSections = new ArrayList<>();
 
     @OneToMany
+    private final List<PollConsistencyGroup> pollConsistencyGroups = new ArrayList<>();
+
+    @OneToMany
     private final List<Question> questions = new ArrayList<>();
 
     @OneToMany
@@ -115,6 +118,15 @@ public class Poll extends Auditable<User> {
     public void setPollSections(List<PollSection> pollSections) {
         this.pollSections.clear();
         this.pollSections.addAll(pollSections);
+    }
+
+    public List<PollConsistencyGroup> getPollConsistencyGroups() {
+        return Collections.unmodifiableList(pollConsistencyGroups);
+    }
+
+    public void setPollConsistencyGroups(List<PollConsistencyGroup> pollConsistencyGroups) {
+        this.pollConsistencyGroups.clear();
+        this.pollConsistencyGroups.addAll(pollConsistencyGroups);
     }
 
     public List<Question> getQuestions() {
@@ -186,6 +198,18 @@ public class Poll extends Auditable<User> {
         return pollSections.contains(pollSection);
     }
 
+    public void add(PollConsistencyGroup pollConsistencyGroup) {
+        pollConsistencyGroups.add(pollConsistencyGroup);
+    }
+
+    public void addAllConsistencyGroups(Collection<PollConsistencyGroup> pollConsistencyGroups) {
+        this.pollConsistencyGroups.addAll(pollConsistencyGroups);
+    }
+
+    public boolean contains(PollConsistencyGroup pollConsistencyGroup) {
+        return pollConsistencyGroups.contains(pollConsistencyGroup);
+    }
+
     public void add(Question question) {
         questions.add(question);
         sortQuestions();
@@ -200,6 +224,13 @@ public class Poll extends Auditable<User> {
         boolean res = pollSections.remove(section);
         if (!res) {
             throw new NotFoundException("PollSection does not belong to this poll");
+        }
+    }
+
+    public void remove(PollConsistencyGroup pollConsistencyGroup) {
+        boolean res = pollConsistencyGroups.remove(pollConsistencyGroup);
+        if (!res) {
+            throw new NotFoundException("ConsistencyGroup does not belong to this poll");
         }
     }
 
@@ -253,6 +284,24 @@ public class Poll extends Auditable<User> {
     private boolean sectionExists(UUID sectionId) {
         for (PollSection section : pollSections) {
             if (section.getId().equals(sectionId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private PollConsistencyGroup getConsistency(UUID consistencyId) {
+        for (PollConsistencyGroup pollConsistencyGroup : pollConsistencyGroups) {
+            if (pollConsistencyGroup.getId().equals(consistencyId)) {
+                return pollConsistencyGroup;
+            }
+        }
+        return null;
+    }
+
+    private boolean consistencyExists(UUID consistencyId) {
+        for (PollConsistencyGroup pollConsistencyGroup : pollConsistencyGroups) {
+            if (pollConsistencyGroup.getId().equals(consistencyId)) {
                 return true;
             }
         }
@@ -341,6 +390,35 @@ public class Poll extends Auditable<User> {
 
         for (PollSection section : pollSections) {
             section.sortQuestions();
+        }
+    }
+
+    /**
+     * This method assigns questions of the poll to consistency groups defined in the parameter.
+     * @param consistencies The defined assignments
+     * @throws BadRequestException If the consistencies object is not well defined
+     * @throws InternalServerErrorException if the algorithm ha a bug
+     */
+    public void setConsistencies(Map<UUID, List<Long>> consistencies)
+            throws BadRequestException, InternalServerErrorException {
+        Set<UUID> keySet = consistencies.keySet();
+
+        for (UUID key : keySet) {
+            if (!consistencyExists(key)) {
+                throw new BadRequestException("At least one consistency is not part of the poll!");
+            }
+            PollConsistencyGroup pollConsistencyGroup = getConsistency(key);
+            if (pollConsistencyGroup == null) {
+                throw new InternalServerErrorException();
+            }
+            List<Long> questionId = new ArrayList<>(consistencies.get(key));
+            List<Question> consistQuestions = listQuestions(questionId);
+            pollConsistencyGroup.addAll(consistQuestions);
+        }
+        sortQuestions();
+
+        for (PollConsistencyGroup pollConsistencyGroup : pollConsistencyGroups) {
+            pollConsistencyGroup.sortQuestions();
         }
     }
 }

@@ -49,6 +49,7 @@ public interface PollService {
      * @param status The status of the Poll
      * @param anonymity The anonymity of the poll
      * @param structure The structure for the Poll
+     * @param consistencies The consistency groups for the Poll
      * @return The updated Poll.
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the poll could not be found.
      */
@@ -56,7 +57,8 @@ public interface PollService {
                     String title,
                     PollEditStatus status,
                     Anonymity anonymity,
-                    Map<UUID, List<Long>> structure);
+                    Map<UUID, List<Long>> structure,
+                    Map<UUID, List<Long>> consistencies);
 
     /**
      * Deletes the poll from the database.

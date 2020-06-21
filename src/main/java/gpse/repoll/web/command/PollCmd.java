@@ -10,6 +10,7 @@ public class PollCmd {
 
     private String title;
     private PollStructureCmd structure;
+    private PollConsistenciesCmd consistencies;
     private PollEditStatus status;
     private Anonymity anonymity;
 
@@ -35,6 +36,14 @@ public class PollCmd {
 
     public void setStructure(PollStructureCmd structure) {
         this.structure = structure;
+    }
+
+    public PollConsistenciesCmd getConsistencies() {
+        return consistencies;
+    }
+
+    public void setConsistencies(PollConsistenciesCmd consistencies) {
+        this.consistencies = consistencies;
     }
 
     public PollEditStatus getStatus() {
