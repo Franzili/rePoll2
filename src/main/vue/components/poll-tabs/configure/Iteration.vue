@@ -7,23 +7,37 @@
         </p>
 
         <p>
-            <b-button class="float-right" variant="primary" data-toggle="modal" data-target="#launchModal">Launch</b-button>
+            <b-button class="float-right" variant="primary" v-b-modal.launchModal>Launch</b-button>
         </p>
-        <launchModal
-            id="modalLaunch"
+        <b-modal
+            id="launchModal"
+            ref="launchIterModal"
             centered
             title="How long should the poll be activ ?"
             header-bg-variant="info"
-            @ok="doUpdate()"> HIER EINGABE VON DATUM ERMÖGLICHEN ODER WAS ANDERS FÜR LAUFZEIT/ABLAUFDATUM!!!
-        </launchModal>
+            @ok="handleOk"><!--@ok="launchSingleIter()"> --><!--HIER EINGABE VON DATUM ERMÖGLICHEN ODER WAS ANDERS FÜR LAUFZEIT/ABLAUFDATUM!!!-->
+            <form ref="launchForm" @submit.stop.prevent="handleSubmit">
+                <b-form-group
+                    :state="launchState"
+                    label="End-Datum"
+                    label-for="endDatumInput"
+                    invalid-feedback="Expiration Date is required"
+                >
+                 <b-form-input
+                     id="launch-date-input"
+                     v-model="date"
+                     :state="launchState"
+                     required></b-form-input>
+                </b-form-group>
+            </form>
+        </b-modal>
         <p>
             <b-button class="float-right" variant="secondary">Schedule</b-button>
         </p>
 
     </b-card>
 
-    <!--v-else-if="poll.status ==='READY'"--><!-- Was bedeuted Launched hier von beiden? -->
-    <b-card v-else-if="poll.status === 'ACTIVATED'">
+    <b-card v-else-if="poll.status !== 'IN_PROCESS'">
         <h6>Iteration</h6>
 
         <p>Comming soon</p>
@@ -41,7 +55,9 @@
         name: "Iteration",
         data() {
             return {
-
+                ende: '',
+                launchState: null,
+                submittedDates: []
             }
 
         },
@@ -51,12 +67,56 @@
         computed: {
             ...mapState('currentPoll', {
                 poll: 'poll'
+            }),
+            ...mapState('myIterations', {
+                iteration: 'iterations'
             })
         },
         methods: {
             ...mapActions('currentPoll', {
                 updatePoll: 'update'
             }),
+            ...mapActions('myIterations', {
+                updateIter: 'update'
+            }),
+            checkFormValidity() {
+                const valid = this.$refs.form.checkValidity()
+                this.launchState = valid
+                return valid
+            },
+            resetModal() {
+                this.ende = ''
+                this.launchState = null
+            },
+            handleOk(bvModalEvt) {
+                bvModalEvt.preventDefault()
+                this.handleSubmit()
+            },
+            handleSubmit() {
+                if (!this.checkFormValidity()) {
+                    return
+                }
+                this.launchSingleIter()
+                this.$nextTick(() => {
+                    this.$bvModal.hide('launchModal')
+                })
+            },
+            launchSingleIter() {
+                let pollIterationCmd = {
+                    start: LocalDateTime.now(),
+                    end: this.ende,
+                    status: 'ACTIVATED'
+                }
+                this.updateIter(pollIterationCmd);
+                let pollCmd = {
+                    id: this.pollId,
+                    status: 'READY'
+                }
+                this.updatePoll(pollCmd);
+            },
+            getLocalDate() {
+                LocalDateTime a  LocalDateTime.now();
+            }
             /*launchPoll() { //Button Launch: launch itetation now
                 //TODO add iteration from this moment to open end
                 this.poll.status = "ACTIVATED"
