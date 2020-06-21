@@ -50,6 +50,7 @@
     }
 
     .sidebar {
+        min-height: calc(100vh - 150px);
         background-color: $light;
         padding-top: 10px;
     }
