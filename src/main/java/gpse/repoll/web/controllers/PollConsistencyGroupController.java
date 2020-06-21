@@ -41,7 +41,7 @@ public class PollConsistencyGroupController {
     }
 
     @Secured(Roles.POLL_EDITOR)
-    @GetMapping("/{pollId}/consistency/{consistencyId}/")
+    @PutMapping("/{pollId}/consistency/{consistencyId}/")
     public PollConsistencyGroup updatePollConsistencyGroup(
             @PathVariable("pollId") final UUID pollId,
             @PathVariable("consistencyId") final UUID consistencyId,
