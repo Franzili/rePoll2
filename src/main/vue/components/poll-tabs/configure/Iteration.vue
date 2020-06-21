@@ -28,7 +28,7 @@
 <script>
     //import {mapActions, mapState} from "vuex";
 
-    import {mapState} from "vuex";
+    import {mapActions, mapState} from "vuex";
 
     export default {
         name: "Iteration",
@@ -47,7 +47,18 @@
             })
         },
         methods: {
-
+            ...mapActions('currentPoll', {
+                updatePoll: 'update'
+            }),
+            /*launchPoll() { //Button Launch: launch itetation now
+                //TODO add iteration from this moment to open end
+                this.poll.status = "ACTIVATED"
+                let pollCmd = {
+                    id: this.poll.id,
+                    status: this.poll.status
+                };
+                this.updatePoll(pollCmd);
+            }*/
         }
     }
 </script>
