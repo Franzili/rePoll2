@@ -7,8 +7,15 @@
         </p>
 
         <p>
-            <b-button class="float-right" variant="primary">Launch</b-button>
+            <b-button class="float-right" variant="primary" data-toggle="modal" data-target="#launchModal">Launch</b-button>
         </p>
+        <launchModal
+            id="modalLaunch"
+            centered
+            title="How long should the poll be activ ?"
+            header-bg-variant="info"
+            @ok="doUpdate()"> HIER EINGABE VON DATUM ERMÖGLICHEN ODER WAS ANDERS FÜR LAUFZEIT/ABLAUFDATUM!!!
+        </launchModal>
         <p>
             <b-button class="float-right" variant="secondary">Schedule</b-button>
         </p>
