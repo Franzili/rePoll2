@@ -26,9 +26,16 @@ public class DownloadsController {
         this.pollService = pollService;
     }
 
-    @RequestMapping("/{id}/")
+    /**
+     * @param format human for human-readable and json for JSON String
+     * @param type poll for poll without entries and entries for entries
+     * */
+    @RequestMapping("/{id}/{type}/{format}/")
     @ResponseBody
-    public void show(@PathVariable("id") final UUID id, HttpServletResponse response) {
+    public void show(@PathVariable("id") final UUID id,
+                     @PathVariable("format") final String format,
+                     @PathVariable("type") final String type,
+                     HttpServletResponse response) {
 
         //create file
         try {
@@ -46,7 +53,9 @@ public class DownloadsController {
         //write to file
         try {
             FileWriter myWriter = new FileWriter("./src/main/resources/testfile.txt");
-            myWriter.write("PollId: " + pollService.getPoll(id).getId().toString());
+            if (format.equals("human") && type.equals("poll")) {
+                myWriter.write(pollService.getPoll(id).getAsHumanReadable());
+            }
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
