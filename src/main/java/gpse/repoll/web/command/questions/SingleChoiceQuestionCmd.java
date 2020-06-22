@@ -11,6 +11,7 @@ public class SingleChoiceQuestionCmd extends QuestionCmd {
 
     private String displayVariant;
     private final List<ChoiceCmd> choices = new ArrayList<>();
+    private Integer numberOfBonusChoices;
 
     public String getDisplayVariant() {
         return displayVariant;
@@ -27,5 +28,13 @@ public class SingleChoiceQuestionCmd extends QuestionCmd {
     public void setChoices(List<ChoiceCmd> choices) {
         this.choices.clear();
         this.choices.addAll(choices);
+    }
+
+    public Integer getNumberOfBonusChoices() {
+        return numberOfBonusChoices;
+    }
+
+    public void setNumberOfBonusChoices(Integer numberOfBonusChoices) {
+        this.numberOfBonusChoices = numberOfBonusChoices;
     }
 }
