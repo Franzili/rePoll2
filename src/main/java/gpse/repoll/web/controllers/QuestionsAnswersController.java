@@ -1,9 +1,9 @@
 package gpse.repoll.web.controllers;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import gpse.repoll.domain.poll.User;
+import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.poll.answers.Answer;
-import gpse.repoll.domain.serialization.SerializeUser;
+import gpse.repoll.domain.serialization.SerializeParticipant;
 import gpse.repoll.domain.service.AnswerService;
 import gpse.repoll.domain.statistics.QuestionAnswersSet;
 import gpse.repoll.security.Roles;
@@ -27,9 +27,9 @@ public class QuestionsAnswersController {
         this.answerService = answerService;
     }
 
-    @JsonSerialize(keyUsing = SerializeUser.class)
+    @JsonSerialize(keyUsing = SerializeParticipant.class)
     @GetMapping("/{pollID}/answers/{questionID:\\d+}/")
-    public Map<User, Answer> listEntriesAnswers(@PathVariable UUID pollID, @PathVariable String questionID) {
+    public Map<Participant, Answer> listEntriesAnswers(@PathVariable UUID pollID, @PathVariable String questionID) {
         return answerService.getAnswers(pollID, Long.valueOf(questionID));
     }
 

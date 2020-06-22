@@ -1,6 +1,6 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.poll.User;
+import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.Answer;
 import gpse.repoll.domain.poll.questions.Question;
@@ -20,12 +20,12 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Map<User, Answer> getAnswers(UUID pollID, Long questionID) {
+    public Map<Participant, Answer> getAnswers(UUID pollID, Long questionID) {
         // TODO for anonymous polls
         List<PollEntry> entries = new ArrayList<>(pollService.getPoll(pollID).getPollEntries());
-        Map<User, Answer> userAnswerMap = new HashMap<>();
+        Map<Participant, Answer> userAnswerMap = new HashMap<>();
         for (PollEntry entry : entries) {
-            User key = entry.getUser();
+            Participant key = entry.getParticipant();
             Question currentQuestion = null;
             for (Question question : entry.getAssociations().keySet()) {
                 if (question.getId().equals(questionID)) {

@@ -1,9 +1,7 @@
 package gpse.repoll.security;
 
-import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.poll.PollEntry;
-import gpse.repoll.domain.poll.PollStatus;
+import gpse.repoll.domain.poll.PollEditStatus;
 import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.repositories.PollEntryRepository;
 import gpse.repoll.domain.service.PollService;
@@ -27,14 +25,14 @@ public class SecurityService {
         this.userService = userService;
     }
 
-    public boolean isActivated(UUID pollID) {
+    public boolean hasStatusLaunched(UUID pollID) {
         Poll poll = pollService.getPoll(pollID);
-        return poll.getStatus().equals(PollStatus.ACTIVATED);
+        return poll.getStatus().equals(PollEditStatus.LAUNCHED);
     }
 
-    public boolean isInProcess(UUID pollID) {
+    public boolean hasStatusEditing(UUID pollID) {
         Poll poll = pollService.getPoll(pollID);
-        return poll.getStatus().equals(PollStatus.IN_PROCESS);
+        return poll.getStatus().equals(PollEditStatus.EDITING);
     }
 
     public boolean isCurrentUser(String username, String userId) {
@@ -45,14 +43,6 @@ public class SecurityService {
             user = userService.getUser(userId);
         }
         return user.getUsername().equals(username);
-    }
-
-    public boolean isOwnEntry(String username, Long entryID) {
-        User user = userService.getUser(username);
-        PollEntry pollEntry = pollEntryRepository.findById(entryID).orElseThrow(() -> {
-            throw new NotFoundException("The entry does not exist!");
-        });
-        return pollEntry.getUser().equals(user);
     }
 
     public boolean isAdmin(String username) {
@@ -68,11 +58,6 @@ public class SecurityService {
     public boolean isEditor(String username) {
         User user = userService.getUser(username);
         return user.getRoles().contains(Roles.POLL_EDITOR);
-    }
-
-    public boolean isParticipant(String username) {
-        User user = userService.getUser(username);
-        return user.getRoles().contains(Roles.PARTICIPANT);
     }
 
     /**

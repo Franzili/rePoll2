@@ -12,7 +12,7 @@
                 <b-col cols="8">
                     <b-form-select v-model="selected" :options="this.structure">
                         <template v-slot:first>
-                            <b-form-select-option :value="null">Select a question for display</b-form-select-option>
+                            <b-form-select-option :value="null" disabled >Select a question for display</b-form-select-option>
                         </template>
                     </b-form-select>
                 </b-col>
@@ -40,6 +40,7 @@
         </b-row>
 
         <b-row>
+            <!-- TODO I WANT TO BE A COMPONENT IF I BECOME MORE COMPLEX -->
             <!--TODO Prototype for deeper analyses, "&& selQuest.length > 0"-->
             <b-table v-if="selected !== null"
                      striped
@@ -63,7 +64,6 @@
         props:['qId'],
         data() {
             return {
-                //{value: null, text: 'Select a question for display'}
                 selected: null,
                 answerSet: [],
                 fields: [

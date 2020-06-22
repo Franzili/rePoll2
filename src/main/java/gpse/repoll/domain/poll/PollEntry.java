@@ -22,10 +22,10 @@ public class PollEntry {
 
     @ManyToMany
     @JsonSerialize(keyUsing = SerializeQuestion.class)
-    private final Map<Question, Answer> associations = new HashMap<>();
+    private final Map<Question, Answer> associations = new HashMap<>(); // Todo insert all questions
 
-    @ManyToOne
-    private User user;
+    @OneToOne
+    private Participant participant;
 
     public Map<Question, Answer> getAssociations() {
         return Collections.unmodifiableMap(associations);
@@ -44,20 +44,12 @@ public class PollEntry {
         this.id = id;
     }
 
-    /**
-     * Get the {@link User} that gave this set of answers.
-     * @return The {@link User} that gave this set of answers.
-     */
-    public User getUser() {
-        return user;
+    public Participant getParticipant() {
+        return participant;
     }
 
-    /**
-     * Set the {@link User} that gave this set of answers.
-     * @param user The {@link User} that gave this set of answers.
-     */
-    public void setUser(User user) {
-        this.user = user;
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
     public void put(Question question, Answer answer) {

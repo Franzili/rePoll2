@@ -93,7 +93,7 @@ public class UserServiceImplTest {
         User user = Mockito.mock(User.class);
         when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
 
-        userService.updateUser(uuid, null, null, "plustig@gmail.com", Roles.PARTICIPANT);
+        userService.updateUser(uuid, null, null, "plustig@gmail.com", Roles.POLL_CREATOR);
         verify(user, never()).setUsername(anyString());
         verify(user, never()).setFullName(anyString());
         verify(user).setEmail("plustig@gmail.com");

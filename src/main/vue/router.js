@@ -1,4 +1,5 @@
 import VueRouter from "vue-router";
+
 import Start from "./pages/Start";
 import Account from "./pages/Account";
 import Answer from "./pages/Answer";
@@ -6,13 +7,17 @@ import PollTable from "./pages/PollTable";
 import Admin from "./pages/Admin";
 import PollResponse from "./pages/PollResponse";
 
+import TestCharts from "./pages/TestCharts";
+
 import PollTabbed from "./pages/PollTabbed";
 import EditPoll from "./components/poll-tabs/edit/EditPoll";
-
-import store from "./store/store";
-import TestCharts from "./pages/TestCharts";
 import PollStats from "./components/poll-tabs/stats/PollStats";
 import ConfigurePoll from "./components/poll-tabs/configure/ConfigurePoll";
+
+import Forbidden from "./pages/error/Forbidden";
+import NotFound from "./pages/error/NotFound";
+
+import store from "./store/store";
 
 let router = new VueRouter({
     mode: 'history',
@@ -25,29 +30,29 @@ let router = new VueRouter({
             path: '/account/',
             component: Account,
             meta: {
-                requiresAuth: true
+                requiresPrivileges: "ROLE_POLL_EDITOR",
+                title: "My Account | RePoll"
             }
         },
         {
             path: '/polls/',
+            name: 'polls',
             component: PollTable,
             meta: {
-                requiresAuth: true
+                requiresPrivileges: "ROLE_POLL_EDITOR",
+                title: "My Polls | RePoll"
             }
         },
         {
             path: '/poll/:id/answer',
             component: Answer,
             name: 'answer',
-            meta: {
-                requiresAuth: true
-            }
         },
         {
             path: '/poll/:pollId/',
             component: PollTabbed,
             meta: {
-                requiresAuth: true
+                requiresPrivileges: "ROLE_POLL_EDITOR",
             },
             children: [
                 {
@@ -55,7 +60,7 @@ let router = new VueRouter({
                     name: 'poll-tabbed',
                     redirect: 'config',
                     meta: {
-                        requiresAuth: true
+                        requiresPrivileges: "ROLE_POLL_EDITOR"
                     }
                 },
                 {
@@ -63,7 +68,7 @@ let router = new VueRouter({
                     name: 'edit-poll',
                     component: EditPoll,
                     meta: {
-                        requiresAuth: true
+                        requiresPrivileges: "ROLE_POLL_EDITOR"
                     }
                 },
                 {
@@ -71,7 +76,7 @@ let router = new VueRouter({
                     name: 'configure-poll',
                     component: ConfigurePoll,
                     meta: {
-                        requiresAuth: true
+                        requiresPrivileges: "ROLE_POLL_EDITOR"
                     }
                 },
                 {
@@ -79,7 +84,7 @@ let router = new VueRouter({
                     name: 'poll-stats',
                     component: PollStats,
                     meta: {
-                        requiresAuth: true
+                        requiresPrivileges: "ROLE_POLL_EDITOR"
                     }
                 }
             ]
@@ -89,7 +94,8 @@ let router = new VueRouter({
             component: Admin,
             name: 'admin',
             meta: {
-                requiresAuth: true
+                requiresPrivileges: "ROLE_ADMIN",
+                title: "Server Administration | RePoll"
             }
         },
         {
@@ -97,37 +103,71 @@ let router = new VueRouter({
             component: PollResponse,
             name: 'response',
             meta: {
-                requiresAuth: true
+                title: "Thank you for participating | RePoll"
             }
         },
         //for Charts testing
         {
             path: '/test/',
             component: TestCharts
+        },
+        {
+            name: 'not-found',
+            path: '/error/not-found',
+            component: NotFound,
+            meta: {
+                title: "Not found | RePoll"
+            }
+        },
+        {
+            name: 'forbidden',
+            path: '/error/forbidden',
+            component: Forbidden,
+            meta: {
+                title: "Forbidden | RePoll"
+            }
+        },
+        {
+            path: '*',
+            redirect: { name: 'not-found' }
         }
     ]
 });
 
+router.beforeEach((to, from, next) => {
+    console.debug("[RePoll] Requested route: " + to.path);
+    next();
+})
 
-// Route Guard. Run before each routing.
-router.beforeEach((to, from , next) => {
-    // if we are not authenticated, redirect to login page.
-
-    // if auth is needed
-    if (to.matched.some(route => route.meta.requiresAuth)) {
-        // if auth is correct proceed to destination
-        if (store.state.auth.authenticated) {
-            next()
-        } else {
-            next("/");
-        }
-    // if auth is not needed but acquired go to polls if '/' is requested
-    } else if (store.state.auth.authenticated && to.path === "/") {
-        next("/polls/");
-    // base case if nothing is needed and acquired
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresPrivileges && !store.state.auth.authenticated) {
+        next('/');
     } else {
-        next()
+        next();
+    }
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.path === '/' && store.state.auth.authenticated) {
+        next('/polls');
+    } else {
+        next();
+    }
+})
+
+router.beforeEach((to, from , next) => {
+    let required = to.meta.requiresPrivileges;
+    if (store.getters['auth/hasPrivileges'](required)) {
+        next();
+    } else {
+        next("/error/forbidden/");
     }
 });
 
+router.beforeEach((to, from, next) => {
+    console.debug("[RePoll] Routing to " + to.path);
+    next();
+})
+
 export default router;
+

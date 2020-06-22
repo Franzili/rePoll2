@@ -1,5 +1,6 @@
 package gpse.repoll.domain.poll.questions;
 
+import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Choice;
 
 import javax.persistence.*;
@@ -15,6 +16,12 @@ public class SingleChoiceQuestion extends Question {
 
     @OneToMany(orphanRemoval = true)
     private final List<Choice> choices = new ArrayList<>();
+
+    @Column
+    private int numberOfBonusChoices;
+
+    @OneToMany(orphanRemoval = true)
+    private final List<Choice> bonusChoices = new ArrayList<>();
 
     @Column
     private String displayVariant = "radio";
@@ -36,11 +43,28 @@ public class SingleChoiceQuestion extends Question {
         this.choices.addAll(choices);
     }
 
-    public void add(Choice choice) {
-        this.choices.add(choice);
+    public void addAllBonusChoices(List<Choice> choices) {
+        if (choices.size() <= numberOfBonusChoices) {
+            this.choices.addAll(choices);
+        } else {
+            throw new BadRequestException("Not so many bonus choices allowed");
+        }
     }
 
-    public void addAll(List<Choice> choices) {
-        this.choices.addAll(choices);
+    public int getNumberOfBonusChoices() {
+        return numberOfBonusChoices;
+    }
+
+    public void setNumberOfBonusChoices(int numberOfBonusChoices) {
+        this.numberOfBonusChoices = numberOfBonusChoices;
+    }
+
+    public List<Choice> getBonusChoices() {
+        return bonusChoices;
+    }
+
+    public void setBonusChoices(List<Choice> bonusChoices) {
+        this.bonusChoices.clear();
+        this.bonusChoices.addAll(bonusChoices);
     }
 }

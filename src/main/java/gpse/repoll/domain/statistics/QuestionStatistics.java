@@ -124,6 +124,9 @@ public class QuestionStatistics {
             for (Choice choice : ((SingleChoiceQuestion) question).getChoices()) {
                 choiceCountMap.put(choice, 0);
             }
+            for (Choice bonusChoice : ((SingleChoiceQuestion) question).getBonusChoices()) {
+                choiceCountMap.put(bonusChoice, 0);
+            }
             for (Answer answer : answers) {
                 if (answer instanceof SingleChoiceAnswer) {
                     SingleChoiceAnswer singleChoiceAnswer = (SingleChoiceAnswer) answer;
@@ -141,6 +144,9 @@ public class QuestionStatistics {
             }
         } else if (question instanceof MultiChoiceQuestion) {
             for (Choice choice : ((MultiChoiceQuestion) question).getChoices()) {
+                choiceCountMap.put(choice, 0);
+            }
+            for (Choice choice : ((MultiChoiceQuestion) question).getBonusChoices()) {
                 choiceCountMap.put(choice, 0);
             }
             for (Answer answer : answers) {
@@ -162,6 +168,14 @@ public class QuestionStatistics {
             }
         } else {
             throw new InternalServerErrorException();
+        }
+        for (Choice choice : choiceCountMap.keySet()) {
+            for (Choice duplicateChoice : choiceCountMap.keySet()) {
+                if (!choice.equals(duplicateChoice) && choice.getText().equals(duplicateChoice.getText())) {
+                    choiceCountMap.put(choice, choiceCountMap.get(duplicateChoice));
+                    choiceCountMap.remove(duplicateChoice);
+                }
+            }
         }
         for (Choice choice : choiceCountMap.keySet()) {
             frequencies.add(new Frequency(choice, choiceCountMap.get(choice), countAllChoices));

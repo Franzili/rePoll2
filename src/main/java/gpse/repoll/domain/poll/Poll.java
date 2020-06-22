@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.exceptions.NotFoundException;
+import gpse.repoll.domain.exceptions.PollAlreadyLaunchedException;
 import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
@@ -28,7 +29,7 @@ public class Poll extends Auditable<User> {
     private UUID id;
 
     @Column
-    private PollStatus status;
+    private PollEditStatus status;
 
     @Column
     private Anonymity anonymity;
@@ -42,11 +43,17 @@ public class Poll extends Auditable<User> {
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
+    @OneToMany(orphanRemoval = true)
+    private final List<PollIteration> pollIterations = new ArrayList<>();
+
     @OneToMany
     private final List<PollSection> pollSections = new ArrayList<>();
 
     @OneToMany
-    private final List<Question> questions = new ArrayList<>(); // todo sorting
+    private final List<Question> questions = new ArrayList<>();
+
+    @OneToMany
+    private final List<Participant> participants = new ArrayList<>();
 
     protected Poll() {
 
@@ -58,7 +65,7 @@ public class Poll extends Auditable<User> {
      */
     public Poll(String title) {
         this.title = title;
-        this.status = PollStatus.IN_PROCESS;
+        this.status = PollEditStatus.EDITING;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
     }
 
@@ -92,6 +99,15 @@ public class Poll extends Auditable<User> {
         this.pollEntries.addAll(pollEntries);
     }
 
+    public List<PollIteration> getPollIterations() {
+        return Collections.unmodifiableList(pollIterations);
+    }
+
+    public void setPollIterations(List<PollIteration> pollIterations) {
+        this.pollIterations.clear();
+        this.pollIterations.addAll(pollIterations);
+    }
+
     public List<PollSection> getPollSections() {
         return Collections.unmodifiableList(pollSections);
     }
@@ -111,6 +127,19 @@ public class Poll extends Auditable<User> {
         sortQuestions();
     }
 
+    public List<Participant> getParticipants() {
+        return Collections.unmodifiableList(participants);
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants.clear();
+        this.participants.addAll(participants);
+    }
+
+    public void addParticipant(Participant participant) {
+        this.participants.add(participant);
+    }
+
     private void sortQuestions() {
         questions.sort(Comparator.comparingInt(Question::getQuestionOrder));
     }
@@ -123,11 +152,14 @@ public class Poll extends Auditable<User> {
         return title;
     }
 
-    public PollStatus getStatus() {
+    public PollEditStatus getStatus() {
         return status;
     }
 
-    public void setStatus(PollStatus status) {
+    public void setStatus(PollEditStatus status) {
+        if (this.status.equals(PollEditStatus.LAUNCHED) && status.equals(PollEditStatus.EDITING)) {
+            throw new PollAlreadyLaunchedException();
+        }
         this.status = status;
     }
 
@@ -136,6 +168,9 @@ public class Poll extends Auditable<User> {
     }
 
     public void setAnonymity(Anonymity anonymity) {
+        if (status.equals(PollEditStatus.LAUNCHED)) {
+            throw new PollAlreadyLaunchedException();
+        }
         this.anonymity = anonymity;
     }
 
@@ -175,6 +210,13 @@ public class Poll extends Auditable<User> {
         }
     }
 
+    public void remove(Participant participant) {
+        boolean res = participants.remove(participant);
+        if (!res) {
+            throw new NotFoundException("Participant does not belong to this poll.");
+        }
+    }
+
     public boolean contains(Question question) {
         return questions.contains(question);
     }
@@ -189,6 +231,14 @@ public class Poll extends Auditable<User> {
 
     public boolean contains(PollEntry pollEntry) {
         return pollEntries.contains(pollEntry);
+    }
+
+    public void add(PollIteration pollIteration) {
+        pollIterations.add(pollIteration);
+    }
+
+    public void remove(PollIteration pollIteration) {
+        pollIterations.remove(pollIteration);
     }
 
     private PollSection getSection(UUID sectionId) {

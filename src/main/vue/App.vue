@@ -17,6 +17,12 @@
         components: {
             NavBar
         },
+        watch: {
+            $route: {
+                handler: to => document.title = to.meta.title || "RePoll",
+                immediate: true
+            }
+        }
     }
 </script>
 

@@ -43,6 +43,18 @@
                 }]},
             this.options);
         },
+        watch: {
+            chartData() {
+                this.renderChart({
+                        labels: this.chartLabels,
+                        datasets: [{
+                            label: this.title,
+                            backgroundColor: this.backgroundColor,
+                            data: this.chartData
+                        }]},
+                    this.options);
+            }
+        }
     }
 </script>
 
