@@ -157,7 +157,7 @@ public class InitializeDatabase implements InitializingBean {
             HashMap<UUID, List<Long>> structure2 = new HashMap<>();
             structure2.put(section01.getId(), List.of(question0201.getId()));
             structure2.put(section02.getId(), List.of(question0202.getId()));
-            pollService.updatePoll(poll2.getId(), null, null, null, structure2, null);
+            pollService.updatePoll(poll2.getId(), null, null, null, structure2);
 
 
 
@@ -212,7 +212,7 @@ public class InitializeDatabase implements InitializingBean {
             HashMap<UUID, List<Long>> structure = new HashMap<>();
             structure.put(section1.getId(), List.of(question1.getId(), question2.getId()));
             structure.put(section2.getId(), List.of(question3.getId(), question4.getId()));
-            pollService.updatePoll(poll.getId(), null, null, null, structure, null);
+            pollService.updatePoll(poll.getId(), null, null, null, structure);
 
             // Create 10 TextAnswers
             TextAnswer textAnswer1 = new TextAnswer();

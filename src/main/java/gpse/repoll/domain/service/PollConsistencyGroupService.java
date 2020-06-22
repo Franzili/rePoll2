@@ -22,10 +22,11 @@ public interface PollConsistencyGroupService {
      * Add a new ConsistencyGroup to a Poll.
      * @param pollId The Poll's ID
      * @param title The title of the new ConsistencyGroup
+     * @param questionIds The ID's of the new questions
      * @return The newly created ConsistencyGroup
      * @throws gpse.repoll.domain.exceptions.NotFoundException If corresponding poll could not be found
      */
-    PollConsistencyGroup addConsistencyGroup(final UUID pollId, final String title);
+    PollConsistencyGroup addConsistencyGroup(final UUID pollId, final String title, final List<Long> questionIds);
 
     /**
      * Get a ConsistencyGroup corresponding to a Poll.
@@ -43,6 +44,7 @@ public interface PollConsistencyGroupService {
      * @param pollId The Poll's ID
      * @param consistencyId The ConsistencyGroup's ID
      * @param title The new Title, or null
+     * @param questionIds The ID's of the new questions
      * @return The changed ConsistencyGroup
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the ConsistencyGroup or the corresponding poll could
      * not be found
@@ -50,7 +52,8 @@ public interface PollConsistencyGroupService {
     PollConsistencyGroup updateConsistencyGroup(
         final UUID pollId,
         final UUID consistencyId,
-        final String title
+        final String title,
+        final List<Long> questionIds
     );
 
     /**

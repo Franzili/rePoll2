@@ -392,33 +392,4 @@ public class Poll extends Auditable<User> {
             section.sortQuestions();
         }
     }
-
-    /**
-     * This method assigns questions of the poll to consistency groups defined in the parameter.
-     * @param consistencies The defined assignments
-     * @throws BadRequestException If the consistencies object is not well defined
-     * @throws InternalServerErrorException if the algorithm ha a bug
-     */
-    public void setConsistencies(Map<UUID, List<Long>> consistencies)
-            throws BadRequestException, InternalServerErrorException {
-        Set<UUID> keySet = consistencies.keySet();
-
-        for (UUID key : keySet) {
-            if (!consistencyExists(key)) {
-                throw new BadRequestException("At least one consistency is not part of the poll!");
-            }
-            PollConsistencyGroup pollConsistencyGroup = getConsistency(key);
-            if (pollConsistencyGroup == null) {
-                throw new InternalServerErrorException();
-            }
-            List<Long> questionId = new ArrayList<>(consistencies.get(key));
-            List<Question> consistQuestions = listQuestions(questionId);
-            pollConsistencyGroup.addAll(consistQuestions);
-        }
-        sortQuestions();
-
-        for (PollConsistencyGroup pollConsistencyGroup : pollConsistencyGroups) {
-            pollConsistencyGroup.sortQuestions();
-        }
-    }
 }

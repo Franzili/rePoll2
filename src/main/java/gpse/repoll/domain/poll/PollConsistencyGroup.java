@@ -19,7 +19,7 @@ public class PollConsistencyGroup {
     @Lob
     private String title;
 
-    @OneToMany
+    @ManyToMany
     @JoinColumn
     private final List<Question> questions = new ArrayList<>();
 
@@ -54,17 +54,14 @@ public class PollConsistencyGroup {
     void setQuestions(List<Question> questions) {
         this.questions.clear();
         this.questions.addAll(questions);
-        sortQuestions();
     }
 
     public void add(Question question) {
         questions.add(question);
-        sortQuestions();
     }
 
     public void addAll(Collection<Question> questions) {
         this.questions.addAll(questions);
-        sortQuestions();
     }
 
     public void remove(Question question) {
@@ -73,6 +70,10 @@ public class PollConsistencyGroup {
 
     public void removeAll(Collection<Question> questions) {
         this.questions.removeAll(questions);
+    }
+
+    public void clear() {
+        questions.clear();
     }
 
     public boolean contains(Question question) {
@@ -88,19 +89,15 @@ public class PollConsistencyGroup {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof PollConsistencyGroup)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        PollConsistencyGroup consistencyGroup = (PollConsistencyGroup) o;
-        return Objects.equals(id, consistencyGroup.id);
+        PollConsistencyGroup that = (PollConsistencyGroup) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public void sortQuestions() {
-        questions.sort(Comparator.comparingInt(Question::getQuestionOrder));
     }
 }

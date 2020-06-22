@@ -73,8 +73,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public Poll updatePoll(final UUID id, final String title, final PollEditStatus status,
                            final Anonymity anonymity,
-                           final Map<UUID, List<Long>> structure,
-                           final Map<UUID, List<Long>> consistencies) {
+                           final Map<UUID, List<Long>> structure) {
         Poll poll = getPoll(id);
         if (title != null) {
             poll.setTitle(title);
@@ -87,9 +86,6 @@ public class PollServiceImpl implements PollService {
         }
         if (structure != null) {
             poll.setStructure(structure);
-        }
-        if (consistencies != null) {
-            poll.setConsistencies(consistencies);
         }
         pollRepository.save(poll);
         return poll;

@@ -16,6 +16,7 @@ import java.util.UUID;
 public class PollConsistencyGroupServiceImpl implements PollConsistencyGroupService {
 
     private final PollService pollService;
+    private final QuestionService questionService;
 
     private final PollConsistencyGroupRepository pollConsistencyGroupRepository;
     private final PollRepository pollRepository;
@@ -24,10 +25,12 @@ public class PollConsistencyGroupServiceImpl implements PollConsistencyGroupServ
     public PollConsistencyGroupServiceImpl(
         PollService pollService,
         PollConsistencyGroupRepository pollConsistencyGroupRepository,
-        PollRepository pollRepository) {
+        PollRepository pollRepository,
+        QuestionService questionService) {
         this.pollConsistencyGroupRepository = pollConsistencyGroupRepository;
         this.pollService = pollService;
         this.pollRepository = pollRepository;
+        this.questionService = questionService;
     }
 
     /**
@@ -43,9 +46,13 @@ public class PollConsistencyGroupServiceImpl implements PollConsistencyGroupServ
      */
     @Override
     public PollConsistencyGroup addConsistencyGroup(final UUID pollId,
-                                                    final String title) {
+                                                    final String title,
+                                                    final List<Long> questionIds) {
         Poll poll = pollService.getPoll(pollId);
         PollConsistencyGroup pollConsistencyGroup = new PollConsistencyGroup(title);
+        for (Long questionId : questionIds) {
+            pollConsistencyGroup.add(questionService.getQuestion(pollId, questionId));
+        }
         pollConsistencyGroupRepository.save(pollConsistencyGroup);
         poll.add(pollConsistencyGroup);
         pollService.save(poll);
@@ -85,11 +92,16 @@ public class PollConsistencyGroupServiceImpl implements PollConsistencyGroupServ
     @Override
     public PollConsistencyGroup updateConsistencyGroup(final UUID pollId,
                                                        final UUID consistencyId,
-                                                       final String title) {
+                                                       final String title,
+                                                       final List<Long> questionIds) {
         Poll poll = pollService.getPoll(pollId);
         PollConsistencyGroup pollConsistencyGroup = findConsistencyGroupOfPoll(poll, consistencyId);
         if (title != null) {
             pollConsistencyGroup.setTitle(title);
+        }
+        pollConsistencyGroup.clear();
+        for (Long questionId : questionIds) {
+            pollConsistencyGroup.add(questionService.getQuestion(pollId, questionId));
         }
         pollService.save(poll);
         return pollConsistencyGroup;

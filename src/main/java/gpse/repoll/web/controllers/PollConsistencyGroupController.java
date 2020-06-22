@@ -37,7 +37,8 @@ public class PollConsistencyGroupController {
                                                         @RequestBody PollConsistencyGroupCmd pollConsistencyGroupCmd) {
         return pollConsistencyGroupService.addConsistencyGroup(
             pollId,
-            pollConsistencyGroupCmd.getTitle());
+            pollConsistencyGroupCmd.getTitle(),
+            pollConsistencyGroupCmd.getQuestionIds());
     }
 
     @Secured(Roles.POLL_EDITOR)
@@ -49,7 +50,8 @@ public class PollConsistencyGroupController {
         return pollConsistencyGroupService.updateConsistencyGroup(
             pollId,
             consistencyId,
-            pollConsistencyGroupCmd.getTitle());
+            pollConsistencyGroupCmd.getTitle(),
+            pollConsistencyGroupCmd.getQuestionIds());
     }
 
     @Secured(Roles.POLL_EDITOR)
