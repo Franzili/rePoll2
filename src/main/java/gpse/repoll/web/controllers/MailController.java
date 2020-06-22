@@ -1,19 +1,20 @@
 package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.service.MailService;
+import gpse.repoll.mails.MailConfig;
 import gpse.repoll.security.Roles;
+import gpse.repoll.web.command.MailCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
- * REST Controller managing the endpoint /api/v1/polls/mail/.
- * This controller is for test purposes only.
+ * REST Controller managing the endpoint /api/v1/configs/.
  */
 @Controller
-@Secured(Roles.POLL_CREATOR)
+@Secured(Roles.ADMIN)
+@RequestMapping("/api/v1/")
 public class MailController {
 
     private static final String ACCOUNT = "zizimeyer4@gmail.com";
@@ -25,8 +26,15 @@ public class MailController {
         this.mailService = mailService;
     }
 
+    @PutMapping("/configs/")
+    public MailConfig setServerConfigs(@RequestBody final MailCmd mailCmd) {
+        return mailService.setHostServer(
+            mailCmd.getSmtpServerAddress(), mailCmd.getSmtpPort(), mailCmd.getAccount(), mailCmd.getPassword()
+        );
+    }
+
     @ResponseBody
-    @RequestMapping("/api/v1/polls/mail/")
+    @RequestMapping("/polls/mail/")
     public String sendSimpleEmail() {
         return mailService.sendEmail(TEST, "hihi", ACCOUNT);
     }

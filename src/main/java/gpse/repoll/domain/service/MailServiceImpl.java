@@ -1,7 +1,9 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.User;
+import gpse.repoll.domain.repositories.MailConfigRepository;
 import gpse.repoll.domain.repositories.UserRepository;
+import gpse.repoll.mails.MailConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -10,7 +12,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -24,6 +25,7 @@ public class MailServiceImpl implements MailService {
     private static final String FAILURE = "Failure!\nThe Mail could not be sent";
     private static final String INVALID_MAIL_ADDRESS = "Invalid E-Mail address";
     private UserRepository userRepository;
+    private MailConfigRepository mailConfigRepository;
 
     @Autowired
     private JavaMailSender emailSender;
@@ -80,5 +82,14 @@ public class MailServiceImpl implements MailService {
             } catch (MailException e) {
                 return FAILURE;
             }
+    }
+
+    public MailConfig setHostServer(String smtpServerAddress, int port, String account, String password) {
+        MailConfig mailConfig = new MailConfig();
+        mailConfig.setHostServer(smtpServerAddress);
+        mailConfig.setPort(port);
+        mailConfig.setSendersAddress(account);
+        mailConfigRepository.save(mailConfig);
+        return mailConfig;
     }
 }

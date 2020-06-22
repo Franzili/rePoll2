@@ -38,10 +38,8 @@ public class MailConfig {
     @Column
     private String senderPassword = "qwertz24";
 
-    private String sendTo;
 
-
-    protected MailConfig() {
+    public MailConfig() {
 
     }
 
@@ -105,13 +103,5 @@ public class MailConfig {
 
     public void setSenderPassword(String senderPassword) {
         this.senderPassword = senderPassword;
-    }
-
-    public String getSendTo() {
-        return sendTo;
-    }
-
-    public void setSendTo(String sendTo) {
-        this.sendTo = sendTo;
     }
 }

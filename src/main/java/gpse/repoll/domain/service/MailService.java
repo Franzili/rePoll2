@@ -1,6 +1,7 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.User;
+import gpse.repoll.mails.MailConfig;
 
 /**
  * Provides operations with Mailing to the Controller.
@@ -22,4 +23,14 @@ public interface MailService {
      * @return Confirmation that the Mail was sent or an error message.
      */
     String sendPwdGenMail(User user);
+
+    /**
+     * Sets the SMTP Server Configs.
+     * @param smtpServerAddress server address.
+     * @param port server port.
+     * @param account The account the mails should be sent from.
+     * @param password The corresponding password.
+     * @return The MailConfig Object.
+     */
+    MailConfig setHostServer(String smtpServerAddress, int port, String account, String password);
 }
