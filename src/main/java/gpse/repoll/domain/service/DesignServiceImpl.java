@@ -38,10 +38,13 @@ public class DesignServiceImpl implements DesignService {
             poll.setDesign(design);
             pollRepository.save(poll);
         }
+        Design design = poll.getDesign();
         if (font != null) {
-            poll.getDesign().setFont(font);
+            design.setFont(font);
         }
         //poll.setDesign(newDesign); // TODO einzeln updaten
+        designRepository.save(design);
+        poll.setDesign(design);
         pollRepository.save(poll);
         return pollService.getPoll(pollID).getDesign();
     }
