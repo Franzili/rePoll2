@@ -14,10 +14,10 @@
             id="launchModal"
             ref="launchIterModal"
             centered
-            title="How long should the poll be activ ?"
+            title="How long should the poll be active ?"
             header-bg-variant="info"
-            @ok="handleOk">
-            <form ref="launchForm" @submit.stop.prevent="handleSubmit">
+            @ok="handleOkLaunch">
+            <form ref="launchForm" @submit.stop.prevent="handleSubmitLaunch">
                 <b-form-group
                     :state="launchState"
                     label="Expiration Date for Iteration"
@@ -101,9 +101,49 @@
             </form>
         </b-modal>
         -->
+
         <p>
-            <b-button class="float-right" variant="secondary">Schedule</b-button>
+            <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>Schedule</b-button>
         </p>
+
+
+        <b-modal
+            id="scheduleModal"
+            ref="scheduleIterModal"
+            centered
+            title="For what time period should the poll be active ?"
+            header-bg-variant="info"
+            @ok="handleOkSchedule">
+            <form ref="scheduleForm" @submit.stop.prevent="handleSubmitLaunch">
+                <b-form-group
+                    :state="scheduleState"
+                    label="Start and Expiration Date for Iteration"
+                    label-for="endDatumInput"
+                    invalid-feedback="Expiration Date is required"
+                >
+                    <b-form-input
+                        id="schedule-start-input"
+                        v-model="dateStart"
+                        :state="scheduleState"
+                        label
+                        required>
+                    </b-form-input>
+                    <label>
+                        yyyy-MM-dd HH:mm:ss
+                    </label><b-form-input
+                    id="schedule-end-input"
+                    v-model="dateEnde"
+                    :state="scheduleState"
+                    label
+                    required>
+                </b-form-input>
+                    <label>
+                        yyyy-MM-dd HH:mm:ss
+                    </label>
+                </b-form-group>
+            </form>
+        </b-modal>
+
 
     </b-card>
 
@@ -120,7 +160,6 @@
     //import {mapActions, mapState} from "vuex";
 
     import {mapActions, mapState} from "vuex";
-    //import  moment from 'moment';
 
     export default {
         name: "Iteration",
@@ -128,20 +167,26 @@
             return {
                 ende: "",
                 launchState: null,
-                timestamp: ""
+                timestamp: "",
+                end: "",
+                start: "",
+                iterId: "",
+                iterStatus: ""
             }
-
         },
         created() {
-
+            /*this.iterId = this.iterationId,
+            this.iterStatus = this.iterationStatus,
+            this.end = this.iterationEnd,
+            this.start = this.iterationStart*/
         },
         computed: {
             ...mapState('currentPoll', {
                 poll: 'poll'
             }),
-            ...mapState('currentIteration', {
+            /*...mapState('currentIteration', {
                 iteration: 'iteration'
-            }),
+            }),*/
             ...mapState('myIterations', {
                 iterations: 'iterations'
             }),
@@ -149,26 +194,31 @@
                 pollId: state => state.poll.id,
                 pollStatus: state => state.poll.status,
             }),
-            ...mapState('currentIteration', {
-                iterationId: state => state.iterations.id,
-                iterationStatus: state => state.iterations.status
-            }),
-
-
-            /*StringToDateTimeFormatter(){
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
-                LocalDateTime dateTime = LocalDateTime.parse("2019-03-27 10:15:30 AM", formatter);
-            },*/
+            /*...mapState('currentIteration', {
+                iterationId: state => state.iteration.id,
+                iterationStatus: state => state.iteration.status,
+                iterationEnd: state => state.iteration.end,
+                iterationStart: state => state.iteration.start
+            }),*/
         },
         methods: {
             ...mapActions('currentPoll', {
                 updatePoll: 'update'
             }),
-            ...mapActions('currentIteration', {
+            /*...mapActions('currentIteration', {
                 updateIteration: 'update'
             }),
             ...mapActions('currentIterations', {
                 createIteration: 'create'
+            }),*/
+            ...mapActions('myIterations', {
+                listIterations: 'load'
+            }),
+            ...mapActions('myIterations', {
+                createIteration: 'create'
+            }),
+            ...mapActions('myIterations', {
+                deleteIteration: 'delete'
             }),
             getTimeNow: function() {
                 //const today = new Date(); //yyyy-MM-dd HH:mm:ss
@@ -177,24 +227,12 @@
                 //this.timestamp = date + ' ' + time;
                 this.timestamp = new Date();
             },
-            checkFormValidity() {
-                const valid = this.$refs.form.checkValidity()
-                this.launchState = valid
-                return valid
-            },
-            resetModal() {
-                this.ende = ''
-                this.launchState = null
-            },
-            handleOk(bvModalEvt) {
+            handleOkLaunch(bvModalEvt) {
                 bvModalEvt.preventDefault()
-                this.handleSubmit()
+                this.handleSubmitLaunch()
             },
-            handleSubmit() {
-                /*if (!this.checkFormValidity()) {
-                    return
-                }*/
-                this.ende = this.dateEnde
+            handleSubmitLaunch() {
+                this.ende = this.dateEnde //ignore error 'unresolved variable'
                 this.launchSingleIter()
                 this.$nextTick(() => {
                     this.$bvModal.hide('launchModal')
@@ -207,10 +245,37 @@
                     end: new Date(this.ende),
                     status: 'ACTIVATED'
                 }
-                //this.createIteration(pollIterationCmd);
+                this.createIteration(pollIterationCmd);
                 console.log('start: ',pollIterationCmd.start)
                 console.log('ende :', pollIterationCmd.end)
-                /*let pollCmd = { //TODO: changing poll status does not work
+                /*let pollCmd = { //TODO: changing poll status throws error message for api
+                    id: this.pollId,
+                    status: 'READY'
+                }
+                this.updatePoll(pollCmd);*/
+            },
+            handleOkSchedule(bvModalEvt) {
+                bvModalEvt.preventDefault()
+                this.handleSubmitSchedule()
+            },
+            handleSubmitSchedule() {
+                this.ende = this.dateEnde //ignore error 'unresolved variable'
+                this.scheduleSingleIter()
+                this.$nextTick(() => {
+                    this.$bvModal.hide('scheduleModal')
+                })
+            },
+            scheduleSingleIter() {
+                this.getTimeNow()
+                let pollIterationCmd = {
+                    start: this.timestamp,
+                    end: new Date(this.ende),
+                    status: 'ACTIVATED'
+                }
+                this.createIteration(pollIterationCmd);
+                console.log('start: ',pollIterationCmd.start)
+                console.log('ende :', pollIterationCmd.end)
+                /*let pollCmd = { //TODO: changing poll status throws error message for api
                     id: this.pollId,
                     status: 'READY'
                 }
