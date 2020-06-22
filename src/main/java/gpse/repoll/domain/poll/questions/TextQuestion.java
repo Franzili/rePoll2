@@ -10,6 +10,16 @@ public class TextQuestion extends Question {
 
     private int charLimit; // todo > 0 at least
 
+    public TextQuestion() {
+
+    }
+
+    public TextQuestion(TextQuestion textQuestion) {
+        setTitle(textQuestion.getTitle());
+        setQuestionOrder(textQuestion.getQuestionOrder());
+        charLimit = textQuestion.charLimit;
+    }
+
     public int getCharLimit() {
         return charLimit;
     }
