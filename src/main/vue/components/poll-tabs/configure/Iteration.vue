@@ -9,13 +9,82 @@
         <p>
             <b-button class="float-right" variant="primary" v-b-modal.launchModal>Launch</b-button>
         </p>
+
         <b-modal
             id="launchModal"
             ref="launchIterModal"
             centered
             title="How long should the poll be activ ?"
             header-bg-variant="info"
-            @ok="handleOk"><!--@ok="launchSingleIter()"> --><!--HIER EINGABE VON DATUM ERMÖGLICHEN ODER WAS ANDERS FÜR LAUFZEIT/ABLAUFDATUM!!!-->
+            @ok="handleOk">
+            <form ref="launchForm" @submit.stop.prevent="handleSubmit">
+                <b-form-group
+                    :state="launchState"
+                    label="Expiration Date for Iteration"
+                    label-for="endDatumInput"
+                    invalid-feedback="Expiration Date is required"
+                >
+                    <b-form-input
+                        id="launch-date-input"
+                        v-model="dateEnde"
+                        :state="launchState"
+                        label
+                        required>
+                    </b-form-input>
+                    <label>
+                        year-month-day hours:minutes:seconds
+                    </label>
+                </b-form-group>
+            </form>
+        </b-modal>
+
+
+
+        <!--
+        <a href="#myModal" role="button" class="btn btn-default" data-toggle="modal">Launch demo modal</a>
+        -->
+
+
+        <!--
+        <p>
+            <b-button href="#launchModal" class="float-right" variant="primary" data-toggle="modal">Launch</b-button>
+        </p>
+
+        <div id="launchModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="launchModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="launchModalLabel">Modal header</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div id="calendar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    -->
+        <!--@ok="launchSingleIter()"> --><!--HIER EINGABE VON DATUM ERMÖGLICHEN ODER WAS ANDERS FÜR LAUFZEIT/ABLAUFDATUM!!!-->
+        <!--
+        <p>
+            <b-button class="float-right" variant="primary" v-b-modal.launchModal>Launch</b-button>
+        </p>
+
+        <b-modal
+            id="launchModal"
+            ref="launchIterModal"
+            centered
+            title="How long should the poll be activ ?"
+            header-bg-variant="info"
+            @ok="handleOk">
             <form ref="launchForm" @submit.stop.prevent="handleSubmit">
                 <b-form-group
                     :state="launchState"
@@ -31,6 +100,7 @@
                 </b-form-group>
             </form>
         </b-modal>
+        -->
         <p>
             <b-button class="float-right" variant="secondary">Schedule</b-button>
         </p>
@@ -57,7 +127,7 @@
             return {
                 ende: '',
                 launchState: null,
-                submittedDates: []
+                timestamp: ""
             }
 
         },
@@ -79,6 +149,12 @@
             ...mapActions('myIterations', {
                 updateIter: 'update'
             }),
+            getTimeNow: function() {
+              const today = new Date();
+                const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                this.timestamp = date + ' ' + time;
+            },
             checkFormValidity() {
                 const valid = this.$refs.form.checkValidity()
                 this.launchState = valid
@@ -93,39 +169,32 @@
                 this.handleSubmit()
             },
             handleSubmit() {
-                if (!this.checkFormValidity()) {
+                /*if (!this.checkFormValidity()) {
                     return
-                }
+                }*/
+                this.ende = this.dateEnde
                 this.launchSingleIter()
                 this.$nextTick(() => {
                     this.$bvModal.hide('launchModal')
                 })
             },
             launchSingleIter() {
+                this.getTimeNow()
                 let pollIterationCmd = {
-                    start: LocalDateTime.now(),
+                    start: this.timestamp,
                     end: this.ende,
                     status: 'ACTIVATED'
                 }
-                this.updateIter(pollIterationCmd);
-                let pollCmd = {
+                //this.updateIter(pollIterationCmd);
+                console.log('start: ',pollIterationCmd.start)
+                console.log('ende :', pollIterationCmd.end)
+                console.log('status :', pollIterationCmd.status)
+                /*let pollCmd = {
                     id: this.pollId,
                     status: 'READY'
                 }
-                this.updatePoll(pollCmd);
-            },
-            getLocalDate() {
-                LocalDateTime a  LocalDateTime.now();
+                this.updatePoll(pollCmd);*/
             }
-            /*launchPoll() { //Button Launch: launch itetation now
-                //TODO add iteration from this moment to open end
-                this.poll.status = "ACTIVATED"
-                let pollCmd = {
-                    id: this.poll.id,
-                    status: this.poll.status
-                };
-                this.updatePoll(pollCmd);
-            }*/
         }
     }
 </script>
