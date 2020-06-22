@@ -246,12 +246,12 @@
                 let pollIterationCmd = {
                     start: this.timestamp,
                     end: new Date(this.ende),
-                    //status: 'ACTIVATED'
+                    status: 'OPEN'
                 }
                 this.createIteration(pollIterationCmd);
                 console.log('start: ',pollIterationCmd.start)
                 console.log('ende :', pollIterationCmd.end)
-                console.log('typ: ', typeof pollIterationCmd)
+                console.log('status :', pollIterationCmd.status)
                 let pollCmd = { //TODO: changing poll status throws error message for api
                     id: this.pollId,
                     status: 'LAUNCHED' //'READY'
@@ -274,11 +274,12 @@
                 let pollIterationCmd = {
                     start: this.timestamp,
                     end: new Date(this.ende),
-                    status: 'ACTIVATED'
+                    status: 'SCHEDULED'
                 }
                 this.createIteration(pollIterationCmd);
                 console.log('start: ',pollIterationCmd.start)
                 console.log('ende :', pollIterationCmd.end)
+                console.log('status :', pollIterationCmd.status)
                 let pollCmd = { //TODO: changing poll status throws error message for api
                     id: this.pollId,
                     status: 'LAUNCHED' //'READY'
