@@ -24,10 +24,25 @@ public class MultiChoiceQuestion extends Question {
     private final List<Choice> choices = new ArrayList<>();
 
     @Column
-    private int numberOfBonusChoices;
+    private Integer numberOfBonusChoices = 0;
 
     @OneToMany
     private final List<Choice> bonusChoices = new ArrayList<>();
+
+    public MultiChoiceQuestion() {
+
+    }
+
+    public MultiChoiceQuestion(MultiChoiceQuestion multiChoiceQuestion) {
+        setTitle(multiChoiceQuestion.getTitle());
+        setQuestionOrder(multiChoiceQuestion.getQuestionOrder());
+        final List<Choice> copiedChoices = new ArrayList<>();
+        for (Choice choice : multiChoiceQuestion.getChoices()) {
+            copiedChoices.add(new Choice(choice.getText()));
+        }
+        choices.addAll(copiedChoices);
+        numberOfBonusChoices = multiChoiceQuestion.numberOfBonusChoices;
+    }
 
     public List<Choice> getChoices() {
         return Collections.unmodifiableList(choices);
@@ -46,11 +61,14 @@ public class MultiChoiceQuestion extends Question {
         }
     }
 
-    public int getNumberOfBonusChoices() {
+    public Integer getNumberOfBonusChoices() {
         return numberOfBonusChoices;
     }
 
-    public void setNumberOfBonusChoices(int numberOfBonusChoices) {
+    public void setNumberOfBonusChoices(Integer numberOfBonusChoices) {
+        if (numberOfBonusChoices == null) {
+            this.numberOfBonusChoices = 0;
+        }
         this.numberOfBonusChoices = numberOfBonusChoices;
     }
 

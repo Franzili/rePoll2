@@ -72,6 +72,16 @@ public class Poll extends Auditable<User> {
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
     }
 
+    public Poll(Poll poll, List<PollSection> pollSections) {
+       this.status = PollEditStatus.EDITING;
+       this.anonymity = poll.anonymity;
+       this.title = poll.title;
+       this.pollSections.addAll(pollSections);
+       for (PollSection pollSection : this.pollSections) {
+           questions.addAll(pollSection.getQuestions());
+       }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

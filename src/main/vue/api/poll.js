@@ -13,6 +13,9 @@ export default {
         };
         return axios.post('/api/v1/polls/', pollCmd);
     },
+    duplicate(pollId) {
+        return axios.post('/api/v1/polls/' + pollId + '/')
+    },
     update(pollCmd) {
         return axios.put('/api/v1/polls/' + pollCmd.id + '/', pollCmd);
     },

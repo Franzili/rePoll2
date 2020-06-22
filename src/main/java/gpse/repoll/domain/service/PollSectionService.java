@@ -11,6 +11,8 @@ import java.util.UUID;
  */
 public interface PollSectionService {
 
+    void save(PollSection pollSection);
+
     /**
      * Get all PollSections of a Poll.
      * @param id The polls ID

@@ -18,13 +18,29 @@ public class SingleChoiceQuestion extends Question {
     private final List<Choice> choices = new ArrayList<>();
 
     @Column
-    private int numberOfBonusChoices;
+    private Integer numberOfBonusChoices = 0;
 
     @OneToMany(orphanRemoval = true)
     private final List<Choice> bonusChoices = new ArrayList<>();
 
     @Column
     private String displayVariant = "radio";
+
+    public SingleChoiceQuestion() {
+
+    }
+
+    public SingleChoiceQuestion(SingleChoiceQuestion singleChoiceQuestion) {
+        setTitle(singleChoiceQuestion.getTitle());
+        setQuestionOrder(singleChoiceQuestion.getQuestionOrder());
+        final List<Choice> copiedChoices = new ArrayList<>();
+        for (Choice choice : singleChoiceQuestion.getChoices()) {
+            copiedChoices.add(new Choice(choice.getText()));
+        }
+        choices.addAll(copiedChoices);
+        numberOfBonusChoices = singleChoiceQuestion.getNumberOfBonusChoices();
+        displayVariant = singleChoiceQuestion.getDisplayVariant();
+    }
 
     public String getDisplayVariant() {
         return displayVariant;
@@ -51,11 +67,14 @@ public class SingleChoiceQuestion extends Question {
         }
     }
 
-    public int getNumberOfBonusChoices() {
+    public Integer getNumberOfBonusChoices() {
         return numberOfBonusChoices;
     }
 
-    public void setNumberOfBonusChoices(int numberOfBonusChoices) {
+    public void setNumberOfBonusChoices(Integer numberOfBonusChoices) {
+        if (numberOfBonusChoices == null) {
+            this.numberOfBonusChoices = 0;
+        }
         this.numberOfBonusChoices = numberOfBonusChoices;
     }
 
