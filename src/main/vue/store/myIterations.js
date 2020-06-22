@@ -27,6 +27,16 @@ const myIterations = {
          */
         loadStatus(state, status) {
             state.loadStatus = status
+        },
+        create(state, iteration) {
+            state.iterations.push(iteration)
+        },
+        delete(state, id) {
+            state.iterations.filter(iteration => iteration.id !== id)
+        },
+        update(state, iteration) {
+            let IndexOldIteration = state.iterations.findIndex(oldIteration => oldIteration.id === iteration.id)
+            state.iterations[IndexOldIteration] = iteration;
         }
     },
     actions: {
@@ -107,7 +117,8 @@ const myIterations = {
             }*/
             return new Promise((resolve, reject) => {
                 api.iteration.removeIter(rootState.currentPoll.poll.id, id).then(function (res) {
-                    commit('currentIteration/set', {}, {root: true})
+                    //commit('currentIteration/set', {}, {root: true})
+                    commit('delete', id);
                     dispatch('load')
                     resolve(res.data);
                 }).catch(function (error) {
