@@ -171,7 +171,10 @@
                 end: "",
                 start: "",
                 iterId: "",
-                iterStatus: ""
+                iterStatus: "",
+                dateEnde: "",
+                scheduleState: "",
+                dateStart: ""
             }
         },
         created() {
@@ -243,16 +246,17 @@
                 let pollIterationCmd = {
                     start: this.timestamp,
                     end: new Date(this.ende),
-                    status: 'ACTIVATED'
+                    //status: 'ACTIVATED'
                 }
                 this.createIteration(pollIterationCmd);
                 console.log('start: ',pollIterationCmd.start)
                 console.log('ende :', pollIterationCmd.end)
-                /*let pollCmd = { //TODO: changing poll status throws error message for api
+                console.log('typ: ', typeof pollIterationCmd)
+                let pollCmd = { //TODO: changing poll status throws error message for api
                     id: this.pollId,
-                    status: 'READY'
+                    status: 'LAUNCHED' //'READY'
                 }
-                this.updatePoll(pollCmd);*/
+                this.updatePoll(pollCmd);
             },
             handleOkSchedule(bvModalEvt) {
                 bvModalEvt.preventDefault()
@@ -275,11 +279,11 @@
                 this.createIteration(pollIterationCmd);
                 console.log('start: ',pollIterationCmd.start)
                 console.log('ende :', pollIterationCmd.end)
-                /*let pollCmd = { //TODO: changing poll status throws error message for api
+                let pollCmd = { //TODO: changing poll status throws error message for api
                     id: this.pollId,
-                    status: 'READY'
+                    status: 'LAUNCHED' //'READY'
                 }
-                this.updatePoll(pollCmd);*/
+                this.updatePoll(pollCmd);
             }
         }
     }

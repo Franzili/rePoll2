@@ -79,7 +79,8 @@ const myIterations = {
             }*/
             return new Promise((resolve, reject) => {
                 api.iterations.addIter(rootState.currentPoll.poll.id, pollIterationCmd).then(function (res) {
-                    commit('currentIteration/set', res.data, {root: true});
+                    //commit('currentIteration/set', res.data, {root: true});
+                    commit('create', res.data, {root: true});
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);
