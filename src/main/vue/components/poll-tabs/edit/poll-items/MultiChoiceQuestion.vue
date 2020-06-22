@@ -12,6 +12,8 @@
             <h6>Choices:</h6>
             <ChoiceEditor :choices="model.choices"
                           v-on:choicesChanged="model.choices = $event" />
+            <h6>Number of custom choices allowed:</h6>
+            <b-input v-model="bonusChoices"></b-input>
         </div>
     </div>
 </template>
@@ -23,7 +25,8 @@
         components: {ChoiceEditor},
         data() {
             return {
-                selected: []
+                selected: [],
+                bonusChoices: 0
             }
         },
         computed: {
@@ -33,6 +36,11 @@
                     choiceIds: this.selected //.map(choice => choice.id)
                 }
             },
+        },
+        watch: {
+          bonusChoices: function (newNumber) {
+              this.model.numberOfBonusChoices = newNumber
+          }
         },
         props: {
             model: {

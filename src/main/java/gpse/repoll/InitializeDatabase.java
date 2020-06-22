@@ -195,7 +195,7 @@ public class InitializeDatabase implements InitializingBean {
             choicesChoiceQuestionList.add(choice4);
             Question question3 = questionService.addMultiChoiceQuestion(poll.getId(),
                 "Which artist do yo like the most?",
-                4, choicesChoiceQuestionList, 4);
+                4, choicesChoiceQuestionList, 7);
 
             Question question4 = questionService.addScaleQuestion(poll.getId(),
                 "How satisfied are you with our services?",

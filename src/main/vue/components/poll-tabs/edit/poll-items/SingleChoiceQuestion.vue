@@ -26,7 +26,9 @@
             <h6>Choices:</h6>
             <ChoiceEditor :choices="model.choices"
                           v-on:choicesChanged="model.choices = $event"/>
-
+            <b-form-checkbox v-model="bonusChoice">
+                Allow custom choice
+            </b-form-checkbox>
             <h6>Display Variant:</h6>
             <p>
                 <b-form-select v-model="model.displayVariant">
@@ -46,7 +48,8 @@
         name: "SingleChoiceQuestion",
         data() {
             return {
-                selected: null
+                selected: null,
+                bonusChoice: null
             }
         },
         computed: {
@@ -54,6 +57,15 @@
                 return {
                     type: "SingleChoiceAnswer",
                     choiceId: this.selected
+                }
+            }
+        },
+        watch: {
+            bonusChoice: function() {
+                if (this.bonusChoice) {
+                    this.model.numberOfBonusChoices = 1;
+                } else {
+                    this.model.numberOfBonusChoices = 0;
                 }
             }
         },
