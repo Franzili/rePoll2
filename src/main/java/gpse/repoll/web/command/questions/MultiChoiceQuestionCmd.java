@@ -10,6 +10,7 @@ import java.util.List;
 public class MultiChoiceQuestionCmd extends QuestionCmd {
 
     private final List<ChoiceCmd> choices = new ArrayList<>();
+    private Integer numberOfBonusChoices;
 
     public List<ChoiceCmd> getChoices() {
         return choices;
@@ -18,5 +19,13 @@ public class MultiChoiceQuestionCmd extends QuestionCmd {
     public void setChoices(List<ChoiceCmd> choices) {
         this.choices.clear();
         this.choices.addAll(choices);
+    }
+
+    public Integer getNumberOfBonusChoices() {
+        return numberOfBonusChoices;
+    }
+
+    public void setNumberOfBonusChoices(Integer numberOfBonusChoices) {
+        this.numberOfBonusChoices = numberOfBonusChoices;
     }
 }

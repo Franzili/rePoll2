@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class PollEntryCmd {
 
-    private Map<Long, AnswerCmd> answers = new HashMap<>();
+    private final Map<Long, AnswerCmd> answers = new HashMap<>();
 
     public Map<Long, AnswerCmd> getAnswers() {
         return answers;

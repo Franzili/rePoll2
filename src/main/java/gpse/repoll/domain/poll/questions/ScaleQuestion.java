@@ -40,6 +40,16 @@ public class ScaleQuestion extends Question {
         this.max = max - (max - min) % stepCount;
     }
 
+    public ScaleQuestion(ScaleQuestion scaleQuestion) {
+        setTitle(scaleQuestion.getTitle());
+        setQuestionOrder(scaleQuestion.getQuestionOrder());
+        scaleNameLeft = scaleQuestion.getScaleNameLeft();
+        scaleNameRight = scaleQuestion.getScaleNameRight();
+        stepCount = scaleQuestion.getStepCount();
+        min = scaleQuestion.getMin();
+        max = scaleQuestion.getMax();
+    }
+
     public String getScaleNameLeft() {
         return scaleNameLeft;
     }

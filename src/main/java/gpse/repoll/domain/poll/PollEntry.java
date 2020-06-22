@@ -24,9 +24,6 @@ public class PollEntry {
     @JsonSerialize(keyUsing = SerializeQuestion.class)
     private final Map<Question, Answer> associations = new HashMap<>(); // Todo insert all questions
 
-    @ManyToOne
-    private User user;
-
     @OneToOne
     private Participant participant;
 
@@ -45,22 +42,6 @@ public class PollEntry {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * Get the {@link User} that gave this set of answers.
-     * @return The {@link User} that gave this set of answers.
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * Set the {@link User} that gave this set of answers.
-     * @param user The {@link User} that gave this set of answers.
-     */
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Participant getParticipant() {

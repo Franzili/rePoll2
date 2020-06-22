@@ -35,6 +35,7 @@ public class InitializeDatabase implements InitializingBean {
     private final DesignService designService;
     private final DesignRepository designRepository;
     private final ParticipantService participantService;
+    private final ChoiceRepository choiceRepository;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
@@ -49,7 +50,8 @@ public class InitializeDatabase implements InitializingBean {
                               final UserRepository userRepository,
                               final DesignService designService,
                               final DesignRepository designRepository,
-                              final ParticipantService participantService) {
+                              final ParticipantService participantService,
+                              final ChoiceRepository choiceRepository) {
         this.pollService = pollService;
         this.pollSectionService = pollSectionService;
         this.questionService = questionService;
@@ -61,6 +63,7 @@ public class InitializeDatabase implements InitializingBean {
         this.designService = designService;
         this.designRepository = designRepository;
         this.participantService = participantService;
+        this.choiceRepository = choiceRepository;
     }
 
     /**
@@ -186,7 +189,7 @@ public class InitializeDatabase implements InitializingBean {
             choicesRadioButtonList.add(choice7);
             choicesRadioButtonList.add(choice8);
             Question question2 = questionService.addSingleChoiceQuestion(poll.getId(), "How old are you?",
-                3, choicesRadioButtonList, displayVariant);
+                3, choicesRadioButtonList, 1, displayVariant);
 
             List<Choice> choicesChoiceQuestionList = new ArrayList<>();
             Choice choice1 = new Choice("Avicii");
@@ -199,7 +202,7 @@ public class InitializeDatabase implements InitializingBean {
             choicesChoiceQuestionList.add(choice4);
             Question question3 = questionService.addMultiChoiceQuestion(poll.getId(),
                 "Which artist do yo like the most?",
-                4, choicesChoiceQuestionList);
+                4, choicesChoiceQuestionList, 4);
 
             Question question4 = questionService.addScaleQuestion(poll.getId(),
                 "How satisfied are you with our services?",

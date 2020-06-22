@@ -1,5 +1,6 @@
 package gpse.repoll.domain.poll.questions;
 
+import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Choice;
 
 import javax.persistence.*;
@@ -17,7 +18,29 @@ public class SingleChoiceQuestion extends Question {
     private final List<Choice> choices = new ArrayList<>();
 
     @Column
+    private Integer numberOfBonusChoices = 0;
+
+    @OneToMany(orphanRemoval = true)
+    private final List<Choice> bonusChoices = new ArrayList<>();
+
+    @Column
     private String displayVariant = "radio";
+
+    public SingleChoiceQuestion() {
+
+    }
+
+    public SingleChoiceQuestion(SingleChoiceQuestion singleChoiceQuestion) {
+        setTitle(singleChoiceQuestion.getTitle());
+        setQuestionOrder(singleChoiceQuestion.getQuestionOrder());
+        final List<Choice> copiedChoices = new ArrayList<>();
+        for (Choice choice : singleChoiceQuestion.getChoices()) {
+            copiedChoices.add(new Choice(choice.getText()));
+        }
+        choices.addAll(copiedChoices);
+        numberOfBonusChoices = singleChoiceQuestion.getNumberOfBonusChoices();
+        displayVariant = singleChoiceQuestion.getDisplayVariant();
+    }
 
     public String getDisplayVariant() {
         return displayVariant;
@@ -36,11 +59,31 @@ public class SingleChoiceQuestion extends Question {
         this.choices.addAll(choices);
     }
 
-    public void add(Choice choice) {
-        this.choices.add(choice);
+    public void addAllBonusChoices(List<Choice> choices) {
+        if (choices.size() <= numberOfBonusChoices) {
+            this.choices.addAll(choices);
+        } else {
+            throw new BadRequestException("Not so many bonus choices allowed");
+        }
     }
 
-    public void addAll(List<Choice> choices) {
-        this.choices.addAll(choices);
+    public Integer getNumberOfBonusChoices() {
+        return numberOfBonusChoices;
+    }
+
+    public void setNumberOfBonusChoices(Integer numberOfBonusChoices) {
+        if (numberOfBonusChoices == null) {
+            this.numberOfBonusChoices = 0;
+        }
+        this.numberOfBonusChoices = numberOfBonusChoices;
+    }
+
+    public List<Choice> getBonusChoices() {
+        return bonusChoices;
+    }
+
+    public void setBonusChoices(List<Choice> bonusChoices) {
+        this.bonusChoices.clear();
+        this.bonusChoices.addAll(bonusChoices);
     }
 }

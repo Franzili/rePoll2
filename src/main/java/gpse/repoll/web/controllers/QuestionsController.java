@@ -72,6 +72,7 @@ public class QuestionsController {
                     title,
                     questionOrder,
                     choices,
+                    singleChoiceQuestionCmd.getNumberOfBonusChoices(),
                     singleChoiceQuestionCmd.getDisplayVariant());
         } else if (questionCmd instanceof MultiChoiceQuestionCmd) {
             MultiChoiceQuestionCmd multiChoiceQuestionCmd = (MultiChoiceQuestionCmd) questionCmd;
@@ -82,7 +83,12 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.addMultiChoiceQuestion(pollId, title, questionOrder, choices);
+            return questionService.addMultiChoiceQuestion(
+                    pollId,
+                    title,
+                    questionOrder,
+                    choices,
+                    multiChoiceQuestionCmd.getNumberOfBonusChoices());
         }
         // This should never happen
         throw new InternalServerErrorException();
@@ -138,7 +144,8 @@ public class QuestionsController {
                 choices.add(new Choice(choiceCmd.getText()));
             }
             return questionService.updateSingleChoiceQuestion(
-                    pollId, questionId, questionOrder, title, choices);
+                    pollId, questionId, questionOrder, title, choices,
+                    singleChoiceQuestionCmd.getNumberOfBonusChoices());
         } else if (questionCmd instanceof MultiChoiceQuestionCmd) {
             MultiChoiceQuestionCmd multiChoiceQuestionCmd = (MultiChoiceQuestionCmd) questionCmd;
             if (multiChoiceQuestionCmd.getChoices() == null) {
@@ -148,7 +155,13 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.updateMultiChoiceQuestion(pollId, questionId, questionOrder, title, choices);
+            return questionService.updateMultiChoiceQuestion(
+                    pollId,
+                    questionId,
+                    questionOrder,
+                    title,
+                    choices,
+                    multiChoiceQuestionCmd.getNumberOfBonusChoices());
         }
         // This should never happen
         throw new InternalServerErrorException();
