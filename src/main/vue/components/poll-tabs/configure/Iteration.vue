@@ -32,7 +32,7 @@
                         required>
                     </b-form-input>
                     <label>
-                        year-month-day hours:minutes:seconds
+                        yyyy-MM-dd HH:mm:ss
                     </label>
                 </b-form-group>
             </form>
@@ -120,12 +120,13 @@
     //import {mapActions, mapState} from "vuex";
 
     import {mapActions, mapState} from "vuex";
+    //import  moment from 'moment';
 
     export default {
         name: "Iteration",
         data() {
             return {
-                ende: '',
+                ende: "",
                 launchState: null,
                 timestamp: ""
             }
@@ -138,22 +139,43 @@
             ...mapState('currentPoll', {
                 poll: 'poll'
             }),
+            ...mapState('currentIteration', {
+                iteration: 'iteration'
+            }),
             ...mapState('myIterations', {
-                iteration: 'iterations'
-            })
+                iterations: 'iterations'
+            }),
+            ...mapState('currentPoll', {
+                pollId: state => state.poll.id,
+                pollStatus: state => state.poll.status,
+            }),
+            ...mapState('currentIteration', {
+                iterationId: state => state.iterations.id,
+                iterationStatus: state => state.iterations.status
+            }),
+
+
+            /*StringToDateTimeFormatter(){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
+                LocalDateTime dateTime = LocalDateTime.parse("2019-03-27 10:15:30 AM", formatter);
+            },*/
         },
         methods: {
             ...mapActions('currentPoll', {
                 updatePoll: 'update'
             }),
-            ...mapActions('myIterations', {
-                updateIter: 'update'
+            ...mapActions('currentIteration', {
+                updateIteration: 'update'
+            }),
+            ...mapActions('currentIterations', {
+                createIteration: 'create'
             }),
             getTimeNow: function() {
-              const today = new Date();
-                const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-                const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                this.timestamp = date + ' ' + time;
+                //const today = new Date(); //yyyy-MM-dd HH:mm:ss
+                //const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                //const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                //this.timestamp = date + ' ' + time;
+                this.timestamp = new Date();
             },
             checkFormValidity() {
                 const valid = this.$refs.form.checkValidity()
@@ -182,14 +204,13 @@
                 this.getTimeNow()
                 let pollIterationCmd = {
                     start: this.timestamp,
-                    end: this.ende,
+                    end: new Date(this.ende),
                     status: 'ACTIVATED'
                 }
-                //this.updateIter(pollIterationCmd);
+                //this.createIteration(pollIterationCmd);
                 console.log('start: ',pollIterationCmd.start)
                 console.log('ende :', pollIterationCmd.end)
-                console.log('status :', pollIterationCmd.status)
-                /*let pollCmd = {
+                /*let pollCmd = { //TODO: changing poll status does not work
                     id: this.pollId,
                     status: 'READY'
                 }
