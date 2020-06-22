@@ -8,4 +8,6 @@ public interface DesignService {
 
     Design getDesign(UUID pollID);
 
+    Design updateDesign(UUID pollID, String font);
+
 }
