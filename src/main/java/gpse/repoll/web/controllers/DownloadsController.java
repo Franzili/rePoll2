@@ -1,6 +1,6 @@
 package gpse.repoll.web.controllers;
 
-import gpse.repoll.domain.service.PollService;
+import gpse.repoll.domain.service.DownloadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,14 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/api/v1/download")
 public class DownloadsController {
 
-    private final PollService pollService;
+    private final DownloadService downloadService;
 
     //TODO folder should be set by user?
     String folderPath="./src/main/resources/";
 
     @Autowired
-    public DownloadsController(PollService pollService) {
-        this.pollService = pollService;
+    public DownloadsController(DownloadService downloadService) {
+        this.downloadService = downloadService;
     }
 
     /**
@@ -33,35 +33,11 @@ public class DownloadsController {
     @RequestMapping("/{id}/{type}/{format}/")
     @ResponseBody
     public void show(@PathVariable("id") final UUID id,
-                     @PathVariable("format") final String format,
                      @PathVariable("type") final String type,
+                     @PathVariable("format") final String format,
                      HttpServletResponse response) {
 
-        //create file
-        try {
-            File myObj = new File("./src/main/resources/testfile.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        //write to file
-        try {
-            FileWriter myWriter = new FileWriter("./src/main/resources/testfile.txt");
-            if (format.equals("human") && type.equals("poll")) {
-                myWriter.write(pollService.getPoll(id).getAsHumanReadable());
-            }
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        downloadService.download(id, type, format);
 
         //download file
         response.setContentType("application/png");
@@ -81,8 +57,6 @@ public class DownloadsController {
         catch(IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println(pollService.getPoll(id).getId());
     }
 }
 
