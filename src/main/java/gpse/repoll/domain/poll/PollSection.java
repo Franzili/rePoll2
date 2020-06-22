@@ -32,6 +32,12 @@ public class PollSection {
 
     }
 
+    public PollSection(PollSection pollSection, List<Question> questions) {
+        title = pollSection.getTitle();
+        description = pollSection.getDescription();
+        this.questions.addAll(questions);
+    }
+
     /**
      * Creates a new section.
      * @param title The section title

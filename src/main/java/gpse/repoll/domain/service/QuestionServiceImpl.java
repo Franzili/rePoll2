@@ -46,6 +46,11 @@ public class QuestionServiceImpl implements QuestionService {
         this.questionBaseRepository = questionBaseRepository;
     }
 
+    @Override
+    public void save(Question question) {
+        questionBaseRepository.save(question);
+    }
+
     /**
      * {@inheritDoc}
      */
