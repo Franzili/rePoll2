@@ -1,19 +1,59 @@
 <template>
     <div>
-        <b-card>
+
+        <b-card style="background-color:white">
             <h6>Design</h6>
 
-            <p>{{this.selectedFont}}</p>
-
-            <p :style=this.selectedFont.valueOf()>Font:</p>
-
-            <b-form-select :style=this.selectedFont.valueOf() v-model="selectedFont" :options="fonts">
-                <template v-slot:first>
-                <!--    <b-form-select-option value=''>Arial</b-form-select-option>-->
-                </template>
-            </b-form-select>
+            <p style="background-color:white">{{this.selectedFont}}</p>
+            <p :style="'color:' + selectedTextColour + ';'
+                + selectedFont">{{this.selectedTextColour}}</p>
 
 
+            <!-- TODO heigh of v-app -->
+            <v-app
+                style="max-height: 470px">
+                <v-main>
+
+                    <v-row>
+                        <b-col>
+                            <b-col>
+                                <!-- text colour -->
+                                <p>Text-colour:</p>
+                                <v-color-picker
+                                    elevation="15"
+                                    v-model="selectedTextColour"
+                                    mode="hexa">
+                                </v-color-picker>
+                            </b-col>
+
+                            <b-col>
+                                <!-- font -->
+                                <p :style=this.selectedFont.valueOf()>Font:</p>
+                                <b-form-select :style=this.selectedFont.valueOf()
+                                               v-model="selectedFont"
+                                               :options="fonts">
+                                    <template v-slot:first>
+                                        <!--    <b-form-select-option value=''>Arial</b-form-select-option>-->
+                                    </template>
+                                </b-form-select>
+                            </b-col>
+                        </b-col>
+
+                        <b-col>
+                            <!-- background colour -->
+                            <p>Background-colour:</p>
+                            <v-color-picker
+                                elevation="15"
+                                v-model="selectedTextColour"
+                                mode="hexa">
+                            </v-color-picker>
+                        </b-col>
+
+                    </v-row>
+
+                </v-main>
+
+            </v-app>
         </b-card>
     </div>
 </template>
@@ -25,6 +65,8 @@
         name: "Design",
         data () {
             return {
+                selectedTextColour: '',
+
                 selectedFont: '',
                 fonts: [
                     { value: '', text: 'Arial' },
