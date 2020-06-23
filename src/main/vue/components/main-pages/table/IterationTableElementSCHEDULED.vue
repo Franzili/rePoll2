@@ -7,11 +7,17 @@
     >
         <b-row>
             <b-col cols="8">
-                Open:
-                <p class="status">{{iteration.start}}</p>
-                Close
-                <p class="status">{{iteration.end}}</p>
+                <p class="status">{{iteration.status}}</p>
             </b-col>
+
+            <b-col
+                align-self="center">
+                <p v-show="iteration.status === 'SCHEDULED'"
+                ><span class="start">Open: </span>{{iteration.start}}</p>
+                <p v-show="iteration.status === 'SCHEDULED'"
+                ><span class="start">Open: </span>{{iteration.end}}</p>
+            </b-col>
+
             <b-col cols="4" style="text-align: center">
                 <p>
                     <b-button class="float-right" variant="secondary" v-b-modal.deleteModal>X</b-button>
@@ -37,8 +43,13 @@
     import {mapActions} from "vuex";
 
     export default {
-        name: "IterationTableElementSCHEDULED"
+        name: "IterationTableElementSCHEDULED",
         props: ["iteration"],
+        data() {
+            return {
+                iterationStatus: ''
+            }
+        },
         methods: {
             isMobile() {
                 return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
@@ -47,8 +58,19 @@
                 updatePoll: 'update'
             }),
             ...mapActions('myIterations', {
+                createIteration: 'create',
+                listIterations: 'load',
                 deleteIteration: 'delete'
             }),
+            async loadTo() {
+                await this.listIterations(this.iteration.id)
+                return this.$router.push({
+                    name: 'poll-tabbed',
+                    params: {
+                        iterationId: this.iteration.id
+                    }
+                })
+            },
             handleOkCloseNow(bvModalEvt) {
                 bvModalEvt.preventDefault()
 

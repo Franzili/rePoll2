@@ -16,7 +16,7 @@
                     title="For what time period should the poll be active ?"
                     header-bg-variant="info"
                     @ok="handleOkSchedule">
-                    <form ref="scheduleForm" @submit.stop.prevent="handleSubmitLaunch">
+                    <form ref="scheduleForm" @submit.stop.prevent="handleSubmitSchedule">
                         <b-form-group
                             :state="scheduleState"
                             label="Start and Expiration Date for Iteration"
@@ -72,6 +72,9 @@
             return {
                 ende: "",
                 beginn: "",
+                dateEnde: "",
+                scheduleState: "",
+                dateStart: ""
             }
         },
         methods: {

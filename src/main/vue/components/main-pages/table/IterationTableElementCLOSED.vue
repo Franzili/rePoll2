@@ -7,10 +7,15 @@
     >
         <b-row>
             <b-col cols="8">
-                Opened:
-                <p class="status">{{iteration.start}}</p>
-                Closed:
-                <p class="status">{{iteration.end}}</p>
+                <p class="status">{{iteration.status}}</p>
+            </b-col>
+
+            <b-col
+                align-self="center">
+                <p v-show="iteration.status === 'CLOSED'"
+                ><span class="start">Opened: </span>{{iteration.start}}</p>
+                <p v-show="iteration.status === 'CLOSED'"
+                ><span class="start">Closed: </span>{{iteration.end}}</p>
             </b-col>
             <b-col cols="4" style="text-align: center">
 

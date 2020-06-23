@@ -7,11 +7,17 @@
     >
         <b-row>
             <b-col cols="8">
-                Opened:
-                <p class="status">{{iteration.start}}</p>
-                Close
-                <p class="status">{{iteration.end}}</p>
+                <p class="status">{{iteration.status}}</p>
             </b-col>
+
+            <b-col
+                align-self="center">
+                <p v-show="iteration.status === 'OPEN'"
+                ><span class="start">Opened: </span>{{iteration.start}}</p>
+                <p v-show="iteration.status === 'OPEN'"
+                ><span class="start">Close: </span>{{iteration.end}}</p>
+            </b-col>
+
             <b-col cols="4" style="text-align: center">
                 <p>
                     <b-button class="float-right" variant="secondary" v-b-modal.closeModal>Close now</b-button>
@@ -24,7 +30,7 @@
                     title="Do you want to end this iteration ?"
                     header-bg-variant="info"
                     @ok="handleOkCloseNow">
-                    <form ref="closeNowForm" @submit.stop.prevent="handleSubmitCloseNow">
+                    <form ref="closeNowForm" @submit.stop.prevent="handleOkCloseNow">
                     </form>
                 </b-modal>
             </b-col>
