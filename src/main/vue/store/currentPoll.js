@@ -19,7 +19,10 @@ const currentPoll = {
          */
         poll: {
             questions: [],
-            pollSections: []
+            pollSections: [],
+            design: {
+                font: ''
+            }
         },
         answers: [],
         pollAnswers: [],
@@ -159,6 +162,11 @@ const currentPoll = {
             return res;
         },
 
+        design: state => {
+            let design = {font: state.design.font};
+            return design
+        },
+
         statStructureObj: state => {
             let strObj = [];
             state.poll.pollSections.forEach(section => {
@@ -280,6 +288,10 @@ const currentPoll = {
             Object.assign(state.poll, pollCmd)
         },
 
+        updateDesign(state, designCmd) {
+            state.poll.design = designCmd
+        },
+
         addPollSection(state, pollSection) {
             state.poll.pollSections.push(pollSection);
         },
@@ -387,6 +399,21 @@ const currentPoll = {
                     })
             });
         },
+
+        updateDesign({commit}, designUpdate) {
+            return new Promise((resolve, reject) => {
+                api.design.updateDesign(designUpdate)
+                    .then(function (res) {
+                        commit('updateDesign', res.data)
+                        resolve(res.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        reject(error);
+                    })
+            });
+        },
+
         loadMetaStats({commit}, id) {
             return new Promise((resolve, reject) => {
                 api.statistics.get(id).then(function (res) {
