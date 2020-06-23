@@ -26,8 +26,12 @@ public class DesignController {
     }
 
     @PutMapping("/{pollID}/design/")
-    public Design updateDesign(@PathVariable("pollID") final UUID pollID, @RequestBody DesignCmd designCmd) {
-        return designService.updateDesign(pollID, designCmd.getFont());
+    public Design updateDesign(@PathVariable("pollID") final UUID pollID,
+                               @RequestBody DesignCmd designCmd) {
+        return designService.updateDesign(pollID,
+            designCmd.getFont(),
+            designCmd.getTextColour(),
+            designCmd.getBackgroundColour());
     }
 
 }

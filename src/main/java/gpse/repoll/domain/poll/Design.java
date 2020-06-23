@@ -14,8 +14,30 @@ public class Design {
     @Column
     private String font;
 
+    @Column
+    private String textColour;
+
+    @Column
+    private String backgroundColour;
+
     public Design() {
         this.font = "hallo";
+    }
+
+    public String getBackgroundColour() {
+        return backgroundColour;
+    }
+
+    public String getTextColour() {
+        return textColour;
+    }
+
+    public void setTextColour(String textColour) {
+        this.textColour = textColour;
+    }
+
+    public void setBackgroundColour(String backgroundColour) {
+        this.backgroundColour = backgroundColour;
     }
 
     public String getFont() {

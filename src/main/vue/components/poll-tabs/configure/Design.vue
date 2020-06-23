@@ -4,18 +4,17 @@
         <b-card style="background-color:white">
             <h6>Design</h6>
 
-            <!-- TODO heigh of v-app -->
-            <v-app
-                style="max-height: 470px">
+            <!-- TODO height of v-app -->
+            <v-app style="max-height: 470px">
                 <v-main>
 
-                    <v-row>
+                    <b-row>
                         <b-col>
                             <b-col>
                                 <!-- text colour -->
                                 <p>Text-colour:</p>
                                 <div align="left">
-                                    <v-color-picker
+                                    <v-color-picker app
                                         elevation="15"
                                         v-model="selectedTextColour"
                                         mode="hexa">
@@ -29,9 +28,9 @@
                                 <b-form-select :style=this.selectedFont.valueOf()
                                                v-model="selectedFont"
                                                :options="fonts">
-                                    <template v-slot:first>
+                                   <!-- <template v-slot:first> -->
                                         <!--    <b-form-select-option value=''>Arial</b-form-select-option>-->
-                                    </template>
+                                   <!--  </template> -->
                                 </b-form-select>
                             </b-col>
                         </b-col>
@@ -41,7 +40,7 @@
                                 <!-- background colour -->
                                 <p>Background-colour:</p>
                                 <div align="left">
-                                    <v-color-picker
+                                    <v-color-picker app
                                         elevation="15"
                                         v-model="selectedBackgroundColour"
                                         mode="hexa">
@@ -50,7 +49,7 @@
                             </b-col>
                         </b-col>
 
-                    </v-row>
+                    </b-row>
 
                 </v-main>
 

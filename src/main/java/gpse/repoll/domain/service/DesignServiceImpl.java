@@ -17,7 +17,9 @@ public class DesignServiceImpl implements DesignService {
     private final PollRepository pollRepository;
 
     @Autowired
-    public DesignServiceImpl(PollService pollService, DesignRepository designRepository, PollRepository pollRepository){
+    public DesignServiceImpl(PollService pollService,
+                             DesignRepository designRepository,
+                             PollRepository pollRepository){
         this.pollService = pollService;
         this.designRepository = designRepository;
         this.pollRepository = pollRepository;
@@ -30,7 +32,10 @@ public class DesignServiceImpl implements DesignService {
     }
 
     @Override
-    public Design updateDesign(UUID pollID, String font) {
+    public Design updateDesign(UUID pollID,
+                               String font,
+                               String textColour,
+                               String backgroundColour) {
         Poll poll = pollService.getPoll(pollID);
         if (poll.getDesign() == null) {
             Design design = new Design();
@@ -41,6 +46,12 @@ public class DesignServiceImpl implements DesignService {
         Design design = poll.getDesign();
         if (font != null) {
             design.setFont(font);
+        }
+        if (textColour != null) {
+            design.setTextColour(textColour);
+        }
+        if (backgroundColour != null) {
+            design.setBackgroundColour(backgroundColour);
         }
         //poll.setDesign(newDesign); // TODO einzeln updaten
         designRepository.save(design);
