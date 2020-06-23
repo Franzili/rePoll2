@@ -1,7 +1,8 @@
 <template>
     <div>
 
-        <b-card style="background-color:white">
+        <b-card title="hallo"
+            style="background-color:white">
             <h6>Design</h6>
 
             <!-- TODO height of v-app       style="max-height: 470px"-->
@@ -76,15 +77,18 @@
 
             <b-card-group>
                 <b-card
-                    :style="'background-color:' + this.poll.design.backgroundColour"
+                    :style="'background-color:' + this.poll.design.backgroundColour + ';'
+                        + this.poll.design.font
+                        + ';color:' + this.poll.design.textColour"
                     title="design of current poll">
-                    <b-card-text
-                        :style="'color:' + this.poll.design.textColour + ';' + this.poll.design.font">
+                    <b-card-text>
                         This is the design of your poll.
                     </b-card-text>
                 </b-card>
                 <b-card
-                    :style="'background-color:' + selectedBackgroundColour"
+                    :style="'background-color:' + selectedBackgroundColour + ';'
+                        + selectedFont
+                        + ';color:' + selectedTextColour"
                     title="new design">
                     <b-card-text
                         :style="'color:' + selectedTextColour + ';' + selectedFont">
