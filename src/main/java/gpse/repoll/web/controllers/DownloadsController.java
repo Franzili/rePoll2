@@ -39,7 +39,7 @@ public class DownloadsController {
         downloadService.download(id, type, format);
 
         //download file
-        response.setContentType("application/png");
+        response.setContentType("application/txt");
         response.setHeader("Content-Disposition", "attachment; filename=" +"testfile.txt");
         response.setHeader("Content-Transfer-Encoding", "binary");
         try {

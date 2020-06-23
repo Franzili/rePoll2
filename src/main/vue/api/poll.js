@@ -33,7 +33,7 @@ export default {
                     ...structureCmd
                 }
             }
-        }
+        };
         return axios.put('/api/v1/polls/' + pollId + '/', cmd);
     },
     addPollSection(pollId, pollSectionCmd) {
@@ -53,5 +53,10 @@ export default {
     },
     listAssigned(userId) {
         return axios.get('/api/v1/users/' + userId + '/assignedPolls/')
+    },
+    download(cmd) {
+        return axios({url: '/api/v1/download/' + cmd.id + '/' + cmd.type + '/' + cmd.format + '/',
+            method: 'GET',
+            responseType: 'blob'})
     }
 }

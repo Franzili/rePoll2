@@ -24,7 +24,8 @@ const currentPoll = {
          * The statistics belonging to that poll object.
          */
         statistics: [],
-        entries: []
+        entries: [],
+        tmpDownload: {}
     },
 
     getters: {
@@ -227,6 +228,11 @@ const currentPoll = {
     },
 
     mutations: {
+
+        tmpDownloadSet(state, newDownload) {
+            state.testdownload = newDownload;
+        },
+
         /**
          * Sets the new current poll.
          */
@@ -526,6 +532,27 @@ const currentPoll = {
                 })
             })
         },
+
+        download({commit, state}, cmd) {
+            return new Promise(((resolve, reject) => {
+                cmd.id = state.poll.id;
+                api.poll.download(cmd).then((response) => {
+                    commit('tmpDownloadSet', response.data);
+                    let fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                    let fileLink = document.createElement('a');
+
+                    fileLink.href = fileURL;
+                    fileLink.setAttribute('download', 'testfile.txt');
+                    document.body.appendChild(fileLink);
+
+                    fileLink.click();
+                    resolve(response.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            }))
+        }
     },
 
     namespaced: true
