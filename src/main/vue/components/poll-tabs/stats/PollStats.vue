@@ -60,10 +60,8 @@
             },
             async fetchEventList() {
                 await this.loadStatistics(this.poll.id)
-                console.log("load")
                 await this.loadEntries(this.poll.id)
                 if (!this.equalStats(this.stats, this.statistics)) {
-                    console.log("funzt")
                     this.stats = this.statistics
                 }
             },
@@ -93,7 +91,7 @@
         destroyed() {
             this.cancelAutoUpdate()
         },
-        components: {Overview, Compare, Trends, Entries, Questions}
+        components: { Overview, Compare, Trends, Entries, Questions }
     }
 </script>
 

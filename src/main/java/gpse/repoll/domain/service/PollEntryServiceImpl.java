@@ -24,6 +24,7 @@ public class PollEntryServiceImpl implements PollEntryService {
     private final ScaleAnswerRepository scaleAnswerRepository;
     private final SingleChoiceAnswerRepository singleChoiceAnswerRepository;
     private final MultiChoiceAnswerRepository multiChoiceAnswerRepository;
+    private final ParticipantService participantService;
 
     @Autowired
     public PollEntryServiceImpl(
@@ -33,7 +34,8 @@ public class PollEntryServiceImpl implements PollEntryService {
             TextAnswerRepository textAnswerRepository,
             ScaleAnswerRepository scaleAnswerRepository,
             SingleChoiceAnswerRepository singleChoiceAnswerRepository,
-            MultiChoiceAnswerRepository multiChoiceAnswerRepository) {
+            MultiChoiceAnswerRepository multiChoiceAnswerRepository,
+            ParticipantService participantService) {
         this.pollService = pollService;
         this.pollEntryRepository = pollEntryRepository;
         this.questionRepository = questionRepository;
@@ -41,6 +43,7 @@ public class PollEntryServiceImpl implements PollEntryService {
         this.scaleAnswerRepository = scaleAnswerRepository;
         this.singleChoiceAnswerRepository = singleChoiceAnswerRepository;
         this.multiChoiceAnswerRepository = multiChoiceAnswerRepository;
+        this.participantService = participantService;
     }
 
     private void createAnswers(Poll poll, PollEntry pollEntry, Map<Long, Answer> associations) {
@@ -85,10 +88,11 @@ public class PollEntryServiceImpl implements PollEntryService {
     @Override
     public PollEntry addPollEntry(final UUID pollId,
                                   final Map<Long, Answer> associations,
-                                  final Participant participant) {
+                                  final UUID participantID) {
         Poll poll = pollService.getPoll(pollId);
         PollEntry pollEntry = new PollEntry();
         if (poll.getAnonymity().equals(Anonymity.NON_ANONYMOUS)) {
+            Participant participant = participantService.getParticipant(participantID);
             pollEntry.setParticipant(participant);
             createAnswers(poll, pollEntry, associations);
             pollEntryRepository.save(pollEntry);

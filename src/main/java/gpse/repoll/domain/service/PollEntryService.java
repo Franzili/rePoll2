@@ -21,12 +21,12 @@ public interface PollEntryService {
      * Add a new PollEntry to a Poll.
      * @param pollId The Poll's ID
      * @param associations A map of question IDs to Answers
-     * @param participant The Participant that filled out the poll
+     * @param participantID The Participant that filled out the poll
      * @return The newly created PollEntry
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll or any of the Questions
      * could not be found
      */
-    PollEntry addPollEntry(UUID pollId, Map<Long, Answer> associations, Participant participant);
+    PollEntry addPollEntry(UUID pollId, Map<Long, Answer> associations, UUID participantID);
 
     /**
      * Gets a PollEntry.
