@@ -4,65 +4,96 @@
         <b-card style="background-color:white">
             <h6>Design</h6>
 
-            <!-- TODO height of v-app -->
-            <v-app style="max-height: 470px">
+            <!-- TODO height of v-app       style="max-height: 470px"-->
+
+            <v-app>
                 <v-main>
 
                     <b-row>
+
                         <b-col>
-                            <b-col>
+                            <b-card>
+
                                 <!-- text colour -->
-                                <p>Text-colour:</p>
-                                <div align="left">
+                                <h6>Text</h6>
+                                <p>Colour:</p>
+                                <div align="center">
+                                    <!-- elevation = "15" -->
                                     <v-color-picker app
-                                        elevation="15"
-                                        v-model="selectedTextColour"
-                                        mode="hexa">
+                                                    v-model="selectedTextColour"
+                                                    mode="hexa">
                                     </v-color-picker>
                                 </div>
-                            </b-col>
 
-                            <b-col>
                                 <!-- font -->
                                 <p :style=this.selectedFont.valueOf()>Font:</p>
                                 <b-form-select :style=this.selectedFont.valueOf()
                                                v-model="selectedFont"
                                                :options="fonts">
-                                   <!-- <template v-slot:first> -->
-                                        <!--    <b-form-select-option value=''>Arial</b-form-select-option>-->
-                                   <!--  </template> -->
+                                    <!-- <template v-slot:first> -->
+                                    <!--    <b-form-select-option value=''>Arial</b-form-select-option>-->
+                                    <!--  </template> -->
                                 </b-form-select>
-                            </b-col>
+
+                            </b-card>
+
                         </b-col>
 
                         <b-col>
-                            <b-col>
+                            <b-card>
+
                                 <!-- background colour -->
-                                <p>Background-colour:</p>
-                                <div align="left">
+                                <h6>Background</h6>
+                                <p>Colour:</p>
+                                <!-- elevation="15" -->
+
+                                <div align="center">
                                     <v-color-picker app
-                                        elevation="15"
-                                        v-model="selectedBackgroundColour"
-                                        mode="hexa">
+                                                    v-model="selectedBackgroundColour"
+                                                    mode="hexa">
                                     </v-color-picker>
                                 </div>
 
-                                <!-- Apply-Button -->
-                                <div align="right">
-                                    <b-button
-                                        @click="saveDesign">
-                                        Apply
-                                    </b-button>
-                                </div>
-                            </b-col>
+                            </b-card>
 
+                            <!-- Apply-Button -->
+                            <div>
+                                <b-button
+                                    style="margin-top: 30px"
+                                    class="float-right"
+                                    @click="saveDesign">
+                                    Apply
+                                </b-button>
+                            </div>
                         </b-col>
-
                     </b-row>
 
                 </v-main>
-
             </v-app>
+
+
+            <h6>Preview</h6>
+
+            <b-card-group>
+                <b-card
+                    :style="'background-color:' + this.poll.design.backgroundColour"
+                    title="design of current poll">
+                    <b-card-text
+                        :style="'color:' + this.poll.design.textColour + ';' + this.poll.design.font">
+                        This is the design of your poll.
+                    </b-card-text>
+                </b-card>
+                <b-card
+                    :style="'background-color:' + selectedBackgroundColour"
+                    title="new design">
+                    <b-card-text
+                        :style="'color:' + selectedTextColour + ';' + selectedFont">
+                    Are you sure you want to change it?
+                    </b-card-text>
+                </b-card>
+            </b-card-group>
+
+
 
             <p style="background-color:white">{{this.selectedFont}}</p>
             <p :style="'color:' + selectedTextColour + ';'
@@ -109,16 +140,6 @@
             this.selectedFont = this.poll.design.font;
             this.selectedTextColour = this.poll.design.textColour;
             this.selectedBackgroundColour = this.poll.design.backgroundColour
-        },
-        watch: {
-            selectedFont() {
-                if (this.selectedFont !== this.poll.design.font) {
-                    let designCmd = {
-                        font: this.selectedFont
-                    };
-                    this.updateDesign({design: designCmd, pollId: this.poll.id})
-                }
-            }
         }
     }
 </script>
