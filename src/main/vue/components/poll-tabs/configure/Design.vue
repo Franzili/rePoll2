@@ -4,11 +4,6 @@
         <b-card style="background-color:white">
             <h6>Design</h6>
 
-            <p style="background-color:white">{{this.selectedFont}}</p>
-            <p :style="'color:' + selectedTextColour + ';'
-                + selectedFont">{{this.selectedTextColour}}</p>
-
-
             <!-- TODO heigh of v-app -->
             <v-app
                 style="max-height: 470px">
@@ -19,11 +14,13 @@
                             <b-col>
                                 <!-- text colour -->
                                 <p>Text-colour:</p>
-                                <v-color-picker
-                                    elevation="15"
-                                    v-model="selectedTextColour"
-                                    mode="hexa">
-                                </v-color-picker>
+                                <div align="left">
+                                    <v-color-picker
+                                        elevation="15"
+                                        v-model="selectedTextColour"
+                                        mode="hexa">
+                                    </v-color-picker>
+                                </div>
                             </b-col>
 
                             <b-col>
@@ -40,13 +37,17 @@
                         </b-col>
 
                         <b-col>
-                            <!-- background colour -->
-                            <p>Background-colour:</p>
-                            <v-color-picker
-                                elevation="15"
-                                v-model="selectedTextColour"
-                                mode="hexa">
-                            </v-color-picker>
+                            <b-col>
+                                <!-- background colour -->
+                                <p>Background-colour:</p>
+                                <div align="left">
+                                    <v-color-picker
+                                        elevation="15"
+                                        v-model="selectedBackgroundColour"
+                                        mode="hexa">
+                                    </v-color-picker>
+                                </div>
+                            </b-col>
                         </b-col>
 
                     </v-row>
@@ -54,6 +55,10 @@
                 </v-main>
 
             </v-app>
+
+            <p style="background-color:white">{{this.selectedFont}}</p>
+            <p :style="'color:' + selectedTextColour + ';'
+                + selectedFont">{{this.selectedTextColour}}</p>
         </b-card>
     </div>
 </template>
@@ -66,6 +71,7 @@
         data () {
             return {
                 selectedTextColour: '',
+                selectedBackgroundColour: '',
 
                 selectedFont: '',
                 fonts: [
