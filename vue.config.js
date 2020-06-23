@@ -1,7 +1,7 @@
 // vue.config.js
 module.exports = {
 
-
+/**
     rules: [
         {
             test: /\.s(c|a)ss$/,
@@ -30,7 +30,7 @@ module.exports = {
     ],
 
 
-
+*/
 
 
     /*     proxy all webpack dev-server requests starting with /api
