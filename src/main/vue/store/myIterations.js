@@ -127,6 +127,9 @@ const myIterations = {
                 })
             })
         },
+        /**
+         * Updates an interation with new informations in Cmd-obeject
+         */
         update({commit, rootState, dispatch}, pollIterationCmd) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
