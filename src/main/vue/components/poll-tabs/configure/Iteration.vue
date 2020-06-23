@@ -215,12 +215,8 @@
                 createIteration: 'create'
             }),*/
             ...mapActions('myIterations', {
-                listIterations: 'load'
-            }),
-            ...mapActions('myIterations', {
-                createIteration: 'create'
-            }),
-            ...mapActions('myIterations', {
+                createIteration: 'create',
+                listIterations: 'load',
                 deleteIteration: 'delete'
             }),
             getTimeNow: function() {
