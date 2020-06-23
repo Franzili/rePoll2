@@ -166,6 +166,7 @@
         data() {
             return {
                 ende: "",
+                beginn: "",
                 launchState: null,
                 timestamp: "",
                 end: "",
@@ -187,9 +188,6 @@
             ...mapState('currentPoll', {
                 poll: 'poll'
             }),
-            /*...mapState('currentIteration', {
-                iteration: 'iteration'
-            }),*/
             ...mapState('myIterations', {
                 iterations: 'iterations'
             }),
@@ -197,23 +195,11 @@
                 pollId: state => state.poll.id,
                 pollStatus: state => state.poll.status,
             }),
-            /*...mapState('currentIteration', {
-                iterationId: state => state.iteration.id,
-                iterationStatus: state => state.iteration.status,
-                iterationEnd: state => state.iteration.end,
-                iterationStart: state => state.iteration.start
-            }),*/
         },
         methods: {
             ...mapActions('currentPoll', {
                 updatePoll: 'update'
             }),
-            /*...mapActions('currentIteration', {
-                updateIteration: 'update'
-            }),
-            ...mapActions('currentIterations', {
-                createIteration: 'create'
-            }),*/
             ...mapActions('myIterations', {
                 createIteration: 'create',
                 listIterations: 'load',
@@ -245,10 +231,7 @@
                     status: 'OPEN'
                 }
                 this.createIteration(pollIterationCmd);
-                console.log('start: ',pollIterationCmd.start)
-                console.log('ende :', pollIterationCmd.end)
-                console.log('status :', pollIterationCmd.status)
-                let pollCmd = { //TODO: changing poll status throws error message for api
+                let pollCmd = {
                     id: this.pollId,
                     status: 'LAUNCHED' //'READY'
                 }
@@ -260,6 +243,7 @@
             },
             handleSubmitSchedule() {
                 this.ende = this.dateEnde //ignore error 'unresolved variable'
+                this.beginn = this.dateStart
                 this.scheduleSingleIter()
                 this.$nextTick(() => {
                     this.$bvModal.hide('scheduleModal')
@@ -268,15 +252,12 @@
             scheduleSingleIter() {
                 this.getTimeNow()
                 let pollIterationCmd = {
-                    start: this.timestamp,
+                    start: new Date(this.beginn),
                     end: new Date(this.ende),
                     status: 'SCHEDULED'
                 }
                 this.createIteration(pollIterationCmd);
-                console.log('start: ',pollIterationCmd.start)
-                console.log('ende :', pollIterationCmd.end)
-                console.log('status :', pollIterationCmd.status)
-                let pollCmd = { //TODO: changing poll status throws error message for api
+                let pollCmd = {
                     id: this.pollId,
                     status: 'LAUNCHED' //'READY'
                 }
