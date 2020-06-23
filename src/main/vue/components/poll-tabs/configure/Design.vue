@@ -46,7 +46,16 @@
                                         mode="hexa">
                                     </v-color-picker>
                                 </div>
+
+                                <!-- Apply-Button -->
+                                <div align="right">
+                                    <b-button
+                                        @click="saveDesign">
+                                        Apply
+                                    </b-button>
+                                </div>
                             </b-col>
+
                         </b-col>
 
                     </b-row>
@@ -88,9 +97,18 @@
             ...mapActions('currentPoll', {
                 updateDesign: 'updateDesign'
             }),
+            saveDesign() {
+                let designCmd = {
+                    font: this.selectedFont,
+                    textColour: this.selectedTextColour,
+                    backgroundColour: this.selectedBackgroundColour
+                }
+                this.updateDesign({design: designCmd, pollId: this.poll.id})            }
         },
         created: function() {
             this.selectedFont = this.poll.design.font;
+            this.selectedTextColour = this.poll.design.textColour;
+            this.selectedBackgroundColour = this.poll.design.backgroundColour
         },
         watch: {
             selectedFont() {

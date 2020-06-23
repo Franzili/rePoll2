@@ -21,7 +21,9 @@ const currentPoll = {
             questions: [],
             pollSections: [],
             design: {
-                font: ''
+                font: '',
+                textColour: '',
+                backgroundColour: ''
             }
         },
         answers: [],
