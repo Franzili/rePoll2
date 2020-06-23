@@ -6,7 +6,7 @@
                 <p>
                     <b-button variant="primary"
                               class="addButton"
-                              v-b-modal.scheduleModal>Open Now</b-button>
+                              v-b-modal.scheduleModal>New</b-button>
                 </p>
 
                 <b-modal
