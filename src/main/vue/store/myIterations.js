@@ -126,6 +126,22 @@ const myIterations = {
                     reject();
                 })
             })
+        },
+        update({commit, rootState, dispatch}, pollIterationCmd) {
+            if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
+                console.warn("PollId is undefined");
+                return;
+            }
+            return new Promise((resolve, reject) => {
+                api.iterations.update(rootState.currentPoll.poll.id, pollIterationCmd).then(function (res) {
+                    commit('update', res.data);
+                    dispatch('load')
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
         }
     },
     namespaced: true
