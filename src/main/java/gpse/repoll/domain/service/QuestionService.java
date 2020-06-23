@@ -11,6 +11,8 @@ import java.util.UUID;
  */
 public interface QuestionService {
 
+    void save(Question question);
+
     /**
      * Add a new TextQuestion to a Poll.
      * @param pollId The Poll's ID

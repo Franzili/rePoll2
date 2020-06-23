@@ -50,6 +50,9 @@ public class Poll extends Auditable<User> {
     private final List<PollSection> pollSections = new ArrayList<>();
 
     @OneToMany
+    private final List<PollConsistencyGroup> pollConsistencyGroups = new ArrayList<>();
+
+    @OneToMany
     private final List<Question> questions = new ArrayList<>();
 
     @OneToMany
@@ -67,6 +70,16 @@ public class Poll extends Auditable<User> {
         this.title = title;
         this.status = PollEditStatus.EDITING;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
+    }
+
+    public Poll(Poll poll, List<PollSection> pollSections) {
+       this.status = PollEditStatus.EDITING;
+       this.anonymity = poll.anonymity;
+       this.title = poll.title;
+       this.pollSections.addAll(pollSections);
+       for (PollSection pollSection : this.pollSections) {
+           questions.addAll(pollSection.getQuestions());
+       }
     }
 
     @Override
@@ -115,6 +128,15 @@ public class Poll extends Auditable<User> {
     public void setPollSections(List<PollSection> pollSections) {
         this.pollSections.clear();
         this.pollSections.addAll(pollSections);
+    }
+
+    public List<PollConsistencyGroup> getPollConsistencyGroups() {
+        return Collections.unmodifiableList(pollConsistencyGroups);
+    }
+
+    public void setPollConsistencyGroups(List<PollConsistencyGroup> pollConsistencyGroups) {
+        this.pollConsistencyGroups.clear();
+        this.pollConsistencyGroups.addAll(pollConsistencyGroups);
     }
 
     public List<Question> getQuestions() {
@@ -186,6 +208,18 @@ public class Poll extends Auditable<User> {
         return pollSections.contains(pollSection);
     }
 
+    public void add(PollConsistencyGroup pollConsistencyGroup) {
+        pollConsistencyGroups.add(pollConsistencyGroup);
+    }
+
+    public void addAllConsistencyGroups(Collection<PollConsistencyGroup> pollConsistencyGroups) {
+        this.pollConsistencyGroups.addAll(pollConsistencyGroups);
+    }
+
+    public boolean contains(PollConsistencyGroup pollConsistencyGroup) {
+        return pollConsistencyGroups.contains(pollConsistencyGroup);
+    }
+
     public void add(Question question) {
         questions.add(question);
         sortQuestions();
@@ -200,6 +234,13 @@ public class Poll extends Auditable<User> {
         boolean res = pollSections.remove(section);
         if (!res) {
             throw new NotFoundException("PollSection does not belong to this poll");
+        }
+    }
+
+    public void remove(PollConsistencyGroup pollConsistencyGroup) {
+        boolean res = pollConsistencyGroups.remove(pollConsistencyGroup);
+        if (!res) {
+            throw new NotFoundException("ConsistencyGroup does not belong to this poll");
         }
     }
 
@@ -253,6 +294,24 @@ public class Poll extends Auditable<User> {
     private boolean sectionExists(UUID sectionId) {
         for (PollSection section : pollSections) {
             if (section.getId().equals(sectionId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private PollConsistencyGroup getConsistency(UUID consistencyId) {
+        for (PollConsistencyGroup pollConsistencyGroup : pollConsistencyGroups) {
+            if (pollConsistencyGroup.getId().equals(consistencyId)) {
+                return pollConsistencyGroup;
+            }
+        }
+        return null;
+    }
+
+    private boolean consistencyExists(UUID consistencyId) {
+        for (PollConsistencyGroup pollConsistencyGroup : pollConsistencyGroups) {
+            if (pollConsistencyGroup.getId().equals(consistencyId)) {
                 return true;
             }
         }
