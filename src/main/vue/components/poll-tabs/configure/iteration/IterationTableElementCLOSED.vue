@@ -1,10 +1,39 @@
 <template>
-    $END$
+    <b-card
+        border-variant="primary"
+        :title="iteration.id"
+        align="left"
+        bg-variant="light"
+    >
+        <b-row>
+            <b-col cols="8">
+                Opened:
+                <p class="status">{{iteration.start}}</p>
+                Closed:
+                <p class="status">{{iteration.end}}</p>
+            </b-col>
+            <b-col cols="4" style="text-align: center">
+
+                <!-- change with link to charts -->
+                <router-link class="configLink"
+                             :to="{ name: 'answer', params: {id: poll.id}}"
+                >View Results</router-link>
+
+            </b-col>
+        </b-row>
+
+    </b-card>
 </template>
 
 <script>
     export default {
-        name: "IterationTableElementCLOSED"
+        name: "IterationTableElementCLOSED",
+        props: ["iteration"],
+        methods: {
+            isMobile() {
+                return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+            },
+        }
     }
 </script>
 

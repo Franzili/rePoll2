@@ -5,26 +5,89 @@
         align="left"
         bg-variant="light"
     >
-        <b-row v-if="iteration.status === ">
+        <b-row>
             <b-col cols="8">
-                <p class="status">{{poll.status}}</p>
+                Opened:
+                <p class="status">{{iteration.start}}</p>
+                Close
+                <p class="status">{{iteration.end}}</p>
             </b-col>
             <b-col cols="4" style="text-align: center">
-                <router-link class="configLink"
-                             :to="{ name: 'answer', params: {id: poll.id}}"
-                >Fill Out
-                </router-link>
+                <p>
+                    <b-button class="float-right" variant="secondary" v-b-modal.closeModal>Close now</b-button>
+                </p>
+
+                <b-modal
+                    id="scheduleModal"
+                    ref="scheduleIterModal"
+                    centered
+                    title="Do you want to end this iteration ?"
+                    header-bg-variant="info"
+                    @ok="handleOkCloseNow">
+                    <form ref="closeNowForm" @submit.stop.prevent="handleSubmitCloseNow">
+                    </form>
+                </b-modal>
             </b-col>
         </b-row>
     </b-card>
 </template>
 
 <script>
+
+    import {mapActions} from "vuex";
+
     export default {
-        name: "IterationTableElement"
+        name: "IterationTableElementOPEN",
+        props: ["iteration"],
+        methods: {
+            isMobile() {
+                return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+            },
+            ...mapActions('currentPoll', {
+                updatePoll: 'update'
+            }),
+            ...mapActions('myIterations', {
+                updateIteration: 'update'
+            }),
+            getTimeNow: function() {
+                this.timestamp = new Date();
+            },
+            handleOkCloseNow(bvModalEvt) {
+                bvModalEvt.preventDefault()
+                this.getTimeNow()
+                let pollIterationCmd = {
+                    //start: this.timestamp,
+                    //end: new Date(this.ende),
+                    end: this.timestamp,
+                    status: 'CLOSED'
+                }
+                this.createIteration(pollIterationCmd);
+                /*let pollCmd = {
+                    id: this.pollId,
+                    status: 'READY'
+                }
+                this.updatePoll(pollCmd);*/
+            }
+        }
     }
 </script>
 
 <style scoped>
+
+    /*.my-config-link {
+        font-size: 18px;
+        color: #7F7E7F;
+    }
+
+    .my-name {
+        padding-top: 5px;
+        font-size: 22px;
+    }
+    .my-ste {
+        margin: 15px;
+        text-align: center;
+        background-color: white;
+        font-family: Arial,sans-serif;
+    }*/
 
 </style>
