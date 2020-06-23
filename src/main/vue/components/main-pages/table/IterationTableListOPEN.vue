@@ -3,15 +3,17 @@
     <b-container>
         <b-row>
             <b-col>
+                <!--
                 <p>
                     <b-button variant="primary"
                               class="addButton"
                               v-b-modal.launchModal>Open Now</b-button>
-                    <!--
+                </p>
+                -->
+                <!--
                     dritte reihe in b-button
                               :disabled="iteration.status === 'OPEN'"
                               -->
-                </p>
 
                 <b-modal
                     id="launchModal"

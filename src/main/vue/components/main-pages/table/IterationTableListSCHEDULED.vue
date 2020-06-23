@@ -3,11 +3,13 @@
     <b-container>
         <b-row>
             <b-col>
+                <!--
                 <p>
                     <b-button variant="primary"
                               class="addButton"
                               v-b-modal.scheduleModal>New</b-button>
                 </p>
+                -->
 
                 <b-modal
                     id="scheduleModal"

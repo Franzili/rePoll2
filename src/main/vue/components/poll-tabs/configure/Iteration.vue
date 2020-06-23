@@ -158,6 +158,9 @@
                         <h6>Currently Open:</h6>
                     </b-row>
                     <b-row>
+                        <p>
+                            <b-button v-if="poll.status === 'LAUNCHED'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
+                        </p>
                         <b-col >
                             <IterationTableListOPEN v-bind:iterations="iterations"/>
                         </b-col>
@@ -170,6 +173,9 @@
                         <h6>Planned:</h6>
                     </b-row>
                     <b-row>
+                        <p>
+                            <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>New</b-button>
+                        </p>
                         <b-col >
                             <IterationTableListSCHEDULED v-bind:iterations="iterations"/>
                         </b-col>
@@ -215,15 +221,14 @@
                 dateEnde: "",
                 scheduleState: "",
                 dateStart: "",
-                loaded: true
+                loaded: false
             }
         },
-        /*async mounted() {
+        async mounted() {
             this.loaded = false
             await this.listIterations();
             this.loaded = true
-            // this.loadAssigned();
-        },*/
+        },
         created() {
             /*this.iterId = this.iterationId,
             this.iterStatus = this.iterationStatus,
