@@ -30,8 +30,7 @@ public class DownloadsController {
      * @param format human for human-readable and json for JSON String
      * @param type poll for poll without entries and entries for entries
      * */
-    @RequestMapping("/{id}/{type}/{format}/")
-    @ResponseBody
+    @RequestMapping(value = "/{id}/{type}/{format}/", method = RequestMethod.GET)
     public void show(@PathVariable("id") final UUID id,
                      @PathVariable("type") final String type,
                      @PathVariable("format") final String format,
