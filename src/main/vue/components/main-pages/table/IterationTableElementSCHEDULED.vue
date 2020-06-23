@@ -74,7 +74,7 @@
             handleOkCloseNow(bvModalEvt) {
                 bvModalEvt.preventDefault()
 
-                this.deleteIteration(iteration.id);
+                this.deleteIteration(this.iteration.id);
                 /*let pollCmd = {
                     id: this.pollId,
                     status: 'READY'
