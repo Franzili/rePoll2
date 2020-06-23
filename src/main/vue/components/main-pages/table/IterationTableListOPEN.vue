@@ -6,8 +6,11 @@
                 <p>
                     <b-button variant="primary"
                               class="addButton"
-                              :disabled="poll.status === 'LAUNCHED'"
                               v-b-modal.launchModal>Open Now</b-button>
+                    <!--
+                    dritte reihe in b-button
+                              :disabled="iteration.status === 'OPEN'"
+                              -->
                 </p>
 
                 <b-modal
@@ -61,6 +64,8 @@
             return {
                 ende: "",
                 beginn: "",
+                launchState: "",
+                dateEnde: ""
             }
         },
         methods: {
