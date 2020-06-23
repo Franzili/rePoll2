@@ -2,7 +2,7 @@
 
     <b-container>
 
-        <b-row v-bind:key="iteration.id" v-for="iteration in iterations">
+        <b-row v-bind:key="iteration.id" v-if="iteration.status === 'CLOSED'" v-for="iteration in iterations">
             <b-col>
                 <p>
                     <IterationTableElementCLOSED v-bind:iteration="iteration"/>
@@ -19,7 +19,7 @@
     import IterationTableElementCLOSED from "./IterationTableElementCLOSED";
 
     export default {
-        name: "IterationTableList",
+        name: "IterationTableListCLOSED",
         props: ["iterations"],
 
         components: {
