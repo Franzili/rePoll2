@@ -151,7 +151,7 @@
         <h6>Iteration</h6>
 
 
-
+        <!--
                 <b-container v-if="loaded"
                              class="my-container">
                     <b-row align-h="center">
@@ -192,6 +192,25 @@
                         </b-col>
                     </b-row>
                 </b-container>
+        -->
+
+        <b-container
+                     class="my-container">
+            <b-row align-h="center">
+                <h6>Currently Open:</h6>
+            </b-row>
+            <b-row>
+                <p>
+                    <b-button v-if="poll.status === 'LAUNCHED'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
+                </p>
+                <p>
+                    <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>New</b-button>
+                </p>
+                <b-col >
+                    <IterationTableList v-bind:iterations="iterations"/>
+                </b-col>
+            </b-row>
+        </b-container>
 
 
 
@@ -201,13 +220,15 @@
 <script>
 
     import {mapActions, mapState} from "vuex";
-    import IterationTableListOPEN from "../../main-pages/table/IterationTableListOPEN";
-    import IterationTableListSCHEDULED from "../../main-pages/table/IterationTableListSCHEDULED";
-    import IterationTableListCLOSED from "../../main-pages/table/IterationTableListCLOSED";
+    //import IterationTableListOPEN from "../../main-pages/table/IterationTableListOPEN";
+    //import IterationTableListSCHEDULED from "../../main-pages/table/IterationTableListSCHEDULED";
+    //import IterationTableListCLOSED from "../../main-pages/table/IterationTableListCLOSED";
+    import IterationTableList from "../../main-pages/table/IterationTableList";
 
     export default {
         name: "Iteration",
-        components: {IterationTableListCLOSED, IterationTableListSCHEDULED, IterationTableListOPEN},
+        //components: {IterationTableListCLOSED, IterationTableListSCHEDULED, IterationTableListOPEN},
+        components: {IterationTableList},
         data() {
             return {
                 ende: "",
@@ -224,11 +245,11 @@
                 loaded: false
             }
         },
-        async mounted() {
+        /*async mounted() {
             this.loaded = false
             await this.listIterations();
             this.loaded = true
-        },
+        },*/
         created() {
             /*this.iterId = this.iterationId,
             this.iterStatus = this.iterationStatus,
