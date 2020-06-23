@@ -40,9 +40,9 @@
             </b-col>
         </b-row>
 
-        <b-row v-bind:key="iteration.id" v-if="iteration.status === 'OPEN'" v-for="iteration in iterations">
+        <b-row v-bind:key="iteration.id" v-for="iteration in iterations">
             <b-col>
-                <p>
+                <p v-if="iteration.status === 'OPEN'">
                     <IterationTableElementOPEN v-bind:iteration="iteration"/>
                 </p>
             </b-col>
@@ -57,9 +57,11 @@
     export default {
         name: "IterationTableListOPEN",
         props: ["iterations"],
-        data: {
-            ende: "",
-            beginn: "",
+        data() {
+            return {
+                ende: "",
+                beginn: "",
+            }
         },
         methods: {
             getTimeNow: function() {

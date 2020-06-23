@@ -2,9 +2,9 @@
 
     <b-container>
 
-        <b-row v-bind:key="iteration.id" v-if="iteration.status === 'CLOSED'" v-for="iteration in iterations">
+        <b-row v-bind:key="iteration.id"  v-for="iteration in iterations">
             <b-col>
-                <p>
+                <p v-if="iteration.status === 'CLOSED'">
                     <IterationTableElementCLOSED v-bind:iteration="iteration"/>
                 </p>
             </b-col>
