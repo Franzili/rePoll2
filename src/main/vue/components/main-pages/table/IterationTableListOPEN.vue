@@ -96,6 +96,7 @@
                     status: 'LAUNCHED' //'READY'
                 }
                 this.updatePoll(pollCmd);
+
             },
         },
         components: {IterationTableElementOPEN}

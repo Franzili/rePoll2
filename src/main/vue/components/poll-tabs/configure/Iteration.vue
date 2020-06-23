@@ -150,19 +150,58 @@
     <b-card v-else-if="poll.status === 'READY' || poll.status === 'LAUNCHED'">
         <h6>Iteration</h6>
 
-        <p>Comming soon</p>
+
+
+                <b-container v-if="loaded"
+                             class="my-container">
+                    <b-row align-h="center">
+                        <h6>Currently Open:</h6>
+                    </b-row>
+                    <b-row>
+                        <b-col >
+                            <IterationTableListOPEN v-bind:iterations="iterations"/>
+                        </b-col>
+                    </b-row>
+                </b-container>
+
+                <b-container v-if="loaded"
+                             class="my-container">
+                    <b-row align-h="center">
+                        <h6>Planned:</h6>
+                    </b-row>
+                    <b-row>
+                        <b-col >
+                            <IterationTableListSCHEDULED v-bind:iterations="iterations"/>
+                        </b-col>
+                    </b-row>
+                </b-container>
+                <b-container v-if="loaded"
+                             class="my-container">
+                    <b-row align-h="center">
+                        <h6>Previous Iterations:</h6>
+                    </b-row>
+                    <b-row>
+                        <b-col >
+                            <IterationTableListCLOSED v-bind:iterations="iterations"/>
+                        </b-col>
+                    </b-row>
+                </b-container>
+
 
 
     </b-card>
 </template>
 
 <script>
-    //import {mapActions, mapState} from "vuex";
 
     import {mapActions, mapState} from "vuex";
+    import IterationTableListOPEN from "../../main-pages/table/IterationTableListOPEN";
+    import IterationTableListSCHEDULED from "../../main-pages/table/IterationTableListSCHEDULED";
+    import IterationTableListCLOSED from "../../main-pages/table/IterationTableListCLOSED";
 
     export default {
         name: "Iteration",
+        components: {IterationTableListCLOSED, IterationTableListSCHEDULED, IterationTableListOPEN},
         data() {
             return {
                 ende: "",
@@ -175,9 +214,16 @@
                 iterStatus: "",
                 dateEnde: "",
                 scheduleState: "",
-                dateStart: ""
+                dateStart: "",
+                loaded: true
             }
         },
+        /*async mounted() {
+            this.loaded = false
+            await this.listIterations();
+            this.loaded = true
+            // this.loadAssigned();
+        },*/
         created() {
             /*this.iterId = this.iterationId,
             this.iterStatus = this.iterationStatus,

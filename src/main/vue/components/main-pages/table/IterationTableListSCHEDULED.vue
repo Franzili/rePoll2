@@ -62,7 +62,7 @@
 
 <script>
 
-    import {mapActions} from "vuex";
+    import {mapActions, mapState} from "vuex";
     import IterationTableElementSCHEDULED from "./IterationTableElementSCHEDULED";
 
     export default {
@@ -77,7 +77,19 @@
                 dateStart: ""
             }
         },
+        computed: {
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            }),
+            ...mapState('currentPoll', {
+                pollId: state => state.poll.id,
+                pollStatus: state => state.poll.status,
+            }),
+        },
         methods: {
+            ...mapActions('currentPoll', {
+                updatePoll: 'update'
+            }),
             ...mapActions('myIterations', {
                 createIteration: 'create',
                 listIterations: 'load',
@@ -96,7 +108,6 @@
                 })
             },
             scheduleSingleIter() {
-                this.getTimeNow()
                 let pollIterationCmd = {
                     start: new Date(this.beginn),
                     end: new Date(this.ende),
