@@ -2,8 +2,12 @@
     <b-card>
         <b-button variant="primary"
                   class="float-right"
-                  @click="testdownload"
-        >Download Poll as txt file</b-button>
+                  @click="testdownload('human')"
+        >Download human readable Poll as txt file</b-button>
+        <b-button variant="primary"
+                  class="float-left"
+                  @click="testdownload('json')"
+        >Download Poll as json file</b-button>
     </b-card>
 </template>
 
@@ -18,12 +22,12 @@
                 download: 'download'
             }),
 
-            testdownload() {
+            testdownload(format) {
 
                 let cmd = {
                     id: "36808e60-39f7-41f0-b991-f08b80fe8226",
                     type: 'poll',
-                    format: 'human'
+                    format: format
                 }
 
                 this.download(cmd);

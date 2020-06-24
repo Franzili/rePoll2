@@ -533,24 +533,42 @@ const currentPoll = {
             })
         },
 
+        /**
+         * cmd has form: {pollId, type, format}
+         * */
         download({commit, state}, cmd) {
             return new Promise(((resolve, reject) => {
-                cmd.id = state.poll.id;
-                api.poll.download(cmd).then((response) => {
-                    commit('tmpDownloadSet', response.data);
-                    let fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                if (cmd.format === 'human') {
+                    cmd.id = state.poll.id;
+                    api.poll.download(cmd).then((response) => {
+                        commit('tmpDownloadSet', response.data);
+                        let fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                        let fileLink = document.createElement('a');
+
+                        fileLink.href = fileURL;
+                        fileLink.setAttribute('download', state.poll.title + '.txt');
+                        document.body.appendChild(fileLink);
+
+                        fileLink.click();
+                        resolve(response.data);
+                    }).catch(function (error) {
+                        console.log(error);
+                        reject();
+                    })
+                } else  if (cmd.format === 'json') {
+                    let pollJson = JSON.stringify(state.poll);
+                    commit('tmpDownloadSet', pollJson);
+                    let fileURL = window.URL.createObjectURL(new Blob([pollJson]));
                     let fileLink = document.createElement('a');
+                    console.log(fileURL);
 
                     fileLink.href = fileURL;
-                    fileLink.setAttribute('download', 'testfile.txt');
+                    fileLink.setAttribute('download', state.poll.title + '.json');
                     document.body.appendChild(fileLink);
 
                     fileLink.click();
-                    resolve(response.data);
-                }).catch(function (error) {
-                    console.log(error);
-                    reject();
-                })
+                    resolve(pollJson);
+                }
             }))
         }
     },
