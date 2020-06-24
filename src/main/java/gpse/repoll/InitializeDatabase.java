@@ -380,16 +380,16 @@ public class InitializeDatabase implements InitializingBean {
             textMap10.put(question4.getId(), scaleAnswer10);
 
 
-            pollEntryService.addPollEntry(poll.getId(), textMap1, participants.get(0));
-            pollEntryService.addPollEntry(poll.getId(), textMap2, participants.get(1));
-            pollEntryService.addPollEntry(poll.getId(), textMap3, participants.get(2));
-            pollEntryService.addPollEntry(poll.getId(), textMap4, participants.get(3));
-            pollEntryService.addPollEntry(poll.getId(), textMap5, participants.get(4));
-            pollEntryService.addPollEntry(poll.getId(), textMap6, participants.get(5));
-            pollEntryService.addPollEntry(poll.getId(), textMap7, participants.get(6));
-            pollEntryService.addPollEntry(poll.getId(), textMap8, participants.get(7));
-            pollEntryService.addPollEntry(poll.getId(), textMap9, participants.get(8));
-            pollEntryService.addPollEntry(poll.getId(), textMap10, participants.get(9));
+            pollEntryService.addPollEntry(poll.getId(), textMap1, participants.get(0).getId());
+            pollEntryService.addPollEntry(poll.getId(), textMap2, participants.get(1).getId());
+            pollEntryService.addPollEntry(poll.getId(), textMap3, participants.get(2).getId());
+            pollEntryService.addPollEntry(poll.getId(), textMap4, participants.get(3).getId());
+            pollEntryService.addPollEntry(poll.getId(), textMap5, participants.get(4).getId());
+            pollEntryService.addPollEntry(poll.getId(), textMap6, participants.get(5).getId());
+            pollEntryService.addPollEntry(poll.getId(), textMap7, participants.get(6).getId());
+            pollEntryService.addPollEntry(poll.getId(), textMap8, participants.get(7).getId());
+            pollEntryService.addPollEntry(poll.getId(), textMap9, participants.get(8).getId());
+            pollEntryService.addPollEntry(poll.getId(), textMap10, participants.get(9).getId());
 
             return null;
         });

@@ -22,6 +22,11 @@ public class ParticipantServiceImpl implements ParticipantService {
         this.pollRepository = pollRepository;
     }
 
+    @Override
+    public void save(Participant participant) {
+        participantRepository.save(participant);
+    }
+
     /**
      * {@inheritDoc}
      */
