@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DownloadsController {
 
     private final DownloadService downloadService;
+    private final int k24 = 1024;
 
     @Autowired
     public DownloadsController(DownloadService downloadService) {
@@ -27,8 +28,9 @@ public class DownloadsController {
 
     /**
      * @param id pollId
-     *  @param type poll for poll without entries and entries for entries
+     * @param type poll for poll without entries and entries for entries
      * @param format human for human-readable and json for JSON String
+     * @param response HttpServletResponse
      * */
     @RequestMapping(value = "/{id}/{type}/{format}/", method = RequestMethod.GET)
     public void download(@PathVariable("id") final UUID id,
@@ -42,22 +44,21 @@ public class DownloadsController {
 
         //download file
         response.setContentType("application/txt");
-        response.setHeader("Content-Disposition", "attachment; filename=" +fileName);
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
         response.setHeader("Content-Transfer-Encoding", "binary");
         try {
             BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
             //FileInputStream fis = new FileInputStream(folderPath + fileName);
             int len;
-            byte[] buf = new byte[1024];
+            byte[] buf = new byte[k24];
             try (InputStream is = Files.newInputStream(Paths.get(folderPath + fileName))) {
-                while((len = is.read(buf)) > 0) {
-                    bos.write(buf,0,len);
+                while ((len = is.read(buf)) > 0) {
+                    bos.write(buf,0, len);
                 }
             }
             bos.close();
-            response.flushBuffer();
-        }
-        catch(IOException e) {
+            response.flushBuffer(); }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }

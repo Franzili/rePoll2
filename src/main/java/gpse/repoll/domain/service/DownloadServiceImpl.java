@@ -13,8 +13,8 @@ import java.util.UUID;
 public class DownloadServiceImpl implements DownloadService {
 
     //TODO folder should be set by user?
-    private final String FOLDERPATH = "./src/main/resources/";
-    private final String FILENAME = "tmp.txt";
+    private final String folderPath = "./src/main/resources/";
+    private final String fileName = "tmp.txt";
 
     private final PollService pollService;
 
@@ -25,14 +25,13 @@ public class DownloadServiceImpl implements DownloadService {
 
     @Override
     public void download(UUID id, String type, String format) {
-        String fileName = FILENAME;
         //create file
-        new File(FOLDERPATH + fileName);
+        new File(folderPath + fileName);
 
         //write to file
         try {
             //FileWriter myWriter = new FileWriter(FOLDERPATH + fileName);
-            try(BufferedWriter wr = Files.newBufferedWriter(Paths.get(FOLDERPATH + fileName), StandardCharsets.UTF_8)) {
+            try (BufferedWriter wr = Files.newBufferedWriter(Paths.get(folderPath + fileName), StandardCharsets.UTF_8)) {
                 if (format.equals("human") && type.equals("poll")) {
                     wr.write(pollService.getPoll(id).getAsHumanReadable());
                 }
@@ -45,11 +44,11 @@ public class DownloadServiceImpl implements DownloadService {
 
     @Override
     public String getFolderPath() {
-        return FOLDERPATH;
+        return folderPath;
     }
 
     @Override
     public String getFileName() {
-        return FILENAME;
+        return fileName;
     }
 }
