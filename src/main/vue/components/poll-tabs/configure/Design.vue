@@ -1,8 +1,7 @@
 <template>
     <div>
 
-        <b-card title="hallo"
-            style="background-color:white">
+        <b-card>
             <h6>Design</h6>
 
             <!-- TODO height of v-app       style="max-height: 470px"-->
