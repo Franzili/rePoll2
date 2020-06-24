@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,37 +20,39 @@ public class DownloadsController {
 
     private final DownloadService downloadService;
 
-    //TODO folder should be set by user?
-    String folderPath="./src/main/resources/";
-
     @Autowired
     public DownloadsController(DownloadService downloadService) {
         this.downloadService = downloadService;
     }
 
     /**
+     * @param id pollId
+     *  @param type poll for poll without entries and entries for entries
      * @param format human for human-readable and json for JSON String
-     * @param type poll for poll without entries and entries for entries
      * */
     @RequestMapping(value = "/{id}/{type}/{format}/", method = RequestMethod.GET)
-    public void show(@PathVariable("id") final UUID id,
+    public void download(@PathVariable("id") final UUID id,
                      @PathVariable("type") final String type,
                      @PathVariable("format") final String format,
                      HttpServletResponse response) {
 
         downloadService.download(id, type, format);
+        String folderPath = downloadService.getFolderPath();
+        String fileName = downloadService.getFileName();
 
         //download file
         response.setContentType("application/txt");
-        response.setHeader("Content-Disposition", "attachment; filename=" +"testfile.txt");
+        response.setHeader("Content-Disposition", "attachment; filename=" +fileName);
         response.setHeader("Content-Transfer-Encoding", "binary");
         try {
             BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
-            FileInputStream fis = new FileInputStream(folderPath+"testfile.txt");
+            //FileInputStream fis = new FileInputStream(folderPath + fileName);
             int len;
-            byte[] buf = new byte[1024];  //TODO whats that number
-            while((len = fis.read(buf)) > 0) {
-                bos.write(buf,0,len);
+            byte[] buf = new byte[1024];
+            try (InputStream is = Files.newInputStream(Paths.get(folderPath + fileName))) {
+                while((len = is.read(buf)) > 0) {
+                    bos.write(buf,0,len);
+                }
             }
             bos.close();
             response.flushBuffer();

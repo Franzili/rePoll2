@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public interface DownloadService {
     /**
-     * downloads the poll/entries specified by type
+     * downloads the poll/entries specified by type.
      * in a format like txt specified by format
      * from the poll with id
      *
@@ -13,4 +13,8 @@ public interface DownloadService {
      * @param format file format (e.g. txt)
      * */
     void download(UUID id, String type, String format);
+
+    String getFolderPath();
+
+    String getFileName();
 }
