@@ -12,10 +12,8 @@ import org.springframework.stereotype.Component;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
@@ -47,7 +45,7 @@ public class IterationScheduler implements InitializingBean {
         this.pollIterationRepository = pollIterationRepository;
 
         scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(5);
+        scheduler.setPoolSize(1);
         scheduler.setThreadNamePrefix("IterationScheduler");
         scheduler.initialize();
     }
