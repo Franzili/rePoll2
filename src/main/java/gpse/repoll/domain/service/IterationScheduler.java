@@ -12,11 +12,22 @@ import org.springframework.stereotype.Component;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
+import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 
+/**
+ * Responsible for automatically opening and closing PollIterations.
+ *
+ * PollIterations are assumed to be scheduled for opening / closing, if their start / end fields are not null.
+ *
+ * IterationScheduler automagically detects changes in the PollIterationsRepository using an @EntityListener annotation.
+ * Hence, no action needs to be performed manually if a PollIteration is changed somewhere else.
+ */
 @Component
 public class IterationScheduler implements InitializingBean {
     private ThreadPoolTaskScheduler scheduler;
@@ -29,11 +40,14 @@ public class IterationScheduler implements InitializingBean {
     public IterationScheduler() { }
 
     @Autowired
-    public IterationScheduler(@Lazy PollIterationRepository pollIterationRepository) {
+    public IterationScheduler(
+        // lazy annotation needed to break dependency cycle
+        @Lazy PollIterationRepository pollIterationRepository
+    ) {
         this.pollIterationRepository = pollIterationRepository;
 
         scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(1);
+        scheduler.setPoolSize(5);
         scheduler.setThreadNamePrefix("IterationScheduler");
         scheduler.initialize();
     }
@@ -45,17 +59,26 @@ public class IterationScheduler implements InitializingBean {
         }
     }
 
+    /**
+     * Schedule an iteration to be opened / closed.
+     * If the iteration was already scheduled, it will first be unscheduled and then re-scheduled with the
+     * (potentially changed dates).
+     * Then, start/end dates are set, or removed if they are null.
+     * @param iteration The PollIteration to schedule
+     */
     @PrePersist
     @PreUpdate
     public void schedule(final PollIteration iteration) {
         remove(iteration);
+
+        ZoneOffset offset = OffsetDateTime.now().getOffset();
 
         ScheduledFuture<?> task;
         if (iteration.getStart() != null) {
             task = scheduler.schedule(() -> {
                 iteration.setStatus(PollIterationStatus.OPEN);
                 pollIterationRepository.save(iteration);
-            }, iteration.getStart().toInstant(ZoneOffset.UTC));
+            }, iteration.getStart().toInstant(offset));
             openTasks.put(iteration.getId(), task);
         }
 
@@ -63,11 +86,17 @@ public class IterationScheduler implements InitializingBean {
             task = scheduler.schedule(() -> {
                 iteration.setStatus(PollIterationStatus.CLOSED);
                 pollIterationRepository.save(iteration);
-            }, iteration.getStart().toInstant(ZoneOffset.UTC));
+            }, iteration.getEnd().toInstant(offset));
             closeTasks.put(iteration.getId(), task);
         }
     }
 
+    /**
+     * Unschedule a PollIteration.
+     * Remove a PollIteration from scheduling. Its status will no longer be changed by IterationScheduler.
+     * Mainly to be used to automatically unschedule PollIterations that are removed from the database.
+     * @param iteration The PollIteration to unschedule.
+     */
     @PreRemove
     public void remove(PollIteration iteration) {
         Long id = iteration.getId();
