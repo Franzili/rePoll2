@@ -22,7 +22,7 @@ const participants = {
         /**
          * Reloads the Participants from Backend
          */
-        load({rootState, commit}, id) {
+        loadParticipant({rootState, commit}, id) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
                 return;
@@ -30,6 +30,7 @@ const participants = {
             return new Promise((resolve, reject) => {
                 api.poll.listParticipants(id).then(function (res) {
                     commit('set', res.data);
+                    //console.log(res.data);
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);

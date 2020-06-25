@@ -1,11 +1,36 @@
 <template>
     <b-card>
         <!-- TODO: adapt type names to backend terminology -->
-        <b-row v-if="type === 'known'">
+        <div v-if="poll.anonymity === 'NON_ANONYMOUS'">
+            <h6>Participants: </h6>
 
-        </b-row>
+            <b-col cols="6">
+                <p>
 
-        <div v-if="type === 'pseudo'">
+                </p>
+                <p>
+                    <b-button class="float-right" variant="primary">+ Invite new</b-button>
+                </p>
+            </b-col>
+
+            <b-col cols="6">
+                <p>
+                    <b-row class="align-items-center">
+                        <b-col cols="6">
+                            {{ n_participated }} participated, <br/>
+                            {{ n_invites_pending }} invites pending.
+                        </b-col>
+
+                        <b-col cols="6">
+                            <b-button class="float-right">Remind</b-button>
+                        </b-col>
+                    </b-row>
+                </p>
+            </b-col>
+        </div>
+
+
+        <div v-if="poll.anonymity === 'PSEUDONYMOUS'">
             <h6>Invite new participants</h6>
 
             <b-row>
@@ -52,7 +77,7 @@
             </b-row>
         </div>
 
-        <b-row v-if="type === 'anonymous'">
+        <b-row v-if="poll.anonymity === 'ANONYMOUS'">
             <b-container>
                 <b-row align-h="between">
                     <b-col cols="6">
@@ -98,7 +123,8 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
+    import {mapState, mapActions} from "vuex";
+    import participants from "../../../store/participants";
     export default {
         name: "ManageParticipants",
 
@@ -107,10 +133,7 @@
                 link: '',
 
                 //TODO
-                type: 'anonymous',
-
-                //TODO
-                n_participated: 412,
+                n_participated: 0,
                 n_invites_pending: 32
             }
         },
@@ -122,6 +145,16 @@
             ...mapState('participants', {
                 participants: 'participants'
             })
+        },
+
+        mounted() {
+            this.loadParticipant();
+            this.n_participated = participants.length;
+        },
+        methods: {
+            ...mapActions('participants', {
+                loadParticipant: 'loadParticipants'
+            }),
         },
 
         created: function() {
