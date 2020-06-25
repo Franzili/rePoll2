@@ -72,6 +72,54 @@
             </v-app>
 
 
+
+            <!-- Logo -->
+            <b-card>
+                <h6>Logo</h6>
+
+                <b-row>
+                    <b-col>
+                        <b-form-file
+                            accept="image/*"
+                            v-model="selectedFile"
+                            placeholder="Choose a file or drop it here..."
+                            drop-placeholder="Drop file here..."
+                            @change="onFileSelected"
+                        ></b-form-file>
+
+
+                        <b-button @click="saveLogo">apply</b-button>
+
+                    </b-col>
+
+                    <b-col v-if="selectedFile!==null">
+                        <b-card v-if="selectedFile===null">
+                            <p align="center">no logo uploaded</p>
+
+                        </b-card>
+
+                        <b-card-img :src="this.path">
+
+                        </b-card-img>
+
+                    </b-col>
+
+                </b-row>
+
+
+            </b-card>
+
+
+
+
+
+
+
+
+
+
+
+
             <h6>Preview</h6>
 
             <b-card-group>
@@ -98,10 +146,58 @@
 
 
 
+
+
+
+
+
+
+
             <p style="background-color:white">{{this.selectedFont}}</p>
             <p :style="'color:' + selectedTextColour + ';'
                 + selectedFont">{{this.selectedTextColour}}</p>
+
+
+
+
+
+
+
+
+            <!-- Logo -->
+            <div>
+
+
+
+
+
+
+
+
+
+
+                <b-input type="color"></b-input>
+
+
+
+            </div>
+
+
         </b-card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
 </template>
 
@@ -110,8 +206,12 @@
 
     export default {
         name: "Design",
+
         data () {
             return {
+                selectedFile: null, //weg?
+                path: '',
+
                 selectedTextColour: '',
                 selectedBackgroundColour: '',
 
@@ -131,6 +231,16 @@
             ...mapActions('currentPoll', {
                 updateDesign: 'updateDesign'
             }),
+
+            saveLogo() {
+                // TODO Speicherung im Backend
+
+            },
+            onFileSelected(event) {
+                this.selectedFile = event.target.files[0]
+                this.path = URL.createObjectURL(event.target.files[0])
+            },
+
             saveDesign() {
                 let designCmd = {
                     font: this.selectedFont,
