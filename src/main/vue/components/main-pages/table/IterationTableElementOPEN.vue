@@ -24,7 +24,7 @@
                 </p>
 
                 <b-modal
-                    id="scheduleModal"
+                    id="closeModal"
                     ref="scheduleIterModal"
                     centered
                     title="Do you want to end this iteration ?"
