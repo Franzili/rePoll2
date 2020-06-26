@@ -12,7 +12,7 @@
                 </b-col>
                 <b-col col lg="6">
                     <div>
-                        <b-form-input placeholder="Server address" v-model="smtpAddress">
+                        <b-form-input placeholder="Server address" v-model="smtpServerAddress">
                         </b-form-input>
                     </div>
                 </b-col>
@@ -46,7 +46,7 @@
         name: "MailServerConfigs",
         data() {
             return {
-                smtpAddress: '',
+                smtpServerAddress: '',
                 smtpPort: ''
             }
         },
@@ -62,11 +62,11 @@
             ),
             setServerAddress() {
                 let mailCmd = {
-                    smtpAddress: this.smtpAddress,
+                    smtpServerAddress: this.smtpServerAddress,
                     smtpPort: this.smtpPort
                 }
                 this.updateConfigs(mailCmd)
-                console.log(this.smtpAddress)
+                console.log(this.smtpServerAddress)
             }
         }
     }
