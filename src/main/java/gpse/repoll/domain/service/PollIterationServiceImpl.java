@@ -6,6 +6,7 @@ import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollIteration;
 import gpse.repoll.domain.poll.PollIterationStatus;
 import gpse.repoll.domain.repositories.PollIterationRepository;
+import gpse.repoll.domain.repositories.PollRepository;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.concurrent.ScheduledFuture;
 public class PollIterationServiceImpl implements PollIterationService {
 
     private final PollIterationRepository pollIterationRepository;
+    private final PollRepository pollRepository;
     private final PollService pollService;
 
     private Map<Long, ScheduledFuture<?>> openTasks = new HashMap<>();
@@ -30,8 +32,10 @@ public class PollIterationServiceImpl implements PollIterationService {
     private ThreadPoolTaskScheduler scheduler;
 
     public PollIterationServiceImpl(final PollIterationRepository pollIterationRepository,
+                                    final PollRepository pollRepository,
                                     final PollService pollService) {
         this.pollIterationRepository = pollIterationRepository;
+        this.pollRepository = pollRepository;
         this.pollService = pollService;
 
         scheduler = new ThreadPoolTaskScheduler();
@@ -51,9 +55,12 @@ public class PollIterationServiceImpl implements PollIterationService {
                                           final LocalDateTime start,
                                           final LocalDateTime end,
                                           final PollIterationStatus status) {
+        Poll poll = pollService.getPoll(pollID);
         final PollIteration pollIteration = new PollIteration(start, end);
         pollIteration.setStatus(status);
         pollIterationRepository.save(pollIteration);
+        poll.add(pollIteration);
+        pollRepository.save(poll);
         return pollIteration;
     }
 
