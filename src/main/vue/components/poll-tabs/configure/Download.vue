@@ -5,12 +5,14 @@
 
         <div class="float-left">
 
-            <b-button @click="downloadFromStore('poll', 'human')"
-            >Download human readable Poll as txt file</b-button>
-
-            <b-button class="ml-3"
-                      @click="downloadFromStore('poll', 'json')"
-            >Download Poll as json file</b-button>
+            <b-dropdown text="Download poll">
+                <b-dropdown-item @click="downloadFromStore('poll', 'human')">
+                    Download Poll as txt file
+                </b-dropdown-item>
+                <b-dropdown-item @click="downloadFromStore('poll', 'json')">
+                    Download Poll as json file
+                </b-dropdown-item>
+            </b-dropdown>
 
             <b-button class="ml-3"
                       @click="downloadFromStore('entries', 'json')"
