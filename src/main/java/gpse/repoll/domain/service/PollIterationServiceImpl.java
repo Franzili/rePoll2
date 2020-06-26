@@ -42,6 +42,10 @@ public class PollIterationServiceImpl implements PollIterationService {
         scheduler.setPoolSize(1);
         scheduler.setThreadNamePrefix("IterationScheduler");
         scheduler.initialize();
+
+        for (PollIteration iter : pollIterationRepository.findAll()) {
+            scheduleIteration(iter);
+        }
     }
 
     @Override
@@ -61,6 +65,9 @@ public class PollIterationServiceImpl implements PollIterationService {
         pollIterationRepository.save(pollIteration);
         poll.add(pollIteration);
         pollRepository.save(poll);
+
+        scheduleIteration(pollIteration);
+
         return pollIteration;
     }
 
@@ -92,12 +99,18 @@ public class PollIterationServiceImpl implements PollIterationService {
         if (status != null) {
             pollIteration.setStatus(status);
         }
+
+        scheduleIteration(pollIteration);
+
         return pollIteration;
     }
 
     @Override
     public void removePollIteration(final UUID pollID, final Long pollIterationID) {
         final PollIteration pollIteration = getPollIteration(pollID, pollIterationID);
+
+        scheduleRemove(pollIteration);
+
         pollIterationRepository.delete(pollIteration);
     }
 
