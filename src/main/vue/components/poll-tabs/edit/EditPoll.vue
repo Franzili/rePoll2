@@ -7,6 +7,7 @@
             <div class="sticky-offset sticky-top">
                 <QuestionPalette></QuestionPalette>
             </div>
+            <Upload></Upload>
         </b-col>
 
         <b-col class="editor-column">
@@ -26,6 +27,7 @@
     import QuestionPalette from "./QuestionPalette";
     import PollMainView from "./PollMainView";
     import Outline from "../../Outline";
+    import Upload from "../../Upload";
     export default {
         name: "EditPoll",
         computed: {
@@ -33,7 +35,7 @@
                 pollStructure: 'pollStructureFlat'
             })
         },
-        components: {PollMainView, QuestionPalette, Outline},
+        components: {Upload, PollMainView, QuestionPalette, Outline},
     }
 </script>
 
