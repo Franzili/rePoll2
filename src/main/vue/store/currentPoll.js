@@ -59,9 +59,9 @@ const currentPoll = {
          * for a given user with a provided user id
          * */
         entriesWithSections: (state) => {
-            return (userId) => {
+            return (participantId) => {
                 let res = [];
-                let userEntry = {entry: state.entries.find(entry => entry.user.id === userId)};
+                let userEntry = {entry: state.entries.find(entry => entry.participant.id === participantId)};
                 let associations = null;
                 let answers = [];       //used in MultiChoiceAnswer
 
@@ -154,7 +154,7 @@ const currentPoll = {
         entriesUserNames: state => {
             let res = [];
             state.entries.forEach(entry => {
-                let entryUser = {text: entry.user.username, value: entry.user.id};
+                let entryUser = {text: entry.participant.fullName, value: entry.participant.id};
                 res.push(entryUser)
             });
             return res;
