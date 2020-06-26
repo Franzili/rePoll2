@@ -537,6 +537,7 @@ const currentPoll = {
          * cmd has form: {pollId, type, format}
          * */
         download({commit, state}, cmd) {
+            console.log(state.poll);
             return new Promise(((resolve, reject) => {
                 if (cmd.format === 'human') {
                     cmd.id = state.poll.id;

@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 public class DownloadsController {
 
     private final DownloadService downloadService;
-    private final int k24 = 1024;
 
     @Autowired
     public DownloadsController(DownloadService downloadService) {
@@ -42,13 +41,14 @@ public class DownloadsController {
         String folderPath = downloadService.getFolderPath();
         String fileName = downloadService.getFileName();
 
+        int k24 = 1024;
+
         //download file
         response.setContentType("application/txt");
         response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
         response.setHeader("Content-Transfer-Encoding", "binary");
         try {
             BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
-            //FileInputStream fis = new FileInputStream(folderPath + fileName);
             int len;
             byte[] buf = new byte[k24];
             try (InputStream is = Files.newInputStream(Paths.get(folderPath + fileName))) {

@@ -30,13 +30,11 @@ public class DownloadServiceImpl implements DownloadService {
 
         //write to file
         try {
-            //FileWriter myWriter = new FileWriter(FOLDERPATH + fileName);
-            try (BufferedWriter wr = Files.newBufferedWriter(Paths.get(folderPath + fileName), StandardCharsets.UTF_8)) {
-                if (format.equals("human") && type.equals("poll")) {
+            if (format.equals("human") && type.equals("poll")) {
+                try (BufferedWriter wr = Files.newBufferedWriter(Paths.get(folderPath + fileName), StandardCharsets.UTF_8)) {
                     wr.write(pollService.getPoll(id).getAsHumanReadable());
                 }
             }
-            //myWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

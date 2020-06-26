@@ -296,26 +296,29 @@ public class Poll extends Auditable<User> {
 
     public String getAsHumanReadable() {
 
-        StringBuilder prettySections = new StringBuilder();
-        StringBuilder prettyQuestions = new StringBuilder();
+        StringBuilder sectionsWithQuestions = new StringBuilder();
 
         for (PollSection section : pollSections) {
-            prettySections.append(section.getTitle());
-            prettySections.append(", ");
+            sectionsWithQuestions.append(section.getTitle());
+            sectionsWithQuestions.append(": ");
+            sectionsWithQuestions.append("\n");
+            for (Question q : section.getQuestions()) {
+                sectionsWithQuestions.append(q.getTitle());
+                sectionsWithQuestions.append(", ");
+            }
+            if (section.getQuestions().isEmpty()) {
+                sectionsWithQuestions.append("\n");
+            } else {
+                //remove the last ','
+                sectionsWithQuestions.delete(sectionsWithQuestions.length() - 2, sectionsWithQuestions.length() - 1);
+                sectionsWithQuestions.append("\n \n");
+            }
         }
-        for (Question q : questions) {
-            prettyQuestions.append(q.getTitle());
-            prettyQuestions.append(", ");
-        }
-        //remove the last ',' TODO can they be empty?
-        prettySections.delete(prettySections.length() - 2, prettySections.length() - 1);
-        prettyQuestions.delete(prettyQuestions.length() - 2, prettyQuestions.length() - 1);
 
         return "Poll " + title + ":\n\n"
             + "Id:        " + id + "\n"
             + "Status:    " + status + "\n"
-            + "Anonymity: " + anonymity + "\n\n"
-            + "Sections:  " + prettySections.toString() + "\n"
-            + "Questions: " + prettyQuestions.toString() + "\n";
+            + "Anonymity: " + anonymity + "\n\n\n"
+            + "Questions:\n" + sectionsWithQuestions.toString() + "\n";
     }
 }
