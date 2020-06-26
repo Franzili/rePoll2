@@ -92,6 +92,17 @@ const myPolls = {
                 });
             });
         },
+        duplicate({commit}, pollId) {
+            return new Promise((resolve, reject) => {
+                api.poll.duplicate(pollId).then(function (res) {
+                    commit('currentPoll/set', res.data, {root: true});
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
+        },
         delete({commit,dispatch},id) {
             return new Promise((resolve, reject) => {
                 api.poll.delete(id).then(function (res) {

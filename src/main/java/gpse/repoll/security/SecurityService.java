@@ -1,8 +1,6 @@
 package gpse.repoll.security;
 
-import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.PollEditStatus;
 import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.repositories.PollEntryRepository;
@@ -45,14 +43,6 @@ public class SecurityService {
             user = userService.getUser(userId);
         }
         return user.getUsername().equals(username);
-    }
-
-    public boolean isOwnEntry(String username, Long entryID) {
-        User user = userService.getUser(username);
-        PollEntry pollEntry = pollEntryRepository.findById(entryID).orElseThrow(() -> {
-            throw new NotFoundException("The entry does not exist!");
-        });
-        return pollEntry.getUser().equals(user);
     }
 
     public boolean isAdmin(String username) {

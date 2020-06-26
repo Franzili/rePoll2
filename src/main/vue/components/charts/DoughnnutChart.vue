@@ -71,6 +71,19 @@
                     }
                 }
             }
+        },
+        watch: {
+            chartData() {
+                this.getMoreColors();
+                this.renderChart({
+                        labels: this.chartLabels,
+                        datasets: [{
+                            label: this.title,
+                            backgroundColor: this.backgroundColor,
+                            data: this.chartData
+                        }]},
+                    this.options);
+            }
         }
     }
 </script>
