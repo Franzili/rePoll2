@@ -83,13 +83,13 @@
     <b-card v-else-if="poll.status === 'READY' || poll.status === 'LAUNCHED'">
         <h6>Iteration</h6>
 
-        <div v-bind:key="iteration.id" v-for="iteration in iterations">
+
 
             <p>
-                <b-button v-if="poll.status === 'READY'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
+                <b-button v-if="poll.status === 'LAUNCHED'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
             </p>
             <div class="row">
-                <div class="list-group" id="IterationOPEN" role="tablist">
+                <div class="list-group" id="IterationOPEN" role="tablist" v-bind:key="iteration.id" v-for="iteration in iterations">
                     <p v-if="iteration.status === 'OPEN'">
                         <IterationTableElementOPEN v-bind:iteration="iteration"/>
                     </p>
@@ -100,7 +100,7 @@
                 <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>New</b-button>
             </p>
             <div class="row">
-                <div class="list-group" id="IterationSCHEDULED" role="tablist">
+                <div class="list-group" id="IterationSCHEDULED" role="tablist" v-bind:key="iteration.id" v-for="iteration in iterations">
                     <p v-if="iteration.status === 'SCHEDULED'">
                         <IterationTableElementSCHEDULED v-bind:iteration="iteration"/>
                     </p>
@@ -108,7 +108,7 @@
             </div>
 
             <div class="row">
-                <div class="list-group" id="IterationCLOSED" role="tablist">
+                <div class="list-group" id="IterationCLOSED" role="tablist" v-bind:key="iteration.id" v-for="iteration in iterations">
                     <p v-if="iteration.status === 'CLOSED'">
                         <IterationTableElementCLOSED v-bind:iteration="iteration"/>
                     </p>
@@ -181,7 +181,7 @@
                 </form>
             </b-modal>
 
-        </div>
+
 
 
     </b-card>
