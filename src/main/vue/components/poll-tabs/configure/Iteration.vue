@@ -90,7 +90,7 @@
             </p>
             <div class="row">
                 <div class="list-group" id="IterationOPEN" role="tablist" v-bind:key="iteration.id" v-for="iteration in iterations">
-                    <p v-if="iteration.status === 'OPEN'">
+                    <p v-if="iteration.status === 'OPEN' && poll.id === pollId">
                         <IterationTableElementOPEN v-bind:iteration="iteration"/>
                     </p>
                 </div>
@@ -101,7 +101,7 @@
             </p>
             <div class="row">
                 <div class="list-group" id="IterationSCHEDULED" role="tablist" v-bind:key="iteration.id" v-for="iteration in iterations">
-                    <p v-if="iteration.status === 'SCHEDULED'">
+                    <p v-if="iteration.status === 'SCHEDULED' && poll.id === pollId">
                         <IterationTableElementSCHEDULED v-bind:iteration="iteration"/>
                     </p>
                 </div>
@@ -109,7 +109,7 @@
 
             <div class="row">
                 <div class="list-group" id="IterationCLOSED" role="tablist" v-bind:key="iteration.id" v-for="iteration in iterations">
-                    <p v-if="iteration.status === 'CLOSED'">
+                    <p v-if="iteration.status === 'CLOSED' && poll.id === pollId">
                         <IterationTableElementCLOSED v-bind:iteration="iteration"/>
                     </p>
                 </div>
