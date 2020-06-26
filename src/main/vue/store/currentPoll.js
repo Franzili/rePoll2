@@ -590,9 +590,14 @@ const currentPoll = {
                         reject();
                     })
                 } else  if (cmd.format === 'json') {
-                    let pollJson = JSON.stringify(state.poll);
-                    commit('tmpDownloadSet', pollJson);
-                    let fileURL = window.URL.createObjectURL(new Blob([pollJson]));
+
+                    let pollSections = JSON.stringify(state.poll.pollSections);
+                    let pollQuestions = JSON.stringify(state.poll.questions);
+
+                    let res = '{ sections: ' + pollSections + ', questions: ' + pollQuestions + '}';
+
+                    commit('tmpDownloadSet', res);
+                    let fileURL = window.URL.createObjectURL(new Blob([res]));
                     let fileLink = document.createElement('a');
                     console.log(fileURL);
 
@@ -601,7 +606,7 @@ const currentPoll = {
                     document.body.appendChild(fileLink);
 
                     fileLink.click();
-                    resolve(pollJson);
+                    resolve(res);
                 }
             }))
         }
