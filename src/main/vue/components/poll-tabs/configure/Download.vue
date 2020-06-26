@@ -5,12 +5,18 @@
 
         <div class="float-left">
 
-            <b-button @click="downloadFromStore('human')"
+            <b-button @click="downloadFromStore('poll', 'human')"
             >Download human readable Poll as txt file</b-button>
 
             <b-button class="ml-3"
-                      @click="downloadFromStore('json')"
+                      @click="downloadFromStore('poll', 'json')"
             >Download Poll as json file</b-button>
+
+            <b-button class="ml-3"
+                      @click="downloadFromStore('entries', 'json')"
+            >Download Poll entries as json file</b-button>
+
+            <!-- <input type="file" id="selectFiles" value="Import" /> -->
 
         </div>
     </b-card>
@@ -27,11 +33,11 @@
                 download: 'download'
             }),
 
-            downloadFromStore(format) {
+            downloadFromStore(type, format) {
 
                 let cmd = {
-                    id: "36808e60-39f7-41f0-b991-f08b80fe8226",
-                    type: 'poll',
+                    id: "",
+                    type: type,
                     format: format
                 };
 
