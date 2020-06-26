@@ -5,7 +5,6 @@
         <p>
             If you launch this poll, you will not be able to edit it again!
         </p>
-
         <p>
             <b-button class="float-right" variant="primary" v-b-modal.launchModal>Launch</b-button>
         </p>
@@ -38,74 +37,9 @@
             </form>
         </b-modal>
 
-
-
-        <!--
-        <a href="#myModal" role="button" class="btn btn-default" data-toggle="modal">Launch demo modal</a>
-        -->
-
-
-        <!--
-        <p>
-            <b-button href="#launchModal" class="float-right" variant="primary" data-toggle="modal">Launch</b-button>
-        </p>
-
-        <div id="launchModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="launchModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="launchModalLabel">Modal header</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <div id="calendar"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                        <button class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    -->
-        <!--@ok="launchSingleIter()"> --><!--HIER EINGABE VON DATUM ERMÖGLICHEN ODER WAS ANDERS FÜR LAUFZEIT/ABLAUFDATUM!!!-->
-        <!--
-        <p>
-            <b-button class="float-right" variant="primary" v-b-modal.launchModal>Launch</b-button>
-        </p>
-
-        <b-modal
-            id="launchModal"
-            ref="launchIterModal"
-            centered
-            title="How long should the poll be activ ?"
-            header-bg-variant="info"
-            @ok="handleOk">
-            <form ref="launchForm" @submit.stop.prevent="handleSubmit">
-                <b-form-group
-                    :state="launchState"
-                    label="End-Datum"
-                    label-for="endDatumInput"
-                    invalid-feedback="Expiration Date is required"
-                >
-                 <b-form-input
-                     id="launch-date-input"
-                     v-model="date"
-                     :state="launchState"
-                     required></b-form-input>
-                </b-form-group>
-            </form>
-        </b-modal>
-        -->
-
         <p>
             <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>Schedule</b-button>
         </p>
-
 
         <b-modal
             id="scheduleModal"
@@ -143,75 +77,111 @@
                 </b-form-group>
             </form>
         </b-modal>
-
-
     </b-card>
+
 
     <b-card v-else-if="poll.status === 'READY' || poll.status === 'LAUNCHED'">
         <h6>Iteration</h6>
 
+        <div v-bind:key="iteration.id" v-for="iteration in iterations">
 
-        <!--
-                <b-container v-if="loaded"
-                             class="my-container">
-                    <b-row align-h="center">
-                        <h6>Currently Open:</h6>
-                    </b-row>
-                    <b-row>
-                        <p>
-                            <b-button v-if="poll.status === 'LAUNCHED'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
-                        </p>
-                        <b-col >
-                            <IterationTableListOPEN v-bind:iterations="iterations"/>
-                        </b-col>
-                    </b-row>
-                </b-container>
+            <p>
+                <b-button v-if="poll.status === 'READY'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
+            </p>
+            <div class="row">
+                <div class="list-group" id="IterationOPEN" role="tablist">
+                    <p v-if="iteration.status === 'OPEN'">
+                        <IterationTableElementOPEN v-bind:iteration="iteration"/>
+                    </p>
+                </div>
+            </div>
 
-                <b-container v-if="loaded"
-                             class="my-container">
-                    <b-row align-h="center">
-                        <h6>Planned:</h6>
-                    </b-row>
-                    <b-row>
-                        <p>
-                            <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>New</b-button>
-                        </p>
-                        <b-col >
-                            <IterationTableListSCHEDULED v-bind:iterations="iterations"/>
-                        </b-col>
-                    </b-row>
-                </b-container>
-                <b-container v-if="loaded"
-                             class="my-container">
-                    <b-row align-h="center">
-                        <h6>Previous Iterations:</h6>
-                    </b-row>
-                    <b-row>
-                        <b-col >
-                            <IterationTableListCLOSED v-bind:iterations="iterations"/>
-                        </b-col>
-                    </b-row>
-                </b-container>
-        -->
+            <p>
+                <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>New</b-button>
+            </p>
+            <div class="row">
+                <div class="list-group" id="IterationSCHEDULED" role="tablist">
+                    <p v-if="iteration.status === 'SCHEDULED'">
+                        <IterationTableElementSCHEDULED v-bind:iteration="iteration"/>
+                    </p>
+                </div>
+            </div>
 
-        <b-container
-                     class="my-container">
-            <b-row align-h="center">
-                <h6>Currently Open:</h6>
-            </b-row>
-            <b-row>
-                <p>
-                    <b-button v-if="poll.status === 'LAUNCHED'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
-                </p>
-                <p>
-                    <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>New</b-button>
-                </p>
-                <b-col >
-                    <IterationTableList v-bind:iterations="iterations"/>
-                </b-col>
-            </b-row>
-        </b-container>
+            <div class="row">
+                <div class="list-group" id="IterationCLOSED" role="tablist">
+                    <p v-if="iteration.status === 'CLOSED'">
+                        <IterationTableElementCLOSED v-bind:iteration="iteration"/>
+                    </p>
+                </div>
+            </div>
 
+
+            <b-modal
+                id="launchModal"
+                ref="launchIterModal"
+                centered
+                title="How long should the poll be active ?"
+                header-bg-variant="info"
+                @ok="handleOkLaunch">
+                <form ref="launchForm" @submit.stop.prevent="handleSubmitLaunch">
+                    <b-form-group
+                        :state="launchState"
+                        label="Expiration Date for Iteration"
+                        label-for="endDatumInput"
+                        invalid-feedback="Expiration Date is required"
+                    >
+                        <b-form-input
+                            id="launch-date-input"
+                            v-model="dateEnde"
+                            :state="launchState"
+                            label
+                            required>
+                        </b-form-input>
+                        <label>
+                            yyyy-MM-dd HH:mm:ss
+                        </label>
+                    </b-form-group>
+                </form>
+            </b-modal>
+
+            <b-modal
+                id="scheduleModal"
+                ref="scheduleIterModal"
+                centered
+                title="For what time period should the poll be active ?"
+                header-bg-variant="info"
+                @ok="handleOkSchedule">
+                <form ref="scheduleForm" @submit.stop.prevent="handleSubmitSchedule">
+                    <b-form-group
+                        :state="scheduleState"
+                        label="Start and Expiration Date for Iteration"
+                        label-for="endDatumInput"
+                        invalid-feedback="Expiration Date is required"
+                    >
+                        <b-form-input
+                            id="schedule-start-input"
+                            v-model="dateStart"
+                            :state="scheduleState"
+                            label
+                            required>
+                        </b-form-input>
+                        <label>
+                            yyyy-MM-dd HH:mm:ss
+                        </label><b-form-input
+                        id="schedule-end-input"
+                        v-model="dateEnde"
+                        :state="scheduleState"
+                        label
+                        required>
+                    </b-form-input>
+                        <label>
+                            yyyy-MM-dd HH:mm:ss
+                        </label>
+                    </b-form-group>
+                </form>
+            </b-modal>
+
+        </div>
 
 
     </b-card>
@@ -223,12 +193,16 @@
     //import IterationTableListOPEN from "../../main-pages/table/IterationTableListOPEN";
     //import IterationTableListSCHEDULED from "../../main-pages/table/IterationTableListSCHEDULED";
     //import IterationTableListCLOSED from "../../main-pages/table/IterationTableListCLOSED";
-    import IterationTableList from "../../main-pages/table/IterationTableList";
+    //import IterationTableList from "../../main-pages/table/IterationTableList";
+    import IterationTableElementSCHEDULED from "../../main-pages/table/IterationTableElementSCHEDULED";
+    import IterationTableElementOPEN from "../../main-pages/table/IterationTableElementOPEN";
+    import IterationTableElementCLOSED from "../../main-pages/table/IterationTableElementCLOSED";
 
     export default {
         name: "Iteration",
         //components: {IterationTableListCLOSED, IterationTableListSCHEDULED, IterationTableListOPEN},
-        components: {IterationTableList},
+        //comments: {IterationTableList},
+        components: {IterationTableElementSCHEDULED,IterationTableElementOPEN, IterationTableElementCLOSED},
         data() {
             return {
                 ende: "",
@@ -331,7 +305,7 @@
                 this.createIteration(pollIterationCmd);
                 let pollCmd = {
                     id: this.pollId,
-                    status: 'LAUNCHED' //'READY'
+                    status: 'READY' //'READY'
                 }
                 this.updatePoll(pollCmd);
             }
@@ -342,3 +316,68 @@
 <style scoped>
 
 </style>
+
+
+
+<!--
+               <b-container v-if="loaded"
+                            class="my-container">
+                   <b-row align-h="center">
+                       <h6>Currently Open:</h6>
+                   </b-row>
+                   <b-row>
+                       <p>
+                           <b-button v-if="poll.status === 'LAUNCHED'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
+                       </p>
+                       <b-col >
+                           <IterationTableListOPEN v-bind:iterations="iterations"/>
+                       </b-col>
+                   </b-row>
+               </b-container>
+
+               <b-container v-if="loaded"
+                            class="my-container">
+                   <b-row align-h="center">
+                       <h6>Planned:</h6>
+                   </b-row>
+                   <b-row>
+                       <p>
+                           <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>New</b-button>
+                       </p>
+                       <b-col >
+                           <IterationTableListSCHEDULED v-bind:iterations="iterations"/>
+                       </b-col>
+                   </b-row>
+               </b-container>
+               <b-container v-if="loaded"
+                            class="my-container">
+                   <b-row align-h="center">
+                       <h6>Previous Iterations:</h6>
+                   </b-row>
+                   <b-row>
+                       <b-col >
+                           <IterationTableListCLOSED v-bind:iterations="iterations"/>
+                       </b-col>
+                   </b-row>
+               </b-container>
+       -->
+
+<!--
+<b-container
+             class="my-container">
+    <b-row align-h="center">
+        <h6>Currently Open:</h6>
+    </b-row>
+    <b-row>
+        <p>
+            <b-button v-if="poll.status === 'READY'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
+        </p>
+        <p>
+            <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>New</b-button>
+        </p>
+        <b-col >
+            <IterationTableList v-bind:iterations="iterations"/>
+        </b-col>
+    </b-row>
+</b-container>
+-->
