@@ -19,7 +19,8 @@ const currentPoll = {
          */
         poll: {
             questions: [],
-            pollSections: []
+            pollSections: [],
+            pollConsistencyGroups: []
         },
         answers: [],
         pollAnswers: [],

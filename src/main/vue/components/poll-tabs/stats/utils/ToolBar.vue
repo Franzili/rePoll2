@@ -74,7 +74,7 @@
 
         <b-button-toolbar style="margin-left: auto" v-if="actives !== undefined">
             <b-form-group>
-                <b-button-group>
+                <b-button-group :size="size">
                     <b-button
                         variant="outline-secondary"
                         v-on:click="$emit('edit')"
@@ -98,8 +98,8 @@
 <script>
     export default {
         name: "ToolBar",
-        // actives: dataChange, bar, donut, boxplot, question, merge, delete
-        props: ['actives', 'choices', 'frequency', 'question'],
+        // actives: dataChange, bar, donut, boxplot, question, merge, delete, edit
+        props: ['actives', 'choices', 'frequency', 'question', 'eSize'],
         data() {
             return {
                 selected: {
@@ -107,10 +107,14 @@
                     frequency: ''
                 },
                 merged: true,
+                size: 'md'
             }
         },
         created() {
             this.selected.frequency = this.frequency
+            if (this.eSize !== undefined) {
+                this.size = this.eSize
+            }
             if (this.choices !== undefined) {
                 this.selected.question = this.choices[0].value
                 this.$emit('question', this.selected.question)

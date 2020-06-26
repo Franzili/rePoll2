@@ -43,7 +43,7 @@
             id="warn-modal">
             For comparison purpose you will need at least two Questions.
         </b-modal>
-        <!--<div>Selected: <strong>{{ selected }}</strong></div> -->
+        <div>Selected: <strong>{{ selected }}</strong></div>
     </b-modal>
 </template>
 
@@ -66,6 +66,8 @@
         methods: {
             show(list) {
                 this.selected = list
+                console.log('list', list)
+                console.log('select', this.selected)
                 this.$refs.modal.show()
             },
             prevent(bvModalEvt) {

@@ -15,8 +15,21 @@
 
         <b-col cols="3" class="sidebar">
             <div class="sticky-offset sticky-top">
-                <Outline :poll-structure="pollStructure"></Outline>
+                <b-row style="min-height: 40vh; max-height: 40vh; overflow-y: auto;">
+                    <Outline :poll-structure="pollStructure"></Outline>
+                </b-row>
+                <b-row align-h="center" style="max-height: 50vh">
+                    <b-col align-self="center"
+                           cols="10"
+                           class="border-top border-primary">
+                        <ConsistEdit></ConsistEdit>
+                    </b-col>
+                    <!--
+                    <b-card></b-card>
+                    -->
+                </b-row>
             </div>
+
         </b-col>
     </b-row>
 </template>
@@ -26,6 +39,7 @@
     import QuestionPalette from "./QuestionPalette";
     import PollMainView from "./PollMainView";
     import Outline from "../../Outline";
+    import ConsistEdit from "./ConsistEdit";
     export default {
         name: "EditPoll",
         computed: {
@@ -33,7 +47,11 @@
                 pollStructure: 'pollStructureFlat'
             })
         },
-        components: {PollMainView, QuestionPalette, Outline},
+        components: {
+            ConsistEdit,
+            PollMainView,
+            QuestionPalette,
+            Outline},
     }
 </script>
 
