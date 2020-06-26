@@ -15,7 +15,7 @@ const myIterations = {
     getters: {
 
     },
-    mutations: {
+    mutations: { //adding poll id . Fixing bug: each poll gets all iterations
         /**
          *  Sets the iterations that are currently loaded. For internal use.
          */
