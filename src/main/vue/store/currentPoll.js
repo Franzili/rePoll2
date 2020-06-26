@@ -23,7 +23,9 @@ const currentPoll = {
             design: {
                 font: '',
                 textColour: '',
-                backgroundColour: ''
+                backgroundColour: '',
+                logoPosition: '',
+                logo: ''
             }
         },
         answers: [],
@@ -164,6 +166,7 @@ const currentPoll = {
             return res;
         },
 
+        // weg?
         design: state => {
             let design = {font: state.design.font};
             return design
@@ -291,7 +294,22 @@ const currentPoll = {
         },
 
         updateDesign(state, designCmd) {
-            state.poll.design = designCmd
+            if(designCmd.font != null) {
+                state.poll.design.font = designCmd.font
+            }
+            if(designCmd.backgroundColour != null) {
+                state.poll.design.backgroundColour = designCmd.backgroundColour
+            }
+            if(designCmd.textColour != null) {
+                state.poll.design.textColour = designCmd.textColour
+            }
+            if(designCmd.logoPosition != null) {
+                state.poll.design.logoPosition = designCmd.logoPosition
+            }
+            if(designCmd.logo != null) {
+                state.poll.design.logo = designCmd.logo
+            }
+            //state.poll.design = designCmd
         },
 
         addPollSection(state, pollSection) {

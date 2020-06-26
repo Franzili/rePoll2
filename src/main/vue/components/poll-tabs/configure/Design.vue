@@ -26,8 +26,8 @@
                                 </div>
 
                                 <!-- font -->
-                                <p :style=this.selectedFont.valueOf()>Font:</p>
-                                <b-form-select :style=this.selectedFont.valueOf()
+                                <p>Font:</p>
+                                <b-form-select :style="'font-family:' + this.selectedFont.valueOf()"
                                                v-model="selectedFont"
                                                :options="fonts">
                                     <!-- <template v-slot:first> -->
@@ -79,39 +79,59 @@
 
                 <b-row>
                     <b-col>
+                        <!-- upload image -->
                         <b-form-file
                             accept="image/*"
                             v-model="selectedFile"
-                            placeholder="Choose a file or drop it here..."
+                            placeholder="Choose a logo or drop it here..."
                             drop-placeholder="Drop file here..."
                             @change="onFileSelected"
                         ></b-form-file>
 
+                        <p></p>
 
-                        <b-button @click="saveLogo">apply</b-button>
+
+                        <!-- logo's position -->
+                        <div v-if="selectedFile!==null && selectedFile!==''">
+                            <h6>Position</h6>
+                            <b-form-group>
+                                <b-form-radio v-model="selectedPosition" value="left">left</b-form-radio>
+                                <b-form-radio v-model="selectedPosition" value="center">center</b-form-radio>
+                                <b-form-radio v-model="selectedPosition" value="right">right</b-form-radio>
+                            </b-form-group>
+                        </div>
+
+
+
+                        <!-- Apply button -->
+                        <b-button
+                            style="margin-left: 20px"
+                            class="float-right"
+                            @click="saveLogo">Apply
+                        </b-button>
+
+                        <!-- delete logo button -->
+                        <b-button
+                            class="float-right"
+                            @click="deleteLogo"
+                            v-if="fileBase64!==null && fileBase64!==''"
+                            variant="danger">
+                            Delete logo
+                        </b-button>
 
 
                     </b-col>
 
-                    <b-col v-if="selectedFile!==null">
-                        <b-card v-if="selectedFile===null">
+                    <b-col>
+                        <b-card v-if="fileBase64==='' || fileBase64===null">
                             <p align="center">no logo uploaded</p>
-
                         </b-card>
 
+                        <b-card-img
+                            v-if="fileBase64!==''"
+                            :src="this.fileBase64">
+                        </b-card-img>
 
-                        <b-card>
-                            <b-img
-                                height="200px"
-                                width="200px"
-                                :src="this.fileBase64"
-                            ></b-img>
-
-                        </b-card>
-
-                        <!--<b-card-img :src="this.path">-->
-
-                        <!--</b-card-img>-->
 
                     </b-col>
 
@@ -121,16 +141,7 @@
             </b-card>
 
 
-
-
-
-
-
-
-
-
-
-
+            <!-- Preview -->
             <h6>Preview</h6>
 
             <b-card-group>
@@ -155,43 +166,7 @@
                 </b-card>
             </b-card-group>
 
-
-
-
-
-            <p style="background-color:white">{{this.selectedFont}}</p>
-            <p :style="'color:' + selectedTextColour + ';'
-                + selectedFont">{{this.selectedTextColour}}</p>
-
-
-
-
-
-
-
-
-            <!-- Logo -->
-            <div>
-
-
-
-
-
-
-
-
-
-
-                <b-input type="color"></b-input>
-
-
-
-            </div>
-
-
         </b-card>
-
-
     </div>
 </template>
 
@@ -203,17 +178,15 @@
 
         data () {
             return {
-                selectedFile: null, //weg?
-                path: '',
-                fileBase64: "hallo",
-
+                selectedFile: null,
+                fileBase64: "",
+                selectedPosition: '',
                 selectedTextColour: '',
                 selectedBackgroundColour: '',
-
                 selectedFont: '',
                 fonts: [
-                    { value: '', text: 'Arial' },
-                    { value: 'font-family:Monospaced', text: 'Monospaced' }
+                    { value: 'Arial', text: 'Arial' },
+                    { value: 'Monospaced', text: 'Monospaced' }
                 ]
             }
         },
@@ -227,16 +200,23 @@
                 updateDesign: 'updateDesign'
             }),
             saveLogo() {
-                // TODO Speicherung im Backend
+                let designCmd = {
+                    logoPosition: this.selectedPosition,
+                    logo: this.fileBase64
+                };
 
-
+                this.updateDesign({design: designCmd, pollId: this.poll.id})
+            },
+            deleteLogo() {
+                this.selectedFile = '';
+                this.fileBase64 = '';
+                let designCmd = {
+                    logo: ''
+                };
+                this.updateDesign({design: designCmd, pollId: this.poll.id})
             },
             async onFileSelected(event) {
                 this.selectedFile = event.target.files[0]
-                this.path = URL.createObjectURL(event.target.files[0])
-
-
-
 
                 function getBase64(file) {
                     return new Promise(function (resolve, reject) {
@@ -269,7 +249,9 @@
         created: function() {
             this.selectedFont = this.poll.design.font;
             this.selectedTextColour = this.poll.design.textColour;
-            this.selectedBackgroundColour = this.poll.design.backgroundColour
+            this.selectedBackgroundColour = this.poll.design.backgroundColour;
+            this.selectedPosition = this.poll.design.logoPosition;
+            this.fileBase64 = this.poll.design.logo
         }
     }
 </script>
