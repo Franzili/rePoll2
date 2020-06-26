@@ -26,7 +26,7 @@ public class MailController {
         this.mailService = mailService;
     }
 
-    @PutMapping("/configs/")
+    @PostMapping("/configs/")
     public MailConfig setServerConfigs(@RequestBody final MailCmd mailCmd) {
         return mailService.setHostServer(
             mailCmd.getSmtpServerAddress(), mailCmd.getSmtpPort(), mailCmd.getAccount(), mailCmd.getPassword()

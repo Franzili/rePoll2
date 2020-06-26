@@ -5,6 +5,7 @@ import users from "./users";
 import entries from "./entries";
 import "./httpLogger";
 import entry from "./entry";
+import admin from "./admin";
 
 export default {
     auth,
@@ -12,5 +13,6 @@ export default {
     statistics,
     entry,
     entries,
-    users
+    users,
+    admin
 }

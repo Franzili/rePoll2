@@ -166,6 +166,7 @@
 <script>
     import {mapActions, mapState} from "vuex";
     import MailServerConfigs from "../components/MailServerConfigs";
+
     export default {
         name: "Admin",
         data() {
@@ -203,7 +204,7 @@
         },
         computed: {
             ...mapState('myUsers', {users: 'users'}),
-            ...mapState('auth',{ username1: 'username'})
+            ...mapState('auth', { username1: 'username'})
         },
         mounted() {
             // Set the initial number of items
