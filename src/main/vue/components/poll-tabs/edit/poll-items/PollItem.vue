@@ -1,6 +1,6 @@
 <template>
     <li>
-        <b-card class="question-card"
+        <b-card class="question-card" :style="'background-color:' + poll.design.backgroundColour"
                 v-bind:class="{ 'question-card-hide-border': hideBorder || model.type === 'SectionHeader',
                                 'question-card-is-header': model.type === 'SectionHeader' } ">
 
