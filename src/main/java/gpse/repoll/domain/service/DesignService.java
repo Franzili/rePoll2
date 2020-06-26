@@ -11,6 +11,8 @@ public interface DesignService {
     Design updateDesign(UUID pollID,
                         String font,
                         String textColour,
-                        String backgroundColour);
+                        String backgroundColour,
+                        String logoPosition,
+                        String logo);
 
 }

@@ -35,7 +35,9 @@ public class DesignServiceImpl implements DesignService {
     public Design updateDesign(UUID pollID,
                                String font,
                                String textColour,
-                               String backgroundColour) {
+                               String backgroundColour,
+                               String logoPosition,
+                               String logo) {
         Poll poll = pollService.getPoll(pollID);
         if (poll.getDesign() == null) {
             Design design = new Design();
@@ -46,16 +48,27 @@ public class DesignServiceImpl implements DesignService {
         Design design = poll.getDesign();
         if (font != null) {
             design.setFont(font);
+            poll.getDesign().setFont(font);
         }
         if (textColour != null) {
             design.setTextColour(textColour);
+            poll.getDesign().setTextColour(textColour);
         }
         if (backgroundColour != null) {
             design.setBackgroundColour(backgroundColour);
+            poll.getDesign().setBackgroundColour(backgroundColour);
+        }
+        if (logoPosition != null) {
+            design.setLogoPosition(logoPosition);
+            poll.getDesign().setLogoPosition(logoPosition);
+        }
+        if (logo != null) {
+            design.setLogo(logo);
+            poll.getDesign().setLogo(logo);
         }
         //poll.setDesign(newDesign); // TODO einzeln updaten
         designRepository.save(design);
-        poll.setDesign(design);
+       // poll.setDesign(design);
         pollRepository.save(poll);
         return pollService.getPoll(pollID).getDesign();
     }

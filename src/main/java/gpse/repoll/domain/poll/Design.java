@@ -20,8 +20,44 @@ public class Design {
     @Column
     private String backgroundColour;
 
+    @Column
+    private String logoPosition;
+
+    @Lob
+    @Column
+    private String logo;
+
+
     public Design() {
-        this.font = "hallo";
+        this.font = "Arial";
+        this.textColour = "#000000FF";
+        this.backgroundColour = "#FFFFFFFF";
+        this.logoPosition = "left";
+        this.logo="";
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public String getLogoPosition() {
+        return logoPosition;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    public void setLogoPosition(String logoPosition) {
+        this.logoPosition = logoPosition;
     }
 
     public String getBackgroundColour() {

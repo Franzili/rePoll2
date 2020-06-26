@@ -8,6 +8,26 @@ public class DesignCmd {
 
     private String backgroundColour;
 
+    private String logoPosition;
+
+    private String logo;
+
+    public String getLogoPosition() {
+        return logoPosition;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogoPosition(String logoPosition) {
+        this.logoPosition = logoPosition;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
     public String getTextColour() {
         return textColour;
     }

@@ -22,6 +22,14 @@ public class DesignController {
 
     @GetMapping("/{pollId}/design/")
     public Design getDesign(@PathVariable("pollId") final UUID pollId) {
+        if (designService.getDesign(pollId) == null) {
+            designService.updateDesign(pollId,
+                null,
+                null,
+                null,
+                null,
+                null);
+        }
         return designService.getDesign(pollId);
     }
 
@@ -31,7 +39,9 @@ public class DesignController {
         return designService.updateDesign(pollID,
             designCmd.getFont(),
             designCmd.getTextColour(),
-            designCmd.getBackgroundColour());
+            designCmd.getBackgroundColour(),
+            designCmd.getLogoPosition(),
+            designCmd.getLogo());
     }
 
 }
