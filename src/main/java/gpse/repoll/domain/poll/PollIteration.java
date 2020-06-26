@@ -1,7 +1,5 @@
 package gpse.repoll.domain.poll;
 
-import gpse.repoll.domain.service.IterationScheduler;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,7 +8,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@EntityListeners(IterationScheduler.class)
 public class PollIteration {
 
     @Id

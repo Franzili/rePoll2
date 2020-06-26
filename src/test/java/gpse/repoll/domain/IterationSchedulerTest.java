@@ -1,3 +1,4 @@
+/*
 package gpse.repoll.domain;
 
 import gpse.repoll.domain.poll.PollIteration;
@@ -57,3 +58,5 @@ public class IterationSchedulerTest {
         );
     }
 }
+
+ */
