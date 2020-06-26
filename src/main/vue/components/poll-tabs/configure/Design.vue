@@ -90,6 +90,7 @@
 
                         <b-button @click="saveLogo">apply</b-button>
 
+
                     </b-col>
 
                     <b-col v-if="selectedFile!==null">
@@ -98,9 +99,19 @@
 
                         </b-card>
 
-                        <b-card-img :src="this.path">
 
-                        </b-card-img>
+                        <b-card>
+                            <b-img
+                                height="200px"
+                                width="200px"
+                                :src="this.fileBase64"
+                            ></b-img>
+
+                        </b-card>
+
+                        <!--<b-card-img :src="this.path">-->
+
+                        <!--</b-card-img>-->
 
                     </b-col>
 
@@ -148,11 +159,6 @@
 
 
 
-
-
-
-
-
             <p style="background-color:white">{{this.selectedFont}}</p>
             <p :style="'color:' + selectedTextColour + ';'
                 + selectedFont">{{this.selectedTextColour}}</p>
@@ -186,18 +192,6 @@
         </b-card>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
 </template>
 
@@ -211,6 +205,7 @@
             return {
                 selectedFile: null, //weg?
                 path: '',
+                fileBase64: "hallo",
 
                 selectedTextColour: '',
                 selectedBackgroundColour: '',
@@ -231,14 +226,35 @@
             ...mapActions('currentPoll', {
                 updateDesign: 'updateDesign'
             }),
-
             saveLogo() {
                 // TODO Speicherung im Backend
 
+
             },
-            onFileSelected(event) {
+            async onFileSelected(event) {
                 this.selectedFile = event.target.files[0]
                 this.path = URL.createObjectURL(event.target.files[0])
+
+
+
+
+                function getBase64(file) {
+                    return new Promise(function (resolve, reject) {
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            resolve(reader.result);
+                        };
+                        reader.onerror = reject;
+                        reader.readAsDataURL(file);
+                    });
+                }
+
+                var promise = getBase64(this.selectedFile);
+                promise.then(function (result) {
+                    console.log(result);
+                });
+
+                this.fileBase64 = await promise
             },
 
             saveDesign() {
@@ -247,7 +263,8 @@
                     textColour: this.selectedTextColour,
                     backgroundColour: this.selectedBackgroundColour
                 }
-                this.updateDesign({design: designCmd, pollId: this.poll.id})            }
+                this.updateDesign({design: designCmd, pollId: this.poll.id})
+            }
         },
         created: function() {
             this.selectedFont = this.poll.design.font;
