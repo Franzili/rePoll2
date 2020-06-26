@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
 @Service
@@ -26,8 +26,8 @@ public class PollIterationServiceImpl implements PollIterationService {
     private final PollRepository pollRepository;
     private final PollService pollService;
 
-    private Map<Long, ScheduledFuture<?>> openTasks = new HashMap<>();
-    private Map<Long, ScheduledFuture<?>> closeTasks = new HashMap<>();
+    private Map<Long, ScheduledFuture<?>> openTasks = new ConcurrentHashMap<>();
+    private Map<Long, ScheduledFuture<?>> closeTasks = new ConcurrentHashMap<>();
 
     private ThreadPoolTaskScheduler scheduler;
 
@@ -140,6 +140,7 @@ public class PollIterationServiceImpl implements PollIterationService {
                 task = scheduler.schedule(() -> {
                     iteration.setStatus(PollIterationStatus.OPEN);
                     pollIterationRepository.save(iteration);
+                    openTasks.remove(iteration.getId());
                 }, iteration.getStart().toInstant(offset));
                 openTasks.put(iteration.getId(), task);
             }
@@ -151,6 +152,7 @@ public class PollIterationServiceImpl implements PollIterationService {
                 task = scheduler.schedule(() -> {
                     iteration.setStatus(PollIterationStatus.CLOSED);
                     pollIterationRepository.save(iteration);
+                    openTasks.remove(iteration.getId());
                 }, iteration.getEnd().toInstant(offset));
                 closeTasks.put(iteration.getId(), task);
             }
