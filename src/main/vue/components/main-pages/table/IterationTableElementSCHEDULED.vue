@@ -1,12 +1,12 @@
 <template>
     <b-card
         border-variant="primary"
-        :title="iteration.id"
         align="left"
         bg-variant="light"
     >
         <b-row>
             <b-col cols="8">
+                {{iteration.id}}
                 <p class="status">{{iteration.status}}</p>
             </b-col>
 
