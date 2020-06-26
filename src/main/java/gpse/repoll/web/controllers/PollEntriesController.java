@@ -1,6 +1,5 @@
 package gpse.repoll.web.controllers;
 
-import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.poll.Choice;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.*;
@@ -51,16 +50,14 @@ public class PollEntriesController {
 
     // todo @securityService.isParticipant(principal.username)
     @PreAuthorize("@securityService.hasStatusLaunched(#pollId)")
-    @PostMapping("/{pollId}/entries/{participantID}/")
+    @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
-                                  @RequestBody PollEntryCmd pollEntryCmd, @PathVariable UUID participantID) {
+                                  @RequestBody PollEntryCmd pollEntryCmd) {
         Map<Long, Answer> answers = createAnswers(pollId, pollEntryCmd);
-        Participant participant = participantService.getParticipant(participantID);
-        return pollEntryService.addPollEntry(pollId, answers, participant);
+        return pollEntryService.addPollEntry(pollId, answers, pollEntryCmd.getParticipantID());
     }
 
-    @PreAuthorize("@securityService.isOwnEntry(principal.username, #entryId)"
-            + "or @securityService.isCreator(principal.username)")
+
     @GetMapping("/{pollId}/entries/{entryId:\\d+}/")
     public PollEntry getPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @PathVariable("entryId") final String entryId) {
