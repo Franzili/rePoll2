@@ -2,7 +2,9 @@
     <!--
         Renders a poll.
     -->
-    <b-container v-if="loaded">
+    <b-container
+        :style="'font-family:' + poll.design.font + ';color:' + poll.design.textColour + ';background-color:' + poll.design.backgroundColour"
+        v-if="loaded">
         <ul class="poll-main-view">
             <PollItem v-for="item in pollStructure"
                       v-bind:key="item.id"
@@ -16,7 +18,7 @@
         <b-button variant="primary" v-on:click="answerPoll">Save</b-button>
         <!--
         Submit Button for later
-        Final Submit, then answers can't be edited animore
+        Final Submit, then answers can't be edited anymore
         <b-button class="my-button" variant="success">Submit!</b-button>
         -->
     </b-container>
@@ -24,7 +26,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapActions} from "vuex"
+    import {mapGetters, mapActions, mapState} from "vuex"
 
     import PollItem from "../components/poll-tabs/edit/poll-items/PollItem";
 
@@ -40,6 +42,9 @@
             ...mapGetters('currentPoll', {
                 pollStructure: 'pollStructureFlat'
             }),
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            })
         },
         methods: {
             ...mapActions('currentPoll', {

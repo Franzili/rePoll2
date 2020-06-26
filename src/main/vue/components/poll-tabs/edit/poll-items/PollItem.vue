@@ -5,7 +5,9 @@
                                 'question-card-is-header': model.type === 'SectionHeader' } ">
 
             <p class="question-card-header">
-                <span class="question-card-title">
+                <span
+                    :style="'font-family:' + poll.design.font + ';color:' + poll.design.textColour"
+                    class="question-card-title">
                     <EditableLabel v-if="model.type === 'SectionHeader'"
                                    tag="h2"
                                    :value="model.title"
@@ -19,7 +21,9 @@
                                    v-on:valueChanged="model.title = $event"/>
                 </span>
 
-                <span v-if="editable">
+                <span
+                    :style="'color:' + poll.design.textColour"
+                    v-if="editable">
                     <b-button-group size="sm">
                         <!-- edit button -->
                         <b-button variant="outline-secondary" v-if="!editing"
@@ -90,6 +94,7 @@
     import ScaleQuestion from "./ScaleQuestion";
 
     import EditableLabel from "../../../EditableLabel";
+    import {mapState} from "vuex";
 
     export default {
         name: "PollItem",
@@ -97,6 +102,11 @@
             return {
                 editing: false,
             }
+        },
+        computed: {
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            })
         },
         props: {
             model: {

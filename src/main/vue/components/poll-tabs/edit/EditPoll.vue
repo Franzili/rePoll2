@@ -2,7 +2,8 @@
     <!--
         Poll Editor main component.
     -->
-    <b-row class="poll-editor">
+    <b-row :style="'background-color:' + poll.design.backgroundColour"
+           class="poll-editor">
         <b-col cols="1" lg="2" class="sidebar">
             <div class="sticky-offset sticky-top">
                 <QuestionPalette></QuestionPalette>
@@ -22,7 +23,7 @@
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
+    import {mapGetters, mapState} from "vuex";
     import QuestionPalette from "./QuestionPalette";
     import PollMainView from "./PollMainView";
     import Outline from "../../Outline";
@@ -31,6 +32,9 @@
         computed: {
             ...mapGetters('currentPoll', {
                 pollStructure: 'pollStructureFlat'
+            }),
+            ...mapState('currentPoll', {
+                poll: 'poll',
             })
         },
         components: {PollMainView, QuestionPalette, Outline},

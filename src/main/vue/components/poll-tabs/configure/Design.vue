@@ -146,8 +146,8 @@
 
             <b-card-group>
                 <b-card
-                    :style="'background-color:' + this.poll.design.backgroundColour + ';'
-                        + this.poll.design.font
+                    :style="'background-color:' + this.poll.design.backgroundColour
+                        + ';font-family:' + this.poll.design.font
                         + ';color:' + this.poll.design.textColour"
                     title="design of current poll">
                     <b-card-text>
@@ -155,8 +155,8 @@
                     </b-card-text>
                 </b-card>
                 <b-card
-                    :style="'background-color:' + selectedBackgroundColour + ';'
-                        + selectedFont
+                    :style="'background-color:' + selectedBackgroundColour
+                        + ';font-family:' + selectedFont
                         + ';color:' + selectedTextColour"
                     title="new design">
                     <b-card-text
@@ -242,7 +242,7 @@
                     font: this.selectedFont,
                     textColour: this.selectedTextColour,
                     backgroundColour: this.selectedBackgroundColour
-                }
+                };
                 this.updateDesign({design: designCmd, pollId: this.poll.id})
             }
         },

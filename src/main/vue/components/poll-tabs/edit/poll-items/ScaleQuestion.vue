@@ -1,5 +1,7 @@
 <template>
-    <div v-if="!editing">
+    <div
+        :style="'font-family:' + poll.design.font + ';color:' + poll.design.textColour"
+        v-if="!editing">
         <div class="scale-question-legend">
             <span class="scale-question-legend-left">{{model.scaleNameLeft}} ({{model.min}})</span>
             <span class="scale-question-legend-spacer"></span>
@@ -38,6 +40,8 @@
 </template>
 
 <script>
+    import {mapState} from "vuex";
+
     export default {
         name: "ScaleQuestion",
         data() {
@@ -54,7 +58,10 @@
                     type: "ScaleAnswer",
                     scaleNumber: this.selected
                 }
-            }
+            },
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            })
         },
         props: {
             model: {
