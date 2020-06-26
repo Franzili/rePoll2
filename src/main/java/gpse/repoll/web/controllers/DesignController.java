@@ -22,14 +22,6 @@ public class DesignController {
 
     @GetMapping("/{pollId}/design/")
     public Design getDesign(@PathVariable("pollId") final UUID pollId) {
-        if (designService.getDesign(pollId) == null) {
-            designService.updateDesign(pollId,
-                null,
-                null,
-                null,
-                null,
-                null);
-        }
         return designService.getDesign(pollId);
     }
 

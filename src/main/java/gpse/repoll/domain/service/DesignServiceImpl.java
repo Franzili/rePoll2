@@ -39,36 +39,34 @@ public class DesignServiceImpl implements DesignService {
                                String logoPosition,
                                String logo) {
         Poll poll = pollService.getPoll(pollID);
-        if (poll.getDesign() == null) {
-            Design design = new Design();
-            designRepository.save(design);
-            poll.setDesign(design);
-            pollRepository.save(poll);
-        }
         Design design = poll.getDesign();
         if (font != null) {
             design.setFont(font);
-            poll.getDesign().setFont(font);
+        } else {
+            design.setFont(poll.getDesign().getFont());
         }
         if (textColour != null) {
             design.setTextColour(textColour);
-            poll.getDesign().setTextColour(textColour);
+        } else {
+            design.setTextColour(poll.getDesign().getTextColour());
         }
         if (backgroundColour != null) {
             design.setBackgroundColour(backgroundColour);
-            poll.getDesign().setBackgroundColour(backgroundColour);
+        } else {
+            design.setBackgroundColour(poll.getDesign().getBackgroundColour());
         }
         if (logoPosition != null) {
             design.setLogoPosition(logoPosition);
-            poll.getDesign().setLogoPosition(logoPosition);
+        } else {
+            design.setLogoPosition(poll.getDesign().getLogoPosition());
         }
         if (logo != null) {
             design.setLogo(logo);
-            poll.getDesign().setLogo(logo);
+        } else {
+            design.setLogo(poll.getDesign().getLogo());
         }
-        //poll.setDesign(newDesign); // TODO einzeln updaten
         designRepository.save(design);
-       // poll.setDesign(design);
+        poll.setDesign(design);
         pollRepository.save(poll);
         return pollService.getPoll(pollID).getDesign();
     }
