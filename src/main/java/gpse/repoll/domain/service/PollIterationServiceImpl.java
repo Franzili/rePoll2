@@ -60,9 +60,15 @@ public class PollIterationServiceImpl implements PollIterationService {
                                           final LocalDateTime end,
                                           final PollIterationStatus status) {
         Poll poll = pollService.getPoll(pollID);
+
         final PollIteration pollIteration = new PollIteration(start, end);
-        pollIteration.setStatus(status);
+        if (status != null) {
+            pollIteration.setStatus(status);
+        } else {
+            pollIteration.setStatus(PollIterationStatus.SCHEDULED);
+        }
         pollIterationRepository.save(pollIteration);
+
         poll.add(pollIteration);
         pollRepository.save(poll);
 
@@ -125,22 +131,29 @@ public class PollIterationServiceImpl implements PollIterationService {
         scheduleRemove(iteration);
 
         ZoneOffset offset = OffsetDateTime.now().getOffset();
-
+        PollIterationStatus status = iteration.getStatus();
         ScheduledFuture<?> task;
-        if (iteration.getStart() != null) {
-            task = scheduler.schedule(() -> {
-                iteration.setStatus(PollIterationStatus.OPEN);
-                pollIterationRepository.save(iteration);
-            }, iteration.getStart().toInstant(offset));
-            openTasks.put(iteration.getId(), task);
+
+        // opening a polliteration only makes sense if it has not been opened yet.
+        if (status.equals(PollIterationStatus.SCHEDULED)) {
+            if (iteration.getStart() != null) {
+                task = scheduler.schedule(() -> {
+                    iteration.setStatus(PollIterationStatus.OPEN);
+                    pollIterationRepository.save(iteration);
+                }, iteration.getStart().toInstant(offset));
+                openTasks.put(iteration.getId(), task);
+            }
         }
 
-        if (iteration.getEnd() != null) {
-            task = scheduler.schedule(() -> {
-                iteration.setStatus(PollIterationStatus.CLOSED);
-                pollIterationRepository.save(iteration);
-            }, iteration.getEnd().toInstant(offset));
-            closeTasks.put(iteration.getId(), task);
+        // closing a polliteration only makes sense if it has not been closed yet.
+        if (status.equals(PollIterationStatus.SCHEDULED) || status.equals(PollIterationStatus.OPEN)) {
+            if (iteration.getEnd() != null) {
+                task = scheduler.schedule(() -> {
+                    iteration.setStatus(PollIterationStatus.CLOSED);
+                    pollIterationRepository.save(iteration);
+                }, iteration.getEnd().toInstant(offset));
+                closeTasks.put(iteration.getId(), task);
+            }
         }
     }
 
