@@ -28,11 +28,11 @@
                         v-model="dateEnde"
                         :state="launchState"
                         label
-                        required>
+                        type="datetime-local"
+                        min="2020-07-01T00:00:00"
+                        required
+                        placeholder="yyyy-MM-dd HH:mm:ss">
                     </b-form-input>
-                    <label>
-                        yyyy-MM-dd HH:mm:ss
-                    </label>
                 </b-form-group>
             </form>
         </b-modal>
@@ -60,23 +60,33 @@
                         v-model="dateStart"
                         :state="scheduleState"
                         label
-                        required>
+                        type="datetime-local"
+                        min="2020-07-01T00:00:00"
+                        required
+                        placeholder="yyyy-MM-dd HH:mm:ss">
                     </b-form-input>
-                    <label>
-                        yyyy-MM-dd HH:mm:ss
-                    </label><b-form-input
+                    <b-form-input
                     id="schedule-end-input"
                     v-model="dateEnde"
                     :state="scheduleState"
                     label
-                    required>
+                    type="datetime-local"
+                    min="2020-07-01T00:00:00"
+                    required
+                    placeholder="yyyy-MM-dd HH:mm:ss">
                 </b-form-input>
-                    <label>
-                        yyyy-MM-dd HH:mm:ss
-                    </label>
                 </b-form-group>
             </form>
         </b-modal>
+
+        <b-modal id="wrongInput" centered title="Wrong Input" ok-only header-bg-variant="warning">
+            Input has to be format YYYY-MM-DD HH:MM:SS
+        </b-modal>
+
+        <b-modal id="wrongDate" centered title="Wrong Input" ok-only header-bg-variant="warning">
+            An Iteration can't start, after it has already ended
+        </b-modal>
+
     </b-card>
 
 
@@ -86,7 +96,7 @@
 
 
             <p>
-                <b-button v-if="poll.status === 'LAUNCHED'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
+                <b-button v-if="poll.status !== 'LAUNCHED'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
             </p>
             <div class="row">
                 <div class="list-group" id="IterationOPEN" role="tablist" v-bind:key="iteration.id" v-for="iteration in iterations">
@@ -115,7 +125,6 @@
                 </div>
             </div>
 
-
             <b-modal
                 id="launchModal"
                 ref="launchIterModal"
@@ -135,11 +144,11 @@
                             v-model="dateEnde"
                             :state="launchState"
                             label
-                            required>
+                            type="datetime-local"
+                            min="2020-07-01T00:00:00"
+                            required
+                            placeholder="yyyy-MM-dd HH:mm:ss">
                         </b-form-input>
-                        <label>
-                            yyyy-MM-dd HH:mm:ss
-                        </label>
                     </b-form-group>
                 </form>
             </b-modal>
@@ -163,26 +172,32 @@
                             v-model="dateStart"
                             :state="scheduleState"
                             label
-                            required>
+                            type="datetime-local"
+                            min="2020-07-01T00:00:00"
+                            required
+                            placeholder="yyyy-MM-dd HH:mm:ss">
                         </b-form-input>
-                        <label>
-                            yyyy-MM-dd HH:mm:ss
-                        </label><b-form-input
+                        <b-form-input
                         id="schedule-end-input"
                         v-model="dateEnde"
                         :state="scheduleState"
                         label
-                        required>
+                        type="datetime-local"
+                        min="2020-07-01T00:00:00"
+                        required
+                        placeholder="yyyy-MM-dd HH:mm:ss">
                     </b-form-input>
-                        <label>
-                            yyyy-MM-dd HH:mm:ss
-                        </label>
                     </b-form-group>
                 </form>
             </b-modal>
 
+            <b-modal id="wrongInput" centered title="Wrong Input" ok-only header-bg-variant="warning">
+                Input has to be format YYYY-MM-DD HH:MM:SS
+            </b-modal>
 
-
+        <b-modal id="wrongDate" centered title="Wrong Input" ok-only header-bg-variant="warning">
+            An Iteration can't start, after it has already ended
+        </b-modal>
 
     </b-card>
 </template>
@@ -258,16 +273,21 @@
                 //this.timestamp = date + ' ' + time;
                 this.timestamp = new Date();
             },
+            /*validateTimeInput(timeInput) {
+                if ( === true) {
+                    console.log(new Date('was ist das : ', timeInput))
+                    return true
+                }
+            },*/
             handleOkLaunch(bvModalEvt) {
                 bvModalEvt.preventDefault()
-                this.handleSubmitLaunch()
+                //if (this.dateEnde.checkValidity === true) {
+                    this.handleSubmitLaunch()
+                //}
             },
             handleSubmitLaunch() {
                 this.ende = this.dateEnde //ignore error 'unresolved variable'
                 this.launchSingleIter()
-                this.$nextTick(() => {
-                    this.$bvModal.hide('launchModal')
-                })
             },
             launchSingleIter() {
                 this.getTimeNow()
@@ -276,24 +296,30 @@
                     end: new Date(this.ende),
                     status: 'OPEN'
                 }
-                this.createIteration(pollIterationCmd);
-                let pollCmd = {
-                    id: this.pollId,
-                    status: 'LAUNCHED' //'READY'
+                if (pollIterationCmd.start < pollIterationCmd.end) {
+                    this.createIteration(pollIterationCmd);
+                    let pollCmd = {
+                        id: this.pollId,
+                        status: 'LAUNCHED' //'READY'
+                    }
+                    this.updatePoll(pollCmd);
+                    this.$nextTick(() => {
+                        this.$bvModal.hide('launchModal')
+                    })
+                }  else {
+                    this.$bvModal.show('wrongDate')
                 }
-                this.updatePoll(pollCmd);
             },
             handleOkSchedule(bvModalEvt) {
                 bvModalEvt.preventDefault()
-                this.handleSubmitSchedule()
+                //if (this.dateEnde.checkValidity === true && this.dateStart.checkValidity === true) {
+                    this.handleSubmitSchedule()
+                //}
             },
             handleSubmitSchedule() {
                 this.ende = this.dateEnde //ignore error 'unresolved variable'
                 this.beginn = this.dateStart
                 this.scheduleSingleIter()
-                this.$nextTick(() => {
-                    this.$bvModal.hide('scheduleModal')
-                })
             },
             scheduleSingleIter() {
                 this.getTimeNow()
@@ -302,12 +328,25 @@
                     end: new Date(this.ende),
                     status: 'SCHEDULED'
                 }
-                this.createIteration(pollIterationCmd);
-                let pollCmd = {
-                    id: this.pollId,
-                    status: 'READY' //'READY'
+                /*if (this.beginn.checkValidity === true && this.ende.checkValidity === true) {
+                    console.log('richrig')
+                } else {
+                    console.log('falsch')
+                }*/
+                if (pollIterationCmd.start < pollIterationCmd.end) {
+                    this.createIteration(pollIterationCmd);
+                    let pollCmd = {
+                        id: this.pollId,
+                        status: 'LAUNCHED' //'READY'
+                    }
+                    this.updatePoll(pollCmd);
+                    this.$nextTick(() => {
+                        this.$bvModal.hide('scheduleModal')
+                    })
+                } else {
+                    this.$bvModal.show('wrongDate')
                 }
-                this.updatePoll(pollCmd);
+
             }
         }
     }
