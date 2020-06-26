@@ -1,9 +1,6 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.poll.Anonymity;
-import gpse.repoll.domain.poll.User;
-import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.poll.PollEntry;
+import gpse.repoll.domain.poll.*;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
@@ -20,6 +17,7 @@ import java.util.UUID;
 public class PollEntryServiceImpl implements PollEntryService {
 
     private final PollService pollService;
+    private final ParticipantService participantService;
 
     private final PollEntryRepository pollEntryRepository;
     private final QuestionBaseRepository<Question> questionRepository;
@@ -28,9 +26,11 @@ public class PollEntryServiceImpl implements PollEntryService {
     private final SingleChoiceAnswerRepository singleChoiceAnswerRepository;
     private final MultiChoiceAnswerRepository multiChoiceAnswerRepository;
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
     public PollEntryServiceImpl(
             PollService pollService,
+            ParticipantService participantService,
             PollEntryRepository pollEntryRepository,
             QuestionBaseRepository<Question> questionRepository,
             TextAnswerRepository textAnswerRepository,
@@ -38,6 +38,7 @@ public class PollEntryServiceImpl implements PollEntryService {
             SingleChoiceAnswerRepository singleChoiceAnswerRepository,
             MultiChoiceAnswerRepository multiChoiceAnswerRepository) {
         this.pollService = pollService;
+        this.participantService = participantService;
         this.pollEntryRepository = pollEntryRepository;
         this.questionRepository = questionRepository;
         this.textAnswerRepository = textAnswerRepository;
@@ -86,19 +87,28 @@ public class PollEntryServiceImpl implements PollEntryService {
      * {@inheritDoc}
      */
     @Override
-    public PollEntry addPollEntry(final UUID pollId, final Map<Long, Answer> associations, final User user) {
+    public PollEntry addPollEntry(final UUID pollId,
+                                  final Map<Long, Answer> associations,
+                                  final UUID participantID) {
         Poll poll = pollService.getPoll(pollId);
         PollEntry pollEntry = new PollEntry();
-        if (poll.getAnonymity().equals(Anonymity.NON_ANONYMOUS)) {
-            pollEntry.setUser(user);
-            createAnswers(poll, pollEntry, associations);
-            pollEntryRepository.save(pollEntry);
-            poll.add(pollEntry);
-            pollService.save(poll);
-            return pollEntry;
+        Participant participant;
+        if (poll.getAnonymity().equals(Anonymity.NON_ANONYMOUS) || poll.getAnonymity().equals(Anonymity.PSEUDONYMOUS)) {
+            if (participantID == null) {
+                throw new BadRequestException("Unknown participant!");
+            }
+            participant = participantService.getParticipant(participantID);
+            pollEntry.setParticipant(participant);
         } else {
-            return null; // todo for other degrees of anonymity
+            participant = new Participant();
+            participantService.save(participant);
         }
+        pollEntry.setParticipant(participant);
+        createAnswers(poll, pollEntry, associations);
+        pollEntryRepository.save(pollEntry);
+        poll.add(pollEntry);
+        pollService.save(poll);
+        return pollEntry;
     }
 
     /**

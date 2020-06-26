@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.exceptions.NotFoundException;
+import gpse.repoll.domain.exceptions.PollAlreadyLaunchedException;
 import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
@@ -28,7 +29,7 @@ public class Poll extends Auditable<User> {
     private UUID id;
 
     @Column
-    private PollStatus status;
+    private PollEditStatus status;
 
     @Column
     private Anonymity anonymity;
@@ -42,11 +43,20 @@ public class Poll extends Auditable<User> {
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
+    @OneToMany(orphanRemoval = true)
+    private final List<PollIteration> pollIterations = new ArrayList<>();
+
     @OneToMany
     private final List<PollSection> pollSections = new ArrayList<>();
 
     @OneToMany
-    private final List<Question> questions = new ArrayList<>(); // todo sorting
+    private final List<PollConsistencyGroup> pollConsistencyGroups = new ArrayList<>();
+
+    @OneToMany
+    private final List<Question> questions = new ArrayList<>();
+
+    @OneToMany
+    private final List<Participant> participants = new ArrayList<>();
 
     protected Poll() {
 
@@ -58,8 +68,18 @@ public class Poll extends Auditable<User> {
      */
     public Poll(String title) {
         this.title = title;
-        this.status = PollStatus.IN_PROCESS;
+        this.status = PollEditStatus.EDITING;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
+    }
+
+    public Poll(Poll poll, List<PollSection> pollSections) {
+       this.status = PollEditStatus.EDITING;
+       this.anonymity = poll.anonymity;
+       this.title = poll.title;
+       this.pollSections.addAll(pollSections);
+       for (PollSection pollSection : this.pollSections) {
+           questions.addAll(pollSection.getQuestions());
+       }
     }
 
     @Override
@@ -92,6 +112,15 @@ public class Poll extends Auditable<User> {
         this.pollEntries.addAll(pollEntries);
     }
 
+    public List<PollIteration> getPollIterations() {
+        return Collections.unmodifiableList(pollIterations);
+    }
+
+    public void setPollIterations(List<PollIteration> pollIterations) {
+        this.pollIterations.clear();
+        this.pollIterations.addAll(pollIterations);
+    }
+
     public List<PollSection> getPollSections() {
         return Collections.unmodifiableList(pollSections);
     }
@@ -99,6 +128,15 @@ public class Poll extends Auditable<User> {
     public void setPollSections(List<PollSection> pollSections) {
         this.pollSections.clear();
         this.pollSections.addAll(pollSections);
+    }
+
+    public List<PollConsistencyGroup> getPollConsistencyGroups() {
+        return Collections.unmodifiableList(pollConsistencyGroups);
+    }
+
+    public void setPollConsistencyGroups(List<PollConsistencyGroup> pollConsistencyGroups) {
+        this.pollConsistencyGroups.clear();
+        this.pollConsistencyGroups.addAll(pollConsistencyGroups);
     }
 
     public List<Question> getQuestions() {
@@ -109,6 +147,19 @@ public class Poll extends Auditable<User> {
         this.questions.clear();
         this.questions.addAll(questions);
         sortQuestions();
+    }
+
+    public List<Participant> getParticipants() {
+        return Collections.unmodifiableList(participants);
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants.clear();
+        this.participants.addAll(participants);
+    }
+
+    public void addParticipant(Participant participant) {
+        this.participants.add(participant);
     }
 
     private void sortQuestions() {
@@ -123,11 +174,14 @@ public class Poll extends Auditable<User> {
         return title;
     }
 
-    public PollStatus getStatus() {
+    public PollEditStatus getStatus() {
         return status;
     }
 
-    public void setStatus(PollStatus status) {
+    public void setStatus(PollEditStatus status) {
+        if (this.status.equals(PollEditStatus.LAUNCHED) && status.equals(PollEditStatus.EDITING)) {
+            throw new PollAlreadyLaunchedException();
+        }
         this.status = status;
     }
 
@@ -136,6 +190,9 @@ public class Poll extends Auditable<User> {
     }
 
     public void setAnonymity(Anonymity anonymity) {
+        if (status.equals(PollEditStatus.LAUNCHED)) {
+            throw new PollAlreadyLaunchedException();
+        }
         this.anonymity = anonymity;
     }
 
@@ -149,6 +206,18 @@ public class Poll extends Auditable<User> {
 
     public boolean contains(PollSection pollSection) {
         return pollSections.contains(pollSection);
+    }
+
+    public void add(PollConsistencyGroup pollConsistencyGroup) {
+        pollConsistencyGroups.add(pollConsistencyGroup);
+    }
+
+    public void addAllConsistencyGroups(Collection<PollConsistencyGroup> pollConsistencyGroups) {
+        this.pollConsistencyGroups.addAll(pollConsistencyGroups);
+    }
+
+    public boolean contains(PollConsistencyGroup pollConsistencyGroup) {
+        return pollConsistencyGroups.contains(pollConsistencyGroup);
     }
 
     public void add(Question question) {
@@ -168,10 +237,24 @@ public class Poll extends Auditable<User> {
         }
     }
 
+    public void remove(PollConsistencyGroup pollConsistencyGroup) {
+        boolean res = pollConsistencyGroups.remove(pollConsistencyGroup);
+        if (!res) {
+            throw new NotFoundException("ConsistencyGroup does not belong to this poll");
+        }
+    }
+
     public void remove(Question question) {
         boolean res = questions.remove(question);
         if (!res) {
             throw new NotFoundException("Question does not belong to this poll");
+        }
+    }
+
+    public void remove(Participant participant) {
+        boolean res = participants.remove(participant);
+        if (!res) {
+            throw new NotFoundException("Participant does not belong to this poll.");
         }
     }
 
@@ -191,6 +274,14 @@ public class Poll extends Auditable<User> {
         return pollEntries.contains(pollEntry);
     }
 
+    public void add(PollIteration pollIteration) {
+        pollIterations.add(pollIteration);
+    }
+
+    public void remove(PollIteration pollIteration) {
+        pollIterations.remove(pollIteration);
+    }
+
     private PollSection getSection(UUID sectionId) {
         for (PollSection section : pollSections) {
             if (section.getId().equals(sectionId)) {
@@ -203,6 +294,24 @@ public class Poll extends Auditable<User> {
     private boolean sectionExists(UUID sectionId) {
         for (PollSection section : pollSections) {
             if (section.getId().equals(sectionId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private PollConsistencyGroup getConsistency(UUID consistencyId) {
+        for (PollConsistencyGroup pollConsistencyGroup : pollConsistencyGroups) {
+            if (pollConsistencyGroup.getId().equals(consistencyId)) {
+                return pollConsistencyGroup;
+            }
+        }
+        return null;
+    }
+
+    private boolean consistencyExists(UUID consistencyId) {
+        for (PollConsistencyGroup pollConsistencyGroup : pollConsistencyGroups) {
+            if (pollConsistencyGroup.getId().equals(consistencyId)) {
                 return true;
             }
         }

@@ -4,7 +4,10 @@
         <b-row>
             <b-col>
                 <p>
-                    <b-button  variant="primary" class="addButton" v-on:click="addNewPoll">+</b-button>
+                    <b-button variant="primary"
+                              class="addButton"
+                              :disabled="!hasCreatorPrivileges"
+                              v-on:click="addNewPoll">+</b-button>
                 </p>
             </b-col>
         </b-row>
@@ -23,11 +26,16 @@
 
 <script>
     import PollTableElement from "./PollTableElement";
-    import {mapActions} from "vuex";
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: "PollTableList",
         props: ["polls"],
+        computed: {
+            ...mapGetters('auth', {
+                hasCreatorPrivileges: "hasCreatorPrivileges"
+            })
+        },
         methods: {
             ...mapActions('myPolls', {
                 createPoll: "create"

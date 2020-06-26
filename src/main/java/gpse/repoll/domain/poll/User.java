@@ -115,11 +115,6 @@ public class User implements UserDetails {
             roles.addAll(allRoles);
             return;
         }
-        allRoles.remove(Roles.POLL_EDITOR);
-        if (role.equals(Roles.PARTICIPANT)) {
-            roles.addAll(allRoles);
-            return;
-        }
         throw new NoValidRoleException();
     }
 

@@ -31,8 +31,7 @@
 
 <script>
     import {mapGetters, mapState} from "vuex";
-    import ChartCards from "./ChartCards";
-
+    import ChartCards from "./utils/ChartCards";
     export default {
         name: "Overview",
         data() {

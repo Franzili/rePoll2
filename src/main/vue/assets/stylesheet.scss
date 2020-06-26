@@ -17,9 +17,11 @@ $teal:      #02a097;
 $green:     #56a137;
 
 $primary: $green;
+$warning: $orange;
 
 $theme-colors: (
     "primary": #56a137,
+    "warning": #cb4b16
 );
 
 /* ------ Put Bootstrap variable customizations above ---- */

@@ -5,7 +5,7 @@
         align="left"
         bg-variant="light"
     >
-        <b-row>
+        <b-row class="align-items-center">
 
             <b-col align-self="start">
                 <p class="status">{{this.pollStatus}}</p>
@@ -17,9 +17,15 @@
                 ><span class="participants">Participants: </span>{{poll.pollEntries}}</p>
             </b-col>
 
-            <b-col cols="4" style="text-align: center">
+            <b-col cols="4" style="text-align: end">
                 <span @click="loadTo" class="configLink">Setup
                 </span>
+            </b-col>
+            <b-col cols="2">
+                <b-button variant="primary"
+                        @click="copyPoll">
+                    Copy Poll
+                </b-button>
             </b-col>
         </b-row>
 
@@ -59,6 +65,9 @@
             ...mapActions('currentPoll', {
                 loadPoll: "load"
             }),
+            ...mapActions('myPolls', {
+                duplicatePoll: "duplicate"
+            }),
             async loadTo() {
                 await this.loadPoll(this.poll.id)
                 return this.$router.push({
@@ -67,8 +76,18 @@
                         pollId: this.poll.id
                     }
                 })
+            },
+            async copyPoll() {
+                let newPoll = await this.duplicatePoll(this.poll.id);
+                return this.$router.push({
+                    name: 'edit-poll',
+                    params: {
+                        pollId: newPoll.id
+                    }
+                })
             }
-        }
+        },
+
     }
 </script>
 

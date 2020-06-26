@@ -2,6 +2,7 @@ package gpse.repoll.web;
 
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.service.CopyService;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
 import gpse.repoll.domain.poll.User;

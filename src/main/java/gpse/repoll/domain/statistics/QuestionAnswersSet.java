@@ -1,6 +1,6 @@
 package gpse.repoll.domain.statistics;
 
-import gpse.repoll.domain.poll.User;
+import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.poll.answers.Answer;
 import gpse.repoll.domain.poll.questions.Question;
 
@@ -10,31 +10,31 @@ import java.util.Map;
 public class QuestionAnswersSet {
 
     private Question question;
-    private final Map<User, Answer> userAnswerMap = new HashMap<>();
+    private final Map<Participant, Answer> participantAnswerMap = new HashMap<>(); // Todo participant instead of user
 
-    public QuestionAnswersSet(Map<User, Answer> userAnswerMap, Question question) {
+    public QuestionAnswersSet(Map<Participant, Answer> participantAnswerMap, Question question) {
         this.question = question;
-        this.userAnswerMap.putAll(userAnswerMap);
+        this.participantAnswerMap.putAll(participantAnswerMap);
     }
 
     public void setQuestion(Question question) {
         this.question = question;
     }
 
-    public void setUserAnswerMap(Map<User, Answer> userAnswerMap) {
-        this.userAnswerMap.clear();
-        this.userAnswerMap.putAll(userAnswerMap);
+    public void setParticipantAnswerMap(Map<Participant, Answer> participantAnswerMap) {
+        this.participantAnswerMap.clear();
+        this.participantAnswerMap.putAll(participantAnswerMap);
     }
 
     public Question getQuestion() {
         return question;
     }
 
-    public Map<User, Answer> getUserAnswerMap() {
-        return userAnswerMap;
+    public Map<Participant, Answer> getParticipantAnswerMap() {
+        return participantAnswerMap;
     }
 
-    public void add(User user, Answer answer) {
-        userAnswerMap.put(user, answer);
+    public void add(Participant participant, Answer answer) {
+        participantAnswerMap.put(participant, answer);
     }
 }

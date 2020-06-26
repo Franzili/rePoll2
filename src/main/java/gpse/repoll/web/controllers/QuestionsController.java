@@ -10,7 +10,6 @@ import gpse.repoll.web.command.ChoiceCmd;
 import gpse.repoll.web.command.questions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -73,6 +72,7 @@ public class QuestionsController {
                     title,
                     questionOrder,
                     choices,
+                    singleChoiceQuestionCmd.getNumberOfBonusChoices(),
                     singleChoiceQuestionCmd.getDisplayVariant());
         } else if (questionCmd instanceof MultiChoiceQuestionCmd) {
             MultiChoiceQuestionCmd multiChoiceQuestionCmd = (MultiChoiceQuestionCmd) questionCmd;
@@ -83,21 +83,22 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.addMultiChoiceQuestion(pollId, title, questionOrder, choices);
+            return questionService.addMultiChoiceQuestion(
+                    pollId,
+                    title,
+                    questionOrder,
+                    choices,
+                    multiChoiceQuestionCmd.getNumberOfBonusChoices());
         }
         // This should never happen
         throw new InternalServerErrorException();
     }
 
-    @PreAuthorize("(@securityService.isActivated(#pollId) and hasRole('Roles.PARTICIPANT'))"
-            + "or hasRole('Roles.POLL_EDITOR')")
     @GetMapping("/{pollId}/questions/")
     public List<Question> listQuestions(@PathVariable("pollId") final UUID pollId) {
         return questionService.getAllQuestions(pollId);
     }
 
-    @PreAuthorize("(@securityService.isActivated(#pollId) and hasRole('Roles.PARTICIPANT'))"
-            + "or hasRole('Roles.POLL_EDITOR')")
     @GetMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question getQuestion(@PathVariable("pollId") final UUID pollId,
                                 @PathVariable("questionId") final String questionId) {
@@ -143,7 +144,8 @@ public class QuestionsController {
                 choices.add(new Choice(choiceCmd.getText()));
             }
             return questionService.updateSingleChoiceQuestion(
-                    pollId, questionId, questionOrder, title, choices);
+                    pollId, questionId, questionOrder, title, choices,
+                    singleChoiceQuestionCmd.getNumberOfBonusChoices());
         } else if (questionCmd instanceof MultiChoiceQuestionCmd) {
             MultiChoiceQuestionCmd multiChoiceQuestionCmd = (MultiChoiceQuestionCmd) questionCmd;
             if (multiChoiceQuestionCmd.getChoices() == null) {
@@ -153,7 +155,13 @@ public class QuestionsController {
             for (ChoiceCmd choiceCmd : multiChoiceQuestionCmd.getChoices()) {
                 choices.add(new Choice(choiceCmd.getText()));
             }
-            return questionService.updateMultiChoiceQuestion(pollId, questionId, questionOrder, title, choices);
+            return questionService.updateMultiChoiceQuestion(
+                    pollId,
+                    questionId,
+                    questionOrder,
+                    title,
+                    choices,
+                    multiChoiceQuestionCmd.getNumberOfBonusChoices());
         }
         // This should never happen
         throw new InternalServerErrorException();

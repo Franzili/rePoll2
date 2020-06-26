@@ -23,7 +23,7 @@ public class PollsController {
     private final PollService pollService;
 
     @Autowired
-    public PollsController(PollService pollService) {
+    public PollsController(final PollService pollService) {
         this.pollService = pollService;
     }
 

@@ -30,6 +30,11 @@ public class PollSectionServiceImpl implements PollSectionService {
         this.pollRepository = pollRepository;
     }
 
+    @Override
+    public void save(PollSection pollSection) {
+        pollSectionRepository.save(pollSection);
+    }
+
     /**
      * {@inheritDoc}
      */

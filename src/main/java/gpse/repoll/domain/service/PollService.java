@@ -2,7 +2,7 @@ package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.Anonymity;
 import gpse.repoll.domain.poll.Poll;
-import gpse.repoll.domain.poll.PollStatus;
+import gpse.repoll.domain.poll.PollEditStatus;
 
 import java.util.List;
 import java.util.Map;
@@ -54,7 +54,7 @@ public interface PollService {
      */
     Poll updatePoll(UUID id,
                     String title,
-                    PollStatus status,
+                    PollEditStatus status,
                     Anonymity anonymity,
                     Map<UUID, List<Long>> structure);
 

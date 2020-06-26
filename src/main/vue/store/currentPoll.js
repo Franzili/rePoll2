@@ -4,12 +4,15 @@ import api from "../api";
 
 import SectionHeaderModel from "./poll-item-models/SectionHeaderModel";
 
+import participants from "./participants";
+
 /**
  * currentPoll holds the state of the Poll that is currently open, or otherwise in focus.
  * Can be used for PollTabbed pages (Config, Edit, Stats), and other pages that focus on
  * exactly one poll.
  */
 const currentPoll = {
+    modules: {participants: participants},
     state: {
         /**
          * The current poll object.
@@ -179,7 +182,7 @@ const currentPoll = {
                     let choice = {text: q.title, value: q.id}
                     qObjList.push(choice)
                 })
-                let secObj = {label: section.title, options: qObjList}
+                let secObj = {label: section.title, options: qObjList, sId: section.id}
                 strObj.push(secObj)
             })
             return strObj
@@ -222,6 +225,36 @@ const currentPoll = {
                         tableObj = [...tableObj, entry]
                     }
                     return tableObj
+                }
+            }
+        },
+        transformToChartData: () => {
+            return (val) => {
+                let labels = []
+                let absFrq = []
+                let relFrq = []
+                for (let i = 0; i < val.frequencies.length; i++) {
+                    labels.push(val.frequencies[i].choice.text);
+                    absFrq.push(val.frequencies[i].absolute)
+                    let rawRelFrq = val.frequencies[i].relative
+                    relFrq.push(Math.round(rawRelFrq * 100));
+                }
+                let boxplot = []
+                if (val.question.type === 'ScaleQuestion') {
+                    for (let item in val.boxplot) {
+                        boxplot.push(val.boxplot[item])
+                    }
+                    boxplot.splice(2, 0, val.median)
+                }
+                return {
+                    label: val.question.title,
+                    qType: val.question.type,
+                    labels: labels,
+                    data: absFrq,
+                    absFrq: absFrq,
+                    relFrq: relFrq,
+                    boxplot: boxplot,
+                    currentChart: 'bar'
                 }
             }
         }
