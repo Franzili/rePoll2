@@ -46,9 +46,6 @@
         name: "IterationTableElementOPEN",
         props: ["iteration"],
         methods: {
-            isMobile() {
-                return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-            },
             ...mapActions('currentPoll', {
                 updatePoll: 'update'
             }),
@@ -67,7 +64,7 @@
                     end: this.timestamp,
                     status: 'CLOSED'
                 }
-                this.createIteration(pollIterationCmd);
+                this.updateIteration(pollIterationCmd);
                 /*let pollCmd = {
                     id: this.pollId,
                     status: 'READY'
@@ -79,21 +76,5 @@
 </script>
 
 <style scoped>
-
-    /*.my-config-link {
-        font-size: 18px;
-        color: #7F7E7F;
-    }
-
-    .my-name {
-        padding-top: 5px;
-        font-size: 22px;
-    }
-    .my-ste {
-        margin: 15px;
-        text-align: center;
-        background-color: white;
-        font-family: Arial,sans-serif;
-    }*/
 
 </style>

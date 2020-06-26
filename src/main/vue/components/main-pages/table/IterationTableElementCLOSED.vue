@@ -20,9 +20,11 @@
             <b-col cols="4" style="text-align: center">
 
                 <!-- change with link to charts -->
+                <!--
                 <router-link class="configLink"
                              :to="{ name: 'answer', params: {id: poll.id}}"
                 >View Results</router-link>
+                -->
 
             </b-col>
         </b-row>
@@ -35,9 +37,6 @@
         name: "IterationTableElementCLOSED",
         props: ["iteration"],
         methods: {
-            isMobile() {
-                return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-            },
         }
     }
 </script>

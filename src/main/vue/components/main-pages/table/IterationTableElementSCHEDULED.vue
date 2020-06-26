@@ -30,7 +30,7 @@
                     title="Do you want to remove this iteration ?"
                     header-bg-variant="info"
                     @ok="handleOkDelete">
-                    <form ref="closeNowForm" @submit.stop.prevent="handleSubmitDelete">
+                    <form ref="closeNowForm" @submit.stop.prevent="handleOkDelete">
                     </form>
                 </b-modal>
             </b-col>
@@ -51,18 +51,13 @@
             }
         },
         methods: {
-            isMobile() {
-                return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-            },
             ...mapActions('currentPoll', {
                 updatePoll: 'update'
             }),
             ...mapActions('myIterations', {
-                createIteration: 'create',
-                listIterations: 'load',
                 deleteIteration: 'delete'
             }),
-            async loadTo() {
+            /*async loadTo() {
                 await this.listIterations(this.iteration.id)
                 return this.$router.push({
                     name: 'poll-tabbed',
@@ -70,8 +65,8 @@
                         iterationId: this.iteration.id
                     }
                 })
-            },
-            handleOkCloseNow(bvModalEvt) {
+            },*/
+            handleOkDelete(bvModalEvt) {
                 bvModalEvt.preventDefault()
 
                 this.deleteIteration(this.iteration.id);
@@ -86,21 +81,5 @@
 </script>
 
 <style scoped>
-
-    /*.my-config-link {
-        font-size: 18px;
-        color: #7F7E7F;
-    }
-
-    .my-name {
-        padding-top: 5px;
-        font-size: 22px;
-    }
-    .my-ste {
-        margin: 15px;
-        text-align: center;
-        background-color: white;
-        font-family: Arial,sans-serif;
-    }*/
 
 </style>
