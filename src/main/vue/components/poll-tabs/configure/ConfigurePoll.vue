@@ -13,11 +13,11 @@
         </p>
 
         <p>
-            <DeletePoll></DeletePoll>
+            <Download></Download>
         </p>
 
         <p>
-            <Download></Download>
+            <DeletePoll></DeletePoll>
         </p>
     </div>
 </template>

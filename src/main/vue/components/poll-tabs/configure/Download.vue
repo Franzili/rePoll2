@@ -1,13 +1,18 @@
 <template>
     <b-card>
-        <b-button variant="primary"
-                  class="float-right"
-                  @click="testdownload('human')"
-        >Download human readable Poll as txt file</b-button>
-        <b-button variant="primary"
-                  class="float-left"
-                  @click="testdownload('json')"
-        >Download Poll as json file</b-button>
+
+        <h6>Download poll or entries</h6>
+
+        <div class="float-left">
+
+            <b-button @click="downloadFromStore('human')"
+            >Download human readable Poll as txt file</b-button>
+
+            <b-button class="ml-3"
+                      @click="downloadFromStore('json')"
+            >Download Poll as json file</b-button>
+
+        </div>
     </b-card>
 </template>
 
@@ -22,13 +27,13 @@
                 download: 'download'
             }),
 
-            testdownload(format) {
+            downloadFromStore(format) {
 
                 let cmd = {
                     id: "36808e60-39f7-41f0-b991-f08b80fe8226",
                     type: 'poll',
                     format: format
-                }
+                };
 
                 this.download(cmd);
 
