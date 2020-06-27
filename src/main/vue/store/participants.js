@@ -30,7 +30,6 @@ const participants = {
             return new Promise((resolve, reject) => {
                 api.poll.listParticipants(id).then(function (res) {
                     commit('set', res.data);
-                    //console.log(res.data);
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);

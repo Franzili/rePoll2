@@ -3,11 +3,16 @@
         <!-- TODO: adapt type names to backend terminology -->
         <div v-if="poll.anonymity === 'NON_ANONYMOUS'">
             <h6>Participants: </h6>
-
             <b-col cols="6">
-                <p>
-
-                </p>
+                <b-table
+                    show-empty
+                    small
+                    :items="this.participants"
+                    :fields="fields">
+                    <template v-slot:cell(name)="row">
+                        {{ row.value.fullName }}
+                    </template>
+                </b-table>
                 <p>
                     <b-button class="float-right" variant="primary">+ Invite new</b-button>
                 </p>
@@ -124,13 +129,17 @@
 
 <script>
     import {mapState, mapActions} from "vuex";
-    import participants from "../../../store/participants";
+
     export default {
         name: "ManageParticipants",
 
         data() {
             return {
                 link: '',
+                items: [],
+                fields: [
+                    { key: 'fullName', label: 'Fullname', sortable: true, sortDirection: 'desc' },
+                    { key: 'email', label: 'Email', sortable: true, sortDirection: 'desc' }],
 
                 //TODO
                 n_participated: 0,
@@ -140,21 +149,21 @@
 
         computed: {
             ...mapState('currentPoll', {
-                poll: 'poll'
-            }),
+                poll: 'poll'}),
             ...mapState('participants', {
                 participants: 'participants'
             })
         },
 
-        mounted() {
-            this.loadParticipant();
-            this.n_participated = participants.length;
-        },
+
         methods: {
             ...mapActions('participants', {
-                loadParticipant: 'loadParticipants'
+                loadParticipant: 'loadParticipant'
             }),
+        },
+        mounted() {
+            this.loadParticipant(this.poll.id);
+            //this.n_participated = this.poll.entries.length;
         },
 
         created: function() {
