@@ -19,7 +19,7 @@ const currentIteration = {
     },
     mutations: {
         /**
-         * Sets the new current poll.
+         * Sets the new current iteration.
          */
         set(state, newIteration) {
             state.iteration = newIteration
