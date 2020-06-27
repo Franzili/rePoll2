@@ -1,5 +1,5 @@
 <template>
-    <b-card v-if="poll.status === 'IN_PROCESS'">
+    <b-card v-if="poll.status === 'READY'">
         <h6>Iteration</h6>
 
         <p>
@@ -115,7 +115,7 @@
     </b-card>
 
 
-    <b-card v-else-if="poll.status === 'READY' || poll.status === 'LAUNCHED'">
+    <b-card v-else-if="poll.status === 'LAUNCHED'">
         <h6>Iteration</h6>
 
 
