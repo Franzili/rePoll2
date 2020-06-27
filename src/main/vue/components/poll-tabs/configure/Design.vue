@@ -6,67 +6,62 @@
 
             <!-- TODO height of v-app       style="max-height: 470px"-->
 
-            <v-app>
-                <v-main>
 
-                    <b-row>
+            <b-row>
 
-                        <b-col>
-                            <b-card>
+                <b-col>
+                    <b-card>
 
-                                <!-- text colour -->
-                                <h6>Text</h6>
-                                <p>Colour:</p>
-                                <b-form-input
-                                    v-model="selectedTextColour"
-                                    type="color">
-                                </b-form-input>
+                        <!-- text colour -->
+                        <h6>Text</h6>
+                        <p>Colour:</p>
+                        <b-form-input
+                            v-model="this.selectedTextColour"
+                            type="color">
+                        </b-form-input>
 
-                                <p></p>
+                        <p></p>
 
-                                <!-- font -->
-                                <p>Font:</p>
-                                <b-form-select :style="'font-family:' + this.selectedFont.valueOf()"
-                                               v-model="selectedFont"
-                                               :options="fonts">
-                                    <!-- <template v-slot:first> -->
-                                    <!--    <b-form-select-option value=''>Arial</b-form-select-option>-->
-                                    <!--  </template> -->
-                                </b-form-select>
+                        <!-- font -->
+                        <p>Font:</p>
+                        <b-form-select :style="'font-family:' + this.selectedFont.valueOf()"
+                                       v-model="selectedFont"
+                                       :options="fonts">
+                            <!-- <template v-slot:first> -->
+                            <!--    <b-form-select-option value=''>Arial</b-form-select-option>-->
+                            <!--  </template> -->
+                        </b-form-select>
 
 
-                            </b-card>
+                    </b-card>
 
-                        </b-col>
+                </b-col>
 
-                        <b-col>
-                            <b-card>
+                <b-col>
+                    <b-card>
 
-                                <!-- background colour -->
-                                <h6>Background</h6>
-                                <p>Colour:</p>
+                        <!-- background colour -->
+                        <h6>Background</h6>
+                        <p>Colour:</p>
 
-                                <b-form-input
-                                    v-model="selectedBackgroundColour"
-                                    type="color">
-                                </b-form-input>
+                        <b-form-input
+                            v-model="selectedBackgroundColour"
+                            type="color">
+                        </b-form-input>
 
-                            </b-card>
+                    </b-card>
 
-                            <!-- Apply-Button -->
-                            <div>
-                                <b-button
-                                    style="margin-top: 30px"
-                                    class="float-right"
-                                    @click="saveDesign">
-                                    Apply
-                                </b-button>
-                            </div>
-                        </b-col>
-                    </b-row>
-
-                </v-main>
-            </v-app>
+                    <!-- Apply-Button -->
+                    <div>
+                        <b-button
+                            style="margin-top: 30px"
+                            class="float-right"
+                            @click="saveDesign">
+                            Apply
+                        </b-button>
+                    </div>
+                </b-col>
+            </b-row>
 
 
 
