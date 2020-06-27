@@ -167,12 +167,6 @@ const currentPoll = {
             return res;
         },
 
-        // weg?
-        design: state => {
-            let design = {font: state.design.font};
-            return design
-        },
-
         statStructureObj: state => {
             let strObj = [];
             state.poll.pollSections.forEach(section => {
@@ -315,7 +309,6 @@ const currentPoll = {
             if(designCmd.logo != null) {
                 state.poll.design.logo = designCmd.logo
             }
-            //state.poll.design = designCmd
         },
 
         addPollSection(state, pollSection) {

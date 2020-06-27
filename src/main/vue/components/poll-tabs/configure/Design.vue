@@ -17,13 +17,12 @@
                                 <!-- text colour -->
                                 <h6>Text</h6>
                                 <p>Colour:</p>
-                                <div align="center">
-                                    <!-- elevation = "15" -->
-                                    <v-color-picker app
-                                                    v-model="selectedTextColour"
-                                                    mode="hexa">
-                                    </v-color-picker>
-                                </div>
+                                <b-form-input
+                                    v-model="selectedTextColour"
+                                    type="color">
+                                </b-form-input>
+
+                                <p></p>
 
                                 <!-- font -->
                                 <p>Font:</p>
@@ -46,14 +45,11 @@
                                 <!-- background colour -->
                                 <h6>Background</h6>
                                 <p>Colour:</p>
-                                <!-- elevation="15" -->
 
-                                <div align="center">
-                                    <v-color-picker app
-                                                    v-model="selectedBackgroundColour"
-                                                    mode="hexa">
-                                    </v-color-picker>
-                                </div>
+                                <b-form-input
+                                    v-model="selectedBackgroundColour"
+                                    type="color">
+                                </b-form-input>
 
                             </b-card>
 
@@ -181,6 +177,7 @@
 
         data () {
             return {
+                colorInput: '',
                 selectedFile: null,
                 fileBase64: "",
                 selectedPosition: '',
