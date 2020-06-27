@@ -35,6 +35,7 @@
                                     <!--  </template> -->
                                 </b-form-select>
 
+
                             </b-card>
 
                         </b-col>
@@ -166,6 +167,8 @@
                 </b-card>
             </b-card-group>
 
+
+
         </b-card>
     </div>
 </template>
@@ -186,7 +189,24 @@
                 selectedFont: '',
                 fonts: [
                     { value: 'Arial', text: 'Arial' },
-                    { value: 'Monospaced', text: 'Monospaced' }
+                    { value: 'Courier', text: 'Courier'},
+                    { value: 'DejaVu', text: 'DejaVu'},
+                    { value: 'DejaVu Math TeX Gyre', text: 'DejaVu Math TeX Gyre'},
+                    { value: 'DejaVu Sans Mono', text: 'DejaVu Sans Mono' },
+                    { value: 'DejaVu Sans Light', text: 'DejaVu Sans Light'},
+                    { value: 'DejaVu Sans Serif', text: 'DejaVu Sans Serif'},
+                    { value: 'DejaVu Serif Condensed', text: 'DejaVu Serif Condensed'},
+                    { value: 'Georgia', text: 'Georgia'},
+                    { value: 'Helvetica', text: 'Helvetica'},
+                    { value: 'Latin Modern Math', text: 'Latin Modern Math'},
+                    { value: 'Monospaced', text: 'Monospaced' },
+                    { value: 'Ubuntu', text: 'Ubuntu'},
+                    { value: 'Ubuntu Condensed', text: 'Ubuntu Condensed'},
+                    { value: 'Ubuntu Light', text: 'UbuntuLight'},
+                    { value: 'Ubuntu Mono', text: 'Ubuntu Mono'},
+                    { value: 'SansSerif', text: 'SansSerif'},
+                    { value: 'Times', text: 'Times'},
+                    { value: 'Times New Roman', text: 'Times New Roman'},
                 ]
             }
         },
