@@ -4,8 +4,7 @@
         <EditableLabel :editing="editing"
                        tag="span"
                        :value="model.description"
-                       v-on:valueChanged="model.description = $event"
-                       class="text-muted"/>
+                       v-on:valueChanged="model.description = $event"/>
     </div>
 </template>
 
