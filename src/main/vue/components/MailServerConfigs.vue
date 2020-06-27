@@ -24,6 +24,18 @@
                 </b-col>
             </b-row>
             <b-row class="justify-content-md-center">
+                <div>
+                    <b-form-input placeholder="zizimeyer4@gmail.com" v-model="mailAccount">
+                    </b-form-input>
+                </div>
+            </b-row>
+            <b-row class="justify-content-md-center">
+                <div>
+                    <b-form-input placeholder="myPassword" v-model="mailPassword">
+                    </b-form-input>
+                </div>
+            </b-row>
+            <b-row class="justify-content-md-center">
                 <b-col col lg="2">
                     <div>
                     </div>
@@ -47,7 +59,9 @@
         data() {
             return {
                 smtpServerAddress: '',
-                smtpPort: ''
+                smtpPort: '',
+                mailAccount: '',
+                mailPassword: ""
             }
         },
         computed: {
@@ -63,7 +77,9 @@
             setServerAddress() {
                 let mailCmd = {
                     smtpServerAddress: this.smtpServerAddress,
-                    smtpPort: this.smtpPort
+                    smtpPort: this.smtpPort,
+                    account: this.mailAccount,
+                    password: this.mailPassword
                 }
                 this.updateConfigs(mailCmd)
                 console.log(this.smtpServerAddress)

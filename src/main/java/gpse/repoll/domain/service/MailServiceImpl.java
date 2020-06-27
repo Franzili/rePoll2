@@ -31,8 +31,10 @@ public class MailServiceImpl implements MailService {
     @Autowired
     private JavaMailSender emailSender;
 
-    public MailServiceImpl() {
-
+    @Autowired
+    public MailServiceImpl(UserRepository userRepository, MailConfigRepository mailConfigRepository) {
+        this.userRepository = userRepository;
+        this.mailConfigRepository = mailConfigRepository;
     }
 
     /**
@@ -86,17 +88,18 @@ public class MailServiceImpl implements MailService {
     }
 
     public MailConfig setHostServer(String smtpServerAddress, int port, String account, String password) {
-        Optional<MailConfig> mailConfigOptional = mailConfigRepository.findById(0L);
-        if (mailConfigOptional.isPresent()) {
-            MailConfig mailConfig = mailConfigOptional.get();
-            mailConfig.setId(0L);
-            mailConfig.setHostServer(smtpServerAddress);
-            mailConfig.setPort(port);
-            mailConfig.setSendersAddress(account);
-            mailConfigRepository.save(mailConfig);
-            return mailConfig;
+        MailConfig mailConfig;
+        if (mailConfigRepository == null) {
+            mailConfig = new MailConfig();
         } else {
-            return null;
+            Optional<MailConfig> mailConfigOptional = mailConfigRepository.findById(0L);
+            mailConfig = mailConfigOptional.orElseGet(MailConfig::new);
         }
+        mailConfig.setId(0L);
+        mailConfig.setHostServer(smtpServerAddress);
+        mailConfig.setPort(port);
+        mailConfig.setSendersAddress(account);
+        mailConfigRepository.save(mailConfig);
+        return mailConfig;
     }
 }
