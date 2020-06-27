@@ -27,6 +27,8 @@ public class PollIteration {
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
+    public PollIteration() { }
+
     public PollIteration(LocalDateTime start, LocalDateTime end) {
         this.start = start;
         this.end = end;

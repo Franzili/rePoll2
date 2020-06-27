@@ -3,12 +3,17 @@
         <p>
             <Anonymity></Anonymity>
         </p>
+
         <p>
             <SelectStatus></SelectStatus>
         </p>
 
         <p>
             <ManageParticipants></ManageParticipants>
+        </p>
+
+        <p>
+            <Download></Download>
         </p>
 
         <p>
@@ -22,10 +27,11 @@
     import ManageParticipants from "./ManageParticipants";
     import DeletePoll from "./DeletePoll";
     import Anonymity from "./Anonymity";
+    import Download from "./Download";
 
     export default {
         name: "ConfigurePoll",
-        components: {Anonymity, SelectStatus, ManageParticipants, DeletePoll }
+        components: {Download, Anonymity, SelectStatus, ManageParticipants, DeletePoll }
     }
 </script>
 
