@@ -27,10 +27,18 @@ public class MailController {
     }
 
     @PostMapping("/configs/")
-    public MailConfig setServerConfigs(@RequestBody final MailCmd mailCmd) {
-        return mailService.setHostServer(
-            mailCmd.getSmtpServerAddress(), mailCmd.getSmtpPort(), mailCmd.getAccount(), mailCmd.getPassword()
-        );
+    public String setServerConfigs(@RequestBody final MailCmd mailCmd) {
+        if (mailService.setHostServer(
+            mailCmd.getSmtpServerAddress(), mailCmd.getSmtpPort(), mailCmd.getAccount(), mailCmd.getPassword())) {
+            return "Changes Saved!";
+        } else {
+            return "Please check your input!";
+        }
+    }
+
+    @GetMapping("/configs/getMailConfigs/")
+    public MailConfig getConfigs() {
+        return mailService.getMailConfigs();
     }
 
     @ResponseBody

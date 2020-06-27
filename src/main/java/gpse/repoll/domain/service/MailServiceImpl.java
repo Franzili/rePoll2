@@ -12,6 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Optional;
@@ -87,7 +88,7 @@ public class MailServiceImpl implements MailService {
             }
     }
 
-    public MailConfig setHostServer(String smtpServerAddress, int port, String account, String password) {
+    public boolean setHostServer(String smtpServerAddress, int port, String account, String password) {
         MailConfig mailConfig;
         if (mailConfigRepository == null) {
             mailConfig = new MailConfig();
@@ -98,8 +99,17 @@ public class MailServiceImpl implements MailService {
         mailConfig.setId(0L);
         mailConfig.setHostServer(smtpServerAddress);
         mailConfig.setPort(port);
-        mailConfig.setSendersAddress(account);
+        try {
+            mailConfig.setSendersAddress(InternetAddress.parse(account)[0]);
+        } catch (AddressException e) {
+            return false;
+        }
         mailConfigRepository.save(mailConfig);
-        return mailConfig;
+        return true;
+    }
+
+    public MailConfig getMailConfigs() {
+        Optional<MailConfig> mailConfigOptional = mailConfigRepository.findById(0L);
+        return mailConfigOptional.orElse(null);
     }
 }

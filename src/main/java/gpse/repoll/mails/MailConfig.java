@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import javax.mail.internet.InternetAddress;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -92,8 +93,8 @@ public class MailConfig {
         return sendersAddress;
     }
 
-    public void setSendersAddress(String sendersAddress) {
-        this.sendersAddress = sendersAddress;
+    public void setSendersAddress(InternetAddress sendersAddress) {
+        this.sendersAddress = sendersAddress.toString();
     }
 
     public String getSenderPassword() {

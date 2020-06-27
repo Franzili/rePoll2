@@ -7,6 +7,9 @@ const adminConfigs = {
     mutations: {
         updateConfigs(state, config) {
             state.configs.push(config)
+        },
+        loadConfigs(state, config) {
+            state.configs = config
         }
     },
     actions: {
@@ -21,7 +24,18 @@ const adminConfigs = {
                     reject();
                 })
             })
-        }
+        },
+        getConfigs({commit}) {
+            return new Promise((resolve, reject) => {
+                api.admin.getConfigs().then(function (res) {
+                    commit('loadConfigs',res.data);
+                    resolve()
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
+        },
     },
 
     namespaced: true

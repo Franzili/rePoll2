@@ -30,7 +30,14 @@ public interface MailService {
      * @param port server port.
      * @param account The account the mails should be sent from.
      * @param password The corresponding password.
-     * @return The MailConfig Object.
+     * @return true, if the input included a correct internet address.
      */
-    MailConfig setHostServer(String smtpServerAddress, int port, String account, String password);
+    boolean setHostServer(String smtpServerAddress, int port, String account, String password);
+
+    /**
+     * Returns the current Configurations for the SMTP Server.
+     * @return A MailConfig Object with the smptServerAddress, the corresponding port and the MailAccount from which
+     * the Mails are send with the corresponding password.
+     */
+    MailConfig getMailConfigs();
 }

@@ -12,26 +12,26 @@
                 </b-col>
                 <b-col col lg="6">
                     <div>
-                        <b-form-input placeholder="Server address" v-model="smtpServerAddress">
+                        <b-form-input :placeholder="smtpServerAddress" v-model="smtpServerAddress">
                         </b-form-input>
                     </div>
                 </b-col>
                 <b-col col lg="2">
                     <div>
-                        <b-form-input placeholder="Port" v-model="smtpPort">
+                        <b-form-input :placeholder="smtpPort" v-model="smtpPort">
                         </b-form-input>
                     </div>
                 </b-col>
             </b-row>
             <b-row class="justify-content-md-center">
                 <div>
-                    <b-form-input placeholder="zizimeyer4@gmail.com" v-model="mailAccount">
+                    <b-form-input :placeholder="mailAccount" v-model="mailAccount">
                     </b-form-input>
                 </div>
             </b-row>
             <b-row class="justify-content-md-center">
                 <div>
-                    <b-form-input placeholder="myPassword" v-model="mailPassword">
+                    <b-form-input :placeholder="mailPassword" v-model="mailPassword">
                     </b-form-input>
                 </div>
             </b-row>
@@ -61,7 +61,7 @@
                 smtpServerAddress: '',
                 smtpPort: '',
                 mailAccount: '',
-                mailPassword: ""
+                mailPassword: ''
             }
         },
         computed: {
@@ -71,7 +71,8 @@
         },
         methods: {
             ...mapActions('adminConfigs', {
-                updateConfigs: 'updateConfigs'
+                updateConfigs: 'updateConfigs',
+                getConfigs: 'getConfigs'
                 }
             ),
             setServerAddress() {
@@ -82,8 +83,20 @@
                     password: this.mailPassword
                 }
                 this.updateConfigs(mailCmd)
-                console.log(this.smtpServerAddress)
             }
+        },
+        created() {
+            const config = this.getConfigs();
+            this.mailAccount = this.configs.mailAccount
+            console.log(this.mailAccount)
+            console.log('hallo')
+            this.smtpPort = this.configs.smtpPort
+            console.log(this.smtpPort)
+            this.mailAccount = config.mailAccount
+        },
+        async mounted() {
+            await this.getConfigs();
+            console.log(this.configs.smtpPort)
         }
     }
 </script>
