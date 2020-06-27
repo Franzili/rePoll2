@@ -418,4 +418,32 @@ public class Poll extends Auditable<User> {
             section.sortQuestions();
         }
     }
+
+    public String getAsHumanReadable() {
+
+        StringBuilder sectionsWithQuestions = new StringBuilder();
+
+        for (PollSection section : pollSections) {
+            sectionsWithQuestions.append(section.getTitle());
+            sectionsWithQuestions.append(": ");
+            sectionsWithQuestions.append("\n");
+            for (Question q : section.getQuestions()) {
+                sectionsWithQuestions.append(q.getTitle());
+                sectionsWithQuestions.append(", ");
+            }
+            if (section.getQuestions().isEmpty()) {
+                sectionsWithQuestions.append("\n");
+            } else {
+                //remove the last ','
+                sectionsWithQuestions.delete(sectionsWithQuestions.length() - 2, sectionsWithQuestions.length() - 1);
+                sectionsWithQuestions.append("\n \n");
+            }
+        }
+
+        return "Poll " + title + ":\n\n"
+            + "Id:        " + id + "\n"
+            + "Status:    " + status + "\n"
+            + "Anonymity: " + anonymity + "\n\n\n"
+            + "Questions:\n" + sectionsWithQuestions.toString() + "\n";
+    }
 }

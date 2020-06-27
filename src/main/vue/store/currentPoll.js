@@ -34,7 +34,8 @@ const currentPoll = {
          * The statistics belonging to that poll object.
          */
         statistics: [],
-        entries: []
+        entries: [],
+        tmpDownload: {}
     },
 
     getters: {
@@ -65,9 +66,9 @@ const currentPoll = {
          * for a given user with a provided user id
          * */
         entriesWithSections: (state) => {
-            return (userId) => {
+            return (participantId) => {
                 let res = [];
-                let userEntry = {entry: state.entries.find(entry => entry.user.id === userId)};
+                let userEntry = {entry: state.entries.find(entry => entry.participant.id === participantId)};
                 let associations = null;
                 let answers = [];       //used in MultiChoiceAnswer
 
@@ -160,7 +161,7 @@ const currentPoll = {
         entriesUserNames: state => {
             let res = [];
             state.entries.forEach(entry => {
-                let entryUser = {text: entry.user.username, value: entry.user.id};
+                let entryUser = {text: entry.participant.fullName, value: entry.participant.id};
                 res.push(entryUser)
             });
             return res;
@@ -273,6 +274,11 @@ const currentPoll = {
     },
 
     mutations: {
+
+        tmpDownloadSet(state, newDownload) {
+            state.testdownload = newDownload;
+        },
+
         /**
          * Sets the new current poll.
          */
@@ -606,9 +612,74 @@ const currentPoll = {
                 })
             })
         },
+
+        /**
+         * cmd has form: {pollId, type, format}
+         * */
+        download({commit, state}, cmd) {
+
+            cmd.id = state.poll.id;
+            console.log(state.poll);
+            return new Promise(((resolve, reject) => {
+                if (cmd.type === 'poll') {
+                    if (cmd.format === 'human') {
+                        api.poll.download(cmd).then((response) => {
+                            commit('tmpDownloadSet', response.data);
+                            let fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                            let fileLink = document.createElement('a');
+
+                            fileLink.href = fileURL;
+                            fileLink.setAttribute('download', state.poll.title + '.txt');
+                            document.body.appendChild(fileLink);
+
+                            fileLink.click();
+                            resolve(response.data);
+                        }).catch(function (error) {
+                            console.log(error);
+                            reject();
+                        })
+                    } else  if (cmd.format === 'json') {
+
+                        let pollSections = JSON.stringify(state.poll.pollSections);
+                        let pollQuestions = JSON.stringify(state.poll.questions);
+
+                        let res = '{ sections: ' + pollSections + ', questions: ' + pollQuestions + '}';
+
+                        commit('tmpDownloadSet', res);
+                        let fileURL = window.URL.createObjectURL(new Blob([res]));
+                        let fileLink = document.createElement('a');
+                        console.log(fileURL);
+
+                        fileLink.href = fileURL;
+                        fileLink.setAttribute('download', state.poll.title + '.json');
+                        document.body.appendChild(fileLink);
+
+                        fileLink.click();
+                        resolve(res);
+                    }
+                } else if (cmd.type === 'entries') {
+                    api.entries.list(cmd.id).then((response) => {
+                        let jsonEntries = JSON.stringify(response.data);
+                        commit('tmpDownloadSet', jsonEntries);
+                        let fileURL = window.URL.createObjectURL(new Blob([jsonEntries]));
+                        let fileLink = document.createElement('a');
+
+                        fileLink.href = fileURL;
+                        fileLink.setAttribute('download', state.poll.title + 'Entries.json');
+                        document.body.appendChild(fileLink);
+
+                        fileLink.click();
+                        resolve(jsonEntries);
+                    }).catch(function (error) {
+                        console.log(error);
+                        reject();
+                    })
+                }
+            }))
+        }
     },
 
     namespaced: true
-}
+};
 
 export default currentPoll;

@@ -8,6 +8,7 @@
             <div class="sticky-offset sticky-top">
                 <QuestionPalette></QuestionPalette>
             </div>
+            <!-- <Upload></Upload> -->
         </b-col>
 
         <b-col class="editor-column">
