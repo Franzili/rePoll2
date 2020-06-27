@@ -5,6 +5,13 @@
     <b-container
         :style="'font-family:' + poll.design.font + ';color:' + poll.design.textColour + ';background-color:' + poll.design.backgroundColour"
         v-if="loaded">
+
+        <b-container :align="poll.design.logoPosition">
+            <b-img
+                :src="poll.design.logo">
+            </b-img>
+        </b-container>
+
         <ul class="poll-main-view">
             <PollItem v-for="item in pollStructure"
                       v-bind:key="item.id"
