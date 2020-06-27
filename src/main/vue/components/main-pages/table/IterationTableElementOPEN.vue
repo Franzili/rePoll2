@@ -64,7 +64,7 @@
                     end: this.timestamp,
                     status: 'CLOSED'
                 }
-                this.updateIteration(pollIterationCmd);
+                this.updateIteration(this.iteration.id, pollIterationCmd)
                 /*let pollCmd = {
                     id: this.pollId,
                     status: 'READY'

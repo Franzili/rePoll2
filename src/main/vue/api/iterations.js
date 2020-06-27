@@ -13,7 +13,7 @@ export default {
     removeIter(pollId, iterId) {
         return axios.delete('api/v1/polls/' + pollId + '/iterations/' + iterId + '/');
     },
-    updateIter(pollId, pollIterationCmd) {
-        return axios.put('/api/v1/polls/' + pollId + '/iterations/' + pollIterationCmd.id + '/', pollIterationCmd);
+    updateIter(pollId,id,  pollIterationCmd) {
+        return axios.put('/api/v1/polls/' + pollId + '/iterations/' + id + '/', pollIterationCmd);
     }
 }
