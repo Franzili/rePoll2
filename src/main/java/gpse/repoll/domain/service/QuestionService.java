@@ -11,6 +11,8 @@ import java.util.UUID;
  */
 public interface QuestionService {
 
+    void save(Question question);
+
     /**
      * Add a new TextQuestion to a Poll.
      * @param pollId The Poll's ID
@@ -52,6 +54,7 @@ public interface QuestionService {
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
+     * @param numberOfBonusChoices the highest possible amount of choices for the question
      * @param displayVariant The display variant
      * @return The newly created SingleChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
@@ -61,6 +64,7 @@ public interface QuestionService {
             String questionTitle,
             Integer questionOrder,
             List<Choice> choices,
+            Integer numberOfBonusChoices,
             String displayVariant);
 
     /**
@@ -69,6 +73,7 @@ public interface QuestionService {
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
+     * @param numberOfBonusChoices the highest possible amount of choices for the question
      * @return The newly created MultiChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
      */
@@ -76,7 +81,8 @@ public interface QuestionService {
             UUID pollId,
             String questionTitle,
             Integer questionOrder,
-            List<Choice> choices);
+            List<Choice> choices,
+            Integer numberOfBonusChoices);
 
     /**
      * Gets all Questions belonging to a Poll.
@@ -147,6 +153,7 @@ public interface QuestionService {
      * @param questionOrder The order for the Questions
      * @param questionTitle The title of the Question
      * @param choices The possible answers
+     * @param numberOfBonusChoices the highest possible amount of choices for the question
      * @return The changed SingleChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
@@ -156,7 +163,9 @@ public interface QuestionService {
             Long questionId,
             Integer questionOrder,
             String questionTitle,
-            List<Choice> choices);
+            List<Choice> choices,
+            Integer numberOfBonusChoices);
+
     /**
      * Update a MultiChoiceQuestion.
      * @param pollId The Poll's ID
@@ -164,6 +173,7 @@ public interface QuestionService {
      * @param questionTitle The title of the Question
      * @param questionOrder The order for the Questions
      * @param choices The possible answers
+     * @param numberOfBonusChoices the highest possible amount of choices for the question
      * @return The changed MultiChoiceQuestion
      * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
      * could not be found.
@@ -173,7 +183,8 @@ public interface QuestionService {
             Long questionId,
             Integer questionOrder,
             String questionTitle,
-            List<Choice> choices);
+            List<Choice> choices,
+            Integer numberOfBonusChoices);
 
     /**
      * Remove a Question.
@@ -183,4 +194,8 @@ public interface QuestionService {
      * not be found.
      */
     void removeQuestion(UUID pollId, Long questionId);
+
+    void addBonusChoice(UUID pollID, Long questionID, Choice bonusChoice);
+
+    void addAllBonusChoices(UUID pollID, Long questionID, List<Choice> bonusChoices);
 }

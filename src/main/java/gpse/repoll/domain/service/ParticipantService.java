@@ -6,6 +6,8 @@ import java.util.UUID;
 
 public interface ParticipantService {
 
+    void save(Participant participant);
+
     /**
      * Gets all Participants from a poll.
      * @param pollId is the poll ID

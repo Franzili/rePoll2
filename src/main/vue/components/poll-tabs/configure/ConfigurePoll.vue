@@ -3,6 +3,7 @@
         <p>
             <Anonymity></Anonymity>
         </p>
+
         <p>
             <SelectStatus></SelectStatus>
         </p>
@@ -16,6 +17,10 @@
         </p>
 
         <p>
+            <Download></Download>
+        </p>
+
+        <p>
             <DeletePoll></DeletePoll>
         </p>
     </div>
@@ -26,11 +31,14 @@
     import ManageParticipants from "./ManageParticipants";
     import DeletePoll from "./DeletePoll";
     import Anonymity from "./Anonymity";
-    import Iteration from "./Iteration";
+
+    import Download from "./Download";
+        import Iteration from "./Iteration";
 
     export default {
         name: "ConfigurePoll",
-        components: {Anonymity, SelectStatus, ManageParticipants, DeletePoll, Iteration }
+        components: {Download, Anonymity, SelectStatus, ManageParticipants, DeletePoll, Iteration }
+
     }
 </script>
 

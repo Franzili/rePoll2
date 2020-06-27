@@ -4,10 +4,21 @@ import gpse.repoll.web.command.answers.AnswerCmd;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class PollEntryCmd {
 
-    private Map<Long, AnswerCmd> answers = new HashMap<>();
+    private UUID participantID;
+
+    private final Map<Long, AnswerCmd> answers = new HashMap<>();
+
+    public UUID getParticipantID() {
+        return participantID;
+    }
+
+    public void setParticipantID(UUID participantID) {
+        this.participantID = participantID;
+    }
 
     public Map<Long, AnswerCmd> getAnswers() {
         return answers;
