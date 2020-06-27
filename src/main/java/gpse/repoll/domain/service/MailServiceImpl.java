@@ -5,9 +5,11 @@ import gpse.repoll.domain.repositories.MailConfigRepository;
 import gpse.repoll.domain.repositories.UserRepository;
 import gpse.repoll.mails.MailConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Optional;
+import java.util.Properties;
 
 /**
  * Default implementation of MailService.
@@ -23,6 +26,7 @@ import java.util.Optional;
 @Component
 public class MailServiceImpl implements MailService {
 
+    private static final String TRUE = "true";
     private static final String EMAIL_SENT = "Email Sent!";
     private static final String FAILURE = "Failure!\nThe Mail could not be sent";
     private static final String INVALID_MAIL_ADDRESS = "Invalid E-Mail address";
@@ -36,6 +40,36 @@ public class MailServiceImpl implements MailService {
     public MailServiceImpl(UserRepository userRepository, MailConfigRepository mailConfigRepository) {
         this.userRepository = userRepository;
         this.mailConfigRepository = mailConfigRepository;
+    }
+
+    /**
+     * Bean that sends a Mail.
+     * @return JavaMailSender object that is sending the Mail.
+     */
+    @Bean
+    public JavaMailSender getJavaMailSender() {
+        MailConfig mailConfig;
+        if (mailConfigRepository.findById(0L).isPresent()) {
+            mailConfig = mailConfigRepository.findById(0L).get();
+        } else {
+            mailConfig = null;
+        }
+
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        assert mailConfig != null;
+        mailSender.setHost(mailConfig.getHostServer());
+        mailSender.setPort(mailConfig.getPort());
+
+        mailSender.setUsername(mailConfig.getSendersAddress());
+        mailSender.setPassword(mailConfig.getSenderPassword());
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", TRUE);
+        props.put("mail.smtp.starttls.enable", TRUE);
+        props.put("mail.debug", TRUE);
+
+        return mailSender;
     }
 
     /**
@@ -76,8 +110,7 @@ public class MailServiceImpl implements MailService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(eMail);
             message.setSubject("Welcome to RePoll!");
-            message.setText("This is your temporary password for rePoll: " + password
-                + " Please change your password as far as possible.");
+            message.setText("This is your password for rePoll: " + password);
 
             // Send Message!
             try {

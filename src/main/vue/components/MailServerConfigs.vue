@@ -75,28 +75,21 @@
                 getConfigs: 'getConfigs'
                 }
             ),
-            setServerAddress() {
+            async setServerAddress() {
                 let mailCmd = {
                     smtpServerAddress: this.smtpServerAddress,
                     smtpPort: this.smtpPort,
                     account: this.mailAccount,
                     password: this.mailPassword
                 }
-                this.updateConfigs(mailCmd)
+                await this.updateConfigs(mailCmd)
             }
         },
-        created() {
-            const config = this.getConfigs();
-            this.mailAccount = this.configs.mailAccount
-            console.log(this.mailAccount)
-            console.log('hallo')
-            this.smtpPort = this.configs.smtpPort
-            console.log(this.smtpPort)
-            this.mailAccount = config.mailAccount
-        },
         async mounted() {
+            console.log("hallo")
             await this.getConfigs();
-            console.log(this.configs.smtpPort)
+
+
         }
     }
 </script>

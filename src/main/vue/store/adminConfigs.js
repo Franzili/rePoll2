@@ -6,7 +6,7 @@ const adminConfigs = {
     },
     mutations: {
         updateConfigs(state, config) {
-            state.configs.push(config)
+            state.configs = config
         },
         loadConfigs(state, config) {
             state.configs = config

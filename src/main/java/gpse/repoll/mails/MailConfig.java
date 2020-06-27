@@ -20,7 +20,6 @@ import java.util.UUID;
 @Configuration
 public class MailConfig {
 
-    private static final String TRUE = "true";
     private static final int PORT = 587;
 
     @Id
@@ -41,28 +40,6 @@ public class MailConfig {
 
     public MailConfig() {
 
-    }
-
-    /**
-     * Bean that sends a Mail.
-     * @return JavaMailSender object that is sending the Mail.
-     */
-    @Bean
-    public JavaMailSender getJavaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(hostServer);
-        mailSender.setPort(port);
-
-        mailSender.setUsername(sendersAddress);
-        mailSender.setPassword(senderPassword);
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", TRUE);
-        props.put("mail.smtp.starttls.enable", TRUE);
-        props.put("mail.debug", TRUE);
-
-        return mailSender;
     }
 
     public Long getId() {
