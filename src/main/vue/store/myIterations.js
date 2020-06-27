@@ -116,7 +116,7 @@ const myIterations = {
                 })
             }*/
             return new Promise((resolve, reject) => {
-                api.iteration.removeIter(rootState.currentPoll.poll.id, id).then(function (res) {
+                api.iterations.removeIter(rootState.currentPoll.poll.id, id).then(function (res) {
                     //commit('currentIteration/set', {}, {root: true})
                     commit('delete', id);
                     dispatch('load')
@@ -136,7 +136,7 @@ const myIterations = {
                 return;
             }
             return new Promise((resolve, reject) => {
-                api.iterations.update(rootState.currentPoll.poll.id, pollIterationCmd).then(function (res) {
+                api.iterations.updateIter(rootState.currentPoll.poll.id, pollIterationCmd).then(function (res) {
                     commit('update', res.data);
                     dispatch('load')
                     resolve(res.data);
