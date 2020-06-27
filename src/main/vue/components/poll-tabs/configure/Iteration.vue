@@ -19,24 +19,26 @@
             <form ref="launchForm" @submit.stop.prevent="handleSubmitLaunch">
                 <b-form-group
                     :state="launchState"
-                    label="Expiration Date for Iteration"
+                    label="For expiration, select date und enter time like HH:MM AM/PM"
                     label-for="endDatumInput"
                     invalid-feedback="Expiration Date is required"
                 >
                     <b-form-input
-                        id="launch-date-input"
+                        id="end-date-input"
                         v-model="dateEnde"
                         :state="launchState"
-                        label
+                        label="expiration date"
+                        label-for="end-date-input"
                         type="date"
                         min="2020-07-01T00:00:00"
                         required>
                     </b-form-input>
                     <b-form-input
-                        id="launch-date-input"
+                        id="end-time-input"
                         v-model="timeEnde"
                         :state="launchState"
-                        label
+                        label="expiration time"
+                        label-for="end-time-input"
                         type="time"
                         required>
                     </b-form-input>
@@ -58,41 +60,47 @@
             <form ref="scheduleForm" @submit.stop.prevent="handleSubmitSchedule">
                 <b-form-group
                     :state="scheduleState"
-                    label="Start and Expiration Date for Iteration"
+                    label="Select date und enter time like HH:MM AM/PM"
                     label-for="endDatumInput"
                     invalid-feedback="Expiration Date is required"
                 >
+                    Start Date and Time
                     <b-form-input
                         id="launch-date-input"
                         v-model="dateStart"
                         :state="launchState"
-                        label
+                        label="start date"
+                        label-for="start-date-input"
                         type="date"
                         min="2020-07-01T00:00:00"
                         required>
                     </b-form-input>
                     <b-form-input
-                        id="launch-date-input"
+                        id="launch-time-input"
                         v-model="timeStart"
                         :state="launchState"
-                        label
+                        label="start time"
+                        label-for="start-time-input"
                         type="time"
                         required>
                     </b-form-input>
+                    Expiration Date and Time
                     <b-form-input
-                        id="launch-date-input"
+                        id="end-date-input"
                         v-model="dateEnde"
                         :state="launchState"
-                        label
+                        label="expiration date"
+                        label-for="end-date-input"
                         type="date"
                         min="2020-07-01T00:00:00"
                         required>
                     </b-form-input>
                     <b-form-input
-                        id="launch-date-input"
+                        id="end-time-input"
                         v-model="timeEnde"
                         :state="launchState"
-                        label
+                        label="expiration time"
+                        label-for="end-time-input"
                         type="time"
                         required>
                     </b-form-input>
@@ -152,24 +160,26 @@
                 <form ref="launchForm" @submit.stop.prevent="handleSubmitLaunch">
                     <b-form-group
                         :state="launchState"
-                        label="Expiration Date for Iteration"
+                        label="For expiration, select date und enter time like HH:MM AM/PM"
                         label-for="endDatumInput"
                         invalid-feedback="Expiration Date is required"
                     >
                         <b-form-input
-                            id="launch-date-input"
+                            id="end-date-input"
                             v-model="dateEnde"
                             :state="launchState"
-                            label
+                            label="expiration date"
+                            label-for="end-date-input"
                             type="date"
                             min="2020-07-01T00:00:00"
                             required>
                         </b-form-input>
                         <b-form-input
-                            id="launch-date-input"
+                            id="end-time-input"
                             v-model="timeEnde"
                             :state="launchState"
-                            label
+                            label="expiration time"
+                            label-for="end-time-input"
                             type="time"
                             required>
                         </b-form-input>
@@ -187,41 +197,47 @@
             <form ref="scheduleForm" @submit.stop.prevent="handleSubmitSchedule">
                 <b-form-group
                     :state="scheduleState"
-                    label="Start and Expiration Date for Iteration"
+                    label="Select date und enter time like HH:MM AM/PM"
                     label-for="endDatumInput"
                     invalid-feedback="Expiration Date is required"
                 >
+                    Start Date and Time
                     <b-form-input
                         id="launch-date-input"
                         v-model="dateStart"
                         :state="launchState"
-                        label
+                        label="start date"
+                        label-for="start-date-input"
                         type="date"
                         min="2020-07-01T00:00:00"
                         required>
                     </b-form-input>
                     <b-form-input
-                        id="launch-date-input"
+                        id="launch-time-input"
                         v-model="timeStart"
                         :state="launchState"
-                        label
+                        label="start time"
+                        label-for="start-time-input"
                         type="time"
                         required>
                     </b-form-input>
+                    Expiration Date and Time
                     <b-form-input
-                        id="launch-date-input"
+                        id="end-date-input"
                         v-model="dateEnde"
                         :state="launchState"
-                        label
+                        label="expiration date"
+                        label-for="end-date-input"
                         type="date"
                         min="2020-07-01T00:00:00"
                         required>
                     </b-form-input>
                     <b-form-input
-                        id="launch-date-input"
+                        id="end-time-input"
                         v-model="timeEnde"
                         :state="launchState"
-
+                        label="expiration time"
+                        label-for="end-time-input"
                         type="time"
                         required>
                     </b-form-input>
