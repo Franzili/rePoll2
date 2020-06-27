@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.Optional;
 
 /**
  * Default implementation of MailService.
@@ -85,11 +86,17 @@ public class MailServiceImpl implements MailService {
     }
 
     public MailConfig setHostServer(String smtpServerAddress, int port, String account, String password) {
-        MailConfig mailConfig = new MailConfig();
-        mailConfig.setHostServer(smtpServerAddress);
-        mailConfig.setPort(port);
-        mailConfig.setSendersAddress(account);
-        mailConfigRepository.save(mailConfig);
-        return mailConfig;
+        Optional<MailConfig> mailConfigOptional = mailConfigRepository.findById(0L);
+        if (mailConfigOptional.isPresent()) {
+            MailConfig mailConfig = mailConfigOptional.get();
+            mailConfig.setId(0L);
+            mailConfig.setHostServer(smtpServerAddress);
+            mailConfig.setPort(port);
+            mailConfig.setSendersAddress(account);
+            mailConfigRepository.save(mailConfig);
+            return mailConfig;
+        } else {
+            return null;
+        }
     }
 }

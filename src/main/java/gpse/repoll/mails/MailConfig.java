@@ -23,8 +23,7 @@ public class MailConfig {
     private static final int PORT = 587;
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    UUID id;
+    Long id = 0L;
 
     @Column
     private int port = PORT;
@@ -65,11 +64,11 @@ public class MailConfig {
         return mailSender;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
