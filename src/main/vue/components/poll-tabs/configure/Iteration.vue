@@ -121,7 +121,7 @@
 
 
             <p>
-                <b-button v-if="poll.status !== 'LAUNCHED'" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
+                <b-button v-if="iterRunning === false" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
             </p>
             <div class="row">
                 <div class="list-group" id="IterationOPEN" role="tablist" v-bind:key="iteration.id" v-for="iteration in iterations">
@@ -277,6 +277,7 @@
                 dateEnde: "",
                 timeStart: '',
                 timeEnde: '',
+                iterRunning: false, //TODO automatically change between true/false whether iteration is open
                 loaded: false,
                 types: [
                     'date',
@@ -332,8 +333,9 @@
                     end: new Date(this.ende),
                     status: 'OPEN'
                 }
-                if (pollIterationCmd.start < pollIterationCmd.end) {
+                if (pollIterationCmd.start <= pollIterationCmd.end) {
                     this.createIteration(pollIterationCmd);
+                    this.iterRunning = true
                     let pollCmd = {
                         id: this.pollId,
                         status: 'LAUNCHED' //'READY'
@@ -362,7 +364,7 @@
                     end: new Date(this.ende),
                     status: 'SCHEDULED'
                 }
-                if (pollIterationCmd.start < pollIterationCmd.end) {
+                if (pollIterationCmd.start <= pollIterationCmd.end) {
                     this.createIteration(pollIterationCmd);
                     let pollCmd = {
                         id: this.pollId,
