@@ -21,21 +21,22 @@
                                    v-on:valueChanged="model.title = $event"/>
                 </span>
 
-                <span
-                    :style="'color:' + poll.design.textColour"
-                    v-if="editable">
-                    <b-button-group size="sm">
+                <span v-if="editable">
+                    <b-button-group
+                        size="sm">
                         <!-- edit button -->
-                        <b-button variant="outline-secondary" v-if="!editing"
+                        <b-button :style="';color:' + poll.design.textColour + ';border-color:' + poll.design.textColour"
+                            variant="outline-secondary" v-if="!editing"
                                                               @click="setEditing(true)">
                             <b-icon-pencil/>
                         </b-button>
-                        <b-button variant="outline-secondary" v-else
-                                                              @click="setEditing(false)">
+                        <b-button :style="';color:' + poll.design.textColour + ';border-color:' + poll.design.textColour"
+                            variant="outline-secondary" v-else @click="setEditing(false)">
                             <b-icon-check/>
                         </b-button>
 
-                        <b-button variant="outline-secondary" @click="remove">
+                        <b-button :style="';color:' + poll.design.textColour + ';border-color:' + poll.design.textColour"
+                            variant="outline-secondary" @click="remove">
                             <b-icon-trash/>
                         </b-button>
 
@@ -44,7 +45,8 @@
 
                 <span v-if="editable">
                     <!-- grab handle -->
-                    <div class="btn btn-sm btn-outline-secondary handle" size="sm">
+                    <div :style="';color:' + poll.design.textColour + ';border-color:' + poll.design.textColour"
+                        class="btn btn-sm btn-outline-secondary handle" size="sm">
                         <b-icon-arrow-up-down />
                     </div>
                 </span>

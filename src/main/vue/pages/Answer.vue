@@ -27,8 +27,7 @@
         </ul>
 
         <b-button
-            style="margin-bottom: 20px"
-            variant="primary"
+            :style="'margin-bottom: 20px;background-color:' + poll.design.textColour + ';color:' + poll.design.backgroundColour + ';border-color:' + poll.design.textColour"
             v-on:click="answerPoll">Save</b-button>
         <!--
         Submit Button for later
