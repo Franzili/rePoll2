@@ -30,8 +30,8 @@ public class Design {
 
     public Design() {
         this.font = "Arial";
-        this.textColour = "#000000FF";
-        this.backgroundColour = "#FFFFFFFF";
+        this.textColour = "#000000";
+        this.backgroundColour = "#ffffff";
         this.logoPosition = "left";
         this.logo="";
     }

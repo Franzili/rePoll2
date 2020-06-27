@@ -6,8 +6,12 @@
         :style="'font-family:' + poll.design.font + ';color:' + poll.design.textColour + ';background-color:' + poll.design.backgroundColour"
         v-if="loaded">
 
-        <b-container :align="poll.design.logoPosition">
+
+        <b-container
+            :align="poll.design.logoPosition">
             <b-img
+                style="margin-top: 20px"
+                height="200px"
                 :src="poll.design.logo">
             </b-img>
         </b-container>
@@ -22,7 +26,10 @@
             />
         </ul>
 
-        <b-button variant="primary" v-on:click="answerPoll">Save</b-button>
+        <b-button
+            style="margin-bottom: 20px"
+            variant="primary"
+            v-on:click="answerPoll">Save</b-button>
         <!--
         Submit Button for later
         Final Submit, then answers can't be edited anymore

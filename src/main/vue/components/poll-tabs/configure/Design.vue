@@ -4,65 +4,95 @@
         <b-card>
             <h6>Design</h6>
 
-            <!-- TODO height of v-app       style="max-height: 470px"-->
+
+                <b-card>
+                    <b-row>
+                        <b-col>
+
+                            <!-- text colour -->
+                            <h6>Text</h6>
+                            <p>Colour:</p>
+                            <b-form-input
+                                v-model="selectedTextColour"
+                                type="color">
+                            </b-form-input>
+
+                            <p></p>
+
+                            <!-- font -->
+                            <p>Font:</p>
+                            <b-form-select :style="'font-family:' + this.selectedFont.valueOf()"
+                                           v-model="selectedFont"
+                                           :options="fonts">
+                            </b-form-select>
 
 
-            <b-row>
 
-                <b-col>
-                    <b-card>
+                        </b-col>
 
-                        <!-- text colour -->
-                        <h6>Text</h6>
-                        <p>Colour:</p>
-                        <b-form-input
-                            v-model="this.selectedTextColour"
-                            type="color">
-                        </b-form-input>
+                        <b-col>
 
-                        <p></p>
+                            <!-- background colour -->
+                            <h6>Background</h6>
+                            <p>Colour:</p>
 
-                        <!-- font -->
-                        <p>Font:</p>
-                        <b-form-select :style="'font-family:' + this.selectedFont.valueOf()"
-                                       v-model="selectedFont"
-                                       :options="fonts">
-                            <!-- <template v-slot:first> -->
-                            <!--    <b-form-select-option value=''>Arial</b-form-select-option>-->
-                            <!--  </template> -->
-                        </b-form-select>
+                            <b-form-input
+                                v-model="selectedBackgroundColour"
+                                type="color">
+                            </b-form-input>
+
+                            <p></p>
 
 
-                    </b-card>
+                            <!-- Apply-Button -->
+                            <b-button
+                                style="margin-top: 30px"
+                                class="float-right"
+                                @click="saveDesign">
+                                Apply
+                            </b-button>
 
-                </b-col>
+                        </b-col>
 
-                <b-col>
-                    <b-card>
+                    </b-row>
 
-                        <!-- background colour -->
-                        <h6>Background</h6>
-                        <p>Colour:</p>
+                    <p></p>
 
-                        <b-form-input
-                            v-model="selectedBackgroundColour"
-                            type="color">
-                        </b-form-input>
 
-                    </b-card>
+                    <!-- Preview -->
+                    <h6>Preview</h6>
 
-                    <!-- Apply-Button -->
-                    <div>
-                        <b-button
-                            style="margin-top: 30px"
-                            class="float-right"
-                            @click="saveDesign">
-                            Apply
-                        </b-button>
-                    </div>
-                </b-col>
-            </b-row>
+                    <b-card-group>
+                        <b-card
+                            :style="'background-color:' + this.poll.design.backgroundColour
+                        + ';font-family:' + this.poll.design.font
+                        + ';color:' + this.poll.design.textColour"
+                            title="design of current poll">
+                            <b-card-text>
+                                This is the design of your poll.
+                            </b-card-text>
+                        </b-card>
+                        <b-card
+                            :style="'background-color:' + selectedBackgroundColour
+                        + ';font-family:' + selectedFont
+                        + ';color:' + selectedTextColour"
+                            title="new design">
+                            <b-card-text
+                                :style="'color:' + selectedTextColour + ';' + selectedFont">
+                                Are you sure you want to change it?
+                            </b-card-text>
+                        </b-card>
+                    </b-card-group>
 
+
+
+
+
+                </b-card>
+
+
+
+            <p></p>
 
 
             <!-- Logo -->
@@ -73,10 +103,10 @@
                     <b-col>
                         <!-- upload image -->
                         <b-form-file
+                            no-drop
                             accept="image/*"
                             v-model="selectedFile"
-                            placeholder="Choose a logo or drop it here..."
-                            drop-placeholder="Drop file here..."
+                            placeholder="Choose a logo ..."
                             @change="onFileSelected"
                         ></b-form-file>
 
@@ -84,7 +114,7 @@
 
 
                         <!-- logo's position -->
-                        <div v-if="selectedFile!==null && selectedFile!==''">
+                        <div v-if="fileBase64!==null && fileBase64!==''">
                             <h6>Position</h6>
                             <b-form-group>
                                 <b-form-radio v-model="selectedPosition" value="left">left</b-form-radio>
@@ -114,16 +144,23 @@
 
                     </b-col>
 
+
                     <b-col>
                         <b-card v-if="fileBase64==='' || fileBase64===null">
+                            <p></p>
                             <p align="center">no logo uploaded</p>
                         </b-card>
 
-                        <b-card-img
-                            v-if="fileBase64!==''"
-                            :src="this.fileBase64">
-                        </b-card-img>
 
+                        <b-container
+                            v-if="fileBase64!==''">
+                            <b-img
+                                center
+                                height="200px"
+                                alt="no logo uploaded"
+                                :src="this.fileBase64">
+                            </b-img>
+                        </b-container>
 
                     </b-col>
 
@@ -133,30 +170,7 @@
             </b-card>
 
 
-            <!-- Preview -->
-            <h6>Preview</h6>
 
-            <b-card-group>
-                <b-card
-                    :style="'background-color:' + this.poll.design.backgroundColour
-                        + ';font-family:' + this.poll.design.font
-                        + ';color:' + this.poll.design.textColour"
-                    title="design of current poll">
-                    <b-card-text>
-                        This is the design of your poll.
-                    </b-card-text>
-                </b-card>
-                <b-card
-                    :style="'background-color:' + selectedBackgroundColour
-                        + ';font-family:' + selectedFont
-                        + ';color:' + selectedTextColour"
-                    title="new design">
-                    <b-card-text
-                        :style="'color:' + selectedTextColour + ';' + selectedFont">
-                    Are you sure you want to change it?
-                    </b-card-text>
-                </b-card>
-            </b-card-group>
 
 
 
@@ -175,6 +189,7 @@
                 colorInput: '',
                 selectedFile: null,
                 fileBase64: "",
+                heightLogo: '220',
                 selectedPosition: '',
                 selectedTextColour: '',
                 selectedBackgroundColour: '',
@@ -220,7 +235,7 @@
                 this.updateDesign({design: designCmd, pollId: this.poll.id})
             },
             deleteLogo() {
-                this.selectedFile = '';
+                this.selectedFile = null;
                 this.fileBase64 = '';
                 let designCmd = {
                     logo: ''
@@ -228,7 +243,6 @@
                 this.updateDesign({design: designCmd, pollId: this.poll.id})
             },
             async onFileSelected(event) {
-                this.selectedFile = event.target.files[0]
 
                 function getBase64(file) {
                     return new Promise(function (resolve, reject) {
@@ -241,12 +255,14 @@
                     });
                 }
 
-                var promise = getBase64(this.selectedFile);
-                promise.then(function (result) {
-                    console.log(result);
-                });
+                if (event.target.files[0] != null) {
 
-                this.fileBase64 = await promise
+                    this.selectedFile = event.target.files[0]
+
+                    var promise = getBase64(this.selectedFile);
+
+                    this.fileBase64 = await promise
+                }
             },
 
             saveDesign() {
