@@ -49,15 +49,13 @@
                     tmpQ.id = -1;
                     this.questionsForPoll.push(tmpQ);
                 }
-
-                console.log(this.questionsForPoll);
             },
 
             async addToPoll() {
                 this.prepareQuestions();
 
                 let newPollStructure = this.pollStructure;
-                for (let i = 0; this.questionsForPoll.length; i++) {
+                for (let i = 0; i < this.questionsForPoll.length; i++) {
                     newPollStructure = this.pollStructure;
                     newPollStructure.push(this.questionsForPoll[i]);
                     await this.$store.dispatch('currentPoll/updateStructure', newPollStructure);
