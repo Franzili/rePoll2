@@ -24,14 +24,12 @@ import java.util.Optional;
 @Component
 public class MailServiceImpl implements MailService {
 
-    private static final String TRUE = "true";
     private static final String EMAIL_SENT = "Email Sent!";
     private static final String FAILURE = "Failure!\nThe Mail could not be sent";
     private static final String INVALID_MAIL_ADDRESS = "Invalid E-Mail address";
     private static final String HOST_SERVER = "smtp.gmail.com";
     private static final String INTERNET_ADDRESS = "repoll@gmail.com";
     private static final String MAIL_PASSWORD = "GutenTag";
-    private static final int PORT = 587;
     private final UserRepository userRepository;
     private final MailConfigRepository mailConfigRepository;
 
@@ -70,8 +68,6 @@ public class MailServiceImpl implements MailService {
      */
     @Override
     public String sendPwdGenMail(User user) {
-        MailSender mailSender = new MailSender(this.mailConfigRepository);
-        JavaMailSender sender = mailSender.getJavaMailSender();
             // Get the E-Mail address
             String eMail = user.getEmail();
             if (eMail == null) {
@@ -84,6 +80,8 @@ public class MailServiceImpl implements MailService {
             message.setTo(eMail);
             message.setSubject("Welcome to RePoll!");
             message.setText("This is your password for rePoll: " + password);
+            MailSender mailSender = new MailSender(this.mailConfigRepository);
+            JavaMailSender sender = mailSender.getJavaMailSender();
 
             // Send Message!
             try {
