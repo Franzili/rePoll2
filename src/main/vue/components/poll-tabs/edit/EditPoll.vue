@@ -18,18 +18,8 @@
                 <b-row style="min-height: 40vh; max-height: 40vh; overflow-y: auto;">
                     <Outline :poll-structure="pollStructure"></Outline>
                 </b-row>
-                <b-row align-h="center" style="max-height: 50vh">
-                    <b-col align-self="center"
-                           cols="10"
-                           class="border-top border-primary">
-                        <ConsistEdit></ConsistEdit>
-                    </b-col>
-                    <!--
-                    <b-card></b-card>
-                    -->
-                </b-row>
+                <ConsistEdit></ConsistEdit>
             </div>
-
         </b-col>
     </b-row>
 </template>

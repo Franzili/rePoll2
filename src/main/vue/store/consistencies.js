@@ -13,13 +13,10 @@ const consistencies = {
             state.currentConsist.push(newConsistency)
         },
         update(state, updConsistency) {
-            console.log('bevor update ',state.currentConsist)
-            let index = state.currentConsist.findIndex(consistency => consistency.id = updConsistency.id)
+            let index = state.currentConsist.findIndex(consistency => consistency.id === updConsistency.id)
             state.currentConsist[index] = updConsistency
-            console.log('danach update ',state.currentConsist)
-
         },
-        delete(state, constId) {
+        delete(state, constId) { // something does not work here
             let index = state.currentConsist.findIndex(consistency => consistency.id = constId)
             state.currentConsist.splice(index, 1)
         }
@@ -59,11 +56,11 @@ const consistencies = {
                 })
             })
         },
-        delete({commit/*, dispatch*/}, dltCmd) {
+        delete({/*commit, */dispatch}, dltCmd) {
             return new Promise((resolve, reject) => {
                 api.consistency.delete(dltCmd).then(function (res) {
-                    commit('delete', dltCmd.constId);
-                    //dispatch('load', dltCmd.pollId);
+                    //commit('delete', dltCmd.constId);
+                    dispatch('load', dltCmd.pollId); // better for reasons
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);
