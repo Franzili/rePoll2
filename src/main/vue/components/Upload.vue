@@ -16,7 +16,7 @@
             return {
                 test: {
                     type: "TextQuestion",
-                    id: 2065,
+                    id: -1,
                     title: "is this working?",
                     questionOrder: 1000,
                     charLimit: 255
@@ -47,7 +47,7 @@
                 let addedTestToPollStructure = this.pollStructure;
                 addedTestToPollStructure.push(this.test);
                 console.log(addedTestToPollStructure);
-                //this.$store.dispatch('currentPoll/updateStructure', addedTestToPollStructure);
+                this.$store.dispatch('currentPoll/updateStructure', addedTestToPollStructure);
                 //console.log(this.$store.getters["currentPoll/pollStructureFlat"]);
             }
         }
