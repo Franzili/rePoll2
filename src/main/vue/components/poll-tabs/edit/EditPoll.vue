@@ -17,7 +17,10 @@
 
         <b-col cols="3" class="sidebar">
             <div class="sticky-offset sticky-top">
-                <Outline :poll-structure="pollStructure"></Outline>
+                <b-row style="min-height: 40vh; max-height: 40vh; overflow-y: auto;">
+                    <Outline :poll-structure="pollStructure"></Outline>
+                </b-row>
+                <ConsistEdit></ConsistEdit>
             </div>
         </b-col>
     </b-row>
@@ -28,6 +31,7 @@
     import QuestionPalette from "./QuestionPalette";
     import PollMainView from "./PollMainView";
     import Outline from "../../Outline";
+    import ConsistEdit from "./ConsistEdit";
     export default {
         name: "EditPoll",
         computed: {
@@ -38,7 +42,11 @@
                 poll: 'poll',
             })
         },
-        components: {PollMainView, QuestionPalette, Outline},
+        components: {
+            ConsistEdit,
+            PollMainView,
+            QuestionPalette,
+            Outline},
     }
 </script>
 
@@ -55,6 +63,7 @@
     }
 
     .sidebar {
+        min-height: calc(100vh - 150px);
         background-color: $light;
         padding-top: 10px;
     }

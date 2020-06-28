@@ -26,7 +26,8 @@ const currentPoll = {
                 backgroundColour: '',
                 logoPosition: '',
                 logo: ''
-            }
+            },
+            pollConsistencyGroups: []
         },
         answers: [],
         pollAnswers: [],
@@ -199,7 +200,7 @@ const currentPoll = {
         getAnswerSetByID: (state) => {
             return (id) => {
                 let match = Object.entries((state.pollAnswers.find(answerSet => answerSet.question.id === id))
-                    .userAnswerMap)
+                    .participantAnswerMap)
                 let tableObj = []
                 if (match[0][1].type === 'TextAnswer') {
                     for (let i = 0; i < match.length; i++) {

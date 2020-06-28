@@ -6,6 +6,7 @@ import entries from "./entries";
 import "./httpLogger";
 import entry from "./entry";
 import design from "./design";
+import consistency from "./consistency";
 
 export default {
     auth,
@@ -14,5 +15,6 @@ export default {
     entry,
     entries,
     users,
-    design
+    design,
+    consistency
 }
