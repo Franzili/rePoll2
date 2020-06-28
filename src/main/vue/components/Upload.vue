@@ -3,7 +3,7 @@
         <UploadJSON v-on:uploadFinished="setQuestionsFromFile"></UploadJSON>
         <b-button class="mt-4" @click="addToPoll">Upload Test Question</b-button>
         <hr/>
-        <p>{{questionsFromFile}}</p>
+        <p>{{this.questionsFromFile}}</p>
     </div>
 </template>
 
@@ -21,8 +21,8 @@
                     questionOrder: 1000,
                     charLimit: 255
                 },
-                addedTestToPollStructure: [],
-                questionsFromFile: []
+                questionsFromFile: [],
+                questionsForPoll: []
             }
         },
         computed: {
@@ -38,17 +38,30 @@
         methods: {
 
             setQuestionsFromFile(data) {
-                console.log("test");
                 this.questionsFromFile = data;
             },
 
-            addToPoll() {
-                console.log(this.pollStructure);
-                let addedTestToPollStructure = this.pollStructure;
-                addedTestToPollStructure.push(this.test);
-                console.log(addedTestToPollStructure);
-                this.$store.dispatch('currentPoll/updateStructure', addedTestToPollStructure);
-                //console.log(this.$store.getters["currentPoll/pollStructureFlat"]);
+            prepareQuestions() {
+                let questionsFromFileJSON = JSON.parse(this.questionsFromFile);
+
+                for (let i = 0; i < questionsFromFileJSON.length; i++) {
+                    let tmpQ = questionsFromFileJSON[i];
+                    tmpQ.id = -1;
+                    this.questionsForPoll.push(tmpQ);
+                }
+
+                console.log(this.questionsForPoll);
+            },
+
+            async addToPoll() {
+                this.prepareQuestions();
+
+                let newPollStructure = this.pollStructure;
+                for (let i = 0; this.questionsForPoll.length; i++) {
+                    newPollStructure = this.pollStructure;
+                    newPollStructure.push(this.questionsForPoll[i]);
+                    await this.$store.dispatch('currentPoll/updateStructure', newPollStructure);
+                }
             }
         }
     }
