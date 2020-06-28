@@ -1,7 +1,5 @@
 package gpse.repoll.mails;
 
-import org.springframework.context.annotation.Configuration;
-
 import javax.mail.internet.InternetAddress;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +9,6 @@ import javax.persistence.Id;
  * Configuration class for Mails, generates a MailSender Bean.
  */
 @Entity
-@Configuration
 public class MailConfig {
 
     private static final int PORT = 587;

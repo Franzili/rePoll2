@@ -4,12 +4,11 @@ import gpse.repoll.domain.poll.User;
 import gpse.repoll.domain.repositories.MailConfigRepository;
 import gpse.repoll.domain.repositories.UserRepository;
 import gpse.repoll.mails.MailConfig;
+import gpse.repoll.mails.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,6 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Optional;
-import java.util.Properties;
 
 /**
  * Default implementation of MailService.
@@ -34,11 +32,8 @@ public class MailServiceImpl implements MailService {
     private static final String INTERNET_ADDRESS = "repoll@gmail.com";
     private static final String MAIL_PASSWORD = "GutenTag";
     private static final int PORT = 587;
-    private UserRepository userRepository;
-    private MailConfigRepository mailConfigRepository;
-
-    @Autowired
-    private JavaMailSender emailSender;
+    private final UserRepository userRepository;
+    private final MailConfigRepository mailConfigRepository;
 
     @Autowired
     public MailServiceImpl(UserRepository userRepository, MailConfigRepository mailConfigRepository) {
@@ -47,51 +42,13 @@ public class MailServiceImpl implements MailService {
     }
 
     /**
-     * Bean that sends a Mail.
-     * @return JavaMailSender object that is sending the Mail.
-     */
-    @Bean
-    public JavaMailSender getJavaMailSender() {
-        // ToDo: Recreate this bean when MailConfigs change
-        MailConfig mailConfig;
-        if (mailConfigRepository.findById(0L).isPresent()) {
-            mailConfig = mailConfigRepository.findById(0L).get();
-        } else {
-            mailConfig = new MailConfig();
-            mailConfig.setId(0L);
-            mailConfig.setHostServer(HOST_SERVER);
-            mailConfig.setPort(PORT);
-            try {
-                mailConfig.setSendersAddress(new InternetAddress(INTERNET_ADDRESS));
-            } catch (AddressException e) {
-                mailConfig.setSendersAddress(null);
-            }
-            mailConfig.setSenderPassword(MAIL_PASSWORD);
-            mailConfigRepository.save(mailConfig);
-        }
-
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(mailConfig.getHostServer());
-        mailSender.setPort(mailConfig.getPort());
-
-        mailSender.setUsername(mailConfig.getSendersAddress());
-        mailSender.setPassword(mailConfig.getSenderPassword());
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", TRUE);
-        props.put("mail.smtp.starttls.enable", TRUE);
-        props.put("mail.debug", TRUE);
-
-        return mailSender;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public String sendEmail(String to, String subject, String body) {
-        MimeMessage message = emailSender.createMimeMessage();
+        MailSender mailSender = new MailSender(this.mailConfigRepository);
+        JavaMailSender sender = mailSender.getJavaMailSender();
+        MimeMessage message = sender.createMimeMessage();
 
         // Send Message!
         try {
@@ -99,7 +56,7 @@ public class MailServiceImpl implements MailService {
             helper.setTo(InternetAddress.parse(to));
             helper.setSubject(subject);
             helper.setText(body);
-            this.emailSender.send(message);
+            sender.send(message);
             return EMAIL_SENT;
         } catch (MailException e) {
             return FAILURE;
@@ -113,6 +70,8 @@ public class MailServiceImpl implements MailService {
      */
     @Override
     public String sendPwdGenMail(User user) {
+        MailSender mailSender = new MailSender(this.mailConfigRepository);
+        JavaMailSender sender = mailSender.getJavaMailSender();
             // Get the E-Mail address
             String eMail = user.getEmail();
             if (eMail == null) {
@@ -128,7 +87,7 @@ public class MailServiceImpl implements MailService {
 
             // Send Message!
             try {
-                this.emailSender.send(message);
+                sender.send(message);
                 return EMAIL_SENT;
             } catch (MailException e) {
                 return FAILURE;
