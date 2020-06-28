@@ -593,13 +593,13 @@ const currentPoll = {
                         })
                     } else  if (cmd.format === 'json') {
 
-                        let pollSections = JSON.stringify(state.poll.pollSections);
+                        //let pollSections = JSON.stringify(state.poll.pollSections);
                         let pollQuestions = JSON.stringify(state.poll.questions);
 
-                        let res = '{ sections: ' + pollSections + ', questions: ' + pollQuestions + '}';
+                        //let res = '{ sections: ' + pollSections + ', questions: ' + pollQuestions + '}';
 
-                        commit('tmpDownloadSet', res);
-                        let fileURL = window.URL.createObjectURL(new Blob([res]));
+                        commit('tmpDownloadSet', pollQuestions);
+                        let fileURL = window.URL.createObjectURL(new Blob([pollQuestions]));
                         let fileLink = document.createElement('a');
                         console.log(fileURL);
 
@@ -608,7 +608,7 @@ const currentPoll = {
                         document.body.appendChild(fileLink);
 
                         fileLink.click();
-                        resolve(res);
+                        resolve(pollQuestions);
                     }
                 } else if (cmd.type === 'entries') {
                     api.entries.list(cmd.id).then((response) => {
