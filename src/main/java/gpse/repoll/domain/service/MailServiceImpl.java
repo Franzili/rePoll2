@@ -52,11 +52,15 @@ public class MailServiceImpl implements MailService {
         if (mailConfigRepository.findById(0L).isPresent()) {
             mailConfig = mailConfigRepository.findById(0L).get();
         } else {
-            mailConfig = null;
+            mailConfig = new MailConfig();
+            mailConfig.setId(0L);
+            mailConfig.setHostServer("");
+            mailConfig.setPort(0);
+            mailConfig.setSendersAddress(new InternetAddress());
+            mailConfig.setSenderPassword("");
         }
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        assert mailConfig != null;
         mailSender.setHost(mailConfig.getHostServer());
         mailSender.setPort(mailConfig.getPort());
 

@@ -4,13 +4,13 @@
             <b-row class="justify-content-md-center" style="margin-bottom: 5vh; text-align: center">
                 <h1>Mail Preferences</h1>
             </b-row>
-            <b-row class="justify-content-md-center">
+            <b-row class="justify-content-md-center" style="margin-bottom: 3vh">
                 <b-col col lg="2">
                     <div>
                         SMTP Server:
                     </div>
                 </b-col>
-                <b-col col lg="6">
+                <b-col col lg="4">
                     <div>
                         <b-form-input :placeholder="smtpServerAddress" v-model="smtpServerAddress">
                         </b-form-input>
@@ -23,17 +23,31 @@
                     </div>
                 </b-col>
             </b-row>
-            <b-row class="justify-content-md-center">
-                <div>
-                    <b-form-input :placeholder="mailAccount" v-model="mailAccount">
-                    </b-form-input>
-                </div>
+            <b-row class="justify-content-md-center" style="margin-bottom: 3vh">
+                <b-col col lg="2">
+                    <div>
+                        Mail Account:
+                    </div>
+                </b-col>
+                <b-col col lg="6">
+                    <div>
+                        <b-form-input :placeholder="mailAccount" v-model="mailAccount">
+                        </b-form-input>
+                    </div>
+                </b-col>
             </b-row>
-            <b-row class="justify-content-md-center">
-                <div>
-                    <b-form-input :placeholder="mailPassword" v-model="mailPassword">
-                    </b-form-input>
-                </div>
+            <b-row class="justify-content-md-center" style="margin-bottom: 3vh">
+                <b-col col lg="2">
+                    <div>
+                        Password:
+                    </div>
+                </b-col>
+                <b-col col lg="6">
+                    <div>
+                        <b-form-input :placeholder="mailPassword" v-model="mailPassword">
+                        </b-form-input>
+                    </div>
+                </b-col>
             </b-row>
             <b-row class="justify-content-md-center">
                 <b-col col lg="2">
@@ -58,10 +72,10 @@
         name: "MailServerConfigs",
         data() {
             return {
-                smtpServerAddress: '',
-                smtpPort: '',
-                mailAccount: '',
-                mailPassword: ''
+                smtpServerAddress: 'smtp.gmail.com',
+                smtpPort: '578',
+                mailAccount: 'repoll@gmail.com',
+                mailPassword: 'klsfp19n320'
             }
         },
         computed: {
