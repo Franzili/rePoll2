@@ -52,7 +52,10 @@
                 </b-col>
                 <b-col col lg="6">
                     <div>
-                        <b-form-input :placeholder="mailPassword" v-model="mailPassword">
+                        <b-form-input
+                            :placeholder="mailPassword"
+                            v-model="mailPassword"
+                            type="password">
                         </b-form-input>
                     </div>
                 </b-col>
