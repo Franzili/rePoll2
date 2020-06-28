@@ -102,6 +102,8 @@
         async mounted() {
             console.log("hallo")
             await this.getConfigs();
+            this.smtpServerAddress = this.configs.smtpServerAddress
+            this.smtpPort = this.configs.smtpPort
         }
     }
 </script>

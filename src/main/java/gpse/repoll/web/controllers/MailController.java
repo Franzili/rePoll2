@@ -6,23 +6,22 @@ import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.MailCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * REST Controller managing the endpoint /api/v1/configs/.
  */
-@Controller
+@RestController
 @Secured(Roles.ADMIN)
 @RequestMapping("/api/v1/")
 public class MailController {
 
     private static final String ACCOUNT = "zizimeyer4@gmail.com";
     private static final String TEST = "zizimeyer4@gmail.com,zizimeyer3@gmail.com";
-    MailService mailService;
+    private final MailService mailService;
 
     @Autowired
-    public MailController(MailService mailService) {
+    public MailController(final MailService mailService) {
         this.mailService = mailService;
     }
 

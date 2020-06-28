@@ -58,6 +58,7 @@ public class MailServiceImpl implements MailService {
             mailConfig.setPort(0);
             mailConfig.setSendersAddress(new InternetAddress());
             mailConfig.setSenderPassword("");
+            mailConfigRepository.save(mailConfig);
         }
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -125,6 +126,10 @@ public class MailServiceImpl implements MailService {
             }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean setHostServer(String smtpServerAddress, int port, String account, String password) {
         MailConfig mailConfig;
         if (mailConfigRepository == null) {
@@ -145,8 +150,25 @@ public class MailServiceImpl implements MailService {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public MailConfig getMailConfigs() {
         Optional<MailConfig> mailConfigOptional = mailConfigRepository.findById(0L);
-        return mailConfigOptional.orElse(null);
+        if (mailConfigOptional.isPresent()) {
+            return mailConfigOptional.get();
+        } else {
+            MailConfig mailConfig = new MailConfig();
+            mailConfig.setId(0L);
+            mailConfig.setHostServer("smtp.gmail.com");
+            mailConfig.setSenderPassword("GutenTag");
+            try {
+                mailConfig.setSendersAddress(new InternetAddress("repoll@gmail.com"));
+            } catch (AddressException e) {
+                return null;
+            }
+            return mailConfig;
+        }
     }
 }
