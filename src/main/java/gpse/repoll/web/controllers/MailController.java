@@ -27,7 +27,7 @@ public class MailController {
 
     @PostMapping("/configs/")
     public String setServerConfigs(@RequestBody final MailCmd mailCmd) {
-        if (mailService.setHostServer(
+        if (mailService.setServerConfigs(
             mailCmd.getSmtpServerAddress(), mailCmd.getSmtpPort(), mailCmd.getAccount(), mailCmd.getPassword())) {
             return "Changes Saved!";
         } else {

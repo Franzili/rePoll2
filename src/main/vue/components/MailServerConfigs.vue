@@ -72,10 +72,10 @@
         name: "MailServerConfigs",
         data() {
             return {
-                smtpServerAddress: 'smtp.gmail.com',
-                smtpPort: '578',
-                mailAccount: 'repoll@gmail.com',
-                mailPassword: 'kl?sfp19n3!20'
+                smtpServerAddress: '',
+                smtpPort: '',
+                mailAccount: '',
+                mailPassword: ''
             }
         },
         computed: {
@@ -100,10 +100,11 @@
             }
         },
         async mounted() {
-            console.log("hallo")
             await this.getConfigs();
-            this.smtpServerAddress = this.configs.smtpServerAddress
-            this.smtpPort = this.configs.smtpPort
+            this.smtpServerAddress = this.configs.hostServer.toString()
+            this.smtpPort = this.configs.port.toString()
+            this.mailAccount = this.configs.sendersAddress.toString()
+            this.mailPassword = this.configs.senderPassword.toString()
         }
     }
 </script>

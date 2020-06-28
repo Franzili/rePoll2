@@ -30,6 +30,10 @@ public class MailServiceImpl implements MailService {
     private static final String EMAIL_SENT = "Email Sent!";
     private static final String FAILURE = "Failure!\nThe Mail could not be sent";
     private static final String INVALID_MAIL_ADDRESS = "Invalid E-Mail address";
+    private static final String HOST_SERVER = "smtp.gmail.com";
+    private static final String INTERNET_ADDRESS = "repoll@gmail.com";
+    private static final String MAIL_PASSWORD = "GutenTag";
+    private static final int PORT = 587;
     private UserRepository userRepository;
     private MailConfigRepository mailConfigRepository;
 
@@ -48,16 +52,21 @@ public class MailServiceImpl implements MailService {
      */
     @Bean
     public JavaMailSender getJavaMailSender() {
+        // ToDo: Recreate this bean when MailConfigs change
         MailConfig mailConfig;
         if (mailConfigRepository.findById(0L).isPresent()) {
             mailConfig = mailConfigRepository.findById(0L).get();
         } else {
             mailConfig = new MailConfig();
             mailConfig.setId(0L);
-            mailConfig.setHostServer("");
-            mailConfig.setPort(0);
-            mailConfig.setSendersAddress(new InternetAddress());
-            mailConfig.setSenderPassword("");
+            mailConfig.setHostServer(HOST_SERVER);
+            mailConfig.setPort(PORT);
+            try {
+                mailConfig.setSendersAddress(new InternetAddress(INTERNET_ADDRESS));
+            } catch (AddressException e) {
+                mailConfig.setSendersAddress(null);
+            }
+            mailConfig.setSenderPassword(MAIL_PASSWORD);
             mailConfigRepository.save(mailConfig);
         }
 
@@ -130,7 +139,7 @@ public class MailServiceImpl implements MailService {
      * {@inheritDoc}
      */
     @Override
-    public boolean setHostServer(String smtpServerAddress, int port, String account, String password) {
+    public boolean setServerConfigs(String smtpServerAddress, int port, String account, String password) {
         MailConfig mailConfig;
         if (mailConfigRepository == null) {
             mailConfig = new MailConfig();
@@ -141,6 +150,7 @@ public class MailServiceImpl implements MailService {
         mailConfig.setId(0L);
         mailConfig.setHostServer(smtpServerAddress);
         mailConfig.setPort(port);
+        mailConfig.setSenderPassword(password);
         try {
             mailConfig.setSendersAddress(InternetAddress.parse(account)[0]);
         } catch (AddressException e) {
@@ -161,12 +171,12 @@ public class MailServiceImpl implements MailService {
         } else {
             MailConfig mailConfig = new MailConfig();
             mailConfig.setId(0L);
-            mailConfig.setHostServer("smtp.gmail.com");
-            mailConfig.setSenderPassword("GutenTag");
+            mailConfig.setHostServer(HOST_SERVER);
+            mailConfig.setSenderPassword(MAIL_PASSWORD);
             try {
-                mailConfig.setSendersAddress(new InternetAddress("repoll@gmail.com"));
+                mailConfig.setSendersAddress(new InternetAddress(INTERNET_ADDRESS));
             } catch (AddressException e) {
-                return null;
+                mailConfig.setSendersAddress(null);
             }
             return mailConfig;
         }

@@ -32,7 +32,7 @@ public interface MailService {
      * @param password The corresponding password.
      * @return true, if the input included a correct internet address.
      */
-    boolean setHostServer(String smtpServerAddress, int port, String account, String password);
+    boolean setServerConfigs(String smtpServerAddress, int port, String account, String password);
 
     /**
      * Returns the current Configurations for the SMTP Server.
