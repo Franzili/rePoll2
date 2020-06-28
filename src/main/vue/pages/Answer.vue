@@ -8,6 +8,7 @@
 
 
         <b-container
+            v-if="poll.design.logo!=='' && poll.design.logo!==null"
             :align="poll.design.logoPosition">
             <b-img
                 style="margin-top: 20px"

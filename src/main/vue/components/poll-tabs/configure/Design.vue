@@ -5,6 +5,7 @@
             <h6>Design</h6>
 
 
+            <p style="font-family: AnjaliOldLipi">hallo</p>
                 <b-card>
                     <b-row>
                         <b-col>
@@ -195,7 +196,9 @@
                 selectedBackgroundColour: '',
                 selectedFont: '',
                 fonts: [
+                    { value: 'AnjaliOldLipi', text: 'AnjaliOldLipi' },
                     { value: 'Arial', text: 'Arial' },
+                    { value: 'Chilanka', text: 'Chilanka' },
                     { value: 'Courier', text: 'Courier'},
                     { value: 'DejaVu', text: 'DejaVu'},
                     { value: 'DejaVu Math TeX Gyre', text: 'DejaVu Math TeX Gyre'},
@@ -206,12 +209,15 @@
                     { value: 'Georgia', text: 'Georgia'},
                     { value: 'Helvetica', text: 'Helvetica'},
                     { value: 'Latin Modern Math', text: 'Latin Modern Math'},
+                    { value: 'Manjari Regular', text: 'Manjari Regular' },
                     { value: 'Monospaced', text: 'Monospaced' },
+                    { value: 'Purisa', text: 'Purisa' },
                     { value: 'Ubuntu', text: 'Ubuntu'},
                     { value: 'Ubuntu Condensed', text: 'Ubuntu Condensed'},
                     { value: 'Ubuntu Light', text: 'UbuntuLight'},
                     { value: 'Ubuntu Mono', text: 'Ubuntu Mono'},
                     { value: 'SansSerif', text: 'SansSerif'},
+                    { value: 'TeX Gyre Schola Math', text: 'TeX Gyre Schola Math'},
                     { value: 'Times', text: 'Times'},
                     { value: 'Times New Roman', text: 'Times New Roman'},
                 ]
