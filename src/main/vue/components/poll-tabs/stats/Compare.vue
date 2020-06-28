@@ -10,6 +10,15 @@
                     ref="mymodal"
                 ></CheckModal>
 
+                <b-form-select style="max-width: 15rem; min-width: 15rem; margin-left: 3vw"
+                    v-model="consistSelected"
+                    :options="consistSelectOpt">
+                    <template v-slot:first>
+                        <b-form-select-option :value="null" disabled>consistency groups
+                        </b-form-select-option>
+                    </template>
+                </b-form-select>
+
                 <b-button v-if="cardList.length > 0"
                     class="float-right"
                     style="width: 50px;height: 50px;"
@@ -57,6 +66,9 @@
         data() {
             return {
                 cardList: [],
+                consistCards: [],
+                consistSelectOpt: [],
+                consistSelected: null,
                 isItem: false,
                 LIST_DELETE: 'Are you sure you want to delete every comparision?',
                 ITEM_DELETE: 'Are you sure you want to delete this comparision?'
@@ -64,7 +76,8 @@
         },
         computed: {
             ...mapState('currentPoll', {
-                statistics: 'statistics'
+                statistics: 'statistics',
+                poll: 'poll'
             }),
             //TODO only for show
             ...mapGetters('currentPoll', {
@@ -72,10 +85,22 @@
             })
         },
         created() {
-            //console.log('compre tab: ')
-            //console.log(this.getPollStructure)
+            this.getConsistencies()
+            this.cardList = this.consistCards
         },
         methods: {
+            getConsistencies() {
+                for (let i = 0; i < this.poll.pollConsistencyGroups.length; i++) {
+                    let group = this.poll.pollConsistencyGroups[i]
+                    let statSet = []
+                    group.questions.forEach(quest => {
+                        statSet.push(this.statistics.find(stat => stat.question.id === quest.id))
+                    })
+                    let cardObj = {id: Date.now() + Math.random(),compSet: statSet, showTitle: 'Consistency ' + (i+1)}
+                    this.consistSelectOpt.push({value: i, text: 'Consistency ' + (i+1)})
+                    this.consistCards.push(cardObj)
+                }
+            },
             showModal(list) {
                 this.$refs.mymodal.show(list)
             },
@@ -122,6 +147,13 @@
                 }).catch(err => {
                     console.log(err)
                 })
+            }
+        },
+        watch: {
+            consistSelected: function(val) {
+                if (!this.cardList.includes(this.consistCards[val])) {
+                    this.cardList.push(this.consistCards[val])
+                }
             }
         },
         components: {
