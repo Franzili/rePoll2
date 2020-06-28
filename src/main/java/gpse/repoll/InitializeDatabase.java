@@ -76,8 +76,8 @@ public class InitializeDatabase implements InitializingBean {
             } catch (UsernameNotFoundException e) {
                 final User user = userService.addUser(
                     "JamesBond",
-                    // Passwort: GutenTag
-                    "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                    "GutenTag",
+                    //"{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
                     "Bob", "jbond@mi6.com",
                         Roles.ADMIN
                 );
@@ -111,7 +111,8 @@ public class InitializeDatabase implements InitializingBean {
                 nobody = userService.addUser(
                         "Nemo",
                         // Passwort: GutenTag
-                        "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                        //"{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                        "GutenTag",
                         "Cpt Nemo",
                         "x@404.com",
                         Roles.POLL_CREATOR);

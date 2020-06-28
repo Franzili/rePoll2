@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,18 +24,21 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PollEntryRepository pollEntryRepository;
     private final PollEntryService pollEntryService;
-
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            MailService mailService,
                            PollService pollService,
                            PollEntryRepository pollEntryRepository,
+                           PasswordEncoder passwordEncoder,
                            PollEntryService pollEntryService) {
+
         this.pollService = pollService;
         this.mailService = mailService;
         this.userRepository = userRepository;
         this.pollEntryRepository = pollEntryRepository;
+        this.passwordEncoder = passwordEncoder;
         this.pollEntryService = pollEntryService;
     }
 
@@ -51,7 +56,8 @@ public class UserServiceImpl implements UserService {
 
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);
+        String enc = passwordEncoder.encode(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setFullName(fullName);
         user.setEmail(email);
         user.setRoles(role);

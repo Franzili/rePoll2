@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -39,10 +40,12 @@ public class UserServiceImplTest {
 
     private PollEntryService pollEntryService;
 
+    private PasswordEncoder passwordEncoder;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        userService = new UserServiceImpl(userRepository, mailService, pollService, pollEntryRepository, pollEntryService);
+        userService = new UserServiceImpl(userRepository, mailService, pollService, pollEntryRepository, passwordEncoder, pollEntryService);
     }
 
     @Test
