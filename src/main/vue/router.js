@@ -116,7 +116,8 @@ let router = new VueRouter({
             path: '/error/not-found',
             component: NotFound,
             meta: {
-                title: "Not found | RePoll"
+                title: "Not found | RePoll",
+                requiresPrivileges: 'ROLE_POLL_EDITOR'
             }
         },
         {
@@ -124,7 +125,8 @@ let router = new VueRouter({
             path: '/error/forbidden',
             component: Forbidden,
             meta: {
-                title: "Forbidden | RePoll"
+                title: "Forbidden | RePoll",
+                requiresPrivileges: 'ROLE_POLL_EDITOR'
             }
         },
         {

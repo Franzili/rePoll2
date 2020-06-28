@@ -50,11 +50,12 @@
         methods: {
             ...mapActions('auth', ['logout']),
             toStart() {
-                return this.$router.push('/');
+                return this.$router.push('/')
             },
             logOutUser: function () {
                 this.logout();
                 location.reload();
+                this.toStart();
             },
             doFunny() {
                 if (this.count === 10) {
