@@ -109,7 +109,9 @@ public class MailServiceImpl implements MailService {
         mailConfig.setPort(port);
         mailConfig.setSenderPassword(password);
         try {
-            mailConfig.setSendersAddress(InternetAddress.parse(account)[0]);
+            InternetAddress sendersAddress = InternetAddress.parse(account)[0];
+            sendersAddress.validate();
+            mailConfig.setSendersAddress(sendersAddress);
         } catch (AddressException e) {
             return false;
         }

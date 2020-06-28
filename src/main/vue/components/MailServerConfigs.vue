@@ -1,6 +1,14 @@
 <template>
-    <b-card>
+    <b-card style="margin-bottom: 5vh">
         <b-container>
+            <b-modal
+                centered
+                title="Server Configs"
+                id="setConfigs">
+                <p>
+                    {{ serverResponseConfigs }}
+                </p>
+            </b-modal>
             <b-row class="justify-content-md-center" style="margin-bottom: 5vh; text-align: center">
                 <h1>Mail Preferences</h1>
             </b-row>
@@ -56,7 +64,8 @@
                 </b-col>
                 <b-col col lg="6">
                     <b-button
-                    @click="setServerAddress">
+                        v-b-modal.setConfigs
+                        @click="setServerAddress">
                         Save Changes
                     </b-button>
                 </b-col>
@@ -75,7 +84,8 @@
                 smtpServerAddress: '',
                 smtpPort: '',
                 mailAccount: '',
-                mailPassword: ''
+                mailPassword: '',
+                serverResponseConfigs: ''
             }
         },
         computed: {
@@ -96,7 +106,7 @@
                     account: this.mailAccount,
                     password: this.mailPassword
                 }
-                await this.updateConfigs(mailCmd)
+                this.serverResponseConfigs = await this.updateConfigs(mailCmd)
             }
         },
         async mounted() {
