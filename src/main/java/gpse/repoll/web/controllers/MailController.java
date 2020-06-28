@@ -36,7 +36,7 @@ public class MailController {
         }
     }
 
-    @GetMapping("/configs/getMailConfigs/")
+    @RequestMapping("/configs/getMailConfigs/")
     public MailConfig getConfigs() {
         return mailService.getMailConfigs();
     }

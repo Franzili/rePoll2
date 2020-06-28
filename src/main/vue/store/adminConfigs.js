@@ -13,6 +13,9 @@ const adminConfigs = {
         }
     },
     actions: {
+        /**
+         * Update the Mail Configurations.
+         */
         updateConfigs({commit}, mailCmd) {
             console.log(mailCmd)
             return new Promise((resolve, reject) => {
@@ -25,6 +28,9 @@ const adminConfigs = {
                 })
             })
         },
+        /**
+         * Get the current configurations from the backend.
+         */
         getConfigs({commit}) {
             return new Promise((resolve, reject) => {
                 api.admin.getConfigs().then(function (res) {

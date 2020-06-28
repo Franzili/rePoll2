@@ -13,7 +13,9 @@ public class SerializeMailConfig extends JsonSerializer<MailConfig> {
     public void serialize(MailConfig mailConfig,
                           JsonGenerator jsonGenerator,
                           SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeString("{\nsmtpServerAddress: " + mailConfig.getHostServer() + ",\nsmtpPort: " + mailConfig.getPort()
-            + ",\naccount: " + mailConfig.getSendersAddress() + ",\npassword: " + mailConfig.getSenderPassword() + "\n}");
+        jsonGenerator.writeString(
+            "{\nsmtpServerAddress: " + mailConfig.getHostServer() + ",\nsmtpPort: " + mailConfig.getPort()
+            + ",\naccount: " + mailConfig.getSendersAddress() + ",\npassword: "
+                + mailConfig.getSenderPassword() + "\n}");
     }
 }

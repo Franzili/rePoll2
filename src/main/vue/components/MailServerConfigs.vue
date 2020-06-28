@@ -75,7 +75,7 @@
                 smtpServerAddress: 'smtp.gmail.com',
                 smtpPort: '578',
                 mailAccount: 'repoll@gmail.com',
-                mailPassword: 'klsfp19n320'
+                mailPassword: 'kl?sfp19n3!20'
             }
         },
         computed: {
@@ -102,8 +102,6 @@
         async mounted() {
             console.log("hallo")
             await this.getConfigs();
-
-
         }
     }
 </script>
