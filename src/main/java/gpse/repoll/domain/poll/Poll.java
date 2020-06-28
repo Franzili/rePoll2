@@ -6,6 +6,7 @@ import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.PollAlreadyLaunchedException;
 import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.poll.Design;
 import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,6 +34,9 @@ public class Poll extends Auditable<User> {
 
     @Column
     private Anonymity anonymity;
+
+    @OneToOne
+    private Design design;// = new Design(); //TODO
 
     @Column
     @Lob
@@ -70,6 +74,7 @@ public class Poll extends Auditable<User> {
         this.title = title;
         this.status = PollEditStatus.EDITING;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
+      //  this.design = new Design();
     }
 
     public Poll(Poll poll, List<PollSection> pollSections) {
@@ -98,6 +103,17 @@ public class Poll extends Auditable<User> {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+    public Design getDesign() {
+        return design;
+    }
+
+
+    public void setDesign(Design design) {
+        this.design = design;
+    }
+
+
 
     public UUID getId() {
         return id;
@@ -401,5 +417,33 @@ public class Poll extends Auditable<User> {
         for (PollSection section : pollSections) {
             section.sortQuestions();
         }
+    }
+
+    public String getAsHumanReadable() {
+
+        StringBuilder sectionsWithQuestions = new StringBuilder();
+
+        for (PollSection section : pollSections) {
+            sectionsWithQuestions.append(section.getTitle());
+            sectionsWithQuestions.append(": ");
+            sectionsWithQuestions.append("\n");
+            for (Question q : section.getQuestions()) {
+                sectionsWithQuestions.append(q.getTitle());
+                sectionsWithQuestions.append(", ");
+            }
+            if (section.getQuestions().isEmpty()) {
+                sectionsWithQuestions.append("\n");
+            } else {
+                //remove the last ','
+                sectionsWithQuestions.delete(sectionsWithQuestions.length() - 2, sectionsWithQuestions.length() - 1);
+                sectionsWithQuestions.append("\n \n");
+            }
+        }
+
+        return "Poll " + title + ":\n\n"
+            + "Id:        " + id + "\n"
+            + "Status:    " + status + "\n"
+            + "Anonymity: " + anonymity + "\n\n\n"
+            + "Questions:\n" + sectionsWithQuestions.toString() + "\n";
     }
 }

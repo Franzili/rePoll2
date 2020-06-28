@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :style="'font-family:' + poll.design.font + ';color:' + poll.design.textColour">
         <b-form-input v-if="!editing"
                       :maxlength="model.charLimit"
                       :placeholder="editable ? 'Enter some text...' : ''"
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+    import {mapState} from "vuex";
+
     export default {
         name: "TextQuestion",
         data() {
@@ -40,7 +42,11 @@
                     type: "TextAnswer",
                     text: this.answerText
                 }
-            }
+            },
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            })
+
         },
         props: {
             model: {

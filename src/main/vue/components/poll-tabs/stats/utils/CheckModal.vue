@@ -43,7 +43,7 @@
             id="warn-modal">
             For comparison purpose you will need at least two Questions.
         </b-modal>
-        <!--<div>Selected: <strong>{{ selected }}</strong></div> -->
+        <!--<div>Selected: <strong>{{ selected }}</strong></div>-->
     </b-modal>
 </template>
 
