@@ -89,8 +89,7 @@ const participants = {
                     reject(error);
                 })
             })
-        }
-
+        },
 
     },
     namespaced: true

@@ -3,35 +3,48 @@
         <!-- TODO: adapt type names to backend terminology -->
         <div v-if="poll.anonymity === 'NON_ANONYMOUS'">
             <h6>Participants: </h6>
-            <b-col cols="6">
-                <b-table
-                    show-empty
-                    small
-                    :items="this.participants"
-                    :fields="fields">
-                    <template v-slot:cell(name)="row">
-                        {{ row.value.fullName }}
-                    </template>
-                </b-table>
-                <p>
-                    <b-button class="float-right" variant="primary">+ Invite new</b-button>
-                </p>
-            </b-col>
+            <b-row>
+                <b-col cols="6">
+                    <p>
+                        <b-table
+                            show-empty
+                            small
+                            sticky-header="true"
+                            :items="this.participants"
+                            :fields="fields"
+                            :sort-desc.sync="sortDesc"
+                            :sort-direction="sortDirection">
+                            <template v-slot:cell(name)="row">
+                                {{ row.value.fullName }}
+                            </template>
+                        </b-table>
+                    </p>
+                    <p>
+                        <b-button class="float-right" variant="primary">+ Invite new</b-button>
+                    </p>
+                    <p>
+                        <UploadParticipants></UploadParticipants>
+                    </p>
+                </b-col>
 
-            <b-col cols="6">
-                <p>
-                    <b-row class="align-items-center">
-                        <b-col cols="6">
-                            {{ n_participated }} participated, <br/>
-                            {{ n_invites_pending }} invites pending.
-                        </b-col>
+                <b-col cols="6">
+                    <p>
+                        Known participants will receive a custom link to the poll automatically, when they are invited.
+                    </p>
+                    <p>
+                        <b-row class="align-items-center">
+                            <b-col cols="6">
+                                {{ n_participated }} participated, <br/>
+                                {{ n_invites_pending }} invites pending.
+                            </b-col>
 
-                        <b-col cols="6">
-                            <b-button class="float-right">Remind</b-button>
-                        </b-col>
-                    </b-row>
-                </p>
-            </b-col>
+                            <b-col cols="6">
+                                <b-button class="float-right">Remind</b-button>
+                            </b-col>
+                        </b-row>
+                    </p>
+                </b-col>
+            </b-row>
         </div>
 
 
@@ -129,9 +142,11 @@
 
 <script>
     import {mapState, mapActions} from "vuex";
+    import UploadParticipants from "./UploadParticipants";
 
     export default {
         name: "ManageParticipants",
+        components: {UploadParticipants},
 
         data() {
             return {
@@ -140,6 +155,8 @@
                 fields: [
                     { key: 'fullName', label: 'Fullname', sortable: true, sortDirection: 'desc' },
                     { key: 'email', label: 'Email', sortable: true, sortDirection: 'desc' }],
+                sortDesc: false,
+                sortDirection: 'asc',
 
                 //TODO
                 n_participated: 0,
@@ -170,7 +187,8 @@
             let id = this.$route.params.pollId;
             let domain = window.location.origin;
             this.link = domain + '/poll/' + id + '/answer';
-        }
+        },
+
     }
 </script>
 
