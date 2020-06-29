@@ -6,6 +6,7 @@ import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.repositories.ParticipantRepository;
 import gpse.repoll.domain.repositories.PollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public class ParticipantServiceImpl implements ParticipantService {
     private final ParticipantRepository participantRepository;
     private final PollRepository pollRepository;
     private final MailService mailService;
+
+    @Value("${repoll.serverAddress}")
+    private String serverPrefix;
 
     @Autowired
     public ParticipantServiceImpl(ParticipantRepository participantRepository,
@@ -53,7 +57,20 @@ public class ParticipantServiceImpl implements ParticipantService {
         Poll poll = pollRepository.findById(pollId).orElseThrow(NotFoundException::new);
         poll.addParticipant(participant);
         pollRepository.save(poll);
-        //mailService.sendEmail(email, "You have been invited to a poll!", )
+
+        if (email != null && !email.equals("")) {
+            String message = String.format(
+                "You were invited to participate in the poll %s.\n"
+                    + "Click the link below to participate:\n\n%s",
+                poll.getTitle(),
+                serverPrefix + "/answer/" + poll.getId() + "/" + participant.getId()
+            );
+            mailService.sendEmail(email, "You've been invited to a poll", message);
+
+            // TODO: to be removed when mails work again
+            System.out.println(message);
+        }
+
         return participant;
     }
 

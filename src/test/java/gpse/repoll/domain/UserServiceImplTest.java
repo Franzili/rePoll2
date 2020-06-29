@@ -187,5 +187,4 @@ public class UserServiceImplTest {
             userService.removeUser(username);
         }).isInstanceOf(NotFoundException.class);
     }
-
 }
