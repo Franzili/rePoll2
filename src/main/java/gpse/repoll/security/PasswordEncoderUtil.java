@@ -6,8 +6,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class PasswordEncoderConfig {
-    private PasswordEncoderConfig() { }
+public final class PasswordEncoderUtil {
+    private PasswordEncoderUtil() { }
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
