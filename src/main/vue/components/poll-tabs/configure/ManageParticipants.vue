@@ -160,7 +160,8 @@
 
                 //TODO
                 n_participated: 6,
-                n_invites_pending: 32
+                n_invites_pending: 32,
+
             }
         },
 
@@ -177,6 +178,12 @@
             ...mapActions('participants', {
                 loadParticipant: 'loadParticipant'
             }),
+            rerender() {
+                this.renderComponent = false;
+                this.$nextTick(()=> {
+                    this.renderComponent = true
+                });
+            },
         },
         mounted() {
             this.loadParticipant(this.poll.id);

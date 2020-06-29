@@ -20,7 +20,7 @@
         data() {
             return {
                 newParticipant: '',
-                participant: []
+                participant: [],
             }
         },
         methods: {
@@ -47,6 +47,7 @@
                           };
                           this.create(participantCmd);
                       }
+
 
                   }, 2000);
 
