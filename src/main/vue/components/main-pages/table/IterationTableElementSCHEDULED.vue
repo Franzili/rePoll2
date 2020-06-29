@@ -14,7 +14,7 @@
                 <p v-show="iteration.status === 'SCHEDULED'"
                 ><span class="start">Open: </span>{{iteration.start}}</p>
                 <p v-show="iteration.status === 'SCHEDULED'"
-                ><span class="start">Open: </span>{{iteration.end}}</p>
+                ><span class="start">Close: </span>{{iteration.end}}</p>
             </b-col>
 
             <b-col cols="4" style="text-align: center">
