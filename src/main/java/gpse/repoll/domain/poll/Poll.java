@@ -49,7 +49,7 @@ public class Poll extends Auditable<User> {
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
-    private final List<PollIteration> pollIterations = new ArrayList<>();
+    private final Set<PollIteration> pollIterations = new HashSet<>();
 
     @OneToOne
     private PollIteration currentIteration;
@@ -132,8 +132,8 @@ public class Poll extends Auditable<User> {
         this.pollEntries.addAll(pollEntries);
     }
 
-    public List<PollIteration> getPollIterations() {
-        return Collections.unmodifiableList(pollIterations);
+    public Set<PollIteration> getPollIterations() {
+        return Collections.unmodifiableSet(pollIterations);
     }
 
     public void setPollIterations(List<PollIteration> pollIterations) {

@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,7 +53,7 @@ public class PollIterationServiceImpl implements PollIterationService {
     }
 
     @Override
-    public List<PollIteration> getAll(final UUID pollID) {
+    public Set<PollIteration> getAll(final UUID pollID) {
         final Poll poll = pollService.getPoll(pollID);
         return poll.getPollIterations();
     }
