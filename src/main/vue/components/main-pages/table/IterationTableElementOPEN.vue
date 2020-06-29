@@ -61,13 +61,12 @@
                     start: this.iteration.start,
                     end: this.timestamp,
                     status: 'CLOSED',
+                    id: this.iteration.id
                 }
-                this.updateIteration(this.iteration.id, pollIterationCmd)
-                /*let pollCmd = {
-                    id: this.pollId,
-                    status: 'READY'
-                }
-                this.updatePoll(pollCmd);*/
+                this.updateIteration( pollIterationCmd)
+                this.$nextTick(() => {
+                    this.$bvModal.hide('closeModal')
+                })
             }
         }
     }
