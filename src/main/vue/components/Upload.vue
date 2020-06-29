@@ -1,9 +1,7 @@
 <template>
     <div>
-        <UploadJSON v-on:uploadFinished="setQuestionsFromFile"></UploadJSON>
-        <b-button class="mt-4" @click="addToPoll">Upload Test Question</b-button>
-        <hr/>
-        <p>{{this.questionsFromFile}}</p>
+        <h6>Import Questions from JSON File</h6>
+        <UploadJSON v-on:uploadFinished="addToPoll"></UploadJSON>
     </div>
 </template>
 
@@ -37,10 +35,6 @@
         },
         methods: {
 
-            setQuestionsFromFile(data) {
-                this.questionsFromFile = data;
-            },
-
             prepareQuestions() {
                 let questionsFromFileJSON = JSON.parse(this.questionsFromFile);
 
@@ -51,7 +45,10 @@
                 }
             },
 
-            async addToPoll() {
+            async addToPoll(data) {
+
+                this.questionsFromFile = data;
+
                 this.prepareQuestions();
 
                 let newPollStructure = this.pollStructure;

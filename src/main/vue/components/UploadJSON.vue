@@ -1,7 +1,11 @@
 <template>
     <div>
-        <input type="file" id="selectFiles" value="Import" /><br />
-        <b-button class="mt-2" @click="readQuestionsFromFile">Import The File!</b-button>
+        <b-form-file
+            id="selectFiles"
+            placeholder="Choose a file or drop it here..."
+            drop-placeholder="Drop file here..."
+        ></b-form-file>
+        <b-button class="my-2" @click="readQuestionsFromFile">Import The Questions!</b-button>
     </div>
 </template>
 
