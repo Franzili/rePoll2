@@ -62,7 +62,8 @@
                     //start: this.timestamp,
                     //end: new Date(this.ende),
                     end: this.timestamp,
-                    status: 'CLOSED'
+                    status: 'CLOSED',
+                    id: this.iteration.id
                 }
                 this.updateIteration(this.iteration.id, pollIterationCmd)
                 /*let pollCmd = {
