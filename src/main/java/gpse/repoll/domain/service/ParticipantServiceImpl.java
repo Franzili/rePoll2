@@ -15,11 +15,15 @@ import java.util.UUID;
 public class ParticipantServiceImpl implements ParticipantService {
     private final ParticipantRepository participantRepository;
     private final PollRepository pollRepository;
+    private final MailService mailService;
 
     @Autowired
-    public ParticipantServiceImpl(ParticipantRepository participantRepository, PollRepository pollRepository) {
+    public ParticipantServiceImpl(ParticipantRepository participantRepository,
+                                  PollRepository pollRepository,
+                                  MailService mailService) {
         this.participantRepository = participantRepository;
         this.pollRepository = pollRepository;
+        this.mailService = mailService;
     }
 
     @Override
@@ -49,6 +53,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         Poll poll = pollRepository.findById(pollId).orElseThrow(NotFoundException::new);
         poll.addParticipant(participant);
         pollRepository.save(poll);
+        //mailService.sendEmail(email, "You have been invited to a poll!", )
         return participant;
     }
 

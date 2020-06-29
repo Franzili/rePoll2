@@ -2,6 +2,7 @@ package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
+import gpse.repoll.domain.exceptions.PollIterationStatusException;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollIteration;
 import gpse.repoll.domain.poll.PollIterationStatus;
@@ -26,10 +27,10 @@ public class PollIterationServiceImpl implements PollIterationService {
     private final PollRepository pollRepository;
     private final PollService pollService;
 
-    private Map<Long, ScheduledFuture<?>> openTasks = new ConcurrentHashMap<>();
-    private Map<Long, ScheduledFuture<?>> closeTasks = new ConcurrentHashMap<>();
+    private final Map<Long, ScheduledFuture<?>> openTasks = new ConcurrentHashMap<>();
+    private final Map<Long, ScheduledFuture<?>> closeTasks = new ConcurrentHashMap<>();
 
-    private ThreadPoolTaskScheduler scheduler;
+    private final ThreadPoolTaskScheduler scheduler;
 
     public PollIterationServiceImpl(final PollIterationRepository pollIterationRepository,
                                     final PollRepository pollRepository,
@@ -43,8 +44,10 @@ public class PollIterationServiceImpl implements PollIterationService {
         scheduler.setThreadNamePrefix("IterationScheduler");
         scheduler.initialize();
 
-        for (PollIteration iter : pollIterationRepository.findAll()) {
-            scheduleIteration(iter);
+        for (Poll poll : pollRepository.findAll()) {
+            for (PollIteration iteration : poll.getPollIterations()) {
+                scheduleIteration(iteration, poll);
+            }
         }
     }
 
@@ -63,6 +66,7 @@ public class PollIterationServiceImpl implements PollIterationService {
 
         final PollIteration pollIteration = new PollIteration(start, end);
         if (status != null) {
+            updateIterationStatus(status, pollIteration, poll);
             pollIteration.setStatus(status);
         } else {
             pollIteration.setStatus(PollIterationStatus.SCHEDULED);
@@ -72,7 +76,7 @@ public class PollIterationServiceImpl implements PollIterationService {
         poll.add(pollIteration);
         pollRepository.save(poll);
 
-        scheduleIteration(pollIteration);
+        scheduleIteration(pollIteration, poll);
 
         return pollIteration;
     }
@@ -96,6 +100,7 @@ public class PollIterationServiceImpl implements PollIterationService {
                                              final LocalDateTime end,
                                              final PollIterationStatus status) {
         final PollIteration pollIteration = getPollIteration(pollID, pollIterationID);
+        final Poll poll = pollService.getPoll(pollID);
         if (start != null) {
             pollIteration.setStart(start);
         }
@@ -103,10 +108,12 @@ public class PollIterationServiceImpl implements PollIterationService {
             pollIteration.setEnd(end);
         }
         if (status != null) {
-            pollIteration.setStatus(status);
+            updateIterationStatus(status, pollIteration, poll);
         }
 
-        scheduleIteration(pollIteration);
+        pollIterationRepository.save(pollIteration);
+
+        scheduleIteration(pollIteration, poll);
 
         return pollIteration;
     }
@@ -127,7 +134,7 @@ public class PollIterationServiceImpl implements PollIterationService {
      * Then, start/end dates are set, or removed if they are null.
      * @param iteration The PollIteration to schedule
      */
-    private void scheduleIteration(final PollIteration iteration) {
+    private void scheduleIteration(final PollIteration iteration, final Poll poll) {
         scheduleRemove(iteration);
 
         ZoneOffset offset = OffsetDateTime.now().getOffset();
@@ -138,7 +145,7 @@ public class PollIterationServiceImpl implements PollIterationService {
         if (status.equals(PollIterationStatus.SCHEDULED)) {
             if (iteration.getStart() != null) {
                 task = scheduler.schedule(() -> {
-                    iteration.setStatus(PollIterationStatus.OPEN);
+                    updateIterationStatus(PollIterationStatus.OPEN, iteration, poll);
                     pollIterationRepository.save(iteration);
                     openTasks.remove(iteration.getId());
                 }, iteration.getStart().toInstant(offset));
@@ -150,7 +157,7 @@ public class PollIterationServiceImpl implements PollIterationService {
         if (status.equals(PollIterationStatus.SCHEDULED) || status.equals(PollIterationStatus.OPEN)) {
             if (iteration.getEnd() != null) {
                 task = scheduler.schedule(() -> {
-                    iteration.setStatus(PollIterationStatus.CLOSED);
+                    updateIterationStatus(PollIterationStatus.CLOSED, iteration, poll);
                     pollIterationRepository.save(iteration);
                     openTasks.remove(iteration.getId());
                 }, iteration.getEnd().toInstant(offset));
@@ -175,5 +182,28 @@ public class PollIterationServiceImpl implements PollIterationService {
             closeTasks.get(id).cancel(false);
             closeTasks.remove(id);
         }
+    }
+
+    private void updateIterationStatus(PollIterationStatus status, PollIteration pollIteration, Poll poll) {
+        switch (status) {
+            case SCHEDULED:
+                if (!pollIteration.getStatus().equals(status)) {
+                    throw new PollIterationStatusException();
+                }
+                break;
+
+            case OPEN:
+                if (poll.getCurrentIteration() != null) {
+                    throw new PollIterationStatusException();
+                }
+                poll.setCurrentIteration(pollIteration);
+                break;
+
+            case CLOSED:
+                poll.setCurrentIteration(null);
+                break;
+        }
+        pollRepository.save(poll);
+        pollIteration.setStatus(status);
     }
 }

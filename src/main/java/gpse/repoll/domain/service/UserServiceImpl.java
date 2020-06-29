@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(email);
         user.setRoles(role);
         userRepository.save(user);
+        mailService.sendPwdGenMail(user);
         return user;
     }
 
