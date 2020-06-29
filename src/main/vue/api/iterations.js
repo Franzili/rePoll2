@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default {
     listAll(pollId) {
-        return axios.get('/api/v1/polls/' + pollId + '/');
+        return axios.get('/api/v1/polls/' + pollId + '/iterations/');
     },
     getIter(pollId, iterId) {
         return axios.get('api/v1/polls/' + pollId + '/iterations/' + iterId + '/');
