@@ -323,7 +323,7 @@
                 dateEnde: "",
                 timeStart: '',
                 timeEnde: '',
-                iterRunning: false, //TODO automatically change between true/false whether iteration is open
+                iterRunning: '', //TODO automatically change between true/false whether iteration is open
                 loaded: false,
                 types: [
                     'date',
@@ -381,7 +381,7 @@
                 }
                 if (pollIterationCmd.start <= pollIterationCmd.end) {
                     this.createIteration(pollIterationCmd);
-                    if (this.iterRunning === false) {
+                    if (this.iterRunning !== true) {
                         this.iterRunning = true
                     }
                     let pollCmd = {
