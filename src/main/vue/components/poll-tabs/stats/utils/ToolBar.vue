@@ -30,6 +30,14 @@
                     class="mr-1">
                     <b-button
                         variant="outline-secondary"
+                        v-on:click="$emit('chart', 'table')"
+                        :disabled="actives[8] === false"
+                        v-if="actives[8] !== null"
+                        title="table-chart">
+                        <b-icon icon="pen"></b-icon>
+                    </b-button>
+                    <b-button
+                        variant="outline-secondary"
                         v-on:click="$emit('chart', 'bar')"
                         :disabled="actives[1] === false"
                         v-if="actives[1] !== null"

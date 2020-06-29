@@ -44,7 +44,8 @@
         methods: {
             ...mapActions('currentPoll', {
                 loadStatistics: 'loadMetaStats',
-                loadEntries: 'loadEntries'
+                loadEntries: 'loadEntries',
+                loadPollAnswers: 'loadPollAnswers'
             }),
             doSwitch(qId) {
                 this.tmpQID = qId;
@@ -52,7 +53,8 @@
             }
         },
         async mounted() {
-            this.loadStatistics(this.poll.id)
+            this.loadPollAnswers(this.poll.id);
+            this.loadStatistics(this.poll.id);
             await this.loadEntries(this.poll.id)
         },
         components: {Overview, Compare, Trends, Entries, Questions}

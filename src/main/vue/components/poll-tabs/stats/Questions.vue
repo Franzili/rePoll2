@@ -77,8 +77,8 @@
             }
         },
         async mounted() {
-            await this.loadPollAnswers(this.poll.id)
-            this.structure = this.getPollStructure
+            await this.loadPollAnswers(this.poll.id);
+            this.structure = this.getPollStructure;
             if (this.qId !== 0) {
                 this.selected = this.qId
             }

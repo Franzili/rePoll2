@@ -262,6 +262,7 @@ const currentPoll = {
                     absFrq: absFrq,
                     relFrq: relFrq,
                     boxplot: boxplot,
+                    tableAnswers: [],
                     currentChart: 'bar'
                 }
             }
