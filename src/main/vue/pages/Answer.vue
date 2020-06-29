@@ -2,7 +2,21 @@
     <!--
         Renders a poll.
     -->
-    <b-container v-if="loaded">
+    <b-container
+        :style="'font-family:' + poll.design.font + ';color:' + poll.design.textColour + ';background-color:' + poll.design.backgroundColour"
+        v-if="loaded">
+
+
+        <b-container
+            v-if="poll.design.logo!=='' && poll.design.logo!==null"
+            :align="poll.design.logoPosition">
+            <b-img
+                style="margin-top: 20px"
+                height="200px"
+                :src="poll.design.logo">
+            </b-img>
+        </b-container>
+
         <ul class="poll-main-view">
             <PollItem v-for="item in pollStructure"
                       v-bind:key="item.id"
@@ -13,10 +27,12 @@
             />
         </ul>
 
-        <b-button variant="primary" v-on:click="answerPoll">Save</b-button>
+        <b-button
+            :style="'margin-bottom: 20px;background-color:' + poll.design.textColour + ';color:' + poll.design.backgroundColour + ';border-color:' + poll.design.textColour"
+            v-on:click="answerPoll">Save</b-button>
         <!--
         Submit Button for later
-        Final Submit, then answers can't be edited animore
+        Final Submit, then answers can't be edited anymore
         <b-button class="my-button" variant="success">Submit!</b-button>
         -->
     </b-container>
@@ -24,7 +40,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapActions} from "vuex"
+    import {mapGetters, mapActions, mapState} from "vuex"
 
     import PollItem from "../components/poll-tabs/edit/poll-items/PollItem";
 
@@ -40,6 +56,9 @@
             ...mapGetters('currentPoll', {
                 pollStructure: 'pollStructureFlat'
             }),
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            })
         },
         methods: {
             ...mapActions('currentPoll', {

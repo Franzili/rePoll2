@@ -1,11 +1,13 @@
 <template>
     <li>
-        <b-card class="question-card"
+        <b-card class="question-card" :style="'background-color:' + poll.design.backgroundColour"
                 v-bind:class="{ 'question-card-hide-border': hideBorder || model.type === 'SectionHeader',
                                 'question-card-is-header': model.type === 'SectionHeader' } ">
 
             <p class="question-card-header">
-                <span class="question-card-title">
+                <span
+                    :style="'font-family:' + poll.design.font + ';color:' + poll.design.textColour"
+                    class="question-card-title">
                     <EditableLabel v-if="model.type === 'SectionHeader'"
                                    tag="h2"
                                    :value="model.title"
@@ -20,18 +22,21 @@
                 </span>
 
                 <span v-if="editable">
-                    <b-button-group size="sm">
+                    <b-button-group
+                        size="sm">
                         <!-- edit button -->
-                        <b-button variant="outline-secondary" v-if="!editing"
+                        <b-button :style="';color:' + poll.design.textColour + ';border-color:' + poll.design.textColour"
+                            variant="outline-secondary" v-if="!editing"
                                                               @click="setEditing(true)">
                             <b-icon-pencil/>
                         </b-button>
-                        <b-button variant="outline-secondary" v-else
-                                                              @click="setEditing(false)">
+                        <b-button :style="';color:' + poll.design.textColour + ';border-color:' + poll.design.textColour"
+                            variant="outline-secondary" v-else @click="setEditing(false)">
                             <b-icon-check/>
                         </b-button>
 
-                        <b-button variant="outline-secondary" @click="remove">
+                        <b-button :style="';color:' + poll.design.textColour + ';border-color:' + poll.design.textColour"
+                            variant="outline-secondary" @click="remove">
                             <b-icon-trash/>
                         </b-button>
 
@@ -40,7 +45,8 @@
 
                 <span v-if="editable">
                     <!-- grab handle -->
-                    <div class="btn btn-sm btn-outline-secondary handle" size="sm">
+                    <div :style="';color:' + poll.design.textColour + ';border-color:' + poll.design.textColour"
+                        class="btn btn-sm btn-outline-secondary handle" size="sm">
                         <b-icon-arrow-up-down />
                     </div>
                 </span>
@@ -90,6 +96,7 @@
     import ScaleQuestion from "./ScaleQuestion";
 
     import EditableLabel from "../../../EditableLabel";
+    import {mapState} from "vuex";
 
     export default {
         name: "PollItem",
@@ -97,6 +104,11 @@
             return {
                 editing: false,
             }
+        },
+        computed: {
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            })
         },
         props: {
             model: {

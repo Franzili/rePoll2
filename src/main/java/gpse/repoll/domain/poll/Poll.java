@@ -6,6 +6,7 @@ import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.PollAlreadyLaunchedException;
 import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.poll.Design;
 import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,6 +34,9 @@ public class Poll extends Auditable<User> {
 
     @Column
     private Anonymity anonymity;
+
+    @OneToOne
+    private Design design;// = new Design(); //TODO
 
     @Column
     @Lob
@@ -70,6 +74,7 @@ public class Poll extends Auditable<User> {
         this.title = title;
         this.status = PollEditStatus.EDITING;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
+      //  this.design = new Design();
     }
 
     public Poll(Poll poll, List<PollSection> pollSections) {
@@ -98,6 +103,17 @@ public class Poll extends Auditable<User> {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+    public Design getDesign() {
+        return design;
+    }
+
+
+    public void setDesign(Design design) {
+        this.design = design;
+    }
+
+
 
     public UUID getId() {
         return id;

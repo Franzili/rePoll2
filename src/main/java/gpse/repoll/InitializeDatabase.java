@@ -32,6 +32,8 @@ public class InitializeDatabase implements InitializingBean {
     private final TransactionTemplate transactionTemplate;
     private final PollRepository pollRepository;
     private final UserRepository userRepository;
+    private final DesignService designService;
+    private final DesignRepository designRepository;
     private final ParticipantService participantService;
     private final ChoiceRepository choiceRepository;
 
@@ -44,7 +46,10 @@ public class InitializeDatabase implements InitializingBean {
                               final PlatformTransactionManager transactionManager,
                               final PollSectionService pollSectionService,
                               final PollRepository pollRepository,
+                              final PollSectionRepository pollSectionRepository,
                               final UserRepository userRepository,
+                              final DesignService designService,
+                              final DesignRepository designRepository,
                               final ParticipantService participantService,
                               final ChoiceRepository choiceRepository) {
         this.pollService = pollService;
@@ -55,6 +60,8 @@ public class InitializeDatabase implements InitializingBean {
         this.transactionTemplate = new TransactionTemplate(transactionManager);
         this.pollRepository = pollRepository;
         this.userRepository = userRepository;
+        this.designService = designService;
+        this.designRepository = designRepository;
         this.participantService = participantService;
         this.choiceRepository = choiceRepository;
     }

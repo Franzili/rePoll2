@@ -2,7 +2,8 @@
     <!--
         Poll Editor main component.
     -->
-    <b-row class="poll-editor">
+    <b-row :style="'background-color:' + poll.design.backgroundColour"
+           class="poll-editor">
         <b-col cols="1" lg="2" class="sidebar">
             <div class="sticky-offset sticky-top">
                 <QuestionPalette></QuestionPalette>
@@ -16,26 +17,39 @@
 
         <b-col cols="3" class="sidebar">
             <div class="sticky-offset sticky-top">
-                <Outline :poll-structure="pollStructure"></Outline>
+                <b-row style="min-height: 40vh; max-height: 40vh; overflow-y: auto;">
+                    <Outline :poll-structure="pollStructure"></Outline>
+                </b-row>
+                <ConsistEdit></ConsistEdit>
             </div>
         </b-col>
     </b-row>
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
+    import {mapGetters, mapState} from "vuex";
     import QuestionPalette from "./QuestionPalette";
     import PollMainView from "./PollMainView";
     import Outline from "../../Outline";
+    import ConsistEdit from "./ConsistEdit";
     import Upload from "../../Upload";
     export default {
         name: "EditPoll",
         computed: {
             ...mapGetters('currentPoll', {
                 pollStructure: 'pollStructureFlat'
+            }),
+            ...mapState('currentPoll', {
+                poll: 'poll',
             })
         },
-        components: {Upload, PollMainView, QuestionPalette, Outline},
+        components: {
+            Upload,
+            ConsistEdit,
+            PollMainView,
+            QuestionPalette,
+            Outline
+        }
     }
 </script>
 
@@ -52,6 +66,7 @@
     }
 
     .sidebar {
+        min-height: calc(100vh - 150px);
         background-color: $light;
         padding-top: 10px;
     }
