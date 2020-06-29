@@ -159,7 +159,7 @@
                 sortDirection: 'asc',
 
                 //TODO
-                n_participated: 0,
+                n_participated: 6,
                 n_invites_pending: 32
             }
         },

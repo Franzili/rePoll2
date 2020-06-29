@@ -33,14 +33,11 @@
                 reader.onload = e =>  {
                     document.querySelector('.output').innerText = e.target.result;
                     newParticipant = e.target.result;
-                    console.log(newParticipant);
                 };
                   reader.readAsText(csv);
                   setTimeout(() => {
                       this.newParticipant = newParticipant;
-                      console.log(this.newParticipant);
                       var res = this.newParticipant.split("\n");
-                      console.log(res);
                       for(var i=0; i < res.length-1; i++) {
                           this.participant = res[i];
                           var tmp = this.participant.split(",");
@@ -48,11 +45,10 @@
                               fullName: tmp[0],
                               email: tmp[1],
                           };
-                          console.log(participantCmd);
                           this.create(participantCmd);
                       }
 
-                  }, 1000);
+                  }, 2000);
 
 
             }

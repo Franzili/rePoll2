@@ -19,7 +19,15 @@ const currentPoll = {
          */
         poll: {
             questions: [],
-            pollSections: []
+            pollSections: [],
+            design: {
+                font: '',
+                textColour: '',
+                backgroundColour: '',
+                logoPosition: '',
+                logo: ''
+            },
+            pollConsistencyGroups: []
         },
         answers: [],
         pollAnswers: [],
@@ -192,7 +200,7 @@ const currentPoll = {
         getAnswerSetByID: (state) => {
             return (id) => {
                 let match = Object.entries((state.pollAnswers.find(answerSet => answerSet.question.id === id))
-                    .userAnswerMap)
+                    .participantAnswerMap)
                 let tableObj = []
                 if (match[0][1].type === 'TextAnswer') {
                     for (let i = 0; i < match.length; i++) {
@@ -284,6 +292,24 @@ const currentPoll = {
          */
         update(state, pollCmd) {
             Object.assign(state.poll, pollCmd)
+        },
+
+        updateDesign(state, designCmd) {
+            if(designCmd.font != null) {
+                state.poll.design.font = designCmd.font
+            }
+            if(designCmd.backgroundColour != null) {
+                state.poll.design.backgroundColour = designCmd.backgroundColour
+            }
+            if(designCmd.textColour != null) {
+                state.poll.design.textColour = designCmd.textColour
+            }
+            if(designCmd.logoPosition != null) {
+                state.poll.design.logoPosition = designCmd.logoPosition
+            }
+            if(designCmd.logo != null) {
+                state.poll.design.logo = designCmd.logo
+            }
         },
 
         addPollSection(state, pollSection) {
@@ -393,6 +419,21 @@ const currentPoll = {
                     })
             });
         },
+
+        updateDesign({commit}, designUpdate) {
+            return new Promise((resolve, reject) => {
+                api.design.updateDesign(designUpdate)
+                    .then(function (res) {
+                        commit('updateDesign', res.data)
+                        resolve(res.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        reject(error);
+                    })
+            });
+        },
+
         loadMetaStats({commit}, id) {
             return new Promise((resolve, reject) => {
                 api.statistics.get(id).then(function (res) {
