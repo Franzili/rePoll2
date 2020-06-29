@@ -13,10 +13,14 @@ import gpse.repoll.domain.service.UserServiceImpl;
 import gpse.repoll.security.Roles;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -25,6 +29,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
@@ -32,14 +38,19 @@ public class UserServiceImplTest {
     @Mock
     private PollService pollService;
 
+    @Autowired
     private MailService mailService;
 
+    @Autowired
     private UserService userService;
 
+    @Autowired
     private PollEntryRepository pollEntryRepository;
 
+    @Autowired
     private PollEntryService pollEntryService;
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
