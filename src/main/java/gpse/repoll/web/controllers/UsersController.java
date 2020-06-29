@@ -23,12 +23,10 @@ import java.util.UUID;
 public class UsersController {
 
     private final UserService userService;
-    private final MailService mailService;
 
     @Autowired
-    public UsersController(UserService userService, MailService mailService) {
+    public UsersController(UserService userService) {
         this.userService = userService;
-        this.mailService = mailService;
     }
 
     @GetMapping("/")
@@ -47,7 +45,6 @@ public class UsersController {
             userCmd.getEmail(),
             userCmd.getRole()
         );
-        mailService.sendPwdGenMail(user);
         return user;
     }
 

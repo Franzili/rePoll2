@@ -7,6 +7,7 @@ import myUsers from "./myUsers";
 import participants from "./participants";
 import myEntries from "./myEntries"
 import consistencies from "./consistencies";
+import adminConfigs from "./adminConfigs";
 
 import Vue from "vue";
 
@@ -26,7 +27,9 @@ let store = new Vuex.Store({
         myEntries: myEntries,
         myUsers: myUsers,
         consistencies: consistencies,
-        participants: participants
+        participants: participants,
+        adminConfigs: adminConfigs,
+
     }
 })
 

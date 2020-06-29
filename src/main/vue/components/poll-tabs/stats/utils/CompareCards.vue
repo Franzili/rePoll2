@@ -123,16 +123,16 @@
                 let obj = this.chartObjs.find(obj => obj.qId === id)
                 switch (obj.chartObj.qType) {
                     case 'TextQuestion':
-                        this.actives = [false, false, false, false, true, null, true, true];
+                        this.actives = [false, false, false, false, true, null, true, true, null];
                         break;
                     case 'SingleChoiceQuestion':
-                        this.actives = [true, true, true, false, true, null, true, true];
+                        this.actives = [true, true, true, false, true, null, true, true, null];
                         break;
                     case 'MultiChoiceQuestion':
-                        this.actives = [true, true, true, false, true, null, true, true];
+                        this.actives = [true, true, true, false, true, null, true, true, null];
                         break;
                     case 'ScaleQuestion':
-                        this.actives = [true, true, true, true, true, null, true, true];
+                        this.actives = [true, true, true, true, true, null, true, true, null];
                         break;
                 }
             }

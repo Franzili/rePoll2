@@ -10,6 +10,7 @@ import gpse.repoll.domain.poll.Design;
 import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -47,8 +48,11 @@ public class Poll extends Auditable<User> {
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
-    @OneToMany(orphanRemoval = true)
-    private final List<PollIteration> pollIterations = new ArrayList<>();
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+    private final Set<PollIteration> pollIterations = new HashSet<>();
+
+    @OneToOne
+    private PollIteration currentIteration;
 
     @OneToMany
     private final List<PollSection> pollSections = new ArrayList<>();
@@ -128,8 +132,8 @@ public class Poll extends Auditable<User> {
         this.pollEntries.addAll(pollEntries);
     }
 
-    public List<PollIteration> getPollIterations() {
-        return Collections.unmodifiableList(pollIterations);
+    public Set<PollIteration> getPollIterations() {
+        return Collections.unmodifiableSet(pollIterations);
     }
 
     public void setPollIterations(List<PollIteration> pollIterations) {
@@ -445,5 +449,13 @@ public class Poll extends Auditable<User> {
             + "Status:    " + status + "\n"
             + "Anonymity: " + anonymity + "\n\n\n"
             + "Questions:\n" + sectionsWithQuestions.toString() + "\n";
+    }
+
+    public PollIteration getCurrentIteration() {
+        return currentIteration;
+    }
+
+    public void setCurrentIteration(PollIteration currentIteration) {
+        this.currentIteration = currentIteration;
     }
 }
