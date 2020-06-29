@@ -19,12 +19,15 @@ public class PollServiceImpl implements PollService {
 
     private final PollRepository pollRepository;
     private final PollSectionRepository pollSectionRepository;
+    private final DesignRepository designRepository;
 
     @Autowired
     public PollServiceImpl(final PollRepository pollRepository,
-                           final PollSectionRepository pollSectionRepository) {
+                           final PollSectionRepository pollSectionRepository,
+                           final DesignRepository designRepository) {
         this.pollRepository = pollRepository;
         this.pollSectionRepository = pollSectionRepository;
+        this.designRepository = designRepository;
     }
 
     @Override
@@ -48,6 +51,9 @@ public class PollServiceImpl implements PollService {
         final Poll poll = new Poll(title);
         final PollSection section = new PollSection();
         final ArrayList<Participant> participants = new ArrayList<>();
+        final Design design = new Design();
+        designRepository.save(design);
+        poll.setDesign(design);
         section.setTitle("First Section Title");
         section.setDescription("You can now add some questions!");
         pollSectionRepository.save(section);

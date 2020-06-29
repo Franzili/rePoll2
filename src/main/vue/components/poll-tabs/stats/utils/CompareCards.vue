@@ -19,6 +19,9 @@
             v-bind:actives="actives">
         </ToolBar>
 
+        <b-row v-show="compareData.showTitle !== undefined">
+            <h5> {{compareData.showTitle}}</h5>
+        </b-row>
 
         <b-row>
             <b-container v-bind:key="item.qId"
@@ -56,7 +59,7 @@
                 actives: [true, true, true, true, true, null, true, true],
                 frequency: 'abs',
                 question: '',
-                chartObjs: []
+                chartObjs: [],
             }
         },
         computed: {

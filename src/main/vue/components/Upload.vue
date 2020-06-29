@@ -1,33 +1,62 @@
 <template>
     <div>
-        <input type="file" id="selectFiles" value="Import" /><br />
-        <button @click="uploadFile">Import The File!</button>
-        <p>{{test}}</p>
+        <h6>Import Questions from JSON File</h6>
+        <UploadJSON v-on:uploadFinished="addToPoll"></UploadJSON>
     </div>
 </template>
 
 <script>
+    import UploadJSON from "./UploadJSON";
     export default {
         name: "Upload",
+        components: {UploadJSON},
         data() {
             return {
-                test: ''
+                test: {
+                    type: "TextQuestion",
+                    id: -1,
+                    title: "is this working?",
+                    questionOrder: 1000,
+                    charLimit: 255
+                },
+                questionsFromFile: [],
+                questionsForPoll: []
+            }
+        },
+        computed: {
+            pollStructure: {
+                get() {
+                    return this.$store.getters["currentPoll/pollStructureFlat"];
+                },
+                set(value) {
+                    this.$store.dispatch('currentPoll/updateStructure', value);
+                }
             }
         },
         methods: {
-            uploadFile() {
-                    const files = document.getElementById('selectFiles').files;
-                    if (files.length <= 0) {
-                        return false;
-                    }
 
-                    const fr = new FileReader();
+            prepareQuestions() {
+                let questionsFromFileJSON = JSON.parse(this.questionsFromFile);
 
-                    fr.onload = e => {
-                        const result = JSON.parse(e.target.result);
-                        this.test = JSON.stringify(result, null, 2);
-                    }
-                    fr.readAsText(files.item(0));
+                for (let i = 0; i < questionsFromFileJSON.length; i++) {
+                    let tmpQ = questionsFromFileJSON[i];
+                    tmpQ.id = -1;
+                    this.questionsForPoll.push(tmpQ);
+                }
+            },
+
+            async addToPoll(data) {
+
+                this.questionsFromFile = data;
+
+                this.prepareQuestions();
+
+                let newPollStructure = this.pollStructure;
+                for (let i = 0; i < this.questionsForPoll.length; i++) {
+                    newPollStructure = this.pollStructure;
+                    newPollStructure.push(this.questionsForPoll[i]);
+                    await this.$store.dispatch('currentPoll/updateStructure', newPollStructure);
+                }
             }
         }
     }
