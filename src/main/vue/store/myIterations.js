@@ -82,25 +82,15 @@ const myIterations = {
         /**
          * Deletes an iteration
          */
-        delete({commit, rootState, dispatch}, id) {
+        delete({commit, rootState}, id) { //{commit, rootState, dispatch}
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
                 return;
             }
-            /*return new Promise((resolve, reject) => {
-                api.iterations.removeIter(rootState.currentPoll.poll.id, id).then(function () {
-                    commit('delete', id);
-                    resolve();
-                }).catch(function (error) {
-                    console.log(error);
-                    reject(error);
-                })
-            }*/
             return new Promise((resolve, reject) => {
                 api.iterations.removeIter(rootState.currentPoll.poll.id, id).then(function (res) {
-                    //commit('currentIteration/set', {}, {root: true})
                     commit('delete', id);
-                    dispatch('load')
+                    //dispatch('load')
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);
@@ -111,18 +101,15 @@ const myIterations = {
         /**
          * Updates an iteration with new information in Cmd-object
          */
-        update({commit, dispatch, rootState}, id, pollIterationCmd) {
+        update({commit,  rootState}, pollIterationCmd) { //{commit, dispatch, rootState},
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
                 return;
             }
-            //console.log('test: ',pollIterationCmd)
-            //console.log(pollIterationCmd.end)
-            //console.log(pollIterationCmd.status)
             return new Promise((resolve, reject) => {
-                api.iterations.updateIter(rootState.currentPoll.poll.id, id , pollIterationCmd).then(function (res) {
+                api.iterations.updateIter(rootState.currentPoll.poll.id, pollIterationCmd.id , pollIterationCmd).then(function (res) {
                     commit('update', res.data);
-                    dispatch('load')
+                    //dispatch('load')
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);
