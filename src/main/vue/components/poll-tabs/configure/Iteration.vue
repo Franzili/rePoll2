@@ -1,5 +1,5 @@
 <template>
-    <b-card v-if="poll.status === 'READY'">
+    <b-card v-if="poll.status === 'EDITING'">
         <h6>Iteration</h6>
 
         <p>
@@ -386,7 +386,7 @@
                     }
                     let pollCmd = {
                         id: this.pollId,
-                        status: 'LAUNCHED' //'READY'
+                        status: 'LAUNCHED'
                     }
                     this.updatePoll(pollCmd);
                     this.$nextTick(() => {
