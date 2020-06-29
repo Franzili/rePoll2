@@ -118,13 +118,56 @@
     <b-card v-else-if="poll.status === 'LAUNCHED'">
         <h6>Iteration</h6>
 
+        <p>
+            <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>New</b-button>
+            <b-button v-if="iterRunning === false" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
+        </p>
 
+        <b-container v-if="loaded"
+                     class="my-container">
+            <b-row align-h="center">
+            </b-row>
+            <b-row>
+                <b-col >
+                    <IterationTableList v-bind:iterations="iterations"/>
+                </b-col>
+            </b-row>
+        </b-container>
 
+        <!--
+        <p>
+            <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>New</b-button>
+            <b-button v-if="iterRunning === false" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
+        </p>
+        <div class="row" v-if="loaded">
+            <div v-bind:key="iteration.id" v-for="iteration in iterations">
+                <div class="list-group" id="IterationOPEN" role="tablist">
+                    <p v-if="iteration.status === 'OPEN'">
+                        <IterationTableElementOPEN v-bind:iteration="iteration"/>
+                    </p>
+                </div>
+
+                <div class="list-group" id="IterationSCHEDULED" role="tablist">
+                    <p v-if="iteration.status === 'SCHEDULED'">
+                        <IterationTableElementSCHEDULED v-bind:iteration="iteration"/>
+                    </p>
+                </div>
+
+                <div class="list-group" id="IterationCLOSED" role="tablist">
+                    <p v-if="iteration.status === 'CLOSED'">
+                        <IterationTableElementCLOSED v-bind:iteration="iteration"/>
+                    </p>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <!--
             <p>
                 <b-button v-if="iterRunning === false" class="float-right" variant="primary" v-b-modal.launchModal>Open Now</b-button>
             </p>
-            <div class="row">
-                <div class="list-group" id="IterationOPEN" role="tablist" v-bind:key="iteration.id" v-for="iteration in iterations">
+            <div class="row" v-if="loaded">
+                <div class="list-group" id="IterationOPEN" role="tablist" v-for="iteration in iterations" v-bind:key="iteration.id">
                     <p v-if="iteration.status === 'OPEN' && poll.id === pollId">
                         <IterationTableElementOPEN v-bind:iteration="iteration"/>
                     </p>
@@ -134,21 +177,22 @@
             <p>
                 <b-button class="float-right" variant="secondary" v-b-modal.scheduleModal>New</b-button>
             </p>
-            <div class="row">
-                <div class="list-group" id="IterationSCHEDULED" role="tablist" v-bind:key="iteration.id" v-for="iteration in iterations">
+            <div class="row" v-if="loaded">
+                <div class="list-group" id="IterationSCHEDULED" role="tablist" v-for="iteration in iterations" v-bind:key="iteration.id">
                     <p v-if="iteration.status === 'SCHEDULED' && poll.id === pollId">
                         <IterationTableElementSCHEDULED v-bind:iteration="iteration"/>
                     </p>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="list-group" id="IterationCLOSED" role="tablist" v-bind:key="iteration.id" v-for="iteration in iterations">
+            <div class="row" v-if="loaded">
+                <div class="list-group" id="IterationCLOSED" role="tablist" v-for="iteration in iterations" v-bind:key="iteration.id">
                     <p v-if="iteration.status === 'CLOSED' && poll.id === pollId">
                         <IterationTableElementCLOSED v-bind:iteration="iteration"/>
                     </p>
                 </div>
             </div>
+        -->
 
             <b-modal
                 id="launchModal"
@@ -255,13 +299,15 @@
 <script>
 
     import {mapActions, mapState} from "vuex";
-    import IterationTableElementSCHEDULED from "../../main-pages/table/IterationTableElementSCHEDULED";
-    import IterationTableElementOPEN from "../../main-pages/table/IterationTableElementOPEN";
-    import IterationTableElementCLOSED from "../../main-pages/table/IterationTableElementCLOSED";
+    //import IterationTableElementSCHEDULED from "../../main-pages/table/IterationTableElementSCHEDULED";
+    //import IterationTableElementOPEN from "../../main-pages/table/IterationTableElementOPEN";
+    //import IterationTableElementCLOSED from "../../main-pages/table/IterationTableElementCLOSED";
+    import IterationTableList from "../../main-pages/table/IterationTableList";
 
     export default {
         name: "Iteration",
-        components: {IterationTableElementSCHEDULED,IterationTableElementOPEN, IterationTableElementCLOSED},
+        //components: {IterationTableElementSCHEDULED,IterationTableElementOPEN, IterationTableElementCLOSED},
+        components: {IterationTableList},
         data() {
             return {
                 ende: "",
@@ -285,11 +331,11 @@
                 ]
             }
         },
-        /*async mounted() {
+        async mounted() {
             this.loaded = false
             await this.listIterations();
             this.loaded = true
-        },*/
+        },
         computed: {
             ...mapState('currentPoll', {
                 poll: 'poll'
