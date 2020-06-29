@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <input type="file" id="selectFile" value="Import" accept=".csv" /><br />
+        <input type="file" id="selectFile" value="Import" accept=".csv" style="margin-bottom: 2vh"/><br />
         <b-button @click="handleFiles">Import File</b-button>
         <div class="output"></div>
 

@@ -2,7 +2,7 @@
     <b-card>
         <!-- TODO: adapt type names to backend terminology -->
         <div v-if="poll.anonymity === 'NON_ANONYMOUS'">
-            <h6>Participants: </h6>
+            <h6>Participants:</h6>
             <b-row>
                 <b-col cols="6">
                     <p>
@@ -20,7 +20,12 @@
                         </b-table>
                     </p>
                     <p>
-                        <b-button class="float-right" variant="primary">+ Invite new</b-button>
+                        <b-button
+                            class="float-right"
+                            variant="primary"
+                            v-b-modal.newParticipant>
+                            Invite New
+                        </b-button>
                     </p>
                     <p>
                         <UploadParticipants></UploadParticipants>
@@ -45,6 +50,37 @@
                     </p>
                 </b-col>
             </b-row>
+            <b-modal
+                id="newParticipant"
+                title="Invite"
+                centered
+                @ok="addParticipant">
+                <div>
+                    <b-row
+                        class="justify-content-md-center"
+                        style="margin-bottom: 3vh">
+                        <b-col col lg="2">
+                            Name:
+                        </b-col>
+                        <b-col col lg="6">
+                            <b-form-input
+                                v-model="name">
+                            </b-form-input>
+                        </b-col>
+                    </b-row>
+                    <b-row
+                        class="justify-content-md-center"
+                        style="margin-bottom: 3vh">
+                        <b-col col lg="2">
+                            E-Mail:
+                        </b-col>
+                        <b-col col lg="6">
+                            <b-form-input v-model="eMail">
+                            </b-form-input>
+                        </b-col>
+                    </b-row>
+                </div>
+            </b-modal>
         </div>
 
 
@@ -162,6 +198,9 @@
                 n_participated: 6,
                 n_invites_pending: 32,
 
+                // For a single participant
+                name: '',
+                eMail: ''
             }
         },
 
@@ -178,12 +217,16 @@
             ...mapActions('participants', {
                 loadParticipant: 'loadParticipant'
             }),
-            rerender() {
-                this.renderComponent = false;
-                this.$nextTick(()=> {
-                    this.renderComponent = true
-                });
-            },
+            ...mapActions('participants', {
+                create: "create"
+            }),
+            async addParticipant() {
+                let participantCmd = {
+                    fullName: this.name,
+                    email: this.eMail
+                }
+                await this.create(participantCmd)
+            }
         },
         mounted() {
             this.loadParticipant(this.poll.id);
