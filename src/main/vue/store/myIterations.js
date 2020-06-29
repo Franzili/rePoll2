@@ -49,15 +49,6 @@ const myIterations = {
                 console.warn("PollId is undefined");
                 return;
             }
-            /*return new Promise((resolve, reject) => {
-                api.iterations.listAll(id).then(function (res) {
-                    commit('set', res.data);
-                    resolve(res.data);
-                }).catch(function (error) {
-                    console.log(error);
-                    reject();
-                });
-            }*/
             return new Promise((resolve, reject) => {
                 commit('loadStatus', "LOADING");
                 api.iterations.listAll(rootState.currentPoll.poll.id).then(function (res) {
@@ -71,25 +62,15 @@ const myIterations = {
             });
         },
         /**
-         * Creates a new iteration. Accesses currentIteration store module to set the newly created
-         * iteration as the current one.
+         * Creates a new iteration for the poll
          */
         create({rootState, commit}, pollIterationCmd) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
                 return;
             }
-            /*return new Promise(function (resolve, reject) {
-                api.iterations.addIter(rootState.currentPoll.poll.id, pollIterationCmd).then(() => {
-                    resolve();
-                }).catch(function (error) {
-                    console.log(error);
-                    reject();
-                })
-            }*/
             return new Promise((resolve, reject) => {
                 api.iterations.addIter(rootState.currentPoll.poll.id, pollIterationCmd).then(function (res) {
-                    //commit('currentIteration/set', res.data, {root: true});
                     commit('create', res.data);
                     resolve(res.data);
                 }).catch(function (error) {
@@ -99,7 +80,7 @@ const myIterations = {
             });
         },
         /**
-         * Deletes a Iteration
+         * Deletes an iteration
          */
         delete({commit, rootState, dispatch}, id) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
@@ -128,17 +109,20 @@ const myIterations = {
             })
         },
         /**
-         * Updates an interation with new informations in Cmd-obeject
+         * Updates an iteration with new information in Cmd-object
          */
-        update({commit, rootState}, id, pollIterationCmd) {
+        update({commit, dispatch, rootState}, id, pollIterationCmd) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
                 return;
             }
+            //console.log('test: ',pollIterationCmd)
+            //console.log(pollIterationCmd.end)
+            //console.log(pollIterationCmd.status)
             return new Promise((resolve, reject) => {
-                api.iterations.updateIter(rootState.currentPoll.poll.id,id , pollIterationCmd).then(function (res) {
+                api.iterations.updateIter(rootState.currentPoll.poll.id, id , pollIterationCmd).then(function (res) {
                     commit('update', res.data);
-                    //dispatch('load')
+                    dispatch('load')
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);
