@@ -130,7 +130,7 @@ const myIterations = {
         /**
          * Updates an interation with new informations in Cmd-obeject
          */
-        update({commit, rootState, dispatch}, id, pollIterationCmd) {
+        update({commit, rootState}, id, pollIterationCmd) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
                 return;
@@ -138,7 +138,7 @@ const myIterations = {
             return new Promise((resolve, reject) => {
                 api.iterations.updateIter(rootState.currentPoll.poll.id,id , pollIterationCmd).then(function (res) {
                     commit('update', res.data);
-                    dispatch('load')
+                    //dispatch('load')
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);
