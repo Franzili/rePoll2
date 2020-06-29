@@ -6,8 +6,7 @@
     >
         <b-row>
             <b-col cols="8">
-                {{iteration.id}}
-                <p class="status">{{iteration.status}}</p>
+                Iteration #{{iteration.id}}
             </b-col>
 
             <b-col
