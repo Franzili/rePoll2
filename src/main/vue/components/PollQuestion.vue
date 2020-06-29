@@ -1,6 +1,7 @@
 <template>
-    <div style="text-align:center;">
-        <b-card border-variant="primary">
+    <div style="text-align:center">
+        <b-card style="background-color: #ff0000"
+            border-variant="primary">
         <b-form-input v-if="editQuestion" class="question" v-model="question.title"></b-form-input>
         <p v-else class="question">{{question.title}}</p>
         <b-icon-check-all class="my-icon" scale="2" animation="fade" v-if="editQuestion" @click="changeEditQuestion"></b-icon-check-all>

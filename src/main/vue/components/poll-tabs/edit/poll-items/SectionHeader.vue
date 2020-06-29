@@ -1,15 +1,16 @@
 <template>
-    <div>
+    <div
+        :style="'font-family:' + poll.design.font + ';color:' + poll.design.textColour">
         <EditableLabel :editing="editing"
                        tag="span"
                        :value="model.description"
-                       v-on:valueChanged="model.description = $event"
-                       class="text-muted"/>
+                       v-on:valueChanged="model.description = $event"/>
     </div>
 </template>
 
 <script>
     import EditableLabel from "../../../EditableLabel";
+    import {mapState} from "vuex";
 
     export default {
         name: "SectionHeader",
@@ -39,6 +40,11 @@
         },
         components: {
             EditableLabel
+        },
+        computed: {
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            })
         }
     }
 </script>

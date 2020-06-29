@@ -12,6 +12,15 @@ public class PollCmd {
     private PollStructureCmd structure;
     private PollEditStatus status;
     private Anonymity anonymity;
+    private DesignCmd design;
+
+    public DesignCmd getDesign() {
+        return design;
+    }
+
+    public void setDesign(DesignCmd design) {
+        this.design = design;
+    }
 
     public Anonymity getAnonymity() {
         return anonymity;

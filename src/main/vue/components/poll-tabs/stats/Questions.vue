@@ -12,7 +12,8 @@
                 <b-col cols="8">
                     <b-form-select v-model="selected" :options="this.structure">
                         <template v-slot:first>
-                            <b-form-select-option :value="null" disabled >Select a question for display</b-form-select-option>
+                            <b-form-select-option :value="null" disabled>Select a question for display
+                            </b-form-select-option>
                         </template>
                     </b-form-select>
                 </b-col>
@@ -61,7 +62,7 @@
 
     export default {
         name: "Questions",
-        props:['qId'],
+        props: ['qId'],
         data() {
             return {
                 selected: null,
@@ -78,7 +79,7 @@
         async mounted() {
             await this.loadPollAnswers(this.poll.id)
             this.structure = this.getPollStructure
-            if (this.qId !== 0){
+            if (this.qId !== 0) {
                 this.selected = this.qId
             }
 
@@ -132,8 +133,7 @@
                 }
             },*/
         },
-        components: {
-        }
+        components: {}
     }
 </script>
 
