@@ -614,7 +614,6 @@ const currentPoll = {
         download({commit, state}, cmd) {
 
             cmd.id = state.poll.id;
-            console.log(state.poll);
             return new Promise(((resolve, reject) => {
                 if (cmd.type === 'poll') {
                     if (cmd.format === 'human') {
@@ -635,13 +634,10 @@ const currentPoll = {
                         })
                     } else  if (cmd.format === 'json') {
 
-                        //let pollSections = JSON.stringify(state.poll.pollSections);
-                        let pollQuestions = JSON.stringify(state.poll.questions);
+                        let pollSections = JSON.stringify(state.poll.pollSections);
 
-                        //let res = '{ sections: ' + pollSections + ', questions: ' + pollQuestions + '}';
-
-                        commit('tmpDownloadSet', pollQuestions);
-                        let fileURL = window.URL.createObjectURL(new Blob([pollQuestions]));
+                        commit('tmpDownloadSet', pollSections);
+                        let fileURL = window.URL.createObjectURL(new Blob([pollSections]));
                         let fileLink = document.createElement('a');
                         console.log(fileURL);
 
@@ -650,7 +646,7 @@ const currentPoll = {
                         document.body.appendChild(fileLink);
 
                         fileLink.click();
-                        resolve(pollQuestions);
+                        resolve(pollSections);
                     }
                 } else if (cmd.type === 'entries') {
                     api.entries.list(cmd.id).then((response) => {
