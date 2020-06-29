@@ -16,7 +16,7 @@ public class PollIteration {
     private Long id;
 
     @Column
-    private PollIterationStatus status;
+    private PollIterationStatus status = PollIterationStatus.SCHEDULED;
 
     @Column
     private LocalDateTime start;
