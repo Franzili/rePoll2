@@ -57,7 +57,7 @@
         data() {
             return {
                 activeIndex: -1,
-                actives: [null,null,null,null,null,null,true,true],
+                actives: [null,null,null,null,null,null,true,true,null],
             }
         },
         computed: {
