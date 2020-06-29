@@ -381,7 +381,9 @@
                 }
                 if (pollIterationCmd.start <= pollIterationCmd.end) {
                     this.createIteration(pollIterationCmd);
-                    this.iterRunning = true
+                    if (this.iterRunning === false) {
+                        this.iterRunning = true
+                    }
                     let pollCmd = {
                         id: this.pollId,
                         status: 'LAUNCHED' //'READY'
