@@ -66,11 +66,7 @@ public class ParticipantServiceImpl implements ParticipantService {
                 serverPrefix + "/answer/" + poll.getId() + "/" + participant.getId()
             );
             mailService.sendEmail(email, "You've been invited to a poll", message);
-
-            // TODO: to be removed when mails work again
-            System.out.println(message);
         }
-
         return participant;
     }
 
