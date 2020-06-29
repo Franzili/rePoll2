@@ -56,24 +56,13 @@
             ...mapActions('myIterations', {
                 deleteIteration: 'delete'
             }),
-            /*async loadTo() {
-                await this.listIterations(this.iteration.id)
-                return this.$router.push({
-                    name: 'poll-tabbed',
-                    params: {
-                        iterationId: this.iteration.id
-                    }
-                })
-            },*/
             handleOkDelete(bvModalEvt) {
                 bvModalEvt.preventDefault()
 
                 this.deleteIteration(this.iteration.id);
-                /*let pollCmd = {
-                    id: this.pollId,
-                    status: 'READY'
-                }
-                this.updatePoll(pollCmd);*/
+                this.$nextTick(() => {
+                    this.$bvModal.hide('deleteModal')
+                })
             }
         }
     }
