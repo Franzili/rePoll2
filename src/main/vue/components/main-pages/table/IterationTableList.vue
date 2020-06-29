@@ -1,5 +1,33 @@
 <template>
 
+    <div>
+        <div class="row">
+            <div class="list-group" id="IterationOPEN" role="tablist" v-for="iteration in iterations" v-bind:key="iteration.id">
+                <p v-if="iteration.status === 'OPEN'">
+                    <IterationTableElementOPEN v-bind:iteration="iteration"/>
+                </p>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="list-group" id="IterationSCHEDULED" role="tablist" v-for="iteration in iterations" v-bind:key="iteration.id">
+                <p v-if="iteration.status === 'SCHEDULED'">
+                    <IterationTableElementSCHEDULED v-bind:iteration="iteration"/>
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="list-group" id="IterationCLOSED" role="tablist" v-for="iteration in iterations" v-bind:key="iteration.id">
+                <p v-if="iteration.status === 'CLOSED'">
+                    <IterationTableElementCLOSED v-bind:iteration="iteration"/>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!--
 
     <div>
         <div v-bind:key="iteration.id" v-for="iteration in iterations">
@@ -22,6 +50,8 @@
             </div>
         </div>
     </div>
+
+    -->
 
     <!--
         <b-container>
