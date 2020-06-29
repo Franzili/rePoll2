@@ -241,7 +241,6 @@
                             password: this.password,
                             roles: this.roles,
                         };
-                        console.log(userCmd);
                         this.updateUser(userCmd);
 
                     }
@@ -254,7 +253,6 @@
                             email: this.email,
                             roles: this.roles
                         };
-                        console.log(userCmd);
                         this.createUser(userCmd);
                     }
 

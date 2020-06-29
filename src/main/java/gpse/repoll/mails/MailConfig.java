@@ -20,13 +20,13 @@ public class MailConfig {
     private int port = PORT;
 
     @Column
-    private String hostServer = "smtp.gmail.com";
+    private String hostServer;
 
     @Column
-    private String sendersAddress = "zizimeyer4@gmail.com";
+    private String sendersAddress;
 
     @Column
-    private String senderPassword = "qwertz24";
+    private String senderPassword;
 
 
     public MailConfig() {
