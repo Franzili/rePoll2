@@ -58,11 +58,9 @@
                 bvModalEvt.preventDefault()
                 this.getTimeNow()
                 let pollIterationCmd = {
-                    //start: this.timestamp,
-                    //end: new Date(this.ende),
+                    start: this.iteration.start,
                     end: this.timestamp,
                     status: 'CLOSED',
-                    id: this.iteration.id
                 }
                 this.updateIteration(this.iteration.id, pollIterationCmd)
                 /*let pollCmd = {
