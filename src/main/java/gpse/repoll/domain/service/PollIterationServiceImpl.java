@@ -194,8 +194,11 @@ public class PollIterationServiceImpl implements PollIterationService {
                 break;
 
             case OPEN:
+                // if there is another iteration running, close it.
                 if (poll.getCurrentIteration() != null) {
-                    throw new PollIterationStatusException();
+                    PollIteration previous = poll.getCurrentIteration();
+                    previous.setStatus(PollIterationStatus.CLOSED);
+                    pollIterationRepository.save(previous);
                 }
                 poll.setCurrentIteration(pollIteration);
                 break;
