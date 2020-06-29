@@ -60,7 +60,7 @@
                 <b-form-group
                     label="Role:"
                     label-for="role-input">
-                    <b-form-select v-model="roles" id="role-input" :options="options">Role</b-form-select>
+                    <b-form-select v-model="role" id="role-input" :options="options">Role</b-form-select>
                 </b-form-group>
                 <b-button type="button" class="close" data-dismiss="modal-1">&times;</b-button>
             </div>
@@ -163,10 +163,10 @@
     export default {
         name: "Admin",
         data() {
-            let role_Admin = ['ROLE_ADMIN'];
-            let role_Creator = ['ROLE_POLL_CREATOR'];
-            let role_Editor = ['ROLE_POLL_EDITOR'];
-            let role_Par = ['ROLE_PARTICIPANT'];
+            let role_Admin = 'ROLE_ADMIN';
+            let role_Creator = 'ROLE_POLL_CREATOR';
+            let role_Editor = 'ROLE_POLL_EDITOR';
+            let role_Par = 'ROLE_PARTICIPANT';
             return {
                 isUpdate: false,
                 items: [],
@@ -181,7 +181,7 @@
                 password: '',
                 fullName: '',
                 email: '',
-                roles: [],
+                role: 'ROLE_NO_ROLE',
                 fields: [
                     { key: 'username', label: 'Username', sortable: true, sortDirection: 'desc' },
                     { key: 'email', label: 'E-Mail', sortable: true, class: 'text-center' },
@@ -219,7 +219,7 @@
                     this.username = row.username,
                     this.fullName = row.fullName,
                     this.email = row.email,
-                    this.roles = row.roles,
+                    this.role = row.role,
                     this.password = row.password
             },
             add_UpdateUser() {
@@ -232,7 +232,7 @@
                             fullName: this.fullName,
                             email: this.email,
                             password: this.password,
-                            roles: this.roles,
+                            role: this.role,
                         };
                         console.log(userCmd);
                         this.updateUser(userCmd);
@@ -245,9 +245,8 @@
                             password: this.password,
                             fullName: this.fullName,
                             email: this.email,
-                            roles: this.roles
+                            role: this.role
                         };
-                        console.log(userCmd);
                         this.createUser(userCmd);
                     }
 
