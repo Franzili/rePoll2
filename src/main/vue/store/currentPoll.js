@@ -623,24 +623,22 @@ const currentPoll = {
 
                 //TODO after changed structure of backend combine this into one
                 if (cmd.type === 'poll') {
-                    if (cmd.format === 'human') {
+                    if (cmd.format === 'human' || cmd.format === 'json') {
                         api.poll.download(cmd).then((response) => {
                             res = response.data;
-                            console.log(res);
+                            console.log(state.poll);
                             commit('tmpDownloadSet', res);
-                            commit('downloadFileNameSet', state.poll.title + '.txt');
+                            if (cmd.format === 'human') {
+                                commit('downloadFileNameSet', state.poll.title + '.txt');
+                            } else {
+                                commit('downloadFileNameSet', state.poll.title + '.json');
+                            }
                             resolve(res);
                         }).catch(function (error) {
                             console.log(error);
                             reject();
                         })
-                    } else  if (cmd.format === 'json') {
-                        res = JSON.stringify(state.poll.pollSections);
-                        commit('tmpDownloadSet', res);
-                        commit('downloadFileNameSet', state.poll.title + '.json');
-                        resolve(res);
                     }
-
                 } else if (cmd.type === 'entries') {
                     api.entries.list(cmd.id).then((response) => {
                         res = JSON.stringify(response.data);

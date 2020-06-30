@@ -5,14 +5,7 @@ import gpse.repoll.domain.poll.PollSection;
 import gpse.repoll.domain.poll.questions.Question;
 
 public class PollTxt {
-
-    private Poll currentPoll;
-
-    public PollTxt(Poll poll) {
-        currentPoll = poll;
-    }
-
-    public String getData() {
+    public String getData(Poll currentPoll) {
         StringBuilder sectionsWithQuestions = new StringBuilder();
 
         for (PollSection section : currentPoll.getPollSections()) {

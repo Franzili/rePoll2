@@ -1,5 +1,6 @@
 package gpse.repoll.domain.service;
 
+import gpse.repoll.DownloadFormats.PollJSON;
 import gpse.repoll.DownloadFormats.PollTxt;
 import gpse.repoll.domain.poll.Poll;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,9 @@ public class DownloadServiceImpl implements DownloadService {
 
         if (type.equals("poll")) {
             if (format.equals("human")) {
-                return new PollTxt(currentPoll).getData();
+                return new PollTxt().getData(currentPoll);
+            } else if (format.equals("json")) {
+                return new PollJSON().getData(currentPoll);
             }
         }
 
