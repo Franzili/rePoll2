@@ -12,9 +12,5 @@ public interface DownloadService {
      * @param type poll or entries
      * @param format file format (e.g. txt)
      * */
-    void download(UUID id, String type, String format);
-
-    String getFolderPath();
-
-    String getFileName();
+    String download(UUID id, String type, String format);
 }

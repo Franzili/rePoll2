@@ -626,6 +626,7 @@ const currentPoll = {
                     if (cmd.format === 'human') {
                         api.poll.download(cmd).then((response) => {
                             res = response.data;
+                            console.log(res);
                             commit('tmpDownloadSet', res);
                             commit('downloadFileNameSet', state.poll.title + '.txt');
                             resolve(res);
