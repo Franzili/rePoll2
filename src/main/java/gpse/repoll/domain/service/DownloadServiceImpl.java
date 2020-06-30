@@ -1,5 +1,6 @@
 package gpse.repoll.domain.service;
 
+import gpse.repoll.DownloadFormats.EntriesJSON;
 import gpse.repoll.DownloadFormats.PollJSON;
 import gpse.repoll.DownloadFormats.PollTxt;
 import gpse.repoll.domain.poll.Poll;
@@ -28,6 +29,8 @@ public class DownloadServiceImpl implements DownloadService {
             } else if (format.equals("json")) {
                 return new PollJSON().getData(currentPoll);
             }
+        } else if (type.equals("entries")) {
+            return new EntriesJSON().getData(currentPoll);
         }
 
         return "";

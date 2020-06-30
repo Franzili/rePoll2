@@ -621,35 +621,34 @@ const currentPoll = {
                 cmd.id = state.poll.id;
                 let res = [];
 
-                //TODO after changed structure of backend combine this into one
-                if (cmd.type === 'poll') {
-                    if (cmd.format === 'human' || cmd.format === 'json') {
-                        api.poll.download(cmd).then((response) => {
-                            res = response.data;
-                            console.log(state.poll);
-                            commit('tmpDownloadSet', res);
-                            if (cmd.format === 'human') {
-                                commit('downloadFileNameSet', state.poll.title + '.txt');
-                            } else {
-                                commit('downloadFileNameSet', state.poll.title + '.json');
-                            }
-                            resolve(res);
-                        }).catch(function (error) {
-                            console.log(error);
-                            reject();
-                        })
+                api.poll.download(cmd).then((response) => {
+                    res = response.data;
+                    console.log(state.poll);
+                    commit('tmpDownloadSet', res);
+
+
+                    //Set FileName
+                    if (cmd.type === 'poll') {
+
+                        if (cmd.format === 'human') {
+                            commit('downloadFileNameSet', state.poll.title + '.txt');
+                        } else if (cmd.format === 'json') {
+                            commit('downloadFileNameSet', state.poll.title + '.json');
+                        }
+
+                    } else if (cmd.type === 'entries') {
+
+                        if (cmd.type === 'entries') {
+                            commit('downloadFileNameSet', state.poll.title + 'Entries.json');
+                        }
+                        
                     }
-                } else if (cmd.type === 'entries') {
-                    api.entries.list(cmd.id).then((response) => {
-                        res = JSON.stringify(response.data);
-                        commit('tmpDownloadSet', res);
-                        commit('downloadFileNameSet', state.poll.title + 'Entries.json');
-                        resolve(res);
-                    }).catch(function (error) {
-                        console.log(error);
-                        reject();
-                    })
-                }
+
+                    resolve(res);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
             }));
 
             let fileURL = window.URL.createObjectURL(new Blob([state.tmpDownload]));
