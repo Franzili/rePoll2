@@ -42,15 +42,12 @@ public class UsersControllerTest {
     private PollService pollService;
 
     @Mock
-    private MailService mailService;
-
-    @Mock
     private UsersController usersController;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        usersController = new UsersController(userService, mailService);
+        usersController = new UsersController(userService);
     }
 
     @Test

@@ -8,7 +8,6 @@ export default {
         return axios.get('/api/v1/users/' + id + '/');
     },
     create(userCmd) {
-        console.log(userCmd);
         return axios.post('/api/v1/users/', userCmd);
     },
     update(userCmd) {

@@ -5,11 +5,12 @@ import gpse.repoll.domain.poll.PollIterationStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface PollIterationService {
 
-    List<PollIteration> getAll(UUID pollID);
+    Set<PollIteration> getAll(UUID pollID);
 
     PollIteration addPollIteration(UUID pollID, LocalDateTime start, LocalDateTime end, PollIterationStatus status);
 

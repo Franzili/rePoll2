@@ -22,7 +22,7 @@ const participants = {
         /**
          * Reloads the Participants from Backend
          */
-        load({rootState, commit}, id) {
+        loadParticipant({rootState, commit}, id) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
                 return;
@@ -89,8 +89,7 @@ const participants = {
                     reject(error);
                 })
             })
-        }
-
+        },
 
     },
     namespaced: true

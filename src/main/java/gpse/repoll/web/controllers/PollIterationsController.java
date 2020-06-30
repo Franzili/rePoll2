@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @CrossOrigin
@@ -22,7 +23,7 @@ public class PollIterationsController {
     }
 
     @GetMapping("/{pollID}/iterations/")
-    public List<PollIteration> listAll(@PathVariable UUID pollID) {
+    public Set<PollIteration> listAll(@PathVariable UUID pollID) {
         return pollIterationService.getAll(pollID);
     }
 

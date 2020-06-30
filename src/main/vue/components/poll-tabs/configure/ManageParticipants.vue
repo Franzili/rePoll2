@@ -1,11 +1,90 @@
 <template>
     <b-card>
         <!-- TODO: adapt type names to backend terminology -->
-        <b-row v-if="type === 'known'">
+        <div v-if="poll.anonymity === 'NON_ANONYMOUS'">
+            <h6>Participants:</h6>
+            <b-row>
+                <b-col cols="6">
+                    <p>
+                        <b-table
+                            show-empty
+                            small
+                            sticky-header="true"
+                            :items="this.participants"
+                            :fields="fields"
+                            :sort-desc.sync="sortDesc"
+                            :sort-direction="sortDirection">
+                            <template v-slot:cell(name)="row">
+                                {{ row.value.fullName }}
+                            </template>
+                        </b-table>
+                    </p>
+                    <p>
+                        <b-button
+                            class="float-right"
+                            variant="primary"
+                            v-b-modal.newParticipant>
+                            Invite New
+                        </b-button>
+                    </p>
+                    <p>
+                        <UploadParticipants></UploadParticipants>
+                    </p>
+                </b-col>
 
-        </b-row>
+                <b-col cols="6">
+                    <p>
+                        Known participants will receive a custom link to the poll automatically, when they are invited.
+                    </p>
+                    <p>
+                        <b-row class="align-items-center">
+                            <b-col cols="6">
+                                {{ n_participated }} participated, <br/>
+                                {{ n_invites_pending }} invites pending.
+                            </b-col>
 
-        <div v-if="type === 'pseudo'">
+                            <b-col cols="6">
+                                <b-button class="float-right">Remind</b-button>
+                            </b-col>
+                        </b-row>
+                    </p>
+                </b-col>
+            </b-row>
+            <b-modal
+                id="newParticipant"
+                title="Invite"
+                centered
+                @ok="addParticipant">
+                <div>
+                    <b-row
+                        class="justify-content-md-center"
+                        style="margin-bottom: 3vh">
+                        <b-col col lg="2">
+                            Name:
+                        </b-col>
+                        <b-col col lg="6">
+                            <b-form-input
+                                v-model="name">
+                            </b-form-input>
+                        </b-col>
+                    </b-row>
+                    <b-row
+                        class="justify-content-md-center"
+                        style="margin-bottom: 3vh">
+                        <b-col col lg="2">
+                            E-Mail:
+                        </b-col>
+                        <b-col col lg="6">
+                            <b-form-input v-model="eMail">
+                            </b-form-input>
+                        </b-col>
+                    </b-row>
+                </div>
+            </b-modal>
+        </div>
+
+
+        <div v-if="poll.anonymity === 'PSEUDONYMOUS'">
             <h6>Invite new participants</h6>
 
             <b-row>
@@ -52,7 +131,7 @@
             </b-row>
         </div>
 
-        <b-row v-if="type === 'anonymous'">
+        <b-row v-if="poll.anonymity === 'ANONYMOUS'">
             <b-container>
                 <b-row align-h="between">
                     <b-col cols="6">
@@ -98,37 +177,68 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
+    import {mapState, mapActions} from "vuex";
+    import UploadParticipants from "./UploadParticipants";
+
     export default {
         name: "ManageParticipants",
+        components: {UploadParticipants},
 
         data() {
             return {
                 link: '',
+                items: [],
+                fields: [
+                    { key: 'fullName', label: 'Fullname', sortable: true, sortDirection: 'desc' },
+                    { key: 'email', label: 'Email', sortable: true, sortDirection: 'desc' }],
+                sortDesc: false,
+                sortDirection: 'asc',
 
                 //TODO
-                type: 'anonymous',
+                n_participated: 6,
+                n_invites_pending: 32,
 
-                //TODO
-                n_participated: 412,
-                n_invites_pending: 32
+                // For a single participant
+                name: '',
+                eMail: ''
             }
         },
 
         computed: {
             ...mapState('currentPoll', {
-                poll: 'poll'
-            }),
+                poll: 'poll'}),
             ...mapState('participants', {
                 participants: 'participants'
             })
+        },
+
+
+        methods: {
+            ...mapActions('participants', {
+                loadParticipant: 'loadParticipant'
+            }),
+            ...mapActions('participants', {
+                create: "create"
+            }),
+            async addParticipant() {
+                let participantCmd = {
+                    fullName: this.name,
+                    email: this.eMail
+                }
+                await this.create(participantCmd)
+            }
+        },
+        mounted() {
+            this.loadParticipant(this.poll.id);
+            //this.n_participated = this.poll.entries.length;
         },
 
         created: function() {
             let id = this.$route.params.pollId;
             let domain = window.location.origin;
             this.link = domain + '/poll/' + id + '/answer';
-        }
+        },
+
     }
 </script>
 

@@ -1,77 +1,43 @@
 package gpse.repoll.mails;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-
+import javax.mail.internet.InternetAddress;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Properties;
-import java.util.UUID;
 
 /**
  * Configuration class for Mails, generates a MailSender Bean.
  */
 @Entity
-@Configuration
 public class MailConfig {
 
-    private static final String TRUE = "true";
     private static final int PORT = 587;
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    UUID id;
+    Long id = 0L;
 
     @Column
     private int port = PORT;
 
     @Column
-    private String hostServer = "smtp.gmail.com";
+    private String hostServer;
 
     @Column
-    private String sendersAddress = "zizimeyer4@gmail.com";
+    private String sendersAddress;
 
     @Column
-    private String senderPassword = "qwertz24";
-
-    private String sendTo;
+    private String senderPassword;
 
 
-    protected MailConfig() {
+    public MailConfig() {
 
     }
 
-    /**
-     * Bean that sends a Mail.
-     * @return JavaMailSender object that is sending the Mail.
-     */
-    @Bean
-    public JavaMailSender getJavaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(hostServer);
-        mailSender.setPort(port);
-
-        mailSender.setUsername(sendersAddress);
-        mailSender.setPassword(senderPassword);
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", TRUE);
-        props.put("mail.smtp.starttls.enable", TRUE);
-        props.put("mail.debug", TRUE);
-
-        return mailSender;
-    }
-
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -95,8 +61,8 @@ public class MailConfig {
         return sendersAddress;
     }
 
-    public void setSendersAddress(String sendersAddress) {
-        this.sendersAddress = sendersAddress;
+    public void setSendersAddress(InternetAddress sendersAddress) {
+        this.sendersAddress = sendersAddress.toString();
     }
 
     public String getSenderPassword() {
@@ -105,13 +71,5 @@ public class MailConfig {
 
     public void setSenderPassword(String senderPassword) {
         this.senderPassword = senderPassword;
-    }
-
-    public String getSendTo() {
-        return sendTo;
-    }
-
-    public void setSendTo(String sendTo) {
-        this.sendTo = sendTo;
     }
 }
