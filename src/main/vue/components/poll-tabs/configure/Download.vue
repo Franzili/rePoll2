@@ -6,7 +6,7 @@
         <div class="float-left">
 
             <b-dropdown text="Download poll">
-                <b-dropdown-item @click="downloadFromStore('poll', 'human')">
+                <b-dropdown-item @click="downloadFromStore('poll', 'txt')">
                     Download Poll as txt file
                 </b-dropdown-item>
                 <b-dropdown-item @click="downloadFromStore('poll', 'json')">

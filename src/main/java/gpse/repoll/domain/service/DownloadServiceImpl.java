@@ -24,7 +24,7 @@ public class DownloadServiceImpl implements DownloadService {
         Poll currentPoll = pollService.getPoll(id);
 
         if (type.equals("poll")) {
-            if (format.equals("human")) {
+            if (format.equals("txt")) {
                 return new PollTxt().getData(currentPoll);
             } else if (format.equals("json")) {
                 return new PollJSON().getData(currentPoll);

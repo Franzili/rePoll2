@@ -24,14 +24,12 @@ public class DownloadsController {
     /**
      * @param id pollId
      * @param type poll for poll without entries and entries for entries
-     * @param format human for human-readable and json for JSON String
-     * @param response HttpServletResponse
+     * @param format txt for human-readable and json for JSON String
      * */
     @GetMapping("/{id}/{type}/{format}/")
     public String download(@PathVariable("id") final UUID id,
                          @PathVariable("type") final String type,
-                         @PathVariable("format") final String format,
-                         HttpServletResponse response) {
+                         @PathVariable("format") final String format) {
         return downloadService.download(id, type, format);
     }
 }

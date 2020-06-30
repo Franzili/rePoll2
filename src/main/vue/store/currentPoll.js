@@ -625,25 +625,7 @@ const currentPoll = {
                     res = response.data;
                     console.log(state.poll);
                     commit('tmpDownloadSet', res);
-
-
-                    //Set FileName
-                    if (cmd.type === 'poll') {
-
-                        if (cmd.format === 'human') {
-                            commit('downloadFileNameSet', state.poll.title + '.txt');
-                        } else if (cmd.format === 'json') {
-                            commit('downloadFileNameSet', state.poll.title + '.json');
-                        }
-
-                    } else if (cmd.type === 'entries') {
-
-                        if (cmd.type === 'entries') {
-                            commit('downloadFileNameSet', state.poll.title + 'Entries.json');
-                        }
-                        
-                    }
-
+                    commit('downloadFileNameSet', state.poll.title + '_' + cmd.type + '.' + cmd.format);
                     resolve(res);
                 }).catch(function (error) {
                     console.log(error);
