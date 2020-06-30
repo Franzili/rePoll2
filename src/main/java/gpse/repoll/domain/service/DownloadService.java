@@ -11,6 +11,8 @@ public interface DownloadService {
      * @param id poll ID
      * @param type poll or entries
      * @param format file format (e.g. txt)
+     *
+     * @return The desired Data is returned as a String
      * */
     String download(UUID id, String type, String format);
 }
