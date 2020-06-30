@@ -36,7 +36,8 @@ const currentPoll = {
          */
         statistics: [],
         entries: [],
-        tmpDownload: {}
+        tmpDownload: [],
+        downloadFileName: ''
     },
 
     getters: {
@@ -272,7 +273,11 @@ const currentPoll = {
     mutations: {
 
         tmpDownloadSet(state, newDownload) {
-            state.testdownload = newDownload;
+            state.tmpDownload = newDownload;
+        },
+
+        downloadFileNameSet(state, fileName) {
+            state.downloadFileName = fileName;
         },
 
         /**
@@ -611,63 +616,53 @@ const currentPoll = {
         /**
          * cmd has form: {pollId, type, format}
          * */
-        download({commit, state}, cmd) {
+        async download({commit, state}, cmd,) {
+            await new Promise(((resolve, reject) => {
+                cmd.id = state.poll.id;
+                let res = [];
 
-            cmd.id = state.poll.id;
-            return new Promise(((resolve, reject) => {
+                //TODO after changed structure of backend combine this into one
                 if (cmd.type === 'poll') {
                     if (cmd.format === 'human') {
                         api.poll.download(cmd).then((response) => {
-                            commit('tmpDownloadSet', response.data);
-                            let fileURL = window.URL.createObjectURL(new Blob([response.data]));
-                            let fileLink = document.createElement('a');
-
-                            fileLink.href = fileURL;
-                            fileLink.setAttribute('download', state.poll.title + '.txt');
-                            document.body.appendChild(fileLink);
-
-                            fileLink.click();
-                            resolve(response.data);
+                            res = response.data;
+                            commit('tmpDownloadSet', res);
+                            commit('downloadFileNameSet', state.poll.title + '.txt');
+                            resolve(res);
                         }).catch(function (error) {
                             console.log(error);
                             reject();
                         })
                     } else  if (cmd.format === 'json') {
-
-                        let pollSections = JSON.stringify(state.poll.pollSections);
-
-                        commit('tmpDownloadSet', pollSections);
-                        let fileURL = window.URL.createObjectURL(new Blob([pollSections]));
-                        let fileLink = document.createElement('a');
-                        console.log(fileURL);
-
-                        fileLink.href = fileURL;
-                        fileLink.setAttribute('download', state.poll.title + '.json');
-                        document.body.appendChild(fileLink);
-
-                        fileLink.click();
-                        resolve(pollSections);
+                        res = JSON.stringify(state.poll.pollSections);
+                        commit('tmpDownloadSet', res);
+                        commit('downloadFileNameSet', state.poll.title + '.json');
+                        resolve(res);
                     }
+
                 } else if (cmd.type === 'entries') {
                     api.entries.list(cmd.id).then((response) => {
-                        let jsonEntries = JSON.stringify(response.data);
-                        commit('tmpDownloadSet', jsonEntries);
-                        let fileURL = window.URL.createObjectURL(new Blob([jsonEntries]));
-                        let fileLink = document.createElement('a');
-
-                        fileLink.href = fileURL;
-                        fileLink.setAttribute('download', state.poll.title + 'Entries.json');
-                        document.body.appendChild(fileLink);
-
-                        fileLink.click();
-                        resolve(jsonEntries);
+                        res = JSON.stringify(response.data);
+                        commit('tmpDownloadSet', res);
+                        commit('downloadFileNameSet', state.poll.title + 'Entries.json');
+                        resolve(res);
                     }).catch(function (error) {
                         console.log(error);
                         reject();
                     })
                 }
-            }))
+            }));
+
+            let fileURL = window.URL.createObjectURL(new Blob([state.tmpDownload]));
+            let fileLink = document.createElement('a');
+
+            fileLink.href = fileURL;
+            fileLink.setAttribute('download', state.downloadFileName);
+            document.body.appendChild(fileLink);
+
+            fileLink.click();
         }
+
     },
 
     namespaced: true
