@@ -87,9 +87,10 @@
             }
         },
         async mounted() {
-            this.loaded = false
-            let pollId = this.$route.params.pollId
-            await this.loadPoll(pollId)
+            this.loaded = false;
+            let pollId = this.$route.params.pollId;
+            await this.loadPoll(pollId);
+            this.pollTitle = this.poll.title;
             this.loaded = true
         },
         watch: {
