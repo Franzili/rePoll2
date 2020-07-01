@@ -10,7 +10,6 @@
                             :value="poll.title"
                             :editing="editTitle"
                             v-on:valueChanged="pollTitle = $event">
-                            <!-- is this applied when submitting poll? -->
                         </EditableLabel>
 
                     <div v-if="$route.name === 'edit-poll'" class="ml-3">

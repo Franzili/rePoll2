@@ -23,6 +23,10 @@ public class DownloadServiceImpl implements DownloadService {
 
         Poll currentPoll = pollService.getPoll(id);
 
+
+        //New Types or Formats can be implemented in DownloadFormats package
+        //and used here
+
         if (type.equals("poll")) {
             if (format.equals("txt")) {
                 return new PollTxt().getData(currentPoll);
