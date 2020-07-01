@@ -2,6 +2,7 @@ package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.service.ParticipantService;
+import gpse.repoll.domain.utils.Pair;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.ParticipantCmd;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +39,13 @@ public class ParticipantsController {
 
     @Secured(Roles.POLL_CREATOR)
     @PostMapping("/")
-    public Participant addParticipant(@RequestBody final ParticipantCmd participantCmd,
+    public String addParticipant(@RequestBody final ParticipantCmd participantCmd,
                                       @PathVariable final UUID pollId) {
-        final Participant participant = participantService.addParticipant(
-                participantCmd.getFullName(),
-                participantCmd.getEmail(),
-                pollId
-        );
-
-        return participant;
+        return participantService.addParticipant(
+            participantCmd.getFullName(),
+            participantCmd.getEmail(),
+            pollId
+        ).getString();
     }
 
     @Secured(Roles.POLL_CREATOR)

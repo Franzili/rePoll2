@@ -200,7 +200,9 @@
 
                 // For a single participant
                 name: '',
-                eMail: ''
+                eMail: '',
+
+                participantMailPair: ''
             }
         },
 
@@ -208,7 +210,8 @@
             ...mapState('currentPoll', {
                 poll: 'poll'}),
             ...mapState('participants', {
-                participants: 'participants'
+                participants: 'participants',
+                mailAnswer: 'mailAnswer'
             })
         },
 
@@ -226,6 +229,14 @@
                     email: this.eMail
                 }
                 await this.create(participantCmd)
+                this.makeToast()
+            },
+            makeToast() {
+                this.$bvToast.toast(this.mailAnswer, {
+                    title: 'Mail',
+                    autoHideDelay: 10000,
+                    appendToast: false
+                })
             }
         },
         mounted() {

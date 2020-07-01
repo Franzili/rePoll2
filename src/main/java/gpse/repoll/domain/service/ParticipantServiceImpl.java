@@ -5,6 +5,7 @@ import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.repositories.ParticipantRepository;
 import gpse.repoll.domain.repositories.PollRepository;
+import gpse.repoll.domain.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class ParticipantServiceImpl implements ParticipantService {
      * {@inheritDoc}
      */
     @Override
-    public Participant addParticipant(String fullName, String email, UUID pollId) {
+    public Pair<Participant> addParticipant(String fullName, String email, UUID pollId) {
         Participant participant = new Participant();
         participant.setFullName(fullName);
         participant.setEmail(email);
@@ -65,9 +66,10 @@ public class ParticipantServiceImpl implements ParticipantService {
                 poll.getTitle(),
                 serverPrefix + "/answer/" + poll.getId() + "/" + participant.getId()
             );
-            mailService.sendEmail(email, "You've been invited to a poll", message);
+            String mailMessage = mailService.sendEmail(email, "You've been invited to a poll", message);
+            return new Pair<>(participant, mailMessage);
         }
-        return participant;
+        return new Pair<>(participant, null);
     }
 
     /**

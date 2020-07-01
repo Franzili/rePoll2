@@ -5,6 +5,7 @@ import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.repositories.*;
 import gpse.repoll.domain.service.*;
+import gpse.repoll.domain.utils.Pair;
 import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,7 +129,7 @@ public class InitializeDatabase implements InitializingBean {
 
             List<Participant> participants = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
-                Participant tmpUser;
+                Pair<Participant> tmpUser;
                     tmpUser = participantService.addParticipant(
                         "Patti" + i,
                         // Passwort: GutenTag
@@ -139,7 +140,7 @@ public class InitializeDatabase implements InitializingBean {
                         );
                         //Roles.PARTICIPANT);
 
-                participants.add(tmpUser);
+                participants.add(tmpUser.getObject());
             }
 
 

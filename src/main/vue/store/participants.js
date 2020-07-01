@@ -2,7 +2,8 @@ import api from "../api";
 
 const participants = {
     state: {
-        participants: []
+        participants: [],
+        mailAnswer: ''
     },
     getters: {},
     mutations: {
@@ -16,6 +17,9 @@ const participants = {
         },
         delete(state, id) {
             state.participants.filter(participants => participants.id !== id);
+        },
+        add(state, mailAnswer) {
+            state.mailAnswer = mailAnswer;
         }
     },
     actions: {
@@ -58,13 +62,14 @@ const participants = {
         /**
          * Creates a new Participant
          */
-        create({rootState}, participantCmd) {
+        create({commit, rootState}, participantCmd) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
                 return;
             }
             return new Promise(function (resolve, reject) {
-                api.poll.addParticipant(rootState.currentPoll.poll.id, participantCmd).then(() => {
+                api.poll.addParticipant(rootState.currentPoll.poll.id, participantCmd).then((res) => {
+                    commit('add', res.data);
                     resolve();
                 }).catch(function (error) {
                     console.log(error);

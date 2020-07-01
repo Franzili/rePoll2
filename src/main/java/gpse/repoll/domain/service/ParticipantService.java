@@ -1,6 +1,7 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.Participant;
+import gpse.repoll.domain.utils.Pair;
 
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public interface ParticipantService {
      * @param pollId is the poll ID
      * @return the new Participant
      */
-    Participant addParticipant(String fullName, String email, UUID pollId);
+    Pair<Participant> addParticipant(String fullName, String email, UUID pollId);
 
     /**
      * Gets one Participant.
