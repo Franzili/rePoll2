@@ -33,7 +33,7 @@ public class Design {
         this.textColour = "#000000";
         this.backgroundColour = "#ffffff";
         this.logoPosition = "left";
-        this.logo="";
+        this.logo = "";
     }
 
     public Long getId() {

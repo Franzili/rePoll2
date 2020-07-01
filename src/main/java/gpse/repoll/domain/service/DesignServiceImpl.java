@@ -12,14 +12,14 @@ import java.util.UUID;
 @Service
 public class DesignServiceImpl implements DesignService {
 
-    private PollService pollService;
+    private final PollService pollService;
     private final DesignRepository designRepository;
     private final PollRepository pollRepository;
 
     @Autowired
     public DesignServiceImpl(PollService pollService,
                              DesignRepository designRepository,
-                             PollRepository pollRepository){
+                             PollRepository pollRepository) {
         this.pollService = pollService;
         this.designRepository = designRepository;
         this.pollRepository = pollRepository;

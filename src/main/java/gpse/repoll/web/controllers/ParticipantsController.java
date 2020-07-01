@@ -2,7 +2,6 @@ package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.service.ParticipantService;
-import gpse.repoll.domain.utils.Pair;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.ParticipantCmd;
 import org.springframework.beans.factory.annotation.Autowired;

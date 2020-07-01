@@ -1,23 +1,19 @@
-package gpse.repoll.DownloadFormats;
+package gpse.repoll.download_formats;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gpse.repoll.domain.poll.Poll;
 
-public class EntriesJSON {
-
+public class PollJSON {
     public String getData(Poll currentPoll) {
 
+
         try {
-            return new ObjectMapper().writeValueAsString(currentPoll.getPollEntries());
+            return new ObjectMapper().writeValueAsString(currentPoll.getPollSections());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
         return "";
-
     }
-
-
-
 }

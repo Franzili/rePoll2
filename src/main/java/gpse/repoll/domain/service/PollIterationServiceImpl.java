@@ -17,7 +17,6 @@ import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
@@ -206,6 +205,8 @@ public class PollIterationServiceImpl implements PollIterationService {
             case CLOSED:
                 poll.setCurrentIteration(null);
                 break;
+
+            default: poll.setCurrentIteration(pollIteration);
         }
         pollRepository.save(poll);
         pollIteration.setStatus(status);
