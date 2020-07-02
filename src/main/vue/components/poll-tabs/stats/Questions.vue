@@ -40,6 +40,10 @@
             <h6>{{(poll.questions.find(question => question.id === selected).title)}}</h6>
         </b-row>
 
+       <p>
+           <FilterQuestions></FilterQuestions>
+       </p>
+
         <b-row>
             <!-- TODO I WANT TO BE A COMPONENT IF I BECOME MORE COMPLEX -->
             <!--TODO Prototype for deeper analyses, "&& selQuest.length > 0"-->
@@ -50,6 +54,9 @@
                      outlined
                      :items="answerSet"
                      :fields="fields"
+                     :filter="filter"
+                     :filterIncludedFields="filterOn"
+                     @filtered="OnFiltered"
             ></b-table>
         </b-row>
 
@@ -59,6 +66,7 @@
 <script>
 
     import {mapActions, mapGetters, mapState} from "vuex";
+    import FilterQuestions from "./utils/FilterQuestions";
 
     export default {
         name: "Questions",
@@ -71,7 +79,14 @@
                     {key: 'Username', sortable: true},
                     {key: 'Answers', sortable: true}
                 ],
-                structure: []
+                structure: [],
+                totalRows: 1,
+                filter: '',
+                filterOn: FilterQuestions.data().filterOn,
+                sortDesc: false,
+                sortDirection: 'asc',
+                
+
                 // TODO Prototype for deeper analyses
                 //selQuest: [],
             }
@@ -82,7 +97,7 @@
             if (this.qId !== 0) {
                 this.selected = this.qId
             }
-
+            this.totalRows = this.answerSet.length
         },
         computed: {
             ...mapState('currentPoll', {
@@ -111,6 +126,8 @@
             ...mapActions('currentPoll', {
                 loadPollAnswers: 'loadPollAnswers'
             }),
+
+
             // TODO Prototype for deeper analyses
             /*deleteSelected(id) {
                 let tmpQuests = []
@@ -133,7 +150,7 @@
                 }
             },*/
         },
-        components: {}
+        components: {FilterQuestions}
     }
 </script>
 
