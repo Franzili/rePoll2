@@ -12,7 +12,7 @@ import java.util.UUID;
 @Service
 public class DesignServiceImpl implements DesignService {
 
-    private PollService pollService;
+    private final PollService pollService;
     private final DesignRepository designRepository;
     private final PollRepository pollRepository;
 
@@ -23,6 +23,11 @@ public class DesignServiceImpl implements DesignService {
         this.pollService = pollService;
         this.designRepository = designRepository;
         this.pollRepository = pollRepository;
+    }
+
+    @Override
+    public void save(Design design) {
+        designRepository.save(design);
     }
 
     @Override

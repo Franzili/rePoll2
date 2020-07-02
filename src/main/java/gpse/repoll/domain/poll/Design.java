@@ -36,6 +36,15 @@ public class Design {
         this.logo="";
     }
 
+    public Design(Design design) {
+        this.id = null;
+        this.font = design.font;
+        this.textColour = design.textColour;
+        this.backgroundColour = design.backgroundColour;
+        this.logoPosition = design.logoPosition;
+        this.logo = design.logo;
+    }
+
     public Long getId() {
         return id;
     }

@@ -10,6 +10,8 @@ import java.util.UUID;
  */
 public interface PollConsistencyGroupService {
 
+    void save(PollConsistencyGroup pollConsistencyGroup);
+
     /**
      * Get all ConsistencyGroups of a Poll.
      * @param id The polls ID

@@ -6,6 +6,8 @@ import java.util.UUID;
 
 public interface DesignService {
 
+    void save(Design design);
+
     Design getDesign(UUID pollID);
 
     Design updateDesign(UUID pollID,
