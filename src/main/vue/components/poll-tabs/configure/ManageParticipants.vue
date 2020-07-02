@@ -23,6 +23,8 @@
                         <b-button
                             class="float-right"
                             variant="primary"
+                            data-toggle="tooltip"
+                            title="Invite a new Participant"
                             v-b-modal.newParticipant>
                             Invite New
                         </b-button>
@@ -44,7 +46,9 @@
                             </b-col>
 
                             <b-col cols="6">
-                                <b-button class="float-right">Remind</b-button>
+                                <b-button class="float-right"
+                                data-toggle="tooltip"
+                                title="Send Reminder-Mails to the Participants">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
@@ -97,7 +101,10 @@
                         ></b-form-textarea>
                     </p>
                     <p>
-                        <b-button class="float-right" variant="primary">Invite</b-button>
+                        <b-button class="float-right"
+                                  data-toggle="tooltip"
+                                  title="Invite a new Participant"
+                                  variant="primary">Invite</b-button>
                     </p>
                 </b-col>
 
@@ -144,7 +151,10 @@
                             ></b-form-textarea>
                         </p>
                         <p>
-                            <b-button class="float-right" variant="primary">Invite</b-button>
+                            <b-button class="float-right"
+                                      data-toggle="tooltip"
+                                      title="Invite a new Participant"
+                                      variant="primary">Invite</b-button>
                         </p>
                     </b-col>
 

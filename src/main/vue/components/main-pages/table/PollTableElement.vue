@@ -18,7 +18,9 @@
             </b-col>
 
             <b-col cols="4" style="text-align: end">
-                <span @click="loadTo" class="configLink">Setup
+                <span @click="loadTo" class="configLink"
+                data-toggle="tooltip"
+                title="Go to the Configuration-Page">Setup
                 </span>
             </b-col>
             <b-col cols="2">

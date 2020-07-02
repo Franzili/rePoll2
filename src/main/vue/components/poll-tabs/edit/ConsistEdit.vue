@@ -15,7 +15,10 @@
             <b-col cols="1">
                 <b-button @click="showModal([], -1)"
                           style="margin-top: 1rem" variant="primary"
-                          class="addButton float-right">+
+                          class="addButton float-right"
+                          data-toggle="tooltip"
+                          title="Add new Consistency Group"
+                >+
                 </b-button>
             </b-col>
 

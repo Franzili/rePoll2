@@ -99,7 +99,9 @@
                                     label-cols-sm="3"
                                     label-align-sm="right"
                                     label-size="sm"
-                                    class="mb-0">
+                                    class="mb-0"
+                                    data-toggle="tooltip"
+                                    title="Filter by this column">
                                     <b-form-checkbox-group v-model="filterOn" class="mt-1">
                                         <b-form-checkbox value="username">Name</b-form-checkbox>
                                         <b-form-checkbox value="email">E-Mail</b-form-checkbox>
@@ -145,7 +147,12 @@
                         </b-table>
                         <!---- Add button to create new user--->
                         <b-col >
-                            <b-button class="addButton" v-b-modal.modal-1 @click="isUpdate=false">+</b-button>
+                            <b-button class="addButton"
+                                      data-toggle="tooltip"
+                                      data-placement="auto"
+                                      title="Click to add a new User"
+                                      v-b-modal.modal-1
+                                      @click="isUpdate=false">+</b-button>
                         </b-col>
                         <b-modal id="delete-modal"
                                  centered
