@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Default implementation of {@link ParticipantService}.
+ */
 @Service
 public class ParticipantServiceImpl implements ParticipantService {
     private final ParticipantRepository participantRepository;

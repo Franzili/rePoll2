@@ -3,6 +3,9 @@ package gpse.repoll.domain.poll;
 
 import javax.persistence.*;
 
+/**
+ * Defines the style for one {@link Poll}.
+ */
 @Entity
 public class Design {
 

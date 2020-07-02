@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class InvalidScaleException extends RuntimeException {
 
-    public static final long serialVersionUID = 7L;
+    public static final long serialVersionUID = 4L;
 }

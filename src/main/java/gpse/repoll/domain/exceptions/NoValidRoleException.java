@@ -5,5 +5,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class NoValidRoleException extends RuntimeException {
-    public static final long serialVersionUID = 6L;
+    public static final long serialVersionUID = 7L;
 }

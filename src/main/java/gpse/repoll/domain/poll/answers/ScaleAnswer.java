@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
- * An answer that expresses how much you agree or disagree.
+ * Represents the chosen number of the scale.
  */
 @Entity
 public class ScaleAnswer extends Answer {

@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents one execution of a {@link Poll}.
+ */
 @Entity
 public class PollIteration {
 

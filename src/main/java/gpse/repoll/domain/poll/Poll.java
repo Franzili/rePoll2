@@ -19,8 +19,7 @@ import java.util.*;
 
 /**
  * Main Poll object.
- *
- * Poll objects are assumed to be equal if they have equal IDs.
+ * Represents all information of a poll.
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -72,8 +71,8 @@ public class Poll extends Auditable<User> {
     }
 
     /**
-     * Create a new poll.
-     * @param title The title of the poll.
+     * Creates a new poll.
+     * @param title The title of the poll
      */
     public Poll(String title) {
         this.title = title;
@@ -82,6 +81,11 @@ public class Poll extends Auditable<User> {
       //  this.design = new Design();
     }
 
+    /**
+     * Used to create a copy of another poll.
+     * @param poll The poll that is copied
+     * @param pollSections The sections of the poll that is copied
+     */
     public Poll(Poll poll, List<PollSection> pollSections) {
        this.status = PollEditStatus.EDITING;
        this.anonymity = poll.anonymity;
@@ -348,10 +352,10 @@ public class Poll extends Auditable<User> {
     }
 
     /**
-     Creates a list of questions of the poll.
+     Creates a list of {@link Question}s of the poll.
      * @param questionIds The ID's of the questions
      * @return The list of the questions
-     * @throws BadRequestException if one question is not found in the poll
+     * @throws BadRequestException If one question is not found in the poll
      */
     private List<Question> listQuestions(Collection<Long> questionIds) throws BadRequestException {
         // Checks if there is a question specified which does not belong to this poll
@@ -382,9 +386,9 @@ public class Poll extends Auditable<User> {
     /**
      * This method assigns the questions of the poll to the sections defined in the parameter.
      * The objects are referenced by their IDs.
-     * @param structure the defined assignments
-     * @throws BadRequestException if the structure object is not well defined
-     * @throws InternalServerErrorException if the algorithm has a bug
+     * @param structure The defined assignments
+     * @throws BadRequestException If the structure object is not well defined
+     * @throws InternalServerErrorException If the algorithm has a bug
      */
     public void setStructure(Map<UUID, List<Long>> structure) throws BadRequestException, InternalServerErrorException {
         Set<UUID> keySet = structure.keySet();

@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Default implementation of {@link QuestionService}.
+ */
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
     private static final String NO_QUESTION_FOUND = "The question does not exist!";
-    private static final String TOO_MANY_BONUS_CHOICES = "Not so many bonus choices allowed!";
 
     private final PollService pollService;
 
@@ -46,6 +48,9 @@ public class QuestionServiceImpl implements QuestionService {
         this.questionBaseRepository = questionBaseRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void save(Question question) {
         questionBaseRepository.save(question);
@@ -166,10 +171,9 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     /**
-     * Checks whether the question belongs to the poll.
-     * @param poll The Poll
-     * @param question The Question
-     * @throws BadRequestException if the question does not belong to the poll
+     * Checks whether the {@link Question} belongs to the {@link Poll}.
+     * @param poll The poll
+     * @param question The question
      */
     private void testQuestion(Poll poll, Question question) throws BadRequestException {
         if (!poll.contains(question)) {
@@ -325,6 +329,9 @@ public class QuestionServiceImpl implements QuestionService {
         questionBaseRepository.delete(question);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addBonusChoice(final UUID pollID, final Long questionID, final Choice bonusChoice) {
         Question question = getQuestion(pollID, questionID);
@@ -335,6 +342,9 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addAllBonusChoices(final UUID pollID, final Long questionID, final List<Choice> bonusChoices) {
         Question question = getQuestion(pollID, questionID);

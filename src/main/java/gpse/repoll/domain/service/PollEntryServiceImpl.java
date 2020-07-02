@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Default implementation of {@link PollEntryService}.
+ */
 @Service
 public class PollEntryServiceImpl implements PollEntryService {
 
@@ -47,6 +50,12 @@ public class PollEntryServiceImpl implements PollEntryService {
         this.multiChoiceAnswerRepository = multiChoiceAnswerRepository;
     }
 
+    /**
+     * Fills the {@link PollEntry} with the {@link Answer}s.
+     * @param poll The poll
+     * @param pollEntry The poll entry
+     * @param associations The map of IDs of the {@link Question}s and answers
+     */
     private void createAnswers(Poll poll, PollEntry pollEntry, Map<Long, Answer> associations) {
         for (Long questionId : associations.keySet()) {
             Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
@@ -120,6 +129,12 @@ public class PollEntryServiceImpl implements PollEntryService {
         return findEntryOfPoll(poll, pollEntryId);
     }
 
+    /**
+     * Gets a {@link PollEntry} and tests whether it belongs to the {@link Poll}.
+     * @param poll The poll
+     * @param pollEntryId The ID of the poll
+     * @return The poll entry
+     */
     private PollEntry findEntryOfPoll(Poll poll, Long pollEntryId) {
         PollEntry pollEntry = pollEntryRepository.findById(pollEntryId).orElseThrow(() -> {
             throw new NotFoundException("The entry does not exist!");
