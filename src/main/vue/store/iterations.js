@@ -64,7 +64,9 @@ const iterations = {
             }
 
             // if this was the current iteration and it is now closed
-            if (this.state.currentPoll.poll.currentIteration.id === iterationCmd.id &&
+            let currentIteration = this.state.currentPoll.poll.currentIteration;
+            if (currentIteration !== null &&
+                currentIteration.id === iterationCmd.id &&
                 iterationCmd.status === "CLOSED") {
                 this.state.currentPoll.poll.currentIteration = null;
 
