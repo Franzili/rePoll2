@@ -120,8 +120,12 @@ public class PollIterationServiceImpl implements PollIterationService {
     public void removePollIteration(final UUID pollID, final Long pollIterationID) {
         final PollIteration pollIteration = getPollIteration(pollID, pollIterationID);
 
-        scheduleRemove(pollIteration);
+        // deleting only makes sense if the iteration has not already been opened
+        if (pollIteration.getStatus() != PollIterationStatus.SCHEDULED) {
+            throw new PollIterationStatusException();
+        }
 
+        scheduleRemove(pollIteration);
         pollIterationRepository.delete(pollIteration);
     }
 
