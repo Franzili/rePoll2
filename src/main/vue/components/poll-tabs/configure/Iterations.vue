@@ -10,7 +10,6 @@
             <b-list-group-item>
                 <span class="text-muted">
                     Currently open:
-                    {{current}}
                     <b-list-group>
                         <IterationListElement :value="current"/>
                     </b-list-group>
@@ -20,7 +19,6 @@
             <b-list-group-item>
                 <span class="text-muted">
                     Scheduled:
-                    {{scheduled}}
                 </span>
                 <b-list-group>
                     <IterationListElement v-for="item in scheduled"
@@ -32,7 +30,6 @@
             <b-list-group-item>
                 <span class="text-muted">
                     Previous iterations:
-                    {{previous}}
                 </span>
                 <IterationListElement v-for="item in previous"
                                       v-bind:key="item.id"
