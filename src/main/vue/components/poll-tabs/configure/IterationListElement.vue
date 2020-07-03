@@ -1,6 +1,6 @@
 <template>
     <b-list-group-item class="list-item">
-        <b-container fluid>
+        <b-container fluid class="list-item-container">
             <b-row align-v="center">
                 <!-- open date -->
                 <b-col cols="4">
@@ -256,7 +256,8 @@
     @import '~bootstrap/scss/bootstrap.scss';
 
     .list-item {
-        padding: 8px;
+        padding: 12px;
+        margin: 0 -12px;
         border: 1px solid $border-color !important;
     }
     .item-column {
@@ -264,6 +265,9 @@
     }
     .date-spacing {
         margin-right: 3px;
+    }
+    .list-item-container {
+        padding: 0;
     }
 
 </style>
