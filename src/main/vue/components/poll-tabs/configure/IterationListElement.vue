@@ -12,9 +12,7 @@
                                                v-model="openDate"
                                                value-as-date
                                                size="sm"
-                                               :date-format-options="{
-                                                   year: 'numeric', month: 'short', day: '2-digit', weekday: 'short'
-                                               }"
+                                               :date-format-options="dateTimeFormat"
                                                placeholder=""/>
                             <b-form-timepicker :id="'open-time-' + model.id"
                                                class="flex-grow-1"
@@ -28,7 +26,7 @@
                                          model.status === 'CLOSED'">
                         <span class="text-muted">
                             Opened: <br/>
-                            21.05.2020, 15:49
+                            {{dateTimeFormat.format(model.start)}}
                         </span>
                     </template>
 
@@ -75,7 +73,7 @@
                     <template v-else-if="model.status === 'CLOSED'">
                         <span class="text-muted">
                             Closed: <br/>
-                            21.05.2020, 15:49
+                            {{dateTimeFormat.format(model.end)}}
                         </span>
                     </template>
                 </b-col>
@@ -115,7 +113,16 @@
         data() {
             return {
                 model: this.value,
-                closeManually: this.value.end === null || this.value.end === undefined
+                closeManually: this.value.end === null || this.value.end === undefined,
+                dateTimeFormat: new Intl.DateTimeFormat('en', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    weekday: 'short',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric'
+                })
             }
         },
 
