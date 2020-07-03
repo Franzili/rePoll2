@@ -646,8 +646,15 @@ const currentPoll = {
             document.body.appendChild(fileLink);
 
             fileLink.click();
-        }
+        },
 
+        launch({dispatch, state}) {
+            let pollCmd = {
+                id: state.poll.id,
+                status: "LAUNCHED"
+            };
+            return dispatch("update", pollCmd);
+        }
     },
 
     namespaced: true

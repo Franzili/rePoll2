@@ -44,19 +44,30 @@ const iterations = {
     mutations: {
         add(state, iteration) {
             this.state.currentPoll.poll.pollIterations.push(iteration);
-            this.state.currentPoll.poll.currentIteration = iteration;
+            if (iteration.status === "OPEN") {
+                this.state.currentPoll.poll.currentIteration = iteration;
+            }
         },
         update(state, iterationCmd) {
             let obj = this.state.currentPoll.poll.pollIterations.find(item => item.id === iterationCmd.id);
             Object.assign(obj, iterationCmd);
+
+            if (iterationCmd.status === "OPEN") {
+                // update start date
+                obj.start = new Date();
+                this.state.currentPoll.poll.currentIteration = obj;
+            }
+
+            if (iterationCmd.status === "CLOSED") {
+                // update end date
+                obj.end = new Date();
+            }
 
             // if this was the current iteration and it is now closed
             if (this.state.currentPoll.poll.currentIteration.id === iterationCmd.id &&
                 iterationCmd.status === "CLOSED") {
                 this.state.currentPoll.poll.currentIteration = null;
 
-                // update end date
-                this.state.currentPoll.poll.pollIterations.find(item => item.id === iterationCmd.id).end = new Date();
             }
         },
         remove(state, iterationId) {
