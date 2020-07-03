@@ -1,6 +1,10 @@
 import api from "./../api/index";
 
 function makeIteration(obj) {
+    if (obj == null) {
+        return null;
+    }
+
     let start = null;
     if (obj.start) {
         start = new Date(obj.start);
