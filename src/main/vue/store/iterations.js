@@ -35,15 +35,33 @@ const iterations = {
             return getters['iterations'].filter(it => it.status === 'CLOSED');
         }
     },
-    mutations: {},
+    mutations: {
+        update(state) {
+
+        }
+    },
     actions: {
+        update({rootState, commit, state}, iterationCmd) {
+            commit('update', iterationCmd);
+            return new Promise((resolve, reject) => {
+                api.iterations.update(rootState.currentPoll.pollId, iterationCmd)
+                    .then((res) => {
+                        resolve(res.data);
+                    })
+                    .catch((err) => {
+                        console.warn(err);
+                        reject(err);
+                    })
+            })
+        },
         create({rootState}, iterationCmd) {
             return new Promise((resolve, reject) => {
-                api.iterations.create(rootState.currentPoll.pollId, iterationCmd)
+                api.iterations.create(rootState.currentPoll.pollId, iterationCmd.id, iterationCmd)
                     .then((res) => {
                         resolve(res.data)
                     })
                     .catch((err) => {
+                        console.warn(err);
                         reject(err)
                     });
             });

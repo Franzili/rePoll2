@@ -80,6 +80,8 @@
 </template>
 
 <script>
+    import {mapActions} from "vuex"
+
     export default {
         name: "IterationListElement",
         props: ['model'],
@@ -87,6 +89,11 @@
             return {
                 closeManually: true
             }
+        },
+        methods: {
+            ...mapActions("currentPoll/iterations", {
+                update: "update"
+            })
         },
         computed: {
             openDate: {
