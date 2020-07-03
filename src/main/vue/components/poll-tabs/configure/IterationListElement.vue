@@ -56,9 +56,7 @@
                                                v-model="closeDate"
                                                value-as-date
                                                ref="closeDatePicker"
-                                               :date-format-options="{
-                                                   year: 'numeric', month: 'short', day: '2-digit', weekday: 'short'
-                                               }"
+                                               :date-format-options="dateTimeFormat"
                                                size="sm"
                                                :disabled="closeManually"
                                                :state="closeDateState"
@@ -82,10 +80,25 @@
                     </template>
                 </b-col>
 
+
+                <!-- ====== ACTION AREA ===== --->
                 <b-col cols="4">
-                    <b-button class="float-right" size="sm">
+                    <b-button v-if="model.status === 'SCHEDULED'"
+                              class="float-right" size="sm">
                         <b-icon-trash />
                     </b-button>
+                    <b-button v-else-if="model.status === 'OPEN'"
+                              @click="closeNow(model.id)"
+                              class="float-right">
+                        Close now
+                    </b-button>
+                    <b-button v-else-if="model.status === 'CLOSED'"
+                              class="float-right">
+                        View results
+                    </b-button>
+                    <span v-else>
+                        ??? {{model.status}}
+                    </span>
                 </b-col>
             </b-row>
         </b-container>
@@ -108,7 +121,8 @@
 
         methods: {
             ...mapActions("currentPoll/iterations", {
-                update: "update"
+                update: "update",
+                closeNow: "closeNow"
             })
         },
 

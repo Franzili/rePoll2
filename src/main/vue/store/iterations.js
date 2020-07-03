@@ -48,9 +48,16 @@ const iterations = {
         },
         update(state, iterationCmd) {
             let obj = this.state.currentPoll.poll.pollIterations.find(item => item.id === iterationCmd.id);
-            console.log("got iteration cmd: " + JSON.stringify(iterationCmd));
-            console.log("got current oibject: " + JSON.stringify(obj));
             Object.assign(obj, iterationCmd);
+
+            // if this was the current iteration and it is now closed
+            if (this.state.currentPoll.poll.currentIteration.id === iterationCmd.id &&
+                iterationCmd.status === "CLOSED") {
+                this.state.currentPoll.poll.currentIteration = null;
+
+                // update end date
+                this.state.currentPoll.poll.pollIterations.find(item => item.id === iterationCmd.id).end = new Date();
+            }
         }
     },
 
@@ -96,6 +103,13 @@ const iterations = {
                 end: null
             }
             return dispatch("create", iterationCmd);
+        },
+        closeNow({dispatch}, id) {
+            let iterationCmd = {
+                id,
+                status: "CLOSED"
+            }
+            return dispatch("update", iterationCmd);
         }
     },
 
