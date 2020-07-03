@@ -44,7 +44,8 @@
                                     model.status === 'OPEN'">
                         <div class="d-flex">
                             <span class="text-muted">Close</span>
-                            <b-form-checkbox class="ml-auto">
+                            <b-form-checkbox v-model="closeManually"
+                                             class="ml-auto">
                                 Manually
                             </b-form-checkbox>
                         </div>
@@ -59,12 +60,16 @@
                                                    year: 'numeric', month: 'short', day: '2-digit', weekday: 'short'
                                                }"
                                                size="sm"
+                                               :disabled="closeManually"
+                                               :state="closeDateState"
                                                placeholder=""/>
                             <b-form-timepicker :id="'close-time-' + model.id"
                                                class="flex-grow-1"
                                                v-model="closeTime"
                                                ref="closeTimePicker"
                                                size="sm"
+                                               :disabled="closeManually"
+                                               :state="closeDateState"
                                                placeholder="" />
                         </div>
                     </template>
@@ -97,7 +102,7 @@
         data() {
             return {
                 model: this.value,
-                closeManually: true
+                closeManually: this.value.end === null || this.value.end === undefined
             }
         },
 
@@ -108,6 +113,17 @@
         },
 
         computed: {
+            closeDateState: function() {
+                if (this.closeManually) {
+                    return null;
+                } else {
+                    if (!this.model.end) {
+                        return false;
+                    } else {
+                        return null;
+                    }
+                }
+            },
             openDate: {
                 get() {
                     return this.model.start;
@@ -200,9 +216,9 @@
         watch: {
             model: {
                 handler: function(newVal) {
-                    console.log("JAMOIN!");
-                    console.log(newVal);
-                    this.update(newVal);
+                    if (this.closeDateState === null) {
+                        this.update(newVal);
+                    }
                 },
                 deep: true
             },
