@@ -198,9 +198,12 @@ public class PollIterationServiceImpl implements PollIterationService {
                 break;
 
             case OPEN:
+                pollIteration.setStart(Instant.now());
+
                 // if there is another iteration running, close it.
                 if (poll.getCurrentIteration() != null) {
                     PollIteration previous = poll.getCurrentIteration();
+                    previous.setEnd(Instant.now());
                     previous.setStatus(PollIterationStatus.CLOSED);
                     pollIterationRepository.save(previous);
                 }
@@ -208,11 +211,12 @@ public class PollIterationServiceImpl implements PollIterationService {
                 break;
 
             case CLOSED:
+                pollIteration.setEnd(Instant.now());
                 poll.setCurrentIteration(null);
                 break;
         }
+        pollIteration.setStatus(status);
         pollIterationRepository.save(pollIteration);
         pollRepository.save(poll);
-        pollIteration.setStatus(status);
     }
 }
