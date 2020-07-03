@@ -5,6 +5,14 @@
         </p>
 
         <p>
+            <Iterations/>
+        </p>
+
+        <p>
+            <Launch></Launch>
+        </p>
+
+        <p>
             <SelectStatus></SelectStatus>
         </p>
         <p>
@@ -31,10 +39,15 @@
     import Anonymity from "./Anonymity";
     import Design from "./Design";
     import Download from "./Download";
+    import Launch from "./Launch";
+    import Iterations from "./Iterations";
 
     export default {
         name: "ConfigurePoll",
-        components: {Download, Design, Anonymity, SelectStatus, ManageParticipants, DeletePoll}
+        components: {
+            Iterations,
+            Launch, Download, Design, Anonymity, SelectStatus, ManageParticipants, DeletePoll
+        }
     }
 
 </script>
