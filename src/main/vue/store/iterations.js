@@ -25,6 +25,7 @@ function makeIteration(obj) {
 
 const iterations = {
     state: {},
+
     getters: {
         iterations(state, getters, rootState) {
             return rootState.currentPoll.poll.pollIterations.map(iteration => makeIteration(iteration));
@@ -39,7 +40,12 @@ const iterations = {
             return getters['iterations'].filter(it => it.status === 'CLOSED');
         }
     },
+
     mutations: {
+        add(state, iteration) {
+            this.state.currentPoll.poll.pollIterations.push(iteration);
+            this.state.currentPoll.poll.currentIteration = iteration;
+        },
         update(state, iterationCmd) {
             let obj = this.state.currentPoll.poll.pollIterations.find(item => item.id === iterationCmd.id);
             console.log("got iteration cmd: " + JSON.stringify(iterationCmd));
@@ -47,6 +53,7 @@ const iterations = {
             Object.assign(obj, iterationCmd);
         }
     },
+
     actions: {
         update({rootState, commit}, iterationCmd) {
             console.log("In action. got obj: " + JSON.stringify(iterationCmd));
@@ -62,19 +69,24 @@ const iterations = {
                     })
             })
         },
-        create({rootState}, iterationCmd) {
-            return new Promise((resolve, reject) => {
-                api.iterations.create(rootState.currentPoll.pollId, iterationCmd)
-                    .then((res) => {
-                        resolve(res.data)
-                    })
-                    .catch((err) => {
-                        console.warn(err);
-                        reject(err)
-                    });
-            });
+        async create({rootState, commit}, iterationCmd) {
+            try {
+                let res = await api.iterations.create(rootState.currentPoll.poll.id, iterationCmd);
+                commit("add", res.data);
+            } catch(err) {
+                console.warn(err);
+            }
+        },
+        openNew({dispatch}) {
+            let iterationCmd = {
+                status: "OPEN",
+                start: new Date(),
+                end: null
+            }
+            return dispatch("create", iterationCmd)
         }
     },
+
     namespaced: true
 }
 

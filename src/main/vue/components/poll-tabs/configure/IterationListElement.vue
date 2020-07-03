@@ -33,7 +33,7 @@
                     </template>
 
                     <template v-else>
-                        ??? {{iterationStatus}}
+                        ??? {{model.status}}
                     </template>
                 </b-col>
 

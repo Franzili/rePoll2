@@ -203,6 +203,7 @@ public class PollIterationServiceImpl implements PollIterationService {
                 poll.setCurrentIteration(null);
                 break;
         }
+        pollIterationRepository.save(pollIteration);
         pollRepository.save(poll);
         pollIteration.setStatus(status);
     }

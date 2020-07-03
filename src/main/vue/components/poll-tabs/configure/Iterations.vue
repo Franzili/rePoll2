@@ -23,7 +23,11 @@
                     <span class="text-muted">
                         No iteration is currently open.
                     </span>
-                    <b-button variant="primary" class="float-right">Open new</b-button>
+                    <b-button variant="primary"
+                              class="float-right"
+                              @click="openNew">
+                        Open new
+                    </b-button>
                 </template>
             </b-list-group-item>
 
@@ -73,18 +77,22 @@
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
+    import {mapGetters, mapActions} from "vuex";
     import IterationListElement from "./IterationListElement";
     //import IterationListElement from "./IterationListElement";
     export default {
         name: "Iterations",
         components: {IterationListElement},
-        //components: {IterationListElement},
         computed: {
             ...mapGetters("currentPoll/iterations", {
                 current: "current",
                 scheduled: "scheduled",
                 previous: "previous"
+            })
+        },
+        methods: {
+            ...mapActions("currentPoll/iterations", {
+                openNew: "openNew"
             })
         }
     }
