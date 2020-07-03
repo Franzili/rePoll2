@@ -82,6 +82,7 @@
                 <!-- ====== ACTION AREA ===== --->
                 <b-col cols="4">
                     <b-button v-if="model.status === 'SCHEDULED'"
+                              @click="remove(model.id)"
                               class="float-right" size="sm">
                         <b-icon-trash />
                     </b-button>
@@ -129,7 +130,8 @@
         methods: {
             ...mapActions("currentPoll/iterations", {
                 update: "update",
-                closeNow: "closeNow"
+                closeNow: "closeNow",
+                remove: "remove"
             })
         },
 

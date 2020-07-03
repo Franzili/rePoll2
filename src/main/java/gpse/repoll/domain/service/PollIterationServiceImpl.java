@@ -125,6 +125,10 @@ public class PollIterationServiceImpl implements PollIterationService {
             throw new PollIterationStatusException();
         }
 
+        Poll poll = pollService.getPoll(pollID);
+        poll.remove(pollIteration);
+        pollService.save(poll);
+
         scheduleRemove(pollIteration);
         pollIterationRepository.delete(pollIteration);
     }

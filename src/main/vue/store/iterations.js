@@ -58,6 +58,10 @@ const iterations = {
                 // update end date
                 this.state.currentPoll.poll.pollIterations.find(item => item.id === iterationCmd.id).end = new Date();
             }
+        },
+        remove(state, iterationId) {
+            let ix = this.state.currentPoll.poll.pollIterations.findIndex(item => item.id === iterationId);
+            this.state.currentPoll.poll.pollIterations.splice(ix, 1);
         }
     },
 
@@ -83,6 +87,19 @@ const iterations = {
             } catch(err) {
                 console.warn(err);
             }
+        },
+        remove({rootState, commit}, id) {
+            commit('remove', id);
+            return new Promise((resolve, reject) => {
+                api.iterations.remove(rootState.currentPoll.poll.id, id)
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch((err) => {
+                        console.warn(err);
+                        reject(err);
+                    })
+            })
         },
         openNew({dispatch}) {
             let iterationCmd = {
@@ -110,7 +127,7 @@ const iterations = {
                 status: "CLOSED"
             }
             return dispatch("update", iterationCmd);
-        }
+        },
     },
 
     namespaced: true
