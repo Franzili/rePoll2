@@ -61,4 +61,11 @@ public class ParticipantsController {
          participantService.removeParticipant(participantId, pollId);
     }
 
+    @Secured(Roles.POLL_CREATOR)
+    @RequestMapping("/remind/{participantId}/")
+    public String remindParticipant(@RequestBody final ParticipantCmd participantCmd,
+                                    @PathVariable final UUID participantId,
+                                    @PathVariable final UUID pollId) {
+        return participantService.remindParticipant(participantId, pollId, participantCmd.getEmail());
+    }
 }

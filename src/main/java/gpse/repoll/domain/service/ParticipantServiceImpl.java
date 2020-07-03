@@ -107,4 +107,17 @@ public class ParticipantServiceImpl implements ParticipantService {
         pollRepository.save(poll);
         participantRepository.delete(participant);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String remindParticipant(UUID id, UUID pollId, String email) {
+        Participant participant = participantRepository.findById(id).orElseThrow(NotFoundException::new);
+        Poll poll = pollRepository.findById(pollId).orElseThrow(NotFoundException::new);
+        return mailService.sendEmail(
+            email, String.format("REMINDER: The poll %s is waiting for you!", poll.getTitle()),
+            String.format("If you want to participate, please follow this link: ",
+            serverPrefix + "/answer/" + poll.getId() + "/" + participant.getId()));
+    }
 }

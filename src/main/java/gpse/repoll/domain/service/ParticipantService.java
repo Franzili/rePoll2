@@ -48,4 +48,13 @@ public interface ParticipantService {
      * @param pollId is the Poll-ID
      */
     void removeParticipant(UUID id, UUID pollId);
+
+    /**
+     * Send a reminder E-Mail to a specific participant.
+     * @param id Participant-ID
+     * @param pollId Poll-ID
+     * @param email E-Mail address of the participant
+     * @return an answer from the MailService, whether the mail has been sent or not
+     */
+    String remindParticipant(UUID id, UUID pollId, String email);
 }
