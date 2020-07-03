@@ -84,6 +84,18 @@ const iterations = {
                 end: null
             }
             return dispatch("create", iterationCmd)
+        },
+        scheduleNew({dispatch}) {
+            // set start to one day from now
+            let start = new Date();
+            start.setDate(start.getDate() + 1);
+
+            let iterationCmd = {
+                status: "SCHEDULED",
+                start: start,
+                end: null
+            }
+            return dispatch("create", iterationCmd);
         }
     },
 

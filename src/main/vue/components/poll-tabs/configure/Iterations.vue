@@ -7,6 +7,7 @@
                 </h6>
             </b-list-group-item>
 
+            <!-- ===== CURRENT ITERATION ===== -->
             <b-list-group-item>
                 <!-- if there is an iteration currently open -->
                 <template v-if="current">
@@ -31,27 +32,37 @@
                 </template>
             </b-list-group-item>
 
+            <!-- ===== SCHEDULED ITERATIONS ===== -->
             <b-list-group-item>
-                <!-- if there are scheduled iterations -->
-                <template v-if="scheduled.length > 0">
-                    <span class="text-muted">
-                        Scheduled:
-                    </span>
-                    <b-list-group>
-                        <IterationListElement v-for="item in scheduled"
-                                              v-bind:key="item.id"
-                                              :value="item" />
-                    </b-list-group>
-                </template>
+                <p class="d-flex">
+                    <!-- if there are scheduled iterations -->
+                    <template v-if="scheduled.length > 0">
+                        <span class="text-muted align-self-center">
+                            Scheduled:
+                        </span>
+                    </template>
 
-                <!-- else -->
-                <template v-else>
-                    <span class="text-muted">
-                        No scheduled iterations.
-                    </span>
-                </template>
+                    <!-- else -->
+                    <template v-else>
+                        <span class="text-muted align-self-center">
+                            No scheduled iterations.
+                        </span>
+                    </template>
+
+                    <b-button class="ml-auto"
+                              @click="scheduleNew">
+                        Add
+                    </b-button>
+                </p>
+
+                <b-list-group>
+                    <IterationListElement v-for="item in scheduled"
+                                          v-bind:key="item.id"
+                                          :value="item" />
+                </b-list-group>
             </b-list-group-item>
 
+            <!-- ===== PREVIOUS ITERATIONS ===== -->
             <b-list-group-item>
                 <!-- if there are previous iterations -->
                 <template v-if="previous.length > 0">
@@ -92,7 +103,8 @@
         },
         methods: {
             ...mapActions("currentPoll/iterations", {
-                openNew: "openNew"
+                openNew: "openNew",
+                scheduleNew: "scheduleNew"
             })
         }
     }
