@@ -4,7 +4,6 @@ import gpse.repoll.domain.poll.PollIteration;
 import gpse.repoll.domain.poll.PollIterationStatus;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 

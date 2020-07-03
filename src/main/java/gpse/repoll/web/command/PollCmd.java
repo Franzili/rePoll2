@@ -3,9 +3,6 @@ package gpse.repoll.web.command;
 import gpse.repoll.domain.poll.Anonymity;
 import gpse.repoll.domain.poll.PollEditStatus;
 
-/**
- * Poll helper object used for JSON serialisation.
- */
 public class PollCmd {
 
     private String title;
