@@ -1,7 +1,7 @@
 package gpse.repoll.domain.poll;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,17 +19,17 @@ public class PollIteration {
     private PollIterationStatus status = PollIterationStatus.SCHEDULED;
 
     @Column
-    private LocalDateTime start;
+    private Instant start;
 
     @Column
-    private LocalDateTime end;
+    private Instant end;
 
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
     public PollIteration() { }
 
-    public PollIteration(LocalDateTime start, LocalDateTime end) {
+    public PollIteration(Instant start, Instant end) {
         this.start = start;
         this.end = end;
     }
@@ -39,19 +39,19 @@ public class PollIteration {
         return id;
     }
 
-    public LocalDateTime getStart() {
+    public Instant getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(Instant start) {
         this.start = start;
     }
 
-    public LocalDateTime getEnd() {
+    public Instant getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(Instant end) {
         this.end = end;
     }
 

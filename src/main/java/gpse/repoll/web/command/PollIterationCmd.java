@@ -2,27 +2,27 @@ package gpse.repoll.web.command;
 
 import gpse.repoll.domain.poll.PollIterationStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class PollIterationCmd {
 
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private Instant start;
+    private Instant end;
     private PollIterationStatus status;
 
-    public LocalDateTime getStart() {
+    public Instant getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(Instant start) {
         this.start = start;
     }
 
-    public LocalDateTime getEnd() {
+    public Instant getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(Instant end) {
         this.end = end;
     }
 
