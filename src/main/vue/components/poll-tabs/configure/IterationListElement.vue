@@ -10,6 +10,7 @@
                             <b-form-datepicker :id="'open-date-' + model.id"
                                                class="flex-grow-1 date-spacing"
                                                v-model="openDate"
+                                               value-as-date
                                                size="sm"
                                                :date-format-options="{ year: 'numeric', month: 'short', day: '2-digit', weekday: 'short' }"
                                                placeholder=""/>
@@ -49,12 +50,15 @@
                         <div class="d-flex">
                             <b-form-datepicker :id="'close-date-' + model.id"
                                                class="flex-grow-1 date-spacing"
+                                               v-model="closeDate"
+                                               value-as-date
                                                ref="closeDatePicker"
                                                :date-format-options="{ year: 'numeric', month: 'short', day: '2-digit', weekday: 'short' }"
                                                size="sm"
                                                placeholder=""/>
                             <b-form-timepicker :id="'close-time-' + model.id"
                                                class="flex-grow-1"
+                                               v-model="closeTime"
                                                ref="closeTimePicker"
                                                size="sm"
                                                placeholder="" />
@@ -90,29 +94,44 @@
                 closeManually: true
             }
         },
+
         methods: {
             ...mapActions("currentPoll/iterations", {
                 update: "update"
             })
         },
+
         computed: {
             openDate: {
                 get() {
                     return this.model.start;
                 },
                 set(newValue) {
+                    console.log("SETTING");
+                    if (!this.model.start) {
+                        this.model.start = new Date();
+                    }
                     this.model.start.setFullYear(newValue.getFullYear());
                     this.model.start.setMonth(newValue.getMonth());
                     this.model.start.setDate(newValue.getDate());
                 },
                 deep: true
             },
+
             openTime: {
                 get() {
-                    let s = this.model.start;
-                    return `${s.getHours()}:${s.getMinutes()}:${s.getSeconds()}`  // TODO: do we need zero padding here?
+                    if (this.model.start) {
+                        let s = this.model.start;
+                        return `${s.getHours()}:${s.getMinutes()}:${s.getSeconds()}`  // TODO: do we need zero padding here?
+                    } else {
+                        return null;
+                    }
                 },
                 set(newValue) {
+                    console.log("SETTING");
+                    if (!this.model.start) {
+                        this.model.start = new Date();
+                    }
                     let numbers = newValue.split(":").map(Number);
                     this.model.start.setHours(numbers[0]);
                     this.model.start.setMinutes(numbers[1]);
@@ -120,23 +139,37 @@
                 },
                 deep: true
             },
+
             closeDate: {
                 get() {
                     return this.model.end;
                 },
                 set(newValue) {
+                    console.log("SETTING");
+                    if (!this.model.end) {
+                        this.model.end = new Date();
+                    }
                     this.model.end.setFullYear(newValue.getFullYear());
                     this.model.end.setMonth(newValue.getMonth());
                     this.model.end.setDate(newValue.getDate());
                 },
                 deep: true
             },
+
             closeTime: {
                 get() {
-                    let s = this.model.end;
-                    return `${s.getHours()}:${s.getMinutes()}:${s.getSeconds()}`  // TODO: do we need zero padding here?
+                    if (this.model.end) {
+                        let e = this.model.end;
+                        return `${e.getHours()}:${e.getMinutes()}:${e.getSeconds()}`  // TODO: do we need zero padding here?
+                    } else {
+                        return null;
+                    }
                 },
                 set(newValue) {
+                    console.log("SETTING");
+                    if (!this.model.end) {
+                        this.model.end = new Date();
+                    }
                     let numbers = newValue.split(":").map(Number);
                     this.model.end.setHours(numbers[0]);
                     this.model.end.setMinutes(numbers[1]);
@@ -144,9 +177,16 @@
                 },
                 deep: true
             }
-
         },
+
         watch: {
+            model: {
+                handler: function(newVal) {
+                    console.log("JAMOIN!");
+                    this.update(newVal);
+                },
+                deep: true
+            },
             closeManually: function(newVal) {
                 if (newVal === true) {
                     this.model.end = null;
