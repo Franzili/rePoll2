@@ -48,7 +48,7 @@ const iterations = {
             console.log("In action. got obj: " + JSON.stringify(iterationCmd));
             commit('update', iterationCmd);
             return new Promise((resolve, reject) => {
-                api.iterations.update(rootState.currentPoll.pollId, iterationCmd)
+                api.iterations.update(rootState.currentPoll.poll.id, iterationCmd.id, iterationCmd)
                     .then((res) => {
                         resolve(res.data);
                     })
@@ -60,7 +60,7 @@ const iterations = {
         },
         create({rootState}, iterationCmd) {
             return new Promise((resolve, reject) => {
-                api.iterations.create(rootState.currentPoll.pollId, iterationCmd.id, iterationCmd)
+                api.iterations.create(rootState.currentPoll.pollId, iterationCmd)
                     .then((res) => {
                         resolve(res.data)
                     })
