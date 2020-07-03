@@ -12,7 +12,9 @@
                                                v-model="openDate"
                                                value-as-date
                                                size="sm"
-                                               :date-format-options="{ year: 'numeric', month: 'short', day: '2-digit', weekday: 'short' }"
+                                               :date-format-options="{
+                                                   year: 'numeric', month: 'short', day: '2-digit', weekday: 'short'
+                                               }"
                                                placeholder=""/>
                             <b-form-timepicker :id="'open-time-' + model.id"
                                                class="flex-grow-1"
@@ -53,7 +55,9 @@
                                                v-model="closeDate"
                                                value-as-date
                                                ref="closeDatePicker"
-                                               :date-format-options="{ year: 'numeric', month: 'short', day: '2-digit', weekday: 'short' }"
+                                               :date-format-options="{
+                                                   year: 'numeric', month: 'short', day: '2-digit', weekday: 'short'
+                                               }"
                                                size="sm"
                                                placeholder=""/>
                             <b-form-timepicker :id="'close-time-' + model.id"
@@ -88,9 +92,11 @@
 
     export default {
         name: "IterationListElement",
-        props: ['model'],
+        props: ['value'],
+
         data() {
             return {
+                model: this.value,
                 closeManually: true
             }
         },
@@ -110,6 +116,9 @@
                     console.log("SETTING");
                     if (!this.model.start) {
                         this.model.start = new Date();
+                    } else {
+                        // needed to make property watching work
+                        this.model.start = new Date(this.model.start);
                     }
                     this.model.start.setFullYear(newValue.getFullYear());
                     this.model.start.setMonth(newValue.getMonth());
@@ -131,6 +140,9 @@
                     console.log("SETTING");
                     if (!this.model.start) {
                         this.model.start = new Date();
+                    } else {
+                        // needed to make property watching work
+                        this.model.start = new Date(this.model.start);
                     }
                     let numbers = newValue.split(":").map(Number);
                     this.model.start.setHours(numbers[0]);
@@ -148,6 +160,9 @@
                     console.log("SETTING");
                     if (!this.model.end) {
                         this.model.end = new Date();
+                    } else {
+                        // needed to make property watching work
+                        this.model.end = new Date(this.model.end);
                     }
                     this.model.end.setFullYear(newValue.getFullYear());
                     this.model.end.setMonth(newValue.getMonth());
@@ -169,6 +184,9 @@
                     console.log("SETTING");
                     if (!this.model.end) {
                         this.model.end = new Date();
+                    } else {
+                        // needed to make property watching work
+                        this.model.end = new Date(this.model.end);
                     }
                     let numbers = newValue.split(":").map(Number);
                     this.model.end.setHours(numbers[0]);
@@ -183,6 +201,7 @@
             model: {
                 handler: function(newVal) {
                     console.log("JAMOIN!");
+                    console.log(newVal);
                     this.update(newVal);
                 },
                 deep: true

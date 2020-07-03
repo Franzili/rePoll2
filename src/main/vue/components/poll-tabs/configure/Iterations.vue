@@ -12,7 +12,7 @@
                     Currently open:
                     {{current}}
                     <b-list-group>
-                        <IterationListElement :model="current"/>
+                        <IterationListElement :value="current"/>
                     </b-list-group>
                 </span>
             </b-list-group-item>
@@ -25,7 +25,7 @@
                 <b-list-group>
                     <IterationListElement v-for="item in scheduled"
                                           v-bind:key="item.id"
-                                          :model="item" />
+                                          :value="item" />
                 </b-list-group>
             </b-list-group-item>
 
@@ -36,7 +36,7 @@
                 </span>
                 <IterationListElement v-for="item in previous"
                                       v-bind:key="item.id"
-                                      :model="item" />
+                                      :value="item" />
             </b-list-group-item>
         </b-list-group>
 

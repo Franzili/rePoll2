@@ -36,13 +36,16 @@ const iterations = {
         }
     },
     mutations: {
-        update(iterationCmd) {
+        update(state, iterationCmd) {
             let obj = this.state.currentPoll.poll.pollIterations.find(item => item.id === iterationCmd.id);
+            console.log("got iteration cmd: " + JSON.stringify(iterationCmd));
+            console.log("got current oibject: " + JSON.stringify(obj));
             Object.assign(obj, iterationCmd);
         }
     },
     actions: {
         update({rootState, commit}, iterationCmd) {
+            console.log("In action. got obj: " + JSON.stringify(iterationCmd));
             commit('update', iterationCmd);
             return new Promise((resolve, reject) => {
                 api.iterations.update(rootState.currentPoll.pollId, iterationCmd)

@@ -31,6 +31,7 @@ const currentPoll = {
                 logoPosition: '',
                 logo: ''
             },
+            pollIterations: [],
             pollConsistencyGroups: []
         },
         answers: [],
