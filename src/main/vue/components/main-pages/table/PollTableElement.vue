@@ -1,33 +1,139 @@
 <template>
+    <!-- :title="poll.title" -->
     <b-card
+        no-body
         border-variant="primary"
-        :title="poll.title"
+
         align="left"
         bg-variant="light"
     >
-        <b-row class="align-items-center">
 
-            <b-col align-self="start">
-                <p class="status">{{this.pollStatus}}</p>
-            </b-col>
+        <b-card-body>
+            <b-row>
+                <b-col>
+                    <h4>
+                {{poll.title}}
+                    </h4>
+                </b-col>
+            </b-row>
 
-            <b-col
-                align-self="center">
-                <p v-show="poll.status !== 'IN_PROCESS'&& poll.status !== 'READY'"
-                ><span class="participants">Participants: </span>{{poll.pollEntries}}</p>
-            </b-col>
+            <b-row class="align-items-center">
+                <!--
+                <p>
+                    {{poll}}
+                </p>
+                -->
+                <!--
+                <a @click="loadTo" style="cursor: pointer" class="stretched-link"></a>
+                -->
 
-            <b-col cols="4" style="text-align: end">
+
+                <b-col>
+                    <h6>Status:</h6>
+                    {{this.pollStatus}}
+                </b-col>
+                <b-col>
+                    <h6>Creation Date:</h6>
+                    {{poll.creationTime}}
+                </b-col>
+                <b-col>
+                    <h6>Creator:</h6>
+                    {{poll.creator.username}}
+                </b-col>
+                <b-col>
+                    <h6>Participants:</h6>
+                    0
+                </b-col>
+                <!--
+                <b-col v-if="poll.currentIteration !== null">
+                    {{poll.currentIteration.end}}
+                </b-col>
+                -->
+                <!--
+                <b-col
+                    align-self="center">
+                    <p v-show="poll.status !== 'EDITING'"
+                    ><span class="participants">Participants: </span>{{poll.pollEntries}}</p>
+                </b-col>
+
+                <b-col cols="4" style="text-align: end">
+                    <span @click="loadTo" class="configLink">Setup
+                    </span>
+                </b-col>
+                <b-col cols="2">
+                    <b-button variant="primary"
+                              @click="copyPoll">
+                        Copy Poll
+                    </b-button>
+                </b-col>
+                -->
+            </b-row>
+
+            <b-row v-if="poll.pollIterations.length > 0">
+                <!--
+                <b-button v-b-toggle.iteration  variant="primary">Iterations</b-button>
+                <b-collapse id="iteration" class="mt-2">
+                    <b-table striped
+                             hover
+                             outlined
+                             auto
+                             :fields="fields"
+                             :items="iterations"></b-table>
+                </b-collapse>
+                -->
+
+                <!--
+                <b-col>
+                    <b-container v-bind:key="iteration.id" v-for="iteration in iterations">
+                        <b-row>
+                            <b-col>{{iteration.id}}</b-col>
+                            <b-col>{{iteration.status}}</b-col>
+                            <b-col>{{showDate(iteration.start)}}</b-col>
+                            <b-col>{{showDate(iteration.end)}}</b-col>
+                            <b-col>{{iteration.pollEntries.length}}</b-col>
+                        </b-row>
+                    </b-container>
+                </b-col>
+                -->
+            </b-row>
+        </b-card-body>
+
+
+
+        <!--
+        <b-card-body>
+
+
+            <h4>
+                {{poll.title}}
+            </h4>
+
+            <b-row class="align-items-center">
+
+                <b-col align-self="start">
+                    <p class="status">{{this.pollStatus}}</p>
+                </b-col>
+
+                <b-col
+                    align-self="center">
+                    <p v-show="poll.status !== 'EDITING'"
+                    ><span class="participants">Participants: </span>{{poll.pollEntries}}</p>
+                </b-col>
+
+                <b-col cols="4" style="text-align: end">
                 <span @click="loadTo" class="configLink">Setup
                 </span>
-            </b-col>
-            <b-col cols="2">
-                <b-button variant="primary"
-                        @click="copyPoll">
-                    Copy Poll
-                </b-button>
-            </b-col>
-        </b-row>
+                </b-col>
+                <b-col cols="2">
+                    <b-button variant="primary"
+                              @click="copyPoll">
+                        Copy Poll
+                    </b-button>
+                </b-col>
+            </b-row>
+        </b-card-body>
+        -->
+
 
     </b-card>
 </template>
@@ -36,26 +142,54 @@
     import {mapActions} from "vuex";
 
     export default {
+
         name: "PollListElement",
         props: ["poll"],
         data() {
             return {
-                pollStatus: ''
+                pollStatus: '',
+                iterations: [],
+                fields: [
+                    {key: 'id', sortable: true, label: 'ID'},
+                    {key: 'status', sortable: true, label: 'Status'},
+                    {key: 'start', label: 'Start Date'},
+                    {key: 'end', label: 'End Date'},
+                    {key: 'pollEntries', sortable: true, label: 'Entries'}
+                ],
+                dateTimeFormat: new Intl.DateTimeFormat('en', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    weekday: 'short',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric'
+                })
             }
         },
         beforeMount() {
+            console.log('hallo ')
+            if (this.poll.pollIterations !== []) {
+                this.iterations = this.poll.pollIterations
+                if (this.iterations !== undefined) {
+                    this.iterations.reverse()
+                    this.iterations.forEach(iteration => {
+                        iteration.pollEntries = iteration.pollEntries.length
+                        iteration.start = this.showDate(iteration.start)
+                        iteration.end = this.showDate(iteration.end)
+
+                    })
+                }
+            }
+
+            console.log('byebye')
+            console.log(this.poll.creationTime)
             switch (this.poll.status) {
-                case 'IN_PROCESS':
-                    this.pollStatus = 'in process';
+                case 'EDITING':
+                    this.pollStatus = 'editing';
                     break;
-                case 'READY':
-                    this.pollStatus = 'ready';
-                    break;
-                case 'ACTIVATED':
-                    this.pollStatus = 'activated';
-                    break;
-                case 'DEACTIVATED':
-                    this.pollStatus = 'deactivated';
+                case 'LAUNCHED':
+                    this.pollStatus = 'launched';
                     break;
                 case null:
                     this.pollStatus = ''
@@ -85,6 +219,9 @@
                         pollId: newPoll.id
                     }
                 })
+            },
+            showDate(date) {
+                return new Date(date)
             }
         },
 

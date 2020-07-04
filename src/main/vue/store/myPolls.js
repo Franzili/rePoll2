@@ -27,6 +27,9 @@ const myPolls = {
          *  Sets the polls that are currently loaded. For internal use.
          */
         load(state, polls) {
+            polls.sort(function (a,b) {
+                return new Date(b.creationTime) - new Date(a.creationTime)
+            })
             state.polls = polls
         },
         /**

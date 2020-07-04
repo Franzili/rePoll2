@@ -134,7 +134,7 @@ public class InitializeDatabase implements InitializingBean {
                         // Passwort: GutenTag
                         //"{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
                         //"Privat Patti" + i,
-                        "x@404.com",
+                        "zizimeyer4@gmail.com",
                         poll.getId()
                         );
                         //Roles.PARTICIPANT);

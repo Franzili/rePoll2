@@ -20,6 +20,8 @@ const currentPoll = {
         poll: {
             questions: [],
             pollSections: [],
+            pollEntries: '',
+            pollIterations: [],
             design: {
                 font: '',
                 textColour: '',
