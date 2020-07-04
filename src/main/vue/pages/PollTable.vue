@@ -3,7 +3,7 @@
         <b-container v-if="loaded"
             class="my-container">
             <b-row align-h="center">
-                <h2>Poll Table</h2>
+                <h2>Overview</h2>
             </b-row>
             <b-row>
                 <b-col >
