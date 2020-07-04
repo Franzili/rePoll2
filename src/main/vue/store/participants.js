@@ -80,6 +80,9 @@ const participants = {
                 })
             })
         },
+        /*
+         * Sends reminder emails to every participant that did not participated until now.
+         */
         remind({commit, rootState}) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");

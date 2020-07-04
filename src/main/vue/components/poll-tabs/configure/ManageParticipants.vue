@@ -233,6 +233,10 @@
                 await this.create(participantCmd)
                 this.makeToast()
             },
+            /**
+             * Sends a reminder email to every participant that did not participated until now.
+             * If you try to send emails twice in one page mount, you get a toast that this is not smart :D
+             */
             async reminder() {
                 if (this.mailSentCounter > 0) {
                     this.$bvToast.toast("You have sent Reminders just a few moments ago!\n" +
