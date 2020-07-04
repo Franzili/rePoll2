@@ -114,23 +114,34 @@ public class ParticipantServiceImpl implements ParticipantService {
      * {@inheritDoc}
      */
     @Override
-    public String remindParticipant(UUID id, UUID pollId, String email) {
-        Participant participant = participantRepository.findById(id).orElseThrow(NotFoundException::new);
+    public String remindParticipant(UUID pollId) {
         Poll poll = pollRepository.findById(pollId).orElseThrow(NotFoundException::new);
-        List<Participant> participants = new ArrayList<>();
-        boolean participated = false;
-        for (PollEntry entry : poll.getPollEntries()) {
-            if (entry.getParticipant().equals(participant)) {
-                participated = true;
-                break;
+        List<Participant> participants = poll.getParticipants();
+        String alreadyParticipated = "There are no participants to remind";
+        if (participants.isEmpty()) {
+            return alreadyParticipated;
+        }
+        List<Participant> toRemind = new ArrayList<>();
+        for (Participant participant : participants) {
+            boolean hasParticipated = false;
+            for (PollEntry entry : poll.getPollEntries()) {
+                if (entry.getParticipant().equals(participant)) {
+                    hasParticipated = true;
+                }
+            }
+            if (!hasParticipated) {
+                toRemind.add(participant);
             }
         }
-        if (participated) {
-            return "Already participated";
+        if (toRemind.isEmpty()) {
+            return alreadyParticipated;
         }
-        return mailService.sendEmail(
-            email, String.format("REMINDER: The poll %s is waiting for you!", poll.getTitle()),
-            String.format("If you want to participate, please follow this link: ",
-            serverPrefix + "/answer/" + poll.getId() + "/" + participant.getId()));
+        for (Participant participant : toRemind) {
+            mailService.sendEmail(
+                participant.getEmail(), String.format("REMINDER: The poll %s is waiting for you!", poll.getTitle()),
+                String.format("If you want to participate, please follow this link: ",
+                serverPrefix + "/answer/" + poll.getId() + "/" + participant.getId()));
+        }
+        return "Mails sent!";
     }
 }

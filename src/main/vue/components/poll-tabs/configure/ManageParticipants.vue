@@ -44,7 +44,7 @@
                             </b-col>
 
                             <b-col cols="6">
-                                <b-button class="float-right">Remind</b-button>
+                                <b-button class="float-right" v-on:click="reminder">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
@@ -122,7 +122,7 @@
                             </b-col>
 
                             <b-col cols="6">
-                                <b-button class="float-right">Remind</b-button>
+                                <b-button class="float-right" v-on:click="reminder">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
@@ -202,7 +202,8 @@
                 name: '',
                 eMail: '',
 
-                participantMailPair: ''
+                participantMailPair: '',
+                mailSentCounter: 0
             }
         },
 
@@ -221,7 +222,8 @@
                 loadParticipant: 'loadParticipant'
             }),
             ...mapActions('participants', {
-                create: "create"
+                create: "create",
+                remind: "remind"
             }),
             async addParticipant() {
                 let participantCmd = {
@@ -230,6 +232,20 @@
                 }
                 await this.create(participantCmd)
                 this.makeToast()
+            },
+            async reminder() {
+                if (this.mailSentCounter > 0) {
+                    this.$bvToast.toast("You have sent Reminders just a few moments ago!\n" +
+                        "Reload the page and try again to sent them anyway", {
+                        title: 'Mail',
+                        autoHideDelay: 10000,
+                        appendToast: false
+                    })
+                } else {
+                    await this.remind();
+                    this.mailSentCounter++;
+                    this.makeToast()
+                }
             },
             makeToast() {
                 this.$bvToast.toast(this.mailAnswer, {

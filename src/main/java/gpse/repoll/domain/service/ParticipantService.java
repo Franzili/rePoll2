@@ -50,11 +50,9 @@ public interface ParticipantService {
     void removeParticipant(UUID id, UUID pollId);
 
     /**
-     * Send a reminder E-Mail to a specific participant.
-     * @param id Participant-ID
+     * Send a reminder E-Mail to all participants of a specific poll, that have not participated until now.
      * @param pollId Poll-ID
-     * @param email E-Mail address of the participant
-     * @return an answer from the MailService, whether the mail has been sent or not
+     * @return an answer, whether the mails have been sent or not
      */
-    String remindParticipant(UUID id, UUID pollId, String email);
+    String remindParticipant(UUID pollId);
 }

@@ -20,6 +20,9 @@ const participants = {
         },
         add(state, mailAnswer) {
             state.mailAnswer = mailAnswer;
+        },
+        remind(state, mailAnswer) {
+            state.mailAnswer = mailAnswer;
         }
     },
     actions: {
@@ -70,6 +73,21 @@ const participants = {
             return new Promise(function (resolve, reject) {
                 api.poll.addParticipant(rootState.currentPoll.poll.id, participantCmd).then((res) => {
                     commit('add', res.data);
+                    resolve();
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
+        },
+        remind({commit, rootState}) {
+            if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
+                console.warn("PollId is undefined");
+                return;
+            }
+            return new Promise(function (resolve, reject) {
+                api.poll.sendReminder(rootState.currentPoll.poll.id).then((res) => {
+                    commit('remind', res.data);
                     resolve();
                 }).catch(function (error) {
                     console.log(error);
