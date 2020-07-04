@@ -1,11 +1,11 @@
 package gpse.repoll.domain.poll;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import gpse.repoll.domain.serialization.SerializePollEntries;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.time.Instant;
+import java.util.*;
 
 /**
  * Represents one execution of a {@link Poll}.
@@ -22,44 +22,52 @@ public class PollIteration {
     private PollIterationStatus status = PollIterationStatus.SCHEDULED;
 
     @Column
-    private LocalDateTime start;
+    private Instant start;
 
     @Column
-    private LocalDateTime end;
+    private Instant end;
 
+    @JsonSerialize(using = SerializePollEntries.class)
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
     public PollIteration() { }
 
-    public PollIteration(LocalDateTime start, LocalDateTime end) {
+    public PollIteration(Instant start, Instant end) {
         this.start = start;
         this.end = end;
     }
-
 
     public Long getId() {
         return id;
     }
 
-    public LocalDateTime getStart() {
+    public Instant getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(Instant start) {
         this.start = start;
     }
 
-    public LocalDateTime getEnd() {
+    public Instant getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(Instant end) {
         this.end = end;
     }
 
     public List<PollEntry> getPollEntries() {
         return Collections.unmodifiableList(pollEntries);
+    }
+
+    public void add(PollEntry entry) {
+        this.pollEntries.add(entry);
+    }
+
+    public void addAll(Collection<PollEntry> entries) {
+        this.pollEntries.addAll(entries);
     }
 
     public void setPollEntries(List<PollEntry> pollEntries) {

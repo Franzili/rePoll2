@@ -3,7 +3,7 @@ package gpse.repoll.domain.service;
 import gpse.repoll.domain.poll.PollIteration;
 import gpse.repoll.domain.poll.PollIterationStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,7 +27,7 @@ public interface PollIterationService {
      * @param status The status of the iteration
      * @return The new iteration
      */
-    PollIteration addPollIteration(UUID pollID, LocalDateTime start, LocalDateTime end, PollIterationStatus status);
+    PollIteration addPollIteration(UUID pollID, Instant start, Instant end, PollIterationStatus status);
 
     /**
      * Gets a {@link PollIteration}.
@@ -48,8 +48,8 @@ public interface PollIterationService {
      */
     PollIteration updatePollIteration(UUID pollID,
                                       Long pollIterationID,
-                                      LocalDateTime start,
-                                      LocalDateTime end,
+                                      Instant start,
+                                      Instant end,
                                       PollIterationStatus status);
 
     /**
