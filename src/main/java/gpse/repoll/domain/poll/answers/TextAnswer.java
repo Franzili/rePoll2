@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 
 /**
- * A textual answer to a question.
+ * A textual answer.
  */
 @Entity
 public class TextAnswer extends Answer {

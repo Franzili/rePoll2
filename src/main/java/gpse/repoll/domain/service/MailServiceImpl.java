@@ -19,7 +19,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Optional;
 
 /**
- * Default implementation of MailService.
+ * Default implementation of {@link MailService}.
  */
 @Component
 public class MailServiceImpl implements MailService {

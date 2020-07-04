@@ -1,8 +1,5 @@
 package gpse.repoll.domain.statistics;
 
-/**
- * First and third quartile of frequencies to a corresponding question.
- */
 public class Boxplot {
 
     protected int min;

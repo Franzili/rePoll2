@@ -20,7 +20,7 @@ import java.time.Instant;
 import java.util.*;
 
 /**
- * Fills the Database with example Data used for development purposes.
+ * Fills the database with example data used for development purposes.
  */
 @Service
 public class InitializeDatabase implements InitializingBean {

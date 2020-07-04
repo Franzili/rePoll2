@@ -10,7 +10,6 @@
                             :value="poll.title"
                             :editing="editTitle"
                             v-on:valueChanged="pollTitle = $event">
-                            <!-- is this applied when submitting poll? -->
                         </EditableLabel>
 
                     <div v-if="$route.name === 'edit-poll'" class="ml-3">
@@ -88,9 +87,10 @@
             }
         },
         async mounted() {
-            this.loaded = false
-            let pollId = this.$route.params.pollId
-            await this.loadPoll(pollId)
+            this.loaded = false;
+            let pollId = this.$route.params.pollId;
+            await this.loadPoll(pollId);
+            this.pollTitle = this.poll.title;
             this.loaded = true
         },
         watch: {

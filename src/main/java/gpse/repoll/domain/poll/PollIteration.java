@@ -7,6 +7,9 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.*;
 
+/**
+ * Represents one execution of a {@link Poll}.
+ */
 @Entity
 public class PollIteration {
 

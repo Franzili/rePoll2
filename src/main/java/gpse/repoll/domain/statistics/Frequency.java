@@ -34,9 +34,10 @@ public class Frequency implements Comparable<Frequency> {
     }
 
     /**
-     * Compare Frequencies by their Choice text, if it is a ScaleQuestion.
+     * Compares frequencies by their {@link Choice} text
+     * if it is a {@link gpse.repoll.domain.poll.questions.ScaleQuestion}.
      * @param frequency The frequency you want to compare
-     * @return -1 if this is smaller than frequency, +1 if it's bigger and 0 if they are equal
+     * @return -1 if this is smaller than frequency, +1 if it is bigger and 0 if they are equal
      */
     public int compareChoicesText(Frequency frequency) {
         try {

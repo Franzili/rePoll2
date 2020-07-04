@@ -1,5 +1,5 @@
 <template>
-    <component v-if="!editing" :is="tag">{{value}}</component>
+    <component v-if="!editing" :is="tag">{{currentValue}}</component>
     <b-input v-else v-model="currentValue" />
 </template>
 

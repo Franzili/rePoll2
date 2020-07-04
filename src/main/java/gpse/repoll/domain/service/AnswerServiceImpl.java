@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/**
+ * Default implementation of {@link AnswerService}.
+ */
 @Service
 public class AnswerServiceImpl implements AnswerService {
     private final PollService pollService;
@@ -19,6 +22,9 @@ public class AnswerServiceImpl implements AnswerService {
         this.pollService = pollService;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<Participant, Answer> getAnswers(UUID pollID, Long questionID) {
         // TODO for anonymous polls
@@ -42,6 +48,9 @@ public class AnswerServiceImpl implements AnswerService {
         return userAnswerMap;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<QuestionAnswersSet> getAll(UUID pollId) {
         List<QuestionAnswersSet> answersSets = new ArrayList<>();

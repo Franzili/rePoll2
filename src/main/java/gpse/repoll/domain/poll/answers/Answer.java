@@ -7,7 +7,7 @@ import javax.persistence.*;
 /**
  * Represents an answer to a single question given by one participant.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @Entity
 public abstract class Answer {
     @Id

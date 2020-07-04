@@ -1,8 +1,5 @@
 package gpse.repoll.web.command;
 
-/**
- * PollSection helper object used for JSON serialisation.
- */
 public class PollSectionCmd {
 
     private String title;

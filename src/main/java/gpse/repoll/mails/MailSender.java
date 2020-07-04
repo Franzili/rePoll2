@@ -24,8 +24,8 @@ public class MailSender {
     }
 
     /**
-     * JavaMailSender.
-     * @return JavaMailSender object that is sending the Mail.
+     * {@link JavaMailSender}.
+     * @return The JavaMailSender object that is sending the e-mail
      */
     public JavaMailSender getJavaMailSender() {
         // ToDo: Recreate this bean when MailConfigs change
