@@ -67,6 +67,12 @@
                 } else {
                     this.model.numberOfBonusChoices = 0;
                 }
+            },
+            model: {
+                handler: function() {
+                    this.$emit('modelChanged', this.model)
+                },
+                deep: true
             }
         },
         props: {

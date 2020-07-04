@@ -38,9 +38,15 @@
             },
         },
         watch: {
-          bonusChoices: function (newNumber) {
-              this.model.numberOfBonusChoices = newNumber
-          }
+            bonusChoices: function (newNumber) {
+                this.model.numberOfBonusChoices = newNumber
+            },
+            model: {
+                handler: function() {
+                    this.$emit('modelChanged', this.model)
+                },
+                deep: true
+            }
         },
         props: {
             model: {
