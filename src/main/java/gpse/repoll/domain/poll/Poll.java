@@ -38,10 +38,6 @@ public class Poll extends Auditable<User> {
     @NotEmpty
     private String title;
 
-    @JsonSerialize(using = SerializePollEntries.class)
-    @OneToMany
-    private final List<PollEntry> pollEntries = new ArrayList<>();
-
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     private final Set<PollIteration> pollIterations = new HashSet<>();
 
