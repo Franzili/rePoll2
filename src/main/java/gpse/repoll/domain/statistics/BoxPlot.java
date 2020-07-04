@@ -1,13 +1,13 @@
 package gpse.repoll.domain.statistics;
 
-public class Boxplot {
+public class BoxPlot {
 
-    protected int min;
-    protected Double firstQuartile;
-    protected Double thirdQuartile;
-    protected int max;
+    private int min;
+    private Double firstQuartile;
+    private Double thirdQuartile;
+    private int max;
 
-    protected Boxplot(int min, Double firstQuartile, Double thirdQuartile, int max) {
+    public BoxPlot(int min, Double firstQuartile, Double thirdQuartile, int max) {
         this.min = min;
         this.firstQuartile  = firstQuartile;
         this.thirdQuartile = thirdQuartile;
