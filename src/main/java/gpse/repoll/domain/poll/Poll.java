@@ -1,17 +1,11 @@
 package gpse.repoll.domain.poll;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import gpse.repoll.domain.exceptions.BadRequestException;
-import gpse.repoll.domain.exceptions.InternalServerErrorException;
-import gpse.repoll.domain.exceptions.NotFoundException;
-import gpse.repoll.domain.exceptions.PollAlreadyLaunchedException;
+import gpse.repoll.domain.exceptions.*;
 import gpse.repoll.domain.poll.questions.Question;
-import gpse.repoll.domain.poll.Design;
 import gpse.repoll.domain.serialization.SerializePollEntries;
-import gpse.repoll.domain.serialization.SerializePollSections;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -118,19 +112,16 @@ public class Poll extends Auditable<User> {
         this.design = design;
     }
 
-
-
     public UUID getId() {
         return id;
     }
 
     public List<PollEntry> getPollEntries() {
-        return Collections.unmodifiableList(pollEntries);
-    }
-
-    public void setPollEntries(List<PollEntry> pollEntries) {
-        this.pollEntries.clear();
-        this.pollEntries.addAll(pollEntries);
+        if (currentIteration != null) {
+            return Collections.unmodifiableList(currentIteration.getPollEntries());
+        } else {
+            return null;
+        }
     }
 
     public Set<PollIteration> getPollIterations() {
@@ -284,19 +275,31 @@ public class Poll extends Auditable<User> {
     }
 
     public void add(PollEntry pollEntry) {
-        pollEntries.add(pollEntry);
+        if (currentIteration != null) {
+            currentIteration.add(pollEntry);
+        } else {
+            throw new NoIterationOpenException();
+        }
     }
 
     public void addAllPollEntries(Collection<PollEntry> pollEntries) {
-        this.pollEntries.addAll(pollEntries);
+        if (currentIteration != null) {
+            currentIteration.addAll(pollEntries);
+        } else {
+            throw new NoIterationOpenException();
+        }
     }
 
     public boolean contains(PollEntry pollEntry) {
-        return pollEntries.contains(pollEntry);
+        if (currentIteration != null) {
+            return currentIteration.getPollEntries().contains(pollEntry);
+        } else {
+            throw new NoIterationOpenException();
+        }
     }
 
     public void add(PollIteration pollIteration) {
-        pollIterations.add(pollIteration);
+            pollIterations.add(pollIteration);
     }
 
     public void remove(PollIteration pollIteration) {

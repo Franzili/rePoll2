@@ -1,11 +1,11 @@
 package gpse.repoll.domain.poll;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import gpse.repoll.domain.serialization.SerializePollEntries;
+
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class PollIteration {
@@ -24,6 +24,7 @@ public class PollIteration {
     @Column
     private Instant end;
 
+    @JsonSerialize(using = SerializePollEntries.class)
     @OneToMany
     private final List<PollEntry> pollEntries = new ArrayList<>();
 
@@ -33,7 +34,6 @@ public class PollIteration {
         this.start = start;
         this.end = end;
     }
-
 
     public Long getId() {
         return id;
@@ -57,6 +57,14 @@ public class PollIteration {
 
     public List<PollEntry> getPollEntries() {
         return Collections.unmodifiableList(pollEntries);
+    }
+
+    public void add(PollEntry entry) {
+        this.pollEntries.add(entry);
+    }
+
+    public void addAll(Collection<PollEntry> entries) {
+        this.pollEntries.addAll(entries);
     }
 
     public void setPollEntries(List<PollEntry> pollEntries) {
