@@ -3,6 +3,7 @@ package gpse.repoll.domain.service;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.repositories.ParticipantRepository;
 import gpse.repoll.domain.repositories.PollRepository;
 import gpse.repoll.domain.utils.Pair;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -115,6 +117,17 @@ public class ParticipantServiceImpl implements ParticipantService {
     public String remindParticipant(UUID id, UUID pollId, String email) {
         Participant participant = participantRepository.findById(id).orElseThrow(NotFoundException::new);
         Poll poll = pollRepository.findById(pollId).orElseThrow(NotFoundException::new);
+        List<Participant> participants = new ArrayList<>();
+        boolean participated = false;
+        for (PollEntry entry : poll.getPollEntries()) {
+            if (entry.getParticipant().equals(participant)) {
+                participated = true;
+                break;
+            }
+        }
+        if (participated) {
+            return "Already participated";
+        }
         return mailService.sendEmail(
             email, String.format("REMINDER: The poll %s is waiting for you!", poll.getTitle()),
             String.format("If you want to participate, please follow this link: ",
