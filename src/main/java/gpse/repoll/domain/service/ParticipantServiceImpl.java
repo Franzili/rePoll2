@@ -139,7 +139,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         for (Participant participant : toRemind) {
             mailService.sendEmail(
                 participant.getEmail(), String.format("REMINDER: The poll %s is waiting for you!", poll.getTitle()),
-                String.format("If you want to participate, please follow this link: ",
+                String.format("If you want to participate, please follow this link: %s",
                 serverPrefix + "/answer/" + poll.getId() + "/" + participant.getId()));
         }
         return "Mails sent!";
