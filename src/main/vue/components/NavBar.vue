@@ -80,6 +80,7 @@
     }
 
     .nav-container {
+        position: relative;
         z-index: $zindex-sticky;
         top: 0;
         padding-bottom: 21px;
