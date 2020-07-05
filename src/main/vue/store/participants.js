@@ -58,13 +58,14 @@ const participants = {
         /**
          * Creates a new Participant
          */
-        create({rootState}, participantCmd) {
+        create({rootState, dispatch}, participantCmd) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
                 return;
             }
             return new Promise(function (resolve, reject) {
                 api.poll.addParticipant(rootState.currentPoll.poll.id, participantCmd).then(() => {
+                    dispatch('loadParticipant', rootState.currentPoll.poll.id)
                     resolve();
                 }).catch(function (error) {
                     console.log(error);
