@@ -231,7 +231,7 @@
                     email: this.eMail
                 }
                 await this.create(participantCmd)
-                this.makeToast()
+                this.makeToast(this.mailAnswer)
             },
             /**
              * Sends a reminder email to every participant that did not participated until now.
@@ -239,20 +239,17 @@
              */
             async reminder() {
                 if (this.mailSentCounter > 0) {
-                    this.$bvToast.toast("You have sent Reminders just a few moments ago!\n" +
-                        "Reload the page and try again to sent them anyway", {
-                        title: 'Mail',
-                        autoHideDelay: 10000,
-                        appendToast: false
-                    })
+                    this.makeToast("You have sent Reminders just a few moments ago!\n" +
+                        "Reload the page and try again to sent them anyway")
                 } else {
+                    this.makeToast("Sending Mails ...")
                     await this.remind();
                     this.mailSentCounter++;
-                    this.makeToast()
+                    this.makeToast(this.mailAnswer)
                 }
             },
-            makeToast() {
-                this.$bvToast.toast(this.mailAnswer, {
+            makeToast(message) {
+                this.$bvToast.toast(message, {
                     title: 'Mail',
                     autoHideDelay: 10000,
                     appendToast: false
