@@ -12,7 +12,7 @@
             <Iterations/>
         </p>
 
-        <p>
+        <p v-if="poll.status !== 'LAUNCHED'">
             <Design></Design>
         </p>
 
