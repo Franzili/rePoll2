@@ -85,7 +85,7 @@
         },
         created() {
             this.fetchEventList()
-            const timeout = 5000; // update statistics every 5 minutes
+            const timeout = 300000; // update statistics every 5 minutes
             this.timer = setInterval(this.fetchEventList, timeout)
         },
         async mounted() {
