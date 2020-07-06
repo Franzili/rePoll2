@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-tabs small lazy class="sticky stats-tab-bar" v-model="activeTab">
+        <b-tabs small lazy class="relative stats-tab-bar" v-model="activeTab">
             <b-tab title="Overview"> </b-tab>
             <b-tab title="Compare"> </b-tab>
             <b-tab title="Trends"> </b-tab>

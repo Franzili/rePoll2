@@ -2,7 +2,7 @@
     <b-card>
         <!-- TODO: adapt type names to backend terminology -->
         <div v-if="poll.anonymity === 'NON_ANONYMOUS'">
-            <h6>Participants:</h6>
+            <h6>Participants:  {{this.participants.length}}</h6>
             <b-row>
                 <b-col cols="6">
                     <p>
@@ -33,9 +33,11 @@
                             Invite New
                         </b-button>
                     </p>
-                    <p>
+                    <div>
+                        <DownloadPersonalizedLinks></DownloadPersonalizedLinks>
+
                         <UploadParticipants></UploadParticipants>
-                    </p>
+                    </div>
                 </b-col>
 
                 <b-col cols="6">
@@ -200,10 +202,11 @@
 <script>
     import {mapState, mapActions} from "vuex";
     import UploadParticipants from "./UploadParticipants";
+    import DownloadPersonalizedLinks from "./DownloadPersonalizedLinks";
 
     export default {
         name: "ManageParticipants",
-        components: {UploadParticipants},
+        components: {DownloadPersonalizedLinks, UploadParticipants},
 
         data() {
             return {
