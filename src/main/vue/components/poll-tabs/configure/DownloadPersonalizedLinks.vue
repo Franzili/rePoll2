@@ -1,7 +1,7 @@
 <template>
     <div>
-        <!--             v-if="poll.anonymity === 'NON_ANONYMOUS'" -->
         <b-button
+            v-if="poll.anonymity === 'NON_ANONYMOUS'"
             @click="downloadFromStore('participants', 'csv')">
             Download Personalized Links
         </b-button>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import {mapActions} from "vuex";
+    import {mapActions, mapState} from "vuex";
 
     export default {
         name: "DownloadPersonalizedLinks",
@@ -32,6 +32,11 @@
                 this.download(cmd);
             }
 
+        },
+        computed: {
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            }),
         }
     }
 </script>
