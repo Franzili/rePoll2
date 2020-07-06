@@ -1,8 +1,17 @@
 <template>
 
     <div>
-        <input type="file" id="selectFile" value="Import" accept=".csv" style="margin-bottom: 2vh"/><br />
-        <b-button @click="handleFiles">Import File</b-button>
+        <input type="file"
+               data-toggle="tooltip"
+               title="Select a .csv-file to import"
+               data-placement="auto"
+               id="selectFile"
+               value="Import"
+               accept=".csv"
+               style="margin-bottom: 2vh"/><br />
+        <b-button data-toggle="tooltip"
+                  title="Import data"
+                  @click="handleFiles">Import File</b-button>
         <div class="output"></div>
 
 
@@ -13,6 +22,7 @@
 </template>
 
 <script>
+
 
     import {mapActions} from "vuex";
     export default {

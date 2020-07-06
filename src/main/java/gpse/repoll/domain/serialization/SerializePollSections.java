@@ -10,7 +10,8 @@ import java.util.List;
 
 public class SerializePollSections extends JsonSerializer<List<PollSection>> {
     @Override
-    public void serialize(List<PollSection> pollSections, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(List<PollSection> pollSections, JsonGenerator jsonGenerator,
+                          SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartArray();
         for (PollSection section : pollSections) {
             jsonGenerator.writeStartObject();

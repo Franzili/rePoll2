@@ -1,8 +1,8 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.DownloadFormats.EntriesJSON;
-import gpse.repoll.DownloadFormats.PollJSON;
-import gpse.repoll.DownloadFormats.PollTxt;
+import gpse.repoll.download_formats.EntriesJSON;
+import gpse.repoll.download_formats.PollJSON;
+import gpse.repoll.download_formats.PollTxt;
 import gpse.repoll.domain.poll.Poll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

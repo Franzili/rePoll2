@@ -10,6 +10,8 @@ import java.util.UUID;
  */
 public interface PollConsistencyGroupService {
 
+    void save(PollConsistencyGroup pollConsistencyGroup);
+
     /**
      * Gets all {@link PollConsistencyGroup}s of a {@link gpse.repoll.domain.poll.Poll}.
      * @param id The ID of the poll

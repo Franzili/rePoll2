@@ -31,7 +31,7 @@ public class Poll extends Auditable<User> {
     private Anonymity anonymity;
 
     @OneToOne
-    private Design design;// = new Design(); //TODO
+    private Design design;
 
     @Column
     @Lob
@@ -68,7 +68,6 @@ public class Poll extends Auditable<User> {
         this.title = title;
         this.status = PollEditStatus.EDITING;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
-      //  this.design = new Design();
     }
 
     /**

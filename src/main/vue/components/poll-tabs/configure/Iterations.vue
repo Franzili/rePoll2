@@ -27,7 +27,6 @@
                     <b-button variant="primary"
                               class="float-right"
                               @click="openNew">
-                        Open new
                     </b-button>
                 </template>
             </b-list-group-item>
@@ -50,7 +49,9 @@
                     </template>
 
                     <b-button class="ml-auto"
-                              @click="scheduleNew">
+                              @click="scheduleNew"
+                              data-toggle="tooltip"
+                              title="Add new iteration">
                         Add
                     </b-button>
                 </p>

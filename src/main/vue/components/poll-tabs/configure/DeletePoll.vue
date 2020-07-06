@@ -2,8 +2,10 @@
     <b-card>
         <b-button variant="danger"
                   class="float-right"
+                  data-toggle="tooltip"
+                  title="Delete this Poll"
                   v-b-modal.modal-1
-        >Delete Poll</b-button>
+        >Delete</b-button>
         <b-modal id="modal-1"
                  centered
                  title="Are you sure you want to delete this poll?"

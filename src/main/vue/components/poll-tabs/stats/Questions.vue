@@ -41,6 +41,30 @@
         </b-row>
 
         <b-row>
+            <b-col style="margin-bottom: 2vh">
+                <b-input-group size="sm">
+                    <b-form-input
+                        v-model="filter"
+                        type="search"
+                        id="filterInput"
+                        placeholder="Type to Search"
+                    ></b-form-input>
+                    <b-input-group-append>
+                        <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+                    </b-input-group-append>
+                </b-input-group>
+            </b-col>
+            <b-col>
+                <b-form-checkbox-group v-model="filterOn" class="mt-1">
+                    <b-form-checkbox value="Username">Username</b-form-checkbox>
+                    <b-form-checkbox value="Answers">Answers</b-form-checkbox>
+                </b-form-checkbox-group>
+            </b-col>
+        </b-row>
+
+
+
+        <b-row>
             <!-- TODO I WANT TO BE A COMPONENT IF I BECOME MORE COMPLEX -->
             <!--TODO Prototype for deeper analyses, "&& selQuest.length > 0"-->
 
@@ -51,6 +75,9 @@
                              :sticky-header="true"
                              :items="answerSet"
                              :fields="fields"
+                             :filter="filter"
+                             :filterIncludedFields="filterOn"
+                             @filtered="onFiltered"
                     ></b-table>
                 </div>
         </b-row>
@@ -60,6 +87,7 @@
 <script>
 
     import {mapActions, mapGetters, mapState} from "vuex";
+    //import FilterQuestions from "./utils/FilterQuestions";
 
     export default {
         name: "Questions",
@@ -72,7 +100,10 @@
                     {stickyColumn: true, isRowHeader: true, key: 'Username', sortable: true},
                     {key: 'Answers', sortable: true}
                 ],
-                structure: []
+                structure: [],
+                totalRows: 1,
+                filter: '',
+                filterOn: [],
                 // TODO Prototype for deeper analyses
                 //selQuest: [],
             }
@@ -83,7 +114,7 @@
             if (this.qId !== 0) {
                 this.selected = this.qId
             }
-
+            this.totalRows = this.answerSet.length
         },
         computed: {
             ...mapState('currentPoll', {
@@ -112,6 +143,11 @@
             ...mapActions('currentPoll', {
                 loadPollAnswers: 'loadPollAnswers'
             }),
+            onFiltered(filteredItems) {
+                this.totalRows = filteredItems.length
+            }
+
+
             // TODO Prototype for deeper analyses
             /*deleteSelected(id) {
                 let tmpQuests = []
