@@ -16,6 +16,7 @@
                     </span>
                     <b-list-group>
                         <IterationListElement :value="current"
+                                              class="current-highlight"
                                               @update="onUpdate($event)"/>
                     </b-list-group>
                 </template>
@@ -133,7 +134,13 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import "../../../assets/stylesheet";
+
+    .current-highlight {
+        border: 1px solid $primary !important;
+    }
+
     .iteration-header {
         margin-bottom: 0 !important;
     }
