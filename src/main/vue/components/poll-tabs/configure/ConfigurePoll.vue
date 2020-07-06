@@ -12,12 +12,12 @@
             <Iterations/>
         </p>
 
-        <p v-if="poll.status !== 'LAUNCHED'">
-            <Design></Design>
-        </p>
-
         <p>
             <ManageParticipants></ManageParticipants>
+        </p>
+
+        <p v-if="poll.status !== 'LAUNCHED'">
+            <Design></Design>
         </p>
 
         <p>
