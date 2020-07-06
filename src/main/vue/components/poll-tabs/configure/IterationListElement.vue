@@ -87,12 +87,16 @@
                 <b-col cols="4">
                     <b-button v-if="model.status === 'SCHEDULED'"
                               @click="remove(model.id)"
-                              class="float-right" size="sm">
+                              class="float-right" size="sm"
+                              data-toggle="tooltip"
+                              title="Delete this scheduled iteration">
                         <b-icon-trash />
                     </b-button>
                     <b-button v-else-if="model.status === 'OPEN'"
                               @click="closeNow(model.id)"
-                              class="float-right">
+                              class="float-right"
+                              data-toggle="tooltip"
+                              title="Close current iteration">
                         Close now
                     </b-button>
                     <b-button v-else-if="model.status === 'CLOSED'"

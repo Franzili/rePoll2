@@ -54,6 +54,9 @@ export default {
     addParticipant(pollId, participantCmd) {
         return axios.post('/api/v1/polls/' + pollId + '/participants/', participantCmd);
     },
+    sendReminder(pollId) {
+        return axios.post('/api/v1/polls/' + pollId + '/participants/remind/');
+    },
     updateParticipant(pollId, participantCmd) {
       return axios.put('/api/v1/pools/' + pollId + '/participants/' + participantCmd.id + '/', participantCmd);
     },
