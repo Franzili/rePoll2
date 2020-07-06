@@ -294,12 +294,12 @@
                     switch(this.model.status) {
                         case 'SCHEDULED':
                             if (this.startValid && this.endValid) {
-                                this.update(newVal);
+                                this.$emit('update', newVal);
                             }
                             break;
                         case 'OPEN':
                             if (this.endValid) {
-                                this.update(newVal);
+                                this.$emit('update', newVal);
                             }
                             break;
                         case 'CLOSED':
