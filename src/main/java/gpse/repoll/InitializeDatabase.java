@@ -391,6 +391,8 @@ public class InitializeDatabase implements InitializingBean {
             textMap10.put(question4.getId(), scaleAnswer10);
 
             pollIterationService.addPollIteration(poll.getId(), Instant.now(), null, PollIterationStatus.OPEN);
+            pollIterationService.addPollIteration(poll2.getId(), Instant.now(), null, PollIterationStatus.OPEN);
+            pollIterationService.addPollIteration(poll3.getId(), Instant.now(), null, PollIterationStatus.OPEN);
 
             pollEntryService.addPollEntry(poll.getId(), textMap1, participants.get(0).getId());
             pollEntryService.addPollEntry(poll.getId(), textMap2, participants.get(1).getId());
