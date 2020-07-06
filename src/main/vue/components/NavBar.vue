@@ -1,5 +1,5 @@
 <template>
-    <b-container class="sticky nav-container" fluid="lg">
+    <b-container class="sticky-top nav-container" fluid="lg">
         <b-navbar toggleable="" type="dark" class="nav">
             <b-navbar-brand href="#">
                 <img v-on:click="toStart" src="../assets/logo.png" width="123" height="27" alt>
@@ -80,7 +80,7 @@
     }
 
     .nav-container {
-        position: relative;
+        //position: relative;
         //z-index: $zindex-sticky;
         top: 0;
         padding-bottom: 21px;
