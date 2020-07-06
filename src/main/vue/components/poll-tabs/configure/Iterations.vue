@@ -15,7 +15,9 @@
                         Currently open:
                     </span>
                     <b-list-group>
-                        <IterationListElement :value="current"/>
+                        <IterationListElement :value="current"
+                                              class="current-highlight"
+                                              @update="onUpdate($event)"/>
                     </b-list-group>
                 </template>
 
@@ -27,7 +29,6 @@
                     <b-button variant="primary"
                               class="float-right"
                               @click="openNew">
-                        Open new
                     </b-button>
                 </template>
             </b-list-group-item>
@@ -50,7 +51,9 @@
                     </template>
 
                     <b-button class="ml-auto"
-                              @click="scheduleNew">
+                              @click="scheduleNew"
+                              data-toggle="tooltip"
+                              title="Add new iteration">
                         Add
                     </b-button>
                 </p>
@@ -58,6 +61,7 @@
                 <b-list-group>
                     <IterationListElement v-for="item in scheduled"
                                           v-bind:key="item.id"
+                                          @update="onUpdate($event)"
                                           :value="item" />
                 </b-list-group>
             </b-list-group-item>
@@ -71,6 +75,7 @@
                     </span>
                     <IterationListElement v-for="item in previous"
                                           v-bind:key="item.id"
+                                          @update="onUpdate($event)"
                                           :value="item" />
                 </template>
 
@@ -90,10 +95,15 @@
 <script>
     import {mapGetters, mapActions} from "vuex";
     import IterationListElement from "./IterationListElement";
-    //import IterationListElement from "./IterationListElement";
     export default {
         name: "Iterations",
         components: {IterationListElement},
+        data() {
+            return {
+                // ids to the timeouts that trigger a reload once a poll has been opened automatically
+                timeoutIds: {}
+            }
+        },
         computed: {
             ...mapGetters("currentPoll/iterations", {
                 current: "current",
@@ -102,15 +112,36 @@
             })
         },
         methods: {
+            onUpdate(model) {
+                this.update(model);
+                let timeout = model.start.getTime() - Date.now();
+                let timeoutId = setTimeout(() => {
+                    delete this.timeoutIds[model.id];
+                    location.reload();
+                }, timeout);
+                this.timeoutIds[model.id] = timeoutId;
+            },
             ...mapActions("currentPoll/iterations", {
                 openNew: "openNew",
-                scheduleNew: "scheduleNew"
+                scheduleNew: "scheduleNew",
+                update: "update"
             })
+        },
+        beforeDestroy() {
+            for (let modelId in this.timeoutIds) {
+                clearTimeout(this.timeoutIds[modelId]);
+            }
         }
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import "../../../assets/stylesheet";
+
+    .current-highlight {
+        border: 1px solid $primary !important;
+    }
+
     .iteration-header {
         margin-bottom: 0 !important;
     }

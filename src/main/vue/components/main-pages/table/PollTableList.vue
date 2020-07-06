@@ -6,6 +6,8 @@
                 <p>
                     <b-button variant="primary"
                               class="addButton"
+                              data-toggle="tooltip"
+                              title="Create new Poll"
                               :disabled="!hasCreatorPrivileges"
                               v-on:click="addNewPoll">+</b-button>
                 </p>

@@ -52,6 +52,8 @@
         name: "Answer",
         data() {
             return {
+                pollId: null,
+                participantId: null,
                 currentlyEditing: null,
                 loaded: false
             }
@@ -84,7 +86,11 @@
                     console.log(pollHTMLAnswers[i].__vue__.answer)
                 }
 
-                let entrysOfPoll = {pollId: this.$route.params.id, entryCmd: entryCmd}
+                let entrysOfPoll = {
+                    pollId: this.pollId,
+                    participantId: this.participantId,
+                    entryCmd: entryCmd
+                }
 
                 this.rootEntry(entrysOfPoll)
                 return this.$router.push('/poll-response/')
@@ -92,8 +98,9 @@
         },
         async mounted() {
             this.loaded = false
-            let pollId = this.$route.params.id
-            await this.loadPoll(pollId)
+            this.pollId = this.$route.params.pollId
+            this.participantId = this.$route.params.participantId
+            await this.loadPoll(this.pollId)
             this.loaded = true
         },
         components: { PollItem }
