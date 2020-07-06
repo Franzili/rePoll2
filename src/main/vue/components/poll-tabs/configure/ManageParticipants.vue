@@ -38,12 +38,13 @@
                     </p>
                     <p>
                         <b-row class="align-items-center">
-                            <b-col cols="6">
+                            <b-col>
                                 {{ n_participated }} participated, <br/>
                                 {{ n_invites_pending }} invites pending.
                             </b-col>
-
-                            <b-col cols="6">
+                        </b-row>
+                        <b-row>
+                            <b-col>
                                 <b-button class="float-right">Remind</b-button>
                             </b-col>
                         </b-row>
