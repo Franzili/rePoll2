@@ -17,8 +17,16 @@
                     <h6 class="section">{{section.section}}</h6>
 
                     <b-col>
-                        <div v-if="section.idQA[0]">
-                            <b-table striped hover :fixed="true" :fields="['question', 'answer']" :items="section.idQA"></b-table>
+                        <div v-if="section.idQA[0]" style="white-space: nowrap">
+                            <b-table
+                                striped hover
+                                responsive
+                                :sticky-header="true"
+                                :no-border-collapse="false"
+                                :fixed="true"
+                                :fields="['question', 'answer']"
+                                :items="section.idQA"
+                            ></b-table>
                         </div>
                     </b-col>
                 </div>
