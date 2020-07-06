@@ -6,8 +6,28 @@
             <div v-bind:key="choice.id" v-for="choice in model.choices">
                 <b-form-checkbox :value="choice.id">{{choice.text}}</b-form-checkbox>
             </div>
-        </b-form-checkbox-group>
+            <template v-if="model.numberOfBonusChoices !== 0 && !editable">
+                <div v-bind:key="choice.id" v-for="choice in customChoices">
+                <span class="choice-item">
+                    <b-input v-model="choice.text"></b-input>
 
+                    <b-button size="sm"
+                              pill
+                              variant="outline-secondary"
+                              @click="deleteChoice(choice.id)">
+                        <b-icon-trash-fill/>
+                    </b-button>
+                </span>
+                </div>
+                <div>
+                    <b-button v-if="customChoices.length !== model.numberOfBonusChoices"
+                              size="sm"
+                              @click="addChoice">
+                        <b-icon-plus></b-icon-plus>
+                    </b-button>
+                </div>
+            </template>
+        </b-form-checkbox-group>
         <div v-else>
             <h6>Choices:</h6>
             <ChoiceEditor :choices="model.choices"
@@ -26,16 +46,32 @@
         data() {
             return {
                 selected: [],
-                bonusChoices: 0
+                bonusChoices: 0,
+                customChoices: []
             }
         },
         computed: {
             answer: function() {
                 return {
                     type: "MultiChoiceAnswer",
-                    choiceIds: this.selected //.map(choice => choice.id)
+                    choiceIds: this.selected, //.map(choice => choice.id)
+                    bonusChoices: this.customChoices
                 }
             },
+        },
+        methods: {
+            addChoice() {
+                if (this.customChoices.length < this.model.numberOfBonusChoices && this.model.numberOfBonusChoices !== 0) {
+                    let newChoiceId = Date.now()
+                    this.customChoices.push({
+                        text: "",
+                        id: newChoiceId
+                    })
+                }
+            },
+            deleteChoice(choiceId) {
+                this.customChoices = this.customChoices.filter(choice => choice.id !== choiceId)
+            }
         },
         watch: {
             bonusChoices: function (newNumber) {

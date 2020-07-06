@@ -20,6 +20,11 @@
                                           :value="choice.id">{{choice.text}}</b-form-select-option>
                 </b-form-select>
             </p>
+            <p v-if="model.numberOfBonusChoices === 1 && !editable">
+                or<br>
+                Custom choice
+                <b-input v-model="customChoice"></b-input>
+            </p>
         </template>
 
         <template v-else>
@@ -49,14 +54,18 @@
         data() {
             return {
                 selected: null,
-                bonusChoice: null
+                bonusChoice: null,
+                customChoice: null
             }
         },
         computed: {
             answer: function() {
                 return {
                     type: "SingleChoiceAnswer",
-                    choiceId: this.selected
+                    choiceId: this.selected,
+                    bonusChoiceCmd: {
+                        text: this.customChoice
+                    }
                 }
             }
         },
@@ -73,6 +82,11 @@
                     this.$emit('modelChanged', this.model)
                 },
                 deep: true
+            },
+            customChoice: function (val) {
+                if (!val.isEmpty()) {
+                    this.selected = null
+                }
             }
         },
         props: {
