@@ -14,7 +14,7 @@
             <b-col
                 align-self="center">
                 <p v-show="poll.status !== 'IN_PROCESS'&& poll.status !== 'READY'"
-                ><span class="participants">Participants: </span>{{poll.pollEntries}}</p>
+                ><span class="participants">Participants: </span>{{poll.pollEntries.length}}</p>
             </b-col>
 
             <b-col cols="4" style="text-align: end">

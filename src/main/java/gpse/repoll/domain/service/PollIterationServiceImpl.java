@@ -232,6 +232,8 @@ public class PollIterationServiceImpl implements PollIterationService {
                 pollIteration.setEnd(Instant.now());
                 poll.setCurrentIteration(null);
                 break;
+            default:
+                break;
         }
         pollIteration.setStatus(status);
         pollIterationRepository.save(pollIteration);
