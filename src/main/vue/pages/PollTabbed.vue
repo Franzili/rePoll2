@@ -1,6 +1,6 @@
 <template>
     <b-container fluid="lg" v-if="loaded">
-        <b-row v-if="loaded" class="primary-tab-bar sticky align-items-baseline">
+        <b-row v-if="loaded" class="primary-tab-bar relative align-items-baseline">
             <b-col class="poll-title">
 
                         <h3 v-if="$route.name === 'edit'" class="mr-2">Titel:</h3>
@@ -35,12 +35,12 @@
                     </b-nav-item>
                     <b-nav-item active-class="active"
                                 :to="{ name: 'edit-poll', params: { pollId: $route.params.pollId }}"
-                                :disabled="poll.status !== 'IN_PROCESS'">
+                                :disabled="poll.status === 'LAUNCHED'">
                         Edit
                     </b-nav-item>
                     <b-nav-item active-class="active"
                                 :to="{ name: 'poll-stats', params: { pollId: $route.params.pollId }}"
-                                :disabled="poll.status === 'IN_PROCESS'">
+                                :disabled="poll.status === 'EDITING'">
                         Statistics
                     </b-nav-item>
                 </b-nav>
@@ -109,6 +109,8 @@
 
     .primary-tab-bar {
         top: 80px;
+        //top: 0;
+        //position: relative;
         background-color: $floating-background-color;
     }
 
