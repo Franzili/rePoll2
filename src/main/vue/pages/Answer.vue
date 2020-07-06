@@ -17,6 +17,10 @@
             </b-img>
         </b-container>
 
+        <h1 :style="'font-family: ' + poll.design.font + ';color: ' + poll.design.textColour">
+            {{ poll.title }}
+        </h1>
+
         <ul class="poll-main-view">
             <PollItem v-for="item in pollStructure"
                       v-bind:key="item.id"
