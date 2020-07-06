@@ -7,7 +7,7 @@
             </p>
         </b-row>
         -->
-        <b-row v-if="!isMobile()">
+        <b-row v-if="!isMobile">
             <b-col cols="6">
                 <h5>{{statistic.question.title}}</h5>
             </b-col>
@@ -34,7 +34,6 @@
                     v-bind:frequency="frequency"
                     v-on:chart="chartsObj.currentChart = $event"
                     v-on:frequency="frequency = $event"
-                    style="margin-top: 1vh"
                     class="float-left"></ToolBar>
             </b-col>
 

@@ -115,8 +115,8 @@
                             show-empty
                             small
                             responsive
-                            :no-border-collapse="noCollapse"
-                            :sticky-header="stickyHeader"
+                            :no-border-collapse="true"
+                            :sticky-header="true"
                             :items="this.users"
                             :fields="fields"
                             :filter="filter"
