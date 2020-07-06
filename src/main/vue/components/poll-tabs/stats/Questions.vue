@@ -68,18 +68,18 @@
             <!-- TODO I WANT TO BE A COMPONENT IF I BECOME MORE COMPLEX -->
             <!--TODO Prototype for deeper analyses, "&& selQuest.length > 0"-->
 
-                <div style="white-space: nowrap">
-                    <b-table v-if="selected !== null"
-                             responsive
-                             :no-border-collapse="true"
-                             :sticky-header="true"
-                             :items="answerSet"
-                             :fields="fields"
-                             :filter="filter"
-                             :filterIncludedFields="filterOn"
-                             @filtered="onFiltered"
-                    ></b-table>
-                </div>
+            <div style="white-space: nowrap">
+                <b-table v-if="selected !== null"
+                         responsive
+                         :no-border-collapse="true"
+                         :sticky-header="true"
+                         :items="answerSet"
+                         :fields="fields"
+                         :filter="filter"
+                         :filterIncludedFields="filterOn"
+                         @filtered="onFiltered"
+                ></b-table>
+            </div>
         </b-row>
     </b-container>
 </template>
