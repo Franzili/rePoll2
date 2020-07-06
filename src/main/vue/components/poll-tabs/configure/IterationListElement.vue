@@ -148,21 +148,17 @@
             }),
 
             startValid() {
-                /* check for intersections where our start date is too early:
-                    +--------------+
-                    | other iter   |
-                    +--------------+
-                               xxxxx
-                               +-----------------+
-                               | this iteration  |
-                               +-----------------+
-                 */
-
                 let hasIntersections = false;
+
                 for (let iter of this.otherIterations) {
-                    if (this.model.end !== null && iter.end !== null &&
-                        this.model.end > iter.end &&
-                        this.model.start <= iter.end) {
+                    // if this is our iteration, skip it
+                    if (iter.id === this.model.id) continue;
+
+                    // check for intersections where our start date is too early:
+                    // other iteration:      +----------------+
+                    // this iteration:                    +-----------+
+                    if (this.model.start >= iter.start &&
+                        iter.end != null && iter.end >= this.model.start) {
                         hasIntersections = true;
                         break;
                     }
@@ -170,33 +166,39 @@
 
                 return this.model.start > this.now &&                                   // is in future
                        this.model.end === null || this.model.start < this.model.end &&  // start and end are monotonic
-                       hasIntersections
+                       !hasIntersections
             },
 
             endValid() {
-                /* check for intersections where our end date is too late:
-                             +--------------+
-                             | other iter   |
-                             +--------------+
-                             xxxxxx
-                +-----------------+
-                | this iteration  |
-                +-----------------+
-                 */
-
                 let hasIntersections = false;
-                for (let iter of this.otherIterations) {
-                    if (this.model.end !== null && iter.end !== null &&
-                        this.model.start < iter.start &&
-                        this.model.end >= iter.start) {
-                        hasIntersections = true;
-                        break;
-                    }
+
+                // if this.model.end is null, the backend will only close the iteration
+                // if needed. Hence this is always correct.
+                if (this.model.end === null) {
+                    return true;
                 }
 
-                return this.model.end > this.now &&                                     // is in future
-                    this.model.end === null || this.model.start < this.model.end &&     // start and end are monotonic
-                    hasIntersections
+                // Otherwise, check for intersections.
+                else {
+                    for (let iter of this.otherIterations) {
+                        // if this is our iteration, skip it
+                        if (iter.id === this.model.id) continue;
+
+                        if (this.model.start <= iter.start &&
+                            // Check for cases where our end date is too late:
+                            //
+                            //  other iteration:             +-----------------+
+                            //  this iteration:    +---------------+
+                            this.model.end >= iter.start) {
+                            hasIntersections = true;
+                            break;
+                        }
+                    }
+
+                    return this.model.end > this.now &&         // is in future
+                           this.model.start < this.model.end && // start and end are monotonic
+                           !hasIntersections
+                }
             },
 
             // ==== time handling ==== //
@@ -230,7 +232,6 @@
                     }
                 },
                 set(newValue) {
-                    console.log("SETTING");
                     if (!this.model.start) {
                         this.model.start = new Date();
                     } else {
@@ -274,7 +275,6 @@
                     }
                 },
                 set(newValue) {
-                    console.log("SETTING");
                     if (!this.model.end) {
                         this.model.end = new Date();
                     } else {
