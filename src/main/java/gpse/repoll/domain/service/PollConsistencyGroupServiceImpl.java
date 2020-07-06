@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Default implementation of {@link PollConsistencyGroupService}.
+ */
 @Service
 public class PollConsistencyGroupServiceImpl implements PollConsistencyGroupService {
 

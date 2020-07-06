@@ -16,10 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.time.Instant;
 import java.util.*;
 
 /**
- * Fills the Database with example Data used for development purposes.
+ * Fills the database with example data used for development purposes.
  */
 @Service
 public class InitializeDatabase implements InitializingBean {
@@ -28,6 +29,7 @@ public class InitializeDatabase implements InitializingBean {
     private final PollSectionService pollSectionService;
     private final QuestionService questionService;
     private final PollEntryService pollEntryService;
+    private final PollIterationService pollIterationService;
     private final UserService userService;
     private final TransactionTemplate transactionTemplate;
     private final PollRepository pollRepository;
@@ -42,6 +44,7 @@ public class InitializeDatabase implements InitializingBean {
     public InitializeDatabase(final PollService pollService,
                               final QuestionService questionService,
                               final PollEntryService pollEntryService,
+                              final PollIterationService pollIterationService,
                               final UserService userService,
                               final PlatformTransactionManager transactionManager,
                               final PollSectionService pollSectionService,
@@ -56,6 +59,7 @@ public class InitializeDatabase implements InitializingBean {
         this.pollSectionService = pollSectionService;
         this.questionService = questionService;
         this.pollEntryService = pollEntryService;
+        this.pollIterationService = pollIterationService;
         this.userService = userService;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
         this.pollRepository = pollRepository;
@@ -386,6 +390,7 @@ public class InitializeDatabase implements InitializingBean {
             textMap10.put(question3.getId(), multiChoiceAnswer10);
             textMap10.put(question4.getId(), scaleAnswer10);
 
+            pollIterationService.addPollIteration(poll.getId(), Instant.now(), null, PollIterationStatus.OPEN);
 
             pollEntryService.addPollEntry(poll.getId(), textMap1, participants.get(0).getId());
             pollEntryService.addPollEntry(poll.getId(), textMap2, participants.get(1).getId());

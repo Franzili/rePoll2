@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Default implementation of {@link CopyService}.
+ */
 @Service
 public class CopyServiceImpl implements CopyService {
 
@@ -36,6 +39,9 @@ public class CopyServiceImpl implements CopyService {
         this.choiceRepository = choiceRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Poll copyPoll(UUID pollID) {
         Poll poll = pollService.getPoll(pollID);
@@ -59,6 +65,9 @@ public class CopyServiceImpl implements CopyService {
         return copiedPoll;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PollSection copyPollSection(UUID pollID, UUID sectionID, List<PollConsistencyGroup> pollConsistencyGroups) {
         PollSection pollSection = pollSectionService.getPollSection(pollID, sectionID);
@@ -71,6 +80,9 @@ public class CopyServiceImpl implements CopyService {
         return copiedPollSection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Question copyQuestion(UUID pollID, Long questionID, List<PollConsistencyGroup> pollConsistencyGroups) {
         Question question = questionService.getQuestion(pollID, questionID);

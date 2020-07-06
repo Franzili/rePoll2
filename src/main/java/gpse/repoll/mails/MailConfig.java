@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
- * Configuration class for Mails, generates a MailSender Bean.
+ * Configuration class for e-mails, generates a {@link MailSender} bean.
  */
 @Entity
 public class MailConfig {

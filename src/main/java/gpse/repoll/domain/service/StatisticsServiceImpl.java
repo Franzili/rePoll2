@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
+/**
+ * Default implementation of {@link StatisticsService}.
+ */
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
 
@@ -23,6 +27,9 @@ public class StatisticsServiceImpl implements StatisticsService {
         this.questionService = questionService;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<QuestionStatistics> getAll(UUID pollId) {
         Poll poll = pollService.getPoll(pollId);
@@ -35,6 +42,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public QuestionStatistics getStatistics(UUID pollId, Long questionId) {
         Question question = questionService.getQuestion(pollId, questionId);

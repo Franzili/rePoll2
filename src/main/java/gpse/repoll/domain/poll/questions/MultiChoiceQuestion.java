@@ -12,8 +12,10 @@ import java.util.Collections;
 import java.util.List;
 
 // CPD-OFF
+
 /**
- * A question that can be answered with a @link{ChoiceAnswer}.
+ * A question with multiple answer options
+ * that can be answered with a {@link gpse.repoll.domain.poll.answers.MultiChoiceAnswer}.
  */
 @Entity
 public class MultiChoiceQuestion extends Question {

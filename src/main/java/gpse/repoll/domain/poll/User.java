@@ -11,13 +11,12 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * Represents a User of the application.
- * Users can be participants with no special privileges, or have a role giving
- * them privileges to e.g. create new Polls.
+ * Represents a user of the application, but not participants of a {@link Poll}.
+ * The user class is used for access control.
  */
 @Entity
 public class User implements UserDetails {
-    private static final long serialVersionUID = 5L;
+    private static final long serialVersionUID = 1L;
     private static final int PWD_LENGTH = 12;
 
     @Id
@@ -42,7 +41,6 @@ public class User implements UserDetails {
     private final List<String> roles = new ArrayList<>();
 
     public User() {
-        // Todo: refine user roles
         password = createRandomPwd(PWD_LENGTH);
         roles.add(Roles.NO_ROLE);
     }
@@ -55,20 +53,10 @@ public class User implements UserDetails {
         this.id = uuid;
     }
 
-    /**
-     * Gets the user's full name.
-     * (e.g. John Doe)
-     * @return The user's full name
-     */
     public String getFullName() {
         return fullName;
     }
 
-    /**
-     * Sets the user's full name.
-     * (e.g. John Doe)
-     * @param fullName The user's full name
-     */
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
@@ -133,21 +121,11 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    /**
-     * Gets the user's unique name.
-     * (e.g. jdoe)
-     * @return The user's unique name
-     */
     @Override
     public String getUsername() {
         return username;
     }
 
-    /**
-     * Sets the user's unique name.
-     * (e.g. jdoe)
-     * @param userName The user's new unique name
-     */
     public void setUsername(String userName) {
         this.username = userName;
     }
@@ -178,8 +156,8 @@ public class User implements UserDetails {
 
     /**
      * Creates a new random password.
-     * @param length password length.
-     * @return password.
+     * @param length The password length
+     * @return The password
      */
     String createRandomPwd(int length) {
         Random random = new Random();
@@ -196,10 +174,10 @@ public class User implements UserDetails {
      * Just gets the username.
      *
      * Used if a controller needs to get a user from an authentication token:
-     * The Authentication contains a "principal" that identifies the user. However, the principal
+     * The authentication contains a "principal" that identifies the user. However the principal
      * is only specified to be an {@link Object}. Hence it can be either
-     * a {@link UserDetails} subclass (like this User class) or merely a String token.
-     * To make sure we can always at least get the username, this toString() method is provided.
+     * a {@link UserDetails} subclass (like this user class) or merely a string token.
+     * To make sure we can always at least get the username this toString() method is provided.
      * @return The username
      */
     @Override

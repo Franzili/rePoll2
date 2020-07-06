@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * REST Controller managing /api/v1/polls/* entry points for operations on {@link Design}
+ * of a {@link gpse.repoll.domain.poll.Poll}.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")

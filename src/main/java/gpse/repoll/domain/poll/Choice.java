@@ -16,6 +16,9 @@ public class Choice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * The name of the choice.
+     */
     @Column
     @NotEmpty
     private String text;
