@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Exception representing a Request for an entity that could not be found (i.e. HTTP 404)
+ * Exception representing an error from the server (i.e. HTTP 500)
  */
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class InternalServerErrorException extends RuntimeException {

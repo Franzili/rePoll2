@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class NoOrderDefinedException extends RuntimeException {
 
-    public static final long serialVersionUID = 8L;
+    public static final long serialVersionUID = 5L;
 }

@@ -9,7 +9,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * REST Controller managing the endpoint /api/v1/configs/.
+ * REST Controller managing entry points for e-mails.
  */
 @RestController
 @Secured(Roles.ADMIN)

@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * REST Controller managing /api/v1/polls/ID/answers/* entry points.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")

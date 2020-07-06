@@ -13,9 +13,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * controller managing /api/v1/polls/{pollID}/participants/*.
+ * REST Controller managing /api/v1/polls/ID/participants/* entry points for operations on {@link Participant}s.
  */
-
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls/{pollId}/participants/")

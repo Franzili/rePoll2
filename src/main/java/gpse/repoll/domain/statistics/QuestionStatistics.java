@@ -16,11 +16,12 @@ import gpse.repoll.domain.poll.questions.SingleChoiceQuestion;
 import java.util.*;
 
 /**
- * Statistics for a specific Single-/MultiChoiceQuestion or ScaleQuestion.
+ * Statistics for a {@link SingleChoiceQuestion}, {@link MultiChoiceQuestion} or {@link ScaleQuestion}.
  */
 public class QuestionStatistics {
 
     public static final int MIN_LIST_SIZE = 3;
+
     @JsonIgnore
     private final List<Answer> answers = new ArrayList<>();
 
@@ -70,9 +71,9 @@ public class QuestionStatistics {
     }
 
     /**
-     * Converts a ScaleQuestion to a SingleChoiceQuestion to get the possibility to make Statistics on them.
-     * @param question question
-     * @return SingleChoiceQuestion
+     * Converts a {@link ScaleQuestion} to a {@link SingleChoiceQuestion}.
+     * @param question The question
+     * @return The question as a {@link SingleChoiceQuestion}
      */
     private SingleChoiceQuestion convertScaleToSingleChoiceQuestion(ScaleQuestion question) {
         int min = question.getMin();
@@ -100,11 +101,10 @@ public class QuestionStatistics {
     }
 
     /**
-     * Create a list that contains all the answers to this question.
-     *
-     * @param question The question you want to have all the answers for.
-     * @param pollEntries A list of all PollEntries that should be analysed.
-     * @return A list with all the answers to this question.
+     * Creates a list that contains all {@link Answer}s to this {@link Question}.
+     * @param question The question you want to have all the answers for
+     * @param pollEntries A list of all {@link PollEntry}s that should be analysed
+     * @return A list with all the answers to this question
      */
     private List<Answer> getAnswersTo(Question question, List<PollEntry> pollEntries) {
         List<Answer> answers = new ArrayList<>();
@@ -199,9 +199,9 @@ public class QuestionStatistics {
     }
 
     /**
-     * Create a, by Choice text, sorted list of the integers, representing the choices in a ScaleQuestion.
+     * Creates a sorted list of the integers representing the {@link Choice}s in a {@link ScaleQuestion}.
      * @param frequencies The list of frequencies to be sorted
-     * @return A sorted list of integers, representing the choices
+     * @return A sorted list of integers representing the choices
      */
     private List<Integer> getSortedListIntegers(List<Frequency> frequencies) {
         frequencies.sort(Frequency::compareChoicesText);
@@ -283,8 +283,8 @@ public class QuestionStatistics {
     }
 
     /**
-     * Calculates the arithmetic mean for ScaleQuestions.
-     * @return arithmetic mean of the corresponding question entries
+     * Calculates the arithmetic mean for a {@link ScaleQuestion}.
+     * @return The arithmetic mean of the {@link Answer}s to the question
      */
     private Double computeArithmeticMean() {
         try {

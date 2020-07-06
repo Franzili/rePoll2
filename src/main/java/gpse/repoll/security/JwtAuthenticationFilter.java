@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * JwtAuthenticationFilter is a Filter Bean used to grant users authorization to access @Secured endpoints.
+ * JwtAuthenticationFilter is a filter bean used to grant users authorization to access secured endpoints.
  *
- * Ie. this Bean has to be used to get an authorization token *before* accessing @Secured endpoints.
+ * I.e. this bean has to be used to get an authorization token *before* accessing secured endpoints.
  */
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -37,10 +37,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     /**
-     * Attempt to authenticate a User.
-     * @param request The Request the user sent.
-     * @param response The Response to send to the user
-     * @return An Authentication
+     * Attempts to authenticate a {@link gpse.repoll.domain.poll.User}.
+     * @param request The request the user sent
+     * @param response The response to send to the user
+     * @return An {@link Authentication}
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
@@ -53,11 +53,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     /**
-     * On successful Authentication, generate a JWT token.
-     * @param request
-     * @param response
-     * @param filterChain
-     * @param authentication
+     * On successful authentication generates a JWT token.
+     * @param request The {@link HttpServletRequest}
+     * @param response The {@link HttpServletResponse}
+     * @param filterChain The {@link FilterChain}
+     * @param authentication The {@link Authentication}
      */
     @SuppressWarnings("checkstyle:MagicNumber") // Todo: move expiration to SecurityConstants
     @Override

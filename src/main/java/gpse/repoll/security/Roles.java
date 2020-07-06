@@ -4,8 +4,6 @@ import java.util.List;
 
 /**
  * User roles used for Spring @Secured annotation.
- *
- * Each role describes an action the user is allowed to perform.
  */
 public final class Roles {
 

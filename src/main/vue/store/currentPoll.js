@@ -5,6 +5,7 @@ import api from "../api";
 import SectionHeaderModel from "./poll-item-models/SectionHeaderModel";
 
 import participants from "./participants";
+import iterations from "./iterations";
 
 /**
  * currentPoll holds the state of the Poll that is currently open, or otherwise in focus.
@@ -12,7 +13,10 @@ import participants from "./participants";
  * exactly one poll.
  */
 const currentPoll = {
-    modules: {participants: participants},
+    modules: {
+        participants: participants,
+        iterations: iterations
+    },
     state: {
         /**
          * The current poll object.
@@ -27,6 +31,7 @@ const currentPoll = {
                 logoPosition: '',
                 logo: ''
             },
+            pollIterations: [],
             pollConsistencyGroups: []
         },
         answers: [],
@@ -641,8 +646,15 @@ const currentPoll = {
             document.body.appendChild(fileLink);
 
             fileLink.click();
-        }
+        },
 
+        launch({dispatch, state}) {
+            let pollCmd = {
+                id: state.poll.id,
+                status: "LAUNCHED"
+            };
+            return dispatch("update", pollCmd);
+        }
     },
 
     namespaced: true

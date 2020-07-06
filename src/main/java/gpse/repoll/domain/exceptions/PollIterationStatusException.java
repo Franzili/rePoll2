@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class PollIterationStatusException extends RuntimeException {
 
-    public static final long serialVersionUID = 51L;
+    public static final long serialVersionUID = 9L;
 }
