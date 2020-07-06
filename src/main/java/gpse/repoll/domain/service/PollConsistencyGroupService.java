@@ -6,48 +6,43 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Provides operations on ConsistencyGroups to the controller.
+ * Provides operations on {@link PollConsistencyGroup}s to the controller.
  */
 public interface PollConsistencyGroupService {
 
+    void save(PollConsistencyGroup pollConsistencyGroup);
+
     /**
-     * Get all ConsistencyGroups of a Poll.
-     * @param id The polls ID
-     * @return The ConsistencyGroups.
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If corresponding poll could not be found
+     * Gets all {@link PollConsistencyGroup}s of a {@link gpse.repoll.domain.poll.Poll}.
+     * @param id The ID of the poll
+     * @return A list of the consistency groups
      */
     List<PollConsistencyGroup> getAllConsistencyGroups(final UUID id);
 
     /**
-     * Add a new ConsistencyGroup to a Poll.
-     * @param pollId The Poll's ID
-     * @param title The title of the new ConsistencyGroup
-     * @param questionIds The ID's of the new questions
-     * @return The newly created ConsistencyGroup
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If corresponding poll could not be found
+     * Adds a new {@link PollConsistencyGroup} to a {@link gpse.repoll.domain.poll.Poll}.
+     * @param pollId The ID of the poll
+     * @param title The title of the new consistency group
+     * @param questionIds The IDs of the new questions
+     * @return The newly created consistency group
      */
     PollConsistencyGroup addConsistencyGroup(final UUID pollId, final String title, final List<Long> questionIds);
 
     /**
-     * Get a ConsistencyGroup corresponding to a Poll.
-     * @param pollId The Poll's ID
-     * @param consistencyId The ConsistencyGroup's ID
-     * @return The ConsistencyGroup
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the ConsistencyGroup or the corresponding poll could
-     * not be found
+     * Gets a {@link PollConsistencyGroup} to the corresponding {@link gpse.repoll.domain.poll.Poll}.
+     * @param pollId The ID of the poll
+     * @param consistencyId The ID of the consistency group
+     * @return The consistency group
      */
     PollConsistencyGroup getConsistencyGroup(final UUID pollId, final UUID consistencyId);
 
     /**
-     * Update a ConsistencyGroup.
-     * Parameters that are null will not result in change the ConsistencyGroup object.
-     * @param pollId The Poll's ID
-     * @param consistencyId The ConsistencyGroup's ID
-     * @param title The new Title, or null
-     * @param questionIds The ID's of the new questions
-     * @return The changed ConsistencyGroup
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the ConsistencyGroup or the corresponding poll could
-     * not be found
+     * Updates a {@link PollConsistencyGroup}.
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param consistencyId The ID of the consistency group
+     * @param title The new title
+     * @param questionIds The IDs of the new questions
+     * @return The updated consistency group
      */
     PollConsistencyGroup updateConsistencyGroup(
         final UUID pollId,
@@ -57,14 +52,9 @@ public interface PollConsistencyGroupService {
     );
 
     /**
-     * Deletes a ConsistencyGroup.
-     * @param pollId The Poll's ID
-     * @param consistencyId The ConsistencyGroup's ID
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the PollSection or the corresponding Poll could
-     * not be found.
+     * Deletes a {@link PollConsistencyGroup}.
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param consistencyId The ID of the consistency group
      */
-    void deleteConsistencyGroup(
-        final UUID pollId,
-        final UUID consistencyId
-    );
+    void deleteConsistencyGroup(final UUID pollId, final UUID consistencyId);
 }

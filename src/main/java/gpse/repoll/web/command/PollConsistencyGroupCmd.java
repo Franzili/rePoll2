@@ -2,9 +2,6 @@ package gpse.repoll.web.command;
 
 import java.util.List;
 
-/**
- * ConsistencyGroup helper object used for JSON serialisation.
- */
 public class PollConsistencyGroupCmd {
 
     private String title;

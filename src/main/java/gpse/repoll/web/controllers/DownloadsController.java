@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 /**
- * REST Controller managing /download/* entry points.
+ * REST Controller managing /api/v1/download/* entry points for downloading {@link gpse.repoll.domain.poll.Poll}s.
  */
 @CrossOrigin
 @RestController

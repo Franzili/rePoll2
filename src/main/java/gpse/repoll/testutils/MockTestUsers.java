@@ -8,11 +8,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
- * A mock service that supplies Users to Unit Tests.
- *
- * This Service has one user per role.
- * They are named "AdminUser", "CreatorUser", "EditorUser"
- *
+ * A mock service that supplies users to unit tests.
+ * This service has one user per role.
+ * They are named "AdminUser", "CreatorUser" and "EditorUser".
  * This class is NOT meant to be used in production!
  */
 @Service

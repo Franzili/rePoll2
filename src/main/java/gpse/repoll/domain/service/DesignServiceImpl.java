@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+/**
+ * Default implementation of {@link DesignService}.
+ */
 @Service
 public class DesignServiceImpl implements DesignService {
 
@@ -25,12 +28,23 @@ public class DesignServiceImpl implements DesignService {
         this.pollRepository = pollRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void save(Design design) {
+        designRepository.save(design);
+    }
+
     @Override
     public Design getDesign(UUID pollId) {
         Poll poll = pollService.getPoll(pollId);
         return poll.getDesign();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Design updateDesign(UUID pollID,
                                String font,

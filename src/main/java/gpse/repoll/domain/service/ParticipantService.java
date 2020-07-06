@@ -5,47 +5,50 @@ import gpse.repoll.domain.utils.Pair;
 
 import java.util.UUID;
 
+/**
+ * Provides operations on {@link Participant}s to the controller.
+ */
 public interface ParticipantService {
 
     void save(Participant participant);
 
     /**
-     * Gets all Participants from a poll.
-     * @param pollId is the poll ID
-     * @return a list of Participants
+     * Gets all {@link Participant}s from a {@link gpse.repoll.domain.poll.Poll}.
+     * @param pollId The ID of the poll
+     * @return A list of all participants
      */
     Iterable<Participant> getAll(UUID pollId);
 
     /**
-     * Adds a new Participant to a poll.
-     * @param fullName is the Fullname from a new participant
-     * @param email is the Email from a new participant
-     * @param pollId is the poll ID
-     * @return the new Participant
+     * Adds a new {@link Participant} to a {@link gpse.repoll.domain.poll.Poll}.
+     * @param fullName The the full name from a new participant
+     * @param email The e-mail address from a new participant
+     * @param pollId The ID of the poll
+     * @return The new participant
      */
     Pair<Participant> addParticipant(String fullName, String email, UUID pollId);
 
     /**
-     * Gets one Participant.
-     * @param id is the Participant-ID we want to get
-     * @return one Participant
+     * Gets one {@link Participant}.
+     * @param id The ID of the participant
+     * @return The participant
      */
     Participant getParticipant(UUID id);
 
     /**
-     * Updates one Participant.
-     * @param pollId the ID of the Poll
-     * @param participantId is the Participant-Id we want to update
-     * @param fullName is the new Fullname, can be null
-     * @param email is the new Email, can be null
-     * @return the updated Participant
+     * Updates a {@link Participant}.
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param participantId The ID of the participant
+     * @param fullName The new full name
+     * @param email The new e-mail address
+     * @return The updated participant
      */
     Participant updateParticipant(UUID pollId, UUID participantId, String fullName, String email);
 
     /**
-     * Removes a Participant from the Repository and the Participant-List of the Poll.
-     * @param id is the Participant-ID
-     * @param pollId is the Poll-ID
+     * Deletes a {@link Participant}.
+     * @param id The ID of the participant
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
      */
     void removeParticipant(UUID id, UUID pollId);
 

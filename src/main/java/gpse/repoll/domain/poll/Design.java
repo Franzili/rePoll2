@@ -3,6 +3,9 @@ package gpse.repoll.domain.poll;
 
 import javax.persistence.*;
 
+/**
+ * Defines the style for one {@link Poll}.
+ */
 @Entity
 public class Design {
 
@@ -34,6 +37,15 @@ public class Design {
         this.backgroundColour = "#ffffff";
         this.logoPosition = "left";
         this.logo = "";
+    }
+
+    public Design(Design design) {
+        this.id = null;
+        this.font = design.font;
+        this.textColour = design.textColour;
+        this.backgroundColour = design.backgroundColour;
+        this.logoPosition = design.logoPosition;
+        this.logo = design.logo;
     }
 
     public Long getId() {

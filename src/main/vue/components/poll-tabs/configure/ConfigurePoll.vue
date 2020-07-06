@@ -4,12 +4,18 @@
             <Anonymity></Anonymity>
         </p>
 
-        <p>
-            <SelectStatus></SelectStatus>
+        <p v-if="poll.status === 'EDITING'">
+            <Launch></Launch>
         </p>
+
+        <p v-else-if="poll.status === 'LAUNCHED'">
+            <Iterations/>
+        </p>
+
         <p>
             <Design></Design>
         </p>
+
         <p>
             <ManageParticipants></ManageParticipants>
         </p>
@@ -25,16 +31,32 @@
 </template>
 
 <script>
-    import SelectStatus from "./SelectStatus";
     import ManageParticipants from "./ManageParticipants";
     import DeletePoll from "./DeletePoll";
     import Anonymity from "./Anonymity";
     import Design from "./Design";
     import Download from "./Download";
+    import Launch from "./Launch";
+    import Iterations from "./Iterations";
+
+    import {mapState} from "vuex"
 
     export default {
         name: "ConfigurePoll",
-        components: {Download, Design, Anonymity, SelectStatus, ManageParticipants, DeletePoll}
+        components: {
+            Iterations,
+            Launch,
+            Download,
+            Design,
+            Anonymity,
+            ManageParticipants,
+            DeletePoll
+        },
+        computed: {
+            ...mapState("currentPoll", {
+                poll: "poll"
+            })
+        }
     }
 
 </script>

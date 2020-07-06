@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Default implementation of PollService.
+ * Default implementation of {@link PollService}.
  */
 @Service
 public class PollServiceImpl implements PollService {
@@ -30,6 +30,9 @@ public class PollServiceImpl implements PollService {
         this.designRepository = designRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void save(Poll poll) {
         pollRepository.save(poll);

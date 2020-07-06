@@ -15,9 +15,5 @@ public class EntriesJSON {
         }
 
         return "";
-
     }
-
-
-
 }

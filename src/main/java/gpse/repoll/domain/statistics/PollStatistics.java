@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * All Statistics to a specific poll.
  */
-public class PollStatistics {
+public class PollStatistics { // todo remove this redundant class
 
     private UUID pollID;
 

@@ -9,6 +9,10 @@
                         <b-table
                             show-empty
                             small
+                            striped
+                            hover
+                            fixed
+                            outlined
                             sticky-header="true"
                             :items="this.participants"
                             :fields="fields"
@@ -23,6 +27,8 @@
                         <b-button
                             class="float-right"
                             variant="primary"
+                            data-toggle="tooltip"
+                            title="Invite a new Participant"
                             v-b-modal.newParticipant>
                             Invite New
                         </b-button>
@@ -35,6 +41,7 @@
                 <b-col cols="6">
                     <p>
                         Known participants will receive a custom link to the poll automatically, when they are invited.
+                        The Reminder-Mails will only be send to the participants who have not answered the poll yet.
                     </p>
                     <p>
                         <b-row class="align-items-center">
@@ -44,7 +51,10 @@
                             </b-col>
 
                             <b-col cols="6">
-                                <b-button class="float-right" v-on:click="reminder">Remind</b-button>
+                                <b-button class="float-right"
+                                data-toggle="tooltip"
+                                title="Send Reminder-Mails"
+                                v-on:click="reminder">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
@@ -97,7 +107,10 @@
                         ></b-form-textarea>
                     </p>
                     <p>
-                        <b-button class="float-right" variant="primary">Invite</b-button>
+                        <b-button class="float-right"
+                                  data-toggle="tooltip"
+                                  title="Invite a new Participant"
+                                  variant="primary">Invite</b-button>
                     </p>
                 </b-col>
 
@@ -122,7 +135,10 @@
                             </b-col>
 
                             <b-col cols="6">
-                                <b-button class="float-right" v-on:click="reminder">Remind</b-button>
+                                <b-button class="float-right"
+                                          data-toggle="tooltip"
+                                          title="Send Reminder-Mails"
+                                          v-on:click="reminder">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
@@ -144,7 +160,10 @@
                             ></b-form-textarea>
                         </p>
                         <p>
-                            <b-button class="float-right" variant="primary">Invite</b-button>
+                            <b-button class="float-right"
+                                      data-toggle="tooltip"
+                                      title="Invite a new Participant"
+                                      variant="primary">Invite</b-button>
                         </p>
                     </b-col>
 

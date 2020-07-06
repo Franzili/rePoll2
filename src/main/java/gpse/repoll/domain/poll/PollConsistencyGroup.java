@@ -35,6 +35,12 @@ public class PollConsistencyGroup {
         this.title = title;
     }
 
+    public PollConsistencyGroup(final PollConsistencyGroup consistencyGroup) {
+        this.id = null;
+        this.title = consistencyGroup.title;
+        this.questions.addAll(consistencyGroup.getQuestions());
+    }
+
     public UUID getId() {
         return id;
     }
@@ -58,6 +64,10 @@ public class PollConsistencyGroup {
 
     public void add(Question question) {
         questions.add(question);
+    }
+
+    public void add(int index, Question question) {
+        questions.add(index, question);
     }
 
     public void addAll(Collection<Question> questions) {

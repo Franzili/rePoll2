@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * JwtAuthorizationFilter is a OncePerRequestFilter that checks if the user has the authorization to make
+ * JwtAuthorizationFilter is a once per request filter that checks if the {@link User} has the authorization to make
  * a request.
  */
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
@@ -41,10 +41,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     /**
-     * Check the request for authorization.
-     * @param request The Request.
-     * @param response The Response.
-     * @param filterChain The FilterChain this Filter is a part of.
+     * Checks the request for authorization.
+     * @param request The {@link HttpServletRequest}
+     * @param response The {@link HttpServletResponse}
+     * @param filterChain The {@link FilterChain}
      * @throws IOException
      * @throws ServletException
      */
@@ -62,9 +62,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     /**
-     * Parse the JWT token and grant authorization.
+     * Parses the JWT token and grants authorization.
      * @param request The request containing the JWT token
-     * @return The parsed Authorization
+     * @return The parsed authorization
      */
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(securityConstants.getTokenHeader());
