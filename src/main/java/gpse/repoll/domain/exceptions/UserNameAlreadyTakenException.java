@@ -5,5 +5,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class UserNameAlreadyTakenException extends RuntimeException {
-    public static final long serialVersionUID = 4L;
+    public static final long serialVersionUID = 11L;
 }

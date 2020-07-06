@@ -13,9 +13,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * controller managing /api/v1/polls/{pollID}/participants/*.
+ * REST Controller managing /api/v1/polls/ID/participants/* entry points for operations on {@link Participant}s.
  */
-
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls/{pollId}/participants/")
@@ -38,15 +37,13 @@ public class ParticipantsController {
 
     @Secured(Roles.POLL_CREATOR)
     @PostMapping("/")
-    public Participant addParticipant(@RequestBody final ParticipantCmd participantCmd,
+    public String addParticipant(@RequestBody final ParticipantCmd participantCmd,
                                       @PathVariable final UUID pollId) {
-        final Participant participant = participantService.addParticipant(
-                participantCmd.getFullName(),
-                participantCmd.getEmail(),
-                pollId
-        );
-
-        return participant;
+        return participantService.addParticipant(
+            participantCmd.getFullName(),
+            participantCmd.getEmail(),
+            pollId
+        ).getString();
     }
 
     @Secured(Roles.POLL_CREATOR)
@@ -63,4 +60,9 @@ public class ParticipantsController {
          participantService.removeParticipant(participantId, pollId);
     }
 
+    @Secured(Roles.POLL_CREATOR)
+    @RequestMapping("/remind/")
+    public String remindParticipant(@PathVariable final UUID pollId) {
+        return participantService.remindParticipant(pollId);
+    }
 }

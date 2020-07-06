@@ -14,43 +14,39 @@ import java.util.UUID;
 public interface PollService {
 
     /**
-     * Saves the Poll in the repository.
-     * @param poll the Poll
+     * Saves the {@link Poll} in the repository.
+     * @param poll The poll
      */
     void save(Poll poll);
 
     /**
-     * Get all Polls.
-     * @return A List of all polls
+     * Gets all {@link Poll}s.
+     * @return An iterable of all polls
      */
     Iterable<Poll> getAll();
 
     /**
-     * Add a new Poll.
-     * This internally creates a new Poll object and sets the appropriate parameters.
-     * @param title The title of the Poll object
-     * @return The Poll object created.
+     * Adds a new {@link Poll}.
+     * @param title The title of the poll
+     * @return The created poll
      */
     Poll addPoll(String title);
 
     /**
-     * Get a Poll by its ID.
-     * @param id The Poll's ID
-     * @return The Poll.
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Poll could not be found
+     * Gets a {@link Poll}.
+     * @param id The ID of the poll
+     * @return The poll
      */
     Poll getPoll(UUID id);
 
     /**
-     * Update a Poll.
-     * Parameters that are null will not result in change in the Poll object.
-     * @param id The Poll's ID
-     * @param title A new title, or null
-     * @param status The status of the Poll
-     * @param anonymity The anonymity of the poll
-     * @param structure The structure for the Poll
-     * @return The updated Poll.
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the poll could not be found.
+     * Updates a {@link Poll}.
+     * @param id The ID of the poll
+     * @param title The new title
+     * @param status The new {@link PollEditStatus}
+     * @param anonymity The new {@link Anonymity}
+     * @param structure The new structure
+     * @return The updated poll
      */
     Poll updatePoll(UUID id,
                     String title,
@@ -59,8 +55,8 @@ public interface PollService {
                     Map<UUID, List<Long>> structure);
 
     /**
-     * Deletes the poll from the database.
-     * @param id the ID of the poll
+     * Deletes the {@link Poll} from the database.
+     * @param id The ID of the poll
      */
     void removePoll(UUID id);
 }

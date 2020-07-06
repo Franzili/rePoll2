@@ -5,6 +5,10 @@ import users from "./users";
 import entries from "./entries";
 import "./httpLogger";
 import entry from "./entry";
+import admin from "./admin";
+import design from "./design";
+import consistency from "./consistency";
+import iterations from "./iterations";
 
 export default {
     auth,
@@ -12,5 +16,9 @@ export default {
     statistics,
     entry,
     entries,
-    users
+    design,
+    consistency,
+    users,
+    admin,
+    iterations
 }

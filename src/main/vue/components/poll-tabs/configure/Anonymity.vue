@@ -10,7 +10,7 @@
         </p>
 
 
-        <b-card v-if="poll.status === 'IN_PROCESS'">
+        <b-card v-if="poll.status === 'EDITING'">
             <h6>Anonymity</h6>
 
             <b-form-radio-group

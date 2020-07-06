@@ -3,7 +3,7 @@ package gpse.repoll.domain.poll.questions;
 import javax.persistence.Entity;
 
 /**
- * A question that can be answered with a @link{TextAnswer}.
+ * A question that can be answered with a {@link gpse.repoll.domain.poll.answers.TextAnswer}.
  */
 @Entity
 public class TextQuestion extends Question {

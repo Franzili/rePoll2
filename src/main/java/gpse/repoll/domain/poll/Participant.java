@@ -4,8 +4,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 /**
- * Represents a Participant assigned to one poll.
- * Unequal to User.
+ * Represents a participant assigned to one {@link Poll}.
  */
 @Entity
 public class Participant {

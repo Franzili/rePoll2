@@ -1,11 +1,102 @@
 <template>
     <b-card>
         <!-- TODO: adapt type names to backend terminology -->
-        <b-row v-if="type === 'known'">
+        <div v-if="poll.anonymity === 'NON_ANONYMOUS'">
+            <h6>Participants:</h6>
+            <b-row>
+                <b-col cols="6">
+                    <p>
+                        <b-table
+                            show-empty
+                            small
+                            striped
+                            hover
+                            fixed
+                            outlined
+                            sticky-header="true"
+                            :items="this.participants"
+                            :fields="fields"
+                            :sort-desc.sync="sortDesc"
+                            :sort-direction="sortDirection">
+                            <template v-slot:cell(name)="row">
+                                {{ row.value.fullName }}
+                            </template>
+                        </b-table>
+                    </p>
+                    <p>
+                        <b-button
+                            class="float-right"
+                            variant="primary"
+                            data-toggle="tooltip"
+                            title="Invite a new Participant"
+                            v-b-modal.newParticipant>
+                            Invite New
+                        </b-button>
+                    </p>
+                    <p>
+                        <UploadParticipants></UploadParticipants>
+                    </p>
+                </b-col>
 
-        </b-row>
+                <b-col cols="6">
+                    <p>
+                        Known participants will receive a custom link to the poll automatically, when they are invited.
+                    </p>
+                    <p>
+                        The Remind-Button will send a mail only to the participants who have not answered the poll yet.
+                    </p>
+                    <p>
+                        <b-row class="align-items-center">
+                            <b-col cols="6">
+                                {{ n_participated }} participated, <br/>
+                                {{ n_invites_pending }} invites pending.
+                            </b-col>
 
-        <div v-if="type === 'pseudo'">
+                            <b-col cols="6">
+                                <b-button class="float-right"
+                                data-toggle="tooltip"
+                                title="Send Reminder-Mails"
+                                v-on:click="reminder">Remind</b-button>
+                            </b-col>
+                        </b-row>
+                    </p>
+                </b-col>
+            </b-row>
+            <b-modal
+                id="newParticipant"
+                title="Invite"
+                centered
+                @ok="addParticipant">
+                <div>
+                    <b-row
+                        class="justify-content-md-center"
+                        style="margin-bottom: 3vh">
+                        <b-col col lg="2">
+                            Name:
+                        </b-col>
+                        <b-col col lg="6">
+                            <b-form-input
+                                v-model="name">
+                            </b-form-input>
+                        </b-col>
+                    </b-row>
+                    <b-row
+                        class="justify-content-md-center"
+                        style="margin-bottom: 3vh">
+                        <b-col col lg="2">
+                            E-Mail:
+                        </b-col>
+                        <b-col col lg="6">
+                            <b-form-input v-model="eMail">
+                            </b-form-input>
+                        </b-col>
+                    </b-row>
+                </div>
+            </b-modal>
+        </div>
+
+
+        <div v-if="poll.anonymity === 'PSEUDONYMOUS'">
             <h6>Invite new participants</h6>
 
             <b-row>
@@ -18,7 +109,10 @@
                         ></b-form-textarea>
                     </p>
                     <p>
-                        <b-button class="float-right" variant="primary">Invite</b-button>
+                        <b-button class="float-right"
+                                  data-toggle="tooltip"
+                                  title="Invite a new Participant"
+                                  variant="primary">Invite</b-button>
                     </p>
                 </b-col>
 
@@ -43,7 +137,10 @@
                             </b-col>
 
                             <b-col cols="6">
-                                <b-button class="float-right">Remind</b-button>
+                                <b-button class="float-right"
+                                          data-toggle="tooltip"
+                                          title="Send Reminder-Mails"
+                                          v-on:click="reminder">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
@@ -52,7 +149,7 @@
             </b-row>
         </div>
 
-        <b-row v-if="type === 'anonymous'">
+        <b-row v-if="poll.anonymity === 'ANONYMOUS'">
             <b-container>
                 <b-row align-h="between">
                     <b-col cols="6">
@@ -65,7 +162,10 @@
                             ></b-form-textarea>
                         </p>
                         <p>
-                            <b-button class="float-right" variant="primary">Invite</b-button>
+                            <b-button class="float-right"
+                                      data-toggle="tooltip"
+                                      title="Invite a new Participant"
+                                      variant="primary">Invite</b-button>
                         </p>
                     </b-col>
 
@@ -98,37 +198,96 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
+    import {mapState, mapActions} from "vuex";
+    import UploadParticipants from "./UploadParticipants";
+
     export default {
         name: "ManageParticipants",
+        components: {UploadParticipants},
 
         data() {
             return {
                 link: '',
+                items: [],
+                fields: [
+                    { key: 'fullName', label: 'Fullname', sortable: true, sortDirection: 'desc' },
+                    { key: 'email', label: 'Email', sortable: true, sortDirection: 'desc' }],
+                sortDesc: false,
+                sortDirection: 'asc',
 
                 //TODO
-                type: 'anonymous',
+                n_participated: 6,
+                n_invites_pending: 32,
 
-                //TODO
-                n_participated: 412,
-                n_invites_pending: 32
+                // For a single participant
+                name: '',
+                eMail: '',
+
+                participantMailPair: '',
+                mailSentCounter: 0
             }
         },
 
         computed: {
             ...mapState('currentPoll', {
-                poll: 'poll'
-            }),
+                poll: 'poll'}),
             ...mapState('participants', {
-                participants: 'participants'
+                participants: 'participants',
+                mailAnswer: 'mailAnswer'
             })
+        },
+
+
+        methods: {
+            ...mapActions('participants', {
+                loadParticipant: 'loadParticipant'
+            }),
+            ...mapActions('participants', {
+                create: "create",
+                remind: "remind"
+            }),
+            async addParticipant() {
+                let participantCmd = {
+                    fullName: this.name,
+                    email: this.eMail
+                }
+                await this.create(participantCmd)
+                this.makeToast(this.mailAnswer)
+            },
+            /**
+             * Sends a reminder email to every participant that did not participated until now.
+             * If you try to send emails twice in one page mount, you get a toast that this is not smart :D
+             */
+            async reminder() {
+                if (this.mailSentCounter > 0) {
+                    this.makeToast("You have sent Reminders just a few moments ago!\n" +
+                        "Reload the page and try again to sent them anyway")
+                } else {
+                    this.makeToast("Sending Mails ...")
+                    await this.remind();
+                    this.mailSentCounter++;
+                    this.makeToast(this.mailAnswer)
+                }
+            },
+            makeToast(message) {
+                this.$bvToast.toast(message, {
+                    title: 'Mail',
+                    autoHideDelay: 10000,
+                    appendToast: false
+                })
+            }
+        },
+        mounted() {
+            this.loadParticipant(this.poll.id);
+            //this.n_participated = this.poll.entries.length;
         },
 
         created: function() {
             let id = this.$route.params.pollId;
             let domain = window.location.origin;
             this.link = domain + '/poll/' + id + '/answer';
-        }
+        },
+
     }
 </script>
 

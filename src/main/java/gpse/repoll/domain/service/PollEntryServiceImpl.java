@@ -1,5 +1,6 @@
 package gpse.repoll.domain.service;
 
+import gpse.repoll.domain.exceptions.NoIterationOpenException;
 import gpse.repoll.domain.poll.*;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
@@ -13,11 +14,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Default implementation of {@link PollEntryService}.
+ */
 @Service
 public class PollEntryServiceImpl implements PollEntryService {
 
     private final PollService pollService;
+    private final ParticipantService participantService;
 
+    private final PollIterationRepository pollIterationRepository;
     private final PollEntryRepository pollEntryRepository;
     private final QuestionBaseRepository<Question> questionRepository;
     private final TextAnswerRepository textAnswerRepository;
@@ -25,9 +31,12 @@ public class PollEntryServiceImpl implements PollEntryService {
     private final SingleChoiceAnswerRepository singleChoiceAnswerRepository;
     private final MultiChoiceAnswerRepository multiChoiceAnswerRepository;
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
     public PollEntryServiceImpl(
             PollService pollService,
+            ParticipantService participantService,
+            PollIterationRepository pollIterationRepository,
             PollEntryRepository pollEntryRepository,
             QuestionBaseRepository<Question> questionRepository,
             TextAnswerRepository textAnswerRepository,
@@ -35,6 +44,8 @@ public class PollEntryServiceImpl implements PollEntryService {
             SingleChoiceAnswerRepository singleChoiceAnswerRepository,
             MultiChoiceAnswerRepository multiChoiceAnswerRepository) {
         this.pollService = pollService;
+        this.participantService = participantService;
+        this.pollIterationRepository = pollIterationRepository;
         this.pollEntryRepository = pollEntryRepository;
         this.questionRepository = questionRepository;
         this.textAnswerRepository = textAnswerRepository;
@@ -43,6 +54,12 @@ public class PollEntryServiceImpl implements PollEntryService {
         this.multiChoiceAnswerRepository = multiChoiceAnswerRepository;
     }
 
+    /**
+     * Fills the {@link PollEntry} with the {@link Answer}s.
+     * @param poll The poll
+     * @param pollEntry The poll entry
+     * @param associations The map of IDs of the {@link Question}s and answers
+     */
     private void createAnswers(Poll poll, PollEntry pollEntry, Map<Long, Answer> associations) {
         for (Long questionId : associations.keySet()) {
             Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
@@ -85,19 +102,34 @@ public class PollEntryServiceImpl implements PollEntryService {
     @Override
     public PollEntry addPollEntry(final UUID pollId,
                                   final Map<Long, Answer> associations,
-                                  final Participant participant) {
+                                  final UUID participantID) {
         Poll poll = pollService.getPoll(pollId);
-        PollEntry pollEntry = new PollEntry();
-        if (poll.getAnonymity().equals(Anonymity.NON_ANONYMOUS)) {
-            pollEntry.setParticipant(participant);
-            createAnswers(poll, pollEntry, associations);
-            pollEntryRepository.save(pollEntry);
-            poll.add(pollEntry);
-            pollService.save(poll);
-            return pollEntry;
-        } else {
-            return null; // todo for other degrees of anonymity
+
+        //
+        if (poll.getCurrentIteration() == null) {
+            throw new NoIterationOpenException();
         }
+
+        PollEntry pollEntry = new PollEntry();
+        Participant participant;
+        if (poll.getAnonymity().equals(Anonymity.NON_ANONYMOUS) || poll.getAnonymity().equals(Anonymity.PSEUDONYMOUS)) {
+            if (participantID == null) {
+                throw new BadRequestException("Unknown participant!");
+            }
+            participant = participantService.getParticipant(participantID);
+            pollEntry.setParticipant(participant);
+        } else {
+            participant = new Participant();
+            participantService.save(participant);
+        }
+        pollEntry.setParticipant(participant);
+        createAnswers(poll, pollEntry, associations);
+        pollEntryRepository.save(pollEntry);
+
+        PollIteration currentIteration = poll.getCurrentIteration();
+        currentIteration.add(pollEntry);
+        pollIterationRepository.save(currentIteration);
+        return pollEntry;
     }
 
     /**
@@ -109,6 +141,12 @@ public class PollEntryServiceImpl implements PollEntryService {
         return findEntryOfPoll(poll, pollEntryId);
     }
 
+    /**
+     * Gets a {@link PollEntry} and tests whether it belongs to the {@link Poll}.
+     * @param poll The poll
+     * @param pollEntryId The ID of the poll
+     * @return The poll entry
+     */
     private PollEntry findEntryOfPoll(Poll poll, Long pollEntryId) {
         PollEntry pollEntry = pollEntryRepository.findById(pollEntryId).orElseThrow(() -> {
             throw new NotFoundException("The entry does not exist!");

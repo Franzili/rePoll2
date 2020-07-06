@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {mapActions} from "vuex"
+    import {mapActions, mapState} from "vuex"
 
     import PollItem from "./poll-items/PollItem";
 
@@ -39,12 +39,18 @@
                 set(value) {
                     this.$store.dispatch('currentPoll/updateStructure', value);
                 }
-            }
+            },
+            ...mapState('consistencies', {
+                consistencies: 'currentConsist'
+            })
         },
         methods: {
             ...mapActions('currentPoll', {
                 updatePollItem: 'updatePollItem',
                 removePollItem: 'removePollItem'
+            }),
+            ...mapActions('consistencies', {
+                dltConst: 'delete'
             }),
             onItemEditStarted(item) {
                 if (this.currentlyEditing) {
@@ -59,10 +65,54 @@
                 if (this.currentlyEditing === item) {
                     this.currentlyEditing = null
                     this.updatePollItem(item.model);
+                    this.$root.$emit('update-questions')
                 }
             },
             onRemove(item) {
-                this.removePollItem(item.id);
+                let dltCmds = []
+                for (let i = 0; i < this.consistencies.length; i++) {
+                    let currentConsist = this.consistencies[i]
+                    for (let j = 0; j < currentConsist.questions.length; j++) {
+                        if (currentConsist.questions[j].id === item.id) {
+                            dltCmds.push({
+                                pollId: this.$route.params.pollId,
+                                constId: this.consistencies[i].id
+                            })
+                            break;
+                        }
+                    }
+                }
+                if (dltCmds.length > 0) {
+                    this.$bvModal.msgBoxConfirm(
+                        'Corresponding consistency groups will be delete as well. Do you wish to proceed?',
+                        {
+                        title: ' ',
+                        headerBgVariant: 'info',
+                        centered: true,
+                        okVariant: 'secondary',
+                        cancelVariant: 'primary',
+                        headerBorderVariant: 'dark',
+                        footerBorderVariant: 'dark',
+                        hideHeaderClose: true,
+                        size: 'sm',
+                    }).then(value => {
+                        if (value) {
+                            this.removeQuestionAndConsistency(dltCmds, item)
+                        }
+                    })
+                } else {
+                    this.removePollItem(item.id);
+                }
+            },
+            async removeQuestionAndConsistency(dltCmds, item) {
+                if (dltCmds.length > 0) {
+                    for (let k = 0; k < dltCmds.length; k++) {
+                        await this.dltConst(dltCmds[k])
+                    }
+                    this.removePollItem(item.id);
+                } else {
+                    this.removePollItem(item.id);
+                }
             }
         },
         components: { PollItem, draggable }

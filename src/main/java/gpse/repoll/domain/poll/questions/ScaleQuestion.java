@@ -5,7 +5,7 @@ import gpse.repoll.domain.exceptions.InvalidScaleException;
 import javax.persistence.*;
 
 /**
- * A question that can be answered with a @link{ScaleAnswer}.
+ * A question that can be answered with a {@link gpse.repoll.domain.poll.answers.ScaleAnswer}.
  */
 @Entity
 public class ScaleQuestion extends Question {

@@ -3,6 +3,17 @@
         <b-button-toolbar v-if="actives !== undefined">
             <b-form-group>
                 <b-form-select
+                    v-if="actives[4] !== null && choices !== undefined"
+                    style="max-width: 15rem; min-width: 15rem; margin-right: 0.5rem"
+                    :disabled="actives[4] === false"
+                    v-model="selected.question"
+                    :options="choices"
+                    v-on:change="$emit('question', selected.question)">
+                </b-form-select>
+            </b-form-group>
+
+            <b-form-group>
+                <b-form-select
                     style="max-width: 20rem;"
                     :disabled="actives[0] === false"
                     v-model="selected.frequency"
@@ -17,6 +28,14 @@
                 <b-button-group
                     style="margin-left: 0.5rem"
                     class="mr-1">
+                    <b-button
+                        variant="outline-secondary"
+                        v-on:click="$emit('chart', 'table')"
+                        :disabled="actives[8] === false"
+                        v-if="actives[8] !== null"
+                        title="table-chart">
+                        <b-icon icon="pen"></b-icon>
+                    </b-button>
                     <b-button
                         variant="outline-secondary"
                         v-on:click="$emit('chart', 'bar')"
@@ -49,17 +68,6 @@
             </b-form-group>
 
             <b-form-group>
-                <b-form-select
-                    v-if="actives[4] !== null && choices !== undefined"
-                    style="max-width: 15rem; min-width: 15rem"
-                    :disabled="actives[4] === false"
-                    v-model="selected.question"
-                    :options="choices"
-                    v-on:change="$emit('question', selected.question)">
-                </b-form-select>
-            </b-form-group>
-
-            <b-form-group>
                 <b-button
                     variant="outline-secondary"
                     v-if="actives[5] !== null"
@@ -74,7 +82,7 @@
 
         <b-button-toolbar style="margin-left: auto" v-if="actives !== undefined">
             <b-form-group>
-                <b-button-group>
+                <b-button-group :size="size">
                     <b-button
                         variant="outline-secondary"
                         v-on:click="$emit('edit')"
@@ -98,8 +106,8 @@
 <script>
     export default {
         name: "ToolBar",
-        // actives: dataChange, bar, donut, boxplot, question, merge, delete
-        props: ['actives', 'choices', 'frequency', 'question'],
+        // actives: dataChange, bar, donut, boxplot, question, merge, delete, edit
+        props: ['actives', 'choices', 'frequency', 'question', 'eSize'],
         data() {
             return {
                 selected: {
@@ -107,10 +115,14 @@
                     frequency: ''
                 },
                 merged: true,
+                size: 'md'
             }
         },
         created() {
             this.selected.frequency = this.frequency
+            if (this.eSize !== undefined) {
+                this.size = this.eSize
+            }
             if (this.choices !== undefined) {
                 this.selected.question = this.choices[0].value
                 this.$emit('question', this.selected.question)

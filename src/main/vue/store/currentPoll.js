@@ -5,6 +5,7 @@ import api from "../api";
 import SectionHeaderModel from "./poll-item-models/SectionHeaderModel";
 
 import participants from "./participants";
+import iterations from "./iterations";
 
 /**
  * currentPoll holds the state of the Poll that is currently open, or otherwise in focus.
@@ -12,14 +13,26 @@ import participants from "./participants";
  * exactly one poll.
  */
 const currentPoll = {
-    modules: {participants: participants},
+    modules: {
+        participants: participants,
+        iterations: iterations
+    },
     state: {
         /**
          * The current poll object.
          */
         poll: {
             questions: [],
-            pollSections: []
+            pollSections: [],
+            design: {
+                font: '',
+                textColour: '',
+                backgroundColour: '',
+                logoPosition: '',
+                logo: ''
+            },
+            pollIterations: [],
+            pollConsistencyGroups: []
         },
         answers: [],
         pollAnswers: [],
@@ -27,7 +40,9 @@ const currentPoll = {
          * The statistics belonging to that poll object.
          */
         statistics: [],
-        entries: []
+        entries: [],
+        tmpDownload: [],
+        downloadFileName: ''
     },
 
     getters: {
@@ -58,9 +73,9 @@ const currentPoll = {
          * for a given user with a provided user id
          * */
         entriesWithSections: (state) => {
-            return (userId) => {
+            return (participantId) => {
                 let res = [];
-                let userEntry = {entry: state.entries.find(entry => entry.user.id === userId)};
+                let userEntry = {entry: state.entries.find(entry => entry.participant.id === participantId)};
                 let associations = null;
                 let answers = [];       //used in MultiChoiceAnswer
 
@@ -153,7 +168,7 @@ const currentPoll = {
         entriesUserNames: state => {
             let res = [];
             state.entries.forEach(entry => {
-                let entryUser = {text: entry.user.username, value: entry.user.id};
+                let entryUser = {text: entry.participant.fullName, value: entry.participant.id};
                 res.push(entryUser)
             });
             return res;
@@ -191,7 +206,7 @@ const currentPoll = {
         getAnswerSetByID: (state) => {
             return (id) => {
                 let match = Object.entries((state.pollAnswers.find(answerSet => answerSet.question.id === id))
-                    .userAnswerMap)
+                    .participantAnswerMap)
                 let tableObj = []
                 if (match[0][1].type === 'TextAnswer') {
                     for (let i = 0; i < match.length; i++) {
@@ -253,6 +268,7 @@ const currentPoll = {
                     absFrq: absFrq,
                     relFrq: relFrq,
                     boxplot: boxplot,
+                    tableAnswers: [],
                     currentChart: 'bar'
                 }
             }
@@ -260,6 +276,15 @@ const currentPoll = {
     },
 
     mutations: {
+
+        tmpDownloadSet(state, newDownload) {
+            state.tmpDownload = newDownload;
+        },
+
+        downloadFileNameSet(state, fileName) {
+            state.downloadFileName = fileName;
+        },
+
         /**
          * Sets the new current poll.
          */
@@ -278,6 +303,24 @@ const currentPoll = {
          */
         update(state, pollCmd) {
             Object.assign(state.poll, pollCmd)
+        },
+
+        updateDesign(state, designCmd) {
+            if(designCmd.font != null) {
+                state.poll.design.font = designCmd.font
+            }
+            if(designCmd.backgroundColour != null) {
+                state.poll.design.backgroundColour = designCmd.backgroundColour
+            }
+            if(designCmd.textColour != null) {
+                state.poll.design.textColour = designCmd.textColour
+            }
+            if(designCmd.logoPosition != null) {
+                state.poll.design.logoPosition = designCmd.logoPosition
+            }
+            if(designCmd.logo != null) {
+                state.poll.design.logo = designCmd.logo
+            }
         },
 
         addPollSection(state, pollSection) {
@@ -387,6 +430,21 @@ const currentPoll = {
                     })
             });
         },
+
+        updateDesign({commit}, designUpdate) {
+            return new Promise((resolve, reject) => {
+                api.design.updateDesign(designUpdate)
+                    .then(function (res) {
+                        commit('updateDesign', res.data)
+                        resolve(res.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        reject(error);
+                    })
+            });
+        },
+
         loadMetaStats({commit}, id) {
             return new Promise((resolve, reject) => {
                 api.statistics.get(id).then(function (res) {
@@ -559,9 +617,47 @@ const currentPoll = {
                 })
             })
         },
+
+        /**
+         * cmd has form: {pollId, type, format}
+         * */
+        async download({commit, state}, cmd,) {
+            await new Promise(((resolve, reject) => {
+                cmd.id = state.poll.id;
+                let res = [];
+
+                api.poll.download(cmd).then((response) => {
+                    res = response.data;
+                    console.log(state.poll);
+                    commit('tmpDownloadSet', res);
+                    commit('downloadFileNameSet', state.poll.title + '_' + cmd.type + '.' + cmd.format);
+                    resolve(res);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            }));
+
+            let fileURL = window.URL.createObjectURL(new Blob([state.tmpDownload]));
+            let fileLink = document.createElement('a');
+
+            fileLink.href = fileURL;
+            fileLink.setAttribute('download', state.downloadFileName);
+            document.body.appendChild(fileLink);
+
+            fileLink.click();
+        },
+
+        launch({dispatch, state}) {
+            let pollCmd = {
+                id: state.poll.id,
+                status: "LAUNCHED"
+            };
+            return dispatch("update", pollCmd);
+        }
     },
 
     namespaced: true
-}
+};
 
 export default currentPoll;

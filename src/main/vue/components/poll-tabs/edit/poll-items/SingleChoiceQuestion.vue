@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :style="'font-family:' + poll.design.font + ';color:' + poll.design.textColour">
         <template v-if="!editing">
             <p>
                 <b-form-group v-if="model.displayVariant === 'radio'"
@@ -48,6 +48,7 @@
 
 <script>
     import ChoiceEditor from "./ChoiceEditor";
+    import {mapState} from "vuex";
 
     export default {
         name: "SingleChoiceQuestion",
@@ -87,7 +88,10 @@
                 if (!val.isEmpty()) {
                     this.selected = null
                 }
-            }
+            },
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            })
         },
         props: {
             model: {

@@ -1,10 +1,7 @@
 package gpse.repoll.domain.poll;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import gpse.repoll.domain.exceptions.BadRequestException;
-import gpse.repoll.domain.exceptions.InternalServerErrorException;
-import gpse.repoll.domain.exceptions.NotFoundException;
-import gpse.repoll.domain.exceptions.PollAlreadyLaunchedException;
+import gpse.repoll.domain.exceptions.*;
 import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
@@ -16,8 +13,7 @@ import java.util.*;
 
 /**
  * Main Poll object.
- *
- * Poll objects are assumed to be equal if they have equal IDs.
+ * Represents all information of a poll.
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -34,20 +30,25 @@ public class Poll extends Auditable<User> {
     @Column
     private Anonymity anonymity;
 
+    @OneToOne
+    private Design design;
+
     @Column
     @Lob
     @NotEmpty
     private String title;
 
-    @JsonSerialize(using = SerializePollEntries.class)
-    @OneToMany
-    private final List<PollEntry> pollEntries = new ArrayList<>();
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+    private final Set<PollIteration> pollIterations = new HashSet<>();
 
-    @OneToMany(orphanRemoval = true)
-    private final List<PollIteration> pollIterations = new ArrayList<>();
+    @OneToOne
+    private PollIteration currentIteration;
 
     @OneToMany
     private final List<PollSection> pollSections = new ArrayList<>();
+
+    @OneToMany
+    private final List<PollConsistencyGroup> pollConsistencyGroups = new ArrayList<>();
 
     @OneToMany
     private final List<Question> questions = new ArrayList<>();
@@ -60,8 +61,8 @@ public class Poll extends Auditable<User> {
     }
 
     /**
-     * Create a new poll.
-     * @param title The title of the poll.
+     * Creates a new poll.
+     * @param title The title of the poll
      */
     public Poll(String title) {
         this.title = title;
@@ -69,6 +70,11 @@ public class Poll extends Auditable<User> {
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
     }
 
+    /**
+     * Used to create a copy of another poll.
+     * @param poll The poll that is copied
+     * @param pollSections The sections of the poll that is copied
+     */
     public Poll(Poll poll, List<PollSection> pollSections) {
        this.status = PollEditStatus.EDITING;
        this.anonymity = poll.anonymity;
@@ -96,21 +102,29 @@ public class Poll extends Auditable<User> {
         return Objects.hash(getId());
     }
 
+    public Design getDesign() {
+        return design;
+    }
+
+
+    public void setDesign(Design design) {
+        this.design = design;
+    }
+
     public UUID getId() {
         return id;
     }
 
     public List<PollEntry> getPollEntries() {
-        return Collections.unmodifiableList(pollEntries);
+        if (currentIteration != null) {
+            return Collections.unmodifiableList(currentIteration.getPollEntries());
+        } else {
+            return null;
+        }
     }
 
-    public void setPollEntries(List<PollEntry> pollEntries) {
-        this.pollEntries.clear();
-        this.pollEntries.addAll(pollEntries);
-    }
-
-    public List<PollIteration> getPollIterations() {
-        return Collections.unmodifiableList(pollIterations);
+    public Set<PollIteration> getPollIterations() {
+        return Collections.unmodifiableSet(pollIterations);
     }
 
     public void setPollIterations(List<PollIteration> pollIterations) {
@@ -125,6 +139,15 @@ public class Poll extends Auditable<User> {
     public void setPollSections(List<PollSection> pollSections) {
         this.pollSections.clear();
         this.pollSections.addAll(pollSections);
+    }
+
+    public List<PollConsistencyGroup> getPollConsistencyGroups() {
+        return Collections.unmodifiableList(pollConsistencyGroups);
+    }
+
+    public void setPollConsistencyGroups(List<PollConsistencyGroup> pollConsistencyGroups) {
+        this.pollConsistencyGroups.clear();
+        this.pollConsistencyGroups.addAll(pollConsistencyGroups);
     }
 
     public List<Question> getQuestions() {
@@ -196,6 +219,18 @@ public class Poll extends Auditable<User> {
         return pollSections.contains(pollSection);
     }
 
+    public void add(PollConsistencyGroup pollConsistencyGroup) {
+        pollConsistencyGroups.add(pollConsistencyGroup);
+    }
+
+    public void addAllConsistencyGroups(Collection<PollConsistencyGroup> pollConsistencyGroups) {
+        this.pollConsistencyGroups.addAll(pollConsistencyGroups);
+    }
+
+    public boolean contains(PollConsistencyGroup pollConsistencyGroup) {
+        return pollConsistencyGroups.contains(pollConsistencyGroup);
+    }
+
     public void add(Question question) {
         questions.add(question);
         sortQuestions();
@@ -210,6 +245,13 @@ public class Poll extends Auditable<User> {
         boolean res = pollSections.remove(section);
         if (!res) {
             throw new NotFoundException("PollSection does not belong to this poll");
+        }
+    }
+
+    public void remove(PollConsistencyGroup pollConsistencyGroup) {
+        boolean res = pollConsistencyGroups.remove(pollConsistencyGroup);
+        if (!res) {
+            throw new NotFoundException("ConsistencyGroup does not belong to this poll");
         }
     }
 
@@ -232,19 +274,31 @@ public class Poll extends Auditable<User> {
     }
 
     public void add(PollEntry pollEntry) {
-        pollEntries.add(pollEntry);
+        if (currentIteration != null) {
+            currentIteration.add(pollEntry);
+        } else {
+            throw new NoIterationOpenException();
+        }
     }
 
     public void addAllPollEntries(Collection<PollEntry> pollEntries) {
-        this.pollEntries.addAll(pollEntries);
+        if (currentIteration != null) {
+            currentIteration.addAll(pollEntries);
+        } else {
+            throw new NoIterationOpenException();
+        }
     }
 
     public boolean contains(PollEntry pollEntry) {
-        return pollEntries.contains(pollEntry);
+        if (currentIteration != null) {
+            return currentIteration.getPollEntries().contains(pollEntry);
+        } else {
+            throw new NoIterationOpenException();
+        }
     }
 
     public void add(PollIteration pollIteration) {
-        pollIterations.add(pollIteration);
+            pollIterations.add(pollIteration);
     }
 
     public void remove(PollIteration pollIteration) {
@@ -269,6 +323,24 @@ public class Poll extends Auditable<User> {
         return false;
     }
 
+    private PollConsistencyGroup getConsistency(UUID consistencyId) {
+        for (PollConsistencyGroup pollConsistencyGroup : pollConsistencyGroups) {
+            if (pollConsistencyGroup.getId().equals(consistencyId)) {
+                return pollConsistencyGroup;
+            }
+        }
+        return null;
+    }
+
+    private boolean consistencyExists(UUID consistencyId) {
+        for (PollConsistencyGroup pollConsistencyGroup : pollConsistencyGroups) {
+            if (pollConsistencyGroup.getId().equals(consistencyId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean questionsExist(Collection<Long> questionIds) {
         List<Long> pollQuestionIds = new ArrayList<>();
         for (Question question : questions) {
@@ -278,10 +350,10 @@ public class Poll extends Auditable<User> {
     }
 
     /**
-     Creates a list of questions of the poll.
+     Creates a list of {@link Question}s of the poll.
      * @param questionIds The ID's of the questions
      * @return The list of the questions
-     * @throws BadRequestException if one question is not found in the poll
+     * @throws BadRequestException If one question is not found in the poll
      */
     private List<Question> listQuestions(Collection<Long> questionIds) throws BadRequestException {
         // Checks if there is a question specified which does not belong to this poll
@@ -312,9 +384,9 @@ public class Poll extends Auditable<User> {
     /**
      * This method assigns the questions of the poll to the sections defined in the parameter.
      * The objects are referenced by their IDs.
-     * @param structure the defined assignments
-     * @throws BadRequestException if the structure object is not well defined
-     * @throws InternalServerErrorException if the algorithm has a bug
+     * @param structure The defined assignments
+     * @throws BadRequestException If the structure object is not well defined
+     * @throws InternalServerErrorException If the algorithm has a bug
      */
     public void setStructure(Map<UUID, List<Long>> structure) throws BadRequestException, InternalServerErrorException {
         Set<UUID> keySet = structure.keySet();
@@ -352,5 +424,13 @@ public class Poll extends Auditable<User> {
         for (PollSection section : pollSections) {
             section.sortQuestions();
         }
+    }
+
+    public PollIteration getCurrentIteration() {
+        return currentIteration;
+    }
+
+    public void setCurrentIteration(PollIteration currentIteration) {
+        this.currentIteration = currentIteration;
     }
 }

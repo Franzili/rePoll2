@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :style="'font-family:' + poll.design.font + ';color:' + poll.design.textColour">
         <b-form-checkbox-group v-if="!editing"
                                v-model="selected"
                                :disabled="editable">
@@ -28,6 +28,7 @@
                 </div>
             </template>
         </b-form-checkbox-group>
+
         <div v-else>
             <h6>Choices:</h6>
             <ChoiceEditor :choices="model.choices"
@@ -40,6 +41,7 @@
 
 <script>
     import ChoiceEditor from "./ChoiceEditor";
+    import {mapState} from "vuex";
     export default {
         name: "MultiChoiceQuestion",
         components: {ChoiceEditor},
@@ -58,6 +60,9 @@
                     bonusChoices: this.customChoices
                 }
             },
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            })
         },
         methods: {
             addChoice() {

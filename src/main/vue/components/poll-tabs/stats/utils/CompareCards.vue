@@ -19,6 +19,9 @@
             v-bind:actives="actives">
         </ToolBar>
 
+        <b-row v-show="compareData.showTitle !== undefined">
+            <h5> {{compareData.showTitle}}</h5>
+        </b-row>
 
         <b-row>
             <b-container v-bind:key="item.qId"
@@ -56,7 +59,7 @@
                 actives: [true, true, true, true, true, null, true, true],
                 frequency: 'abs',
                 question: '',
-                chartObjs: []
+                chartObjs: [],
             }
         },
         computed: {
@@ -120,16 +123,16 @@
                 let obj = this.chartObjs.find(obj => obj.qId === id)
                 switch (obj.chartObj.qType) {
                     case 'TextQuestion':
-                        this.actives = [false, false, false, false, true, null, true, true];
+                        this.actives = [false, false, false, false, true, null, true, true, null];
                         break;
                     case 'SingleChoiceQuestion':
-                        this.actives = [true, true, true, false, true, null, true, true];
+                        this.actives = [true, true, true, false, true, null, true, true, null];
                         break;
                     case 'MultiChoiceQuestion':
-                        this.actives = [true, true, true, false, true, null, true, true];
+                        this.actives = [true, true, true, false, true, null, true, true, null];
                         break;
                     case 'ScaleQuestion':
-                        this.actives = [true, true, true, true, true, null, true, true];
+                        this.actives = [true, true, true, true, true, null, true, true, null];
                         break;
                 }
             }

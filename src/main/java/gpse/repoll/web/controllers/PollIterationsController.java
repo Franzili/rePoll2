@@ -6,9 +6,12 @@ import gpse.repoll.web.command.PollIterationCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+/**
+ * REST Controller managing /api/v1/polls/ID/iterations/* entry points.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
@@ -22,7 +25,7 @@ public class PollIterationsController {
     }
 
     @GetMapping("/{pollID}/iterations/")
-    public List<PollIteration> listAll(@PathVariable UUID pollID) {
+    public Set<PollIteration> listAll(@PathVariable UUID pollID) {
         return pollIterationService.getAll(pollID);
     }
 

@@ -1,7 +1,6 @@
 package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.User;
-import gpse.repoll.domain.service.MailService;
 import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.UserCmd;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 /**
  * REST Controller managing /api/v1/users/* entry points.
  */
@@ -23,12 +23,10 @@ import java.util.UUID;
 public class UsersController {
 
     private final UserService userService;
-    private final MailService mailService;
 
     @Autowired
-    public UsersController(UserService userService, MailService mailService) {
+    public UsersController(UserService userService) {
         this.userService = userService;
-        this.mailService = mailService;
     }
 
     @GetMapping("/")
@@ -47,7 +45,6 @@ public class UsersController {
             userCmd.getEmail(),
             userCmd.getRole()
         );
-        mailService.sendPwdGenMail(user);
         return user;
     }
 

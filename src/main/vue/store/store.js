@@ -4,7 +4,10 @@ import currentPoll from "./currentPoll";
 import myPolls from "./myPolls";
 import auth from "./auth";
 import myUsers from "./myUsers";
+import participants from "./participants";
 import myEntries from "./myEntries"
+import consistencies from "./consistencies";
+import adminConfigs from "./adminConfigs";
 
 import Vue from "vue";
 
@@ -22,7 +25,11 @@ let store = new Vuex.Store({
         myPolls: myPolls,
         auth: auth,
         myEntries: myEntries,
-        myUsers: myUsers
+        myUsers: myUsers,
+        consistencies: consistencies,
+        participants: participants,
+        adminConfigs: adminConfigs,
+
     }
 })
 

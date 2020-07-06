@@ -1,6 +1,5 @@
 package gpse.repoll.domain.service;
 
-import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.Answer;
 
@@ -8,44 +7,42 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Provides operations on {@link PollEntry}s to the controller.
+ */
 public interface PollEntryService {
 
     /**
-     * Gets all PollEntries of a poll.
-     * @param pollId The Poll's ID
-     * @return The list of the PollEntries
+     * Gets all {@link PollEntry}s of a {@link gpse.repoll.domain.poll.Poll}.
+     * @param pollId The ID of the poll
+     * @return The list of the poll entries
      */
     List<PollEntry> getAll(UUID pollId);
 
     /**
-     * Add a new PollEntry to a Poll.
-     * @param pollId The Poll's ID
-     * @param associations A map of question IDs to Answers
-     * @param participant The Participant that filled out the poll
-     * @return The newly created PollEntry
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll or any of the Questions
-     * could not be found
+     * Adds a new {@link PollEntry} to a {@link gpse.repoll.domain.poll.Poll}.
+     * @param pollId The ID of the poll
+     * @param associations The map of IDs of {@link gpse.repoll.domain.poll.questions.Question}s
+     *                     to {@link Answer}s
+     * @param participantID The ID of the {@link gpse.repoll.domain.poll.Participant} that filled out the poll
+     * @return The newly created poll entry
      */
-    PollEntry addPollEntry(UUID pollId, Map<Long, Answer> associations, Participant participant);
+    PollEntry addPollEntry(UUID pollId, Map<Long, Answer> associations, UUID participantID);
 
     /**
-     * Gets a PollEntry.
-     * @param pollId The Poll's ID
-     * @param entryId The Entry's ID
-     * @return The PollEntry
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the PollEntry or the corresponding Poll could
-     * not be found.
+     * Gets a {@link PollEntry}.
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param entryId The ID of the poll entry
+     * @return The poll entry
      */
     PollEntry getPollEntry(UUID pollId, Long entryId);
 
     /**
-     Updates a PollEntry of a Poll.
-     * @param pollId The Poll's ID
-     * @param entryId The Entry's ID
-     * @param associations A map of question IDs to Answers
-     * @return The newly created PollEntry
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll or any of the Questions
-     * could not be found
+     Updates a {@link PollEntry} of a {@link gpse.repoll.domain.poll.Poll}.
+     * @param pollId The ID of the poll
+     * @param entryId The ID of the poll entry
+     * @param associations The map of IDs of {@link gpse.repoll.domain.poll.questions.Question}s to {@link Answer}s
+     * @return The updated poll entry
      */
     PollEntry updatePollEntry(UUID pollId, Long entryId, Map<Long, Answer> associations);
 }
