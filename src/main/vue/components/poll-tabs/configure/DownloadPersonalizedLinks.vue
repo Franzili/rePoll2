@@ -11,11 +11,15 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
+    import {mapActions} from "vuex";
 
     export default {
         name: "DownloadPersonalizedLinks",
         methods: {
+            ...mapActions('currentPoll', {
+                download: 'download'
+            }),
+
             downloadFromStore(type, format) {
 
                 let cmd = {
@@ -27,14 +31,7 @@
                 this.download(cmd);
             }
 
-        },
-        computed: {
-            ...mapState('currentPoll', {
-                poll: 'poll'}),
-            ...mapState('participants', {
-                participants: 'participants'
-            })
-        },
+        }
     }
 </script>
 

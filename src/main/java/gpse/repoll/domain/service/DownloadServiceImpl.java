@@ -1,6 +1,7 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.download_formats.EntriesJSON;
+import gpse.repoll.download_formats.ParticipantsCSV;
 import gpse.repoll.download_formats.PollJSON;
 import gpse.repoll.download_formats.PollTxt;
 import gpse.repoll.domain.poll.Poll;
@@ -41,6 +42,8 @@ public class DownloadServiceImpl implements DownloadService {
             }
         } else if (type.equals("entries")) {
             return new EntriesJSON().getData(currentPoll);
+        } else if (type.equals("participants") && format.equals("csv")) {
+            return new ParticipantsCSV().getData(currentPoll);
         }
 
         return "";
