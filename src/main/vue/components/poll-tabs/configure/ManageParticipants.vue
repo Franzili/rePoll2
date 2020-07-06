@@ -29,6 +29,7 @@
                     </p>
                     <p>
                         <UploadParticipants></UploadParticipants>
+                        <DownloadPersonalizedLinks></DownloadPersonalizedLinks>
                     </p>
                 </b-col>
 
@@ -179,10 +180,11 @@
 <script>
     import {mapState, mapActions} from "vuex";
     import UploadParticipants from "./UploadParticipants";
+    import DownloadPersonalizedLinks from "./DownloadPersonalizedLinks";
 
     export default {
         name: "ManageParticipants",
-        components: {UploadParticipants},
+        components: {DownloadPersonalizedLinks, UploadParticipants},
 
         data() {
             return {
