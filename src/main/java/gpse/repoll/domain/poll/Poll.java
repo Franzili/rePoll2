@@ -77,7 +77,7 @@ public class Poll extends Auditable<User> {
     public Poll(Poll poll, List<PollSection> pollSections) {
        this.status = PollEditStatus.EDITING;
        this.anonymity = poll.anonymity;
-       this.title = poll.title;
+       this.title = "Copy of " + poll.title;
        this.pollSections.addAll(pollSections);
        for (PollSection pollSection : this.pollSections) {
            questions.addAll(pollSection.getQuestions());
