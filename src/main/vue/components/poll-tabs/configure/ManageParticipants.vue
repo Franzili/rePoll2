@@ -23,7 +23,8 @@
                         <b-button
                             class="float-right"
                             variant="primary"
-                            v-b-modal.newParticipant>
+                            v-b-modal.newParticipant
+                            style="margin-bottom: 2vh">
                             Invite New
                         </b-button>
                     </p>
@@ -45,7 +46,7 @@
                         </b-row>
                         <b-row>
                             <b-col>
-                                <b-button class="float-right">Remind</b-button>
+                                <b-button style="margin-top: 2vh" class="float-right">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
@@ -123,7 +124,7 @@
                             </b-col>
 
                             <b-col cols="6">
-                                <b-button class="float-right">Remind</b-button>
+                                <b-button style="margin-top: 2vh" class="float-right">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
