@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!--             v-if="poll.anonymity === 'NON_ANONYMOUS'" -->
         <b-button
             @click="downloadFromStore('participants', 'csv')">
             Download Personalized Links

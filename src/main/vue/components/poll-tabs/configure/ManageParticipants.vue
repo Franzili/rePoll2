@@ -27,10 +27,11 @@
                             Invite New
                         </b-button>
                     </p>
-                    <p>
-                        <UploadParticipants></UploadParticipants>
+                    <div>
                         <DownloadPersonalizedLinks></DownloadPersonalizedLinks>
-                    </p>
+
+                        <UploadParticipants></UploadParticipants>
+                    </div>
                 </b-col>
 
                 <b-col cols="6">
