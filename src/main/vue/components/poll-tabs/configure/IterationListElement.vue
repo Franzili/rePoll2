@@ -13,10 +13,13 @@
                                                value-as-date
                                                size="sm"
                                                :date-format-options="dateTimeFormat"
+                                               :state="startValid ? null : false"
+                                               :min="now"
                                                placeholder=""/>
                             <b-form-timepicker :id="'open-time-' + model.id"
                                                class="flex-grow-1"
                                                v-model="openTime"
+                                               :state="startValid ? null : false"
                                                size="sm"
                                                placeholder="" />
                         </div>
@@ -57,7 +60,8 @@
                                                :date-format-options="dateTimeFormat"
                                                size="sm"
                                                :disabled="closeManually"
-                                               :state="closeDateState"
+                                               :min="now"
+                                               :state="endValid ? null : false"
                                                placeholder=""/>
                             <b-form-timepicker :id="'close-time-' + model.id"
                                                class="flex-grow-1"
@@ -65,7 +69,7 @@
                                                ref="closeTimePicker"
                                                size="sm"
                                                :disabled="closeManually"
-                                               :state="closeDateState"
+                                               :state="endValid ? null : false"
                                                placeholder="" />
                         </div>
                     </template>
@@ -105,7 +109,7 @@
 </template>
 
 <script>
-    import {mapActions} from "vuex"
+    import {mapActions, mapGetters} from "vuex"
 
     export default {
         name: "IterationListElement",
@@ -114,6 +118,7 @@
         data() {
             return {
                 model: this.value,
+                now: new Date(),
                 closeManually: this.value.end === null || this.value.end === undefined,
                 dateTimeFormat: new Intl.DateTimeFormat('en', {
                     year: 'numeric',
@@ -136,17 +141,66 @@
         },
 
         computed: {
-            closeDateState: function() {
-                if (this.closeManually) {
-                    return null;
-                } else {
-                    if (!this.model.end) {
-                        return false;
-                    } else {
-                        return null;
+            // ===== validation ===== //
+
+            ...mapGetters("currentPoll/iterations", {
+                otherIterations: "iterations"
+            }),
+
+            startValid() {
+                /* check for intersections where our start date is too early:
+                    +--------------+
+                    | other iter   |
+                    +--------------+
+                               xxxxx
+                               +-----------------+
+                               | this iteration  |
+                               +-----------------+
+                 */
+
+                let hasIntersections = false;
+                for (let iter of this.otherIterations) {
+                    if (this.model.end !== null && iter.end !== null &&
+                        this.model.end > iter.end &&
+                        this.model.start <= iter.end) {
+                        hasIntersections = true;
+                        break;
                     }
                 }
+
+                return this.model.start > this.now &&                                   // is in future
+                       this.model.end === null || this.model.start < this.model.end &&  // start and end are monotonic
+                       hasIntersections
             },
+
+            endValid() {
+                /* check for intersections where our end date is too late:
+                             +--------------+
+                             | other iter   |
+                             +--------------+
+                             xxxxxx
+                +-----------------+
+                | this iteration  |
+                +-----------------+
+                 */
+
+                let hasIntersections = false;
+                for (let iter of this.otherIterations) {
+                    if (this.model.end !== null && iter.end !== null &&
+                        this.model.start < iter.start &&
+                        this.model.end >= iter.start) {
+                        hasIntersections = true;
+                        break;
+                    }
+                }
+
+                return this.model.end > this.now &&                                     // is in future
+                    this.model.end === null || this.model.start < this.model.end &&     // start and end are monotonic
+                    hasIntersections
+            },
+
+            // ==== time handling ==== //
+
             openDate: {
                 get() {
                     return this.model.start;
@@ -233,13 +287,13 @@
                     this.model.end.setSeconds(numbers[2]);
                 },
                 deep: true
-            }
+            },
         },
 
         watch: {
             model: {
                 handler: function(newVal) {
-                    if (this.closeDateState === null) {
+                    if (this.startValid && this.endValid) {
                         this.update(newVal);
                     }
                 },
