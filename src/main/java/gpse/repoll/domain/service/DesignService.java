@@ -10,6 +10,12 @@ import java.util.UUID;
 public interface DesignService {
 
     /**
+     * Saves {@link Design} in the database.
+     * @param design The design object
+     */
+    void save(Design design);
+
+    /**
      * Gets the {@link Design} of a {@link gpse.repoll.domain.poll.Poll}.
      * @param pollID The ID of the poll
      * @return The design of the poll

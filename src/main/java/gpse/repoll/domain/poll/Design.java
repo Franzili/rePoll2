@@ -36,7 +36,16 @@ public class Design {
         this.textColour = "#000000";
         this.backgroundColour = "#ffffff";
         this.logoPosition = "left";
-        this.logo="";
+        this.logo = "";
+    }
+
+    public Design(Design design) {
+        this.id = null;
+        this.font = design.font;
+        this.textColour = design.textColour;
+        this.backgroundColour = design.backgroundColour;
+        this.logoPosition = design.logoPosition;
+        this.logo = design.logo;
     }
 
     public Long getId() {

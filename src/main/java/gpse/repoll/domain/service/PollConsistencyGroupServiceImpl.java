@@ -36,6 +36,11 @@ public class PollConsistencyGroupServiceImpl implements PollConsistencyGroupServ
         this.questionService = questionService;
     }
 
+    @Override
+    public void save(PollConsistencyGroup pollConsistencyGroup) {
+        pollConsistencyGroupRepository.save(pollConsistencyGroup);
+    }
+
     /**
      * {@inheritDoc}
      */
