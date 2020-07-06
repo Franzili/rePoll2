@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+/**
+ * Provides security checks to the controllers.
+ */
 @Service
 public class SecurityService {
 
@@ -61,9 +64,9 @@ public class SecurityService {
     }
 
     /**
-     * Checks if a String can be parsed into a UUID.
-     * @param str the String to try.
-     * @return True if the String is a valid UUID, false otherwise.
+     * Checks if a string can be parsed into a {@link UUID}.
+     * @param str The string
+     * @return True if the string is a valid UUID, false otherwise
      */
     private boolean isValidUuid(String str) {
         try {

@@ -11,16 +11,16 @@ import gpse.repoll.domain.repositories.PollRepository;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
+/**
+ * Default implementation of {@link PollIterationService}.
+ */
 @Service
 public class PollIterationServiceImpl implements PollIterationService {
 
@@ -52,16 +52,22 @@ public class PollIterationServiceImpl implements PollIterationService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<PollIteration> getAll(final UUID pollID) {
         final Poll poll = pollService.getPoll(pollID);
         return poll.getPollIterations();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PollIteration addPollIteration(final UUID pollID,
-                                          final LocalDateTime start,
-                                          final LocalDateTime end,
+                                          final Instant start,
+                                          final Instant end,
                                           final PollIterationStatus status) {
         Poll poll = pollService.getPoll(pollID);
 
@@ -82,6 +88,9 @@ public class PollIterationServiceImpl implements PollIterationService {
         return pollIteration;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PollIteration getPollIteration(final UUID pollID, final Long pollIterationID) {
         final PollIteration pollIteration = pollIterationRepository.findById(pollIterationID).orElseThrow(() -> {
@@ -94,11 +103,14 @@ public class PollIterationServiceImpl implements PollIterationService {
         throw new BadRequestException("Iteration does not belong to this poll!");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PollIteration updatePollIteration(final UUID pollID,
                                              final Long pollIterationID,
-                                             final LocalDateTime start,
-                                             final LocalDateTime end,
+                                             final Instant start,
+                                             final Instant end,
                                              final PollIterationStatus status) {
         final PollIteration pollIteration = getPollIteration(pollID, pollIterationID);
         final Poll poll = pollService.getPoll(pollID);
@@ -119,59 +131,69 @@ public class PollIterationServiceImpl implements PollIterationService {
         return pollIteration;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removePollIteration(final UUID pollID, final Long pollIterationID) {
         final PollIteration pollIteration = getPollIteration(pollID, pollIterationID);
 
-        scheduleRemove(pollIteration);
+        // deleting only makes sense if the iteration has not already been opened
+        if (pollIteration.getStatus() != PollIterationStatus.SCHEDULED) {
+            throw new PollIterationStatusException();
+        }
 
+        Poll poll = pollService.getPoll(pollID);
+        poll.remove(pollIteration);
+        pollService.save(poll);
+
+        scheduleRemove(pollIteration);
         pollIterationRepository.delete(pollIteration);
     }
 
     /**
-     * Schedule an iteration to be opened / closed.
-     * If the iteration was already scheduled, it will first be unscheduled and then re-scheduled with the
-     * (potentially changed dates).
-     * Then, start/end dates are set, or removed if they are null.
-     * @param iteration The PollIteration to schedule
+     * Schedule an {@link PollIteration} to be opened / closed.
+     * If the iteration was already scheduled it will first be unscheduled and then re-scheduled with the
+     * potentially changed dates.
+     * Then start/end dates are set or removed if they are null.
+     * @param iteration The iteration to schedule
      */
     private void scheduleIteration(final PollIteration iteration, final Poll poll) {
         scheduleRemove(iteration);
 
-        ZoneOffset offset = OffsetDateTime.now().getOffset();
         PollIterationStatus status = iteration.getStatus();
         ScheduledFuture<?> task;
 
-        // opening a polliteration only makes sense if it has not been opened yet.
+        // Opening a poll iteration only makes sense if it has not been opened yet.
         if (status.equals(PollIterationStatus.SCHEDULED)) {
             if (iteration.getStart() != null) {
                 task = scheduler.schedule(() -> {
                     updateIterationStatus(PollIterationStatus.OPEN, iteration, poll);
                     pollIterationRepository.save(iteration);
                     openTasks.remove(iteration.getId());
-                }, iteration.getStart().toInstant(offset));
+                }, iteration.getStart());
                 openTasks.put(iteration.getId(), task);
             }
         }
 
-        // closing a polliteration only makes sense if it has not been closed yet.
+        // Closing a poll iteration only makes sense if it has not been closed yet.
         if (status.equals(PollIterationStatus.SCHEDULED) || status.equals(PollIterationStatus.OPEN)) {
             if (iteration.getEnd() != null) {
                 task = scheduler.schedule(() -> {
                     updateIterationStatus(PollIterationStatus.CLOSED, iteration, poll);
                     pollIterationRepository.save(iteration);
                     openTasks.remove(iteration.getId());
-                }, iteration.getEnd().toInstant(offset));
+                }, iteration.getEnd());
                 closeTasks.put(iteration.getId(), task);
             }
         }
     }
 
     /**
-     * Unschedule a PollIteration.
-     * Remove a PollIteration from scheduling. Its status will no longer be changed by IterationScheduler.
-     * Mainly to be used to automatically unschedule PollIterations that are removed from the database.
-     * @param iteration The PollIteration to unschedule.
+     * Unschedules a {@link PollIteration}.
+     * Removes an poll iteration from scheduling. Its status will no longer be changed by IterationScheduler.
+     * Mainly to be used to automatically unschedule poll iterations that are removed from the database.
+     * @param iteration The poll iteration to unschedule.
      */
     private void scheduleRemove(PollIteration iteration) {
         Long id = iteration.getId();
@@ -194,9 +216,12 @@ public class PollIterationServiceImpl implements PollIterationService {
                 break;
 
             case OPEN:
+                pollIteration.setStart(Instant.now());
+
                 // if there is another iteration running, close it.
                 if (poll.getCurrentIteration() != null) {
                     PollIteration previous = poll.getCurrentIteration();
+                    previous.setEnd(Instant.now());
                     previous.setStatus(PollIterationStatus.CLOSED);
                     pollIterationRepository.save(previous);
                 }
@@ -204,10 +229,12 @@ public class PollIterationServiceImpl implements PollIterationService {
                 break;
 
             case CLOSED:
+                pollIteration.setEnd(Instant.now());
                 poll.setCurrentIteration(null);
                 break;
         }
-        pollRepository.save(poll);
         pollIteration.setStatus(status);
+        pollIterationRepository.save(pollIteration);
+        pollRepository.save(poll);
     }
 }

@@ -4,10 +4,9 @@ import gpse.repoll.domain.service.DownloadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
-import javax.servlet.http.HttpServletResponse;
 
 /**
- * REST Controller managing /download/* entry points.
+ * REST Controller managing /api/v1/download/* entry points for downloading {@link gpse.repoll.domain.poll.Poll}s.
  */
 @CrossOrigin
 @RestController

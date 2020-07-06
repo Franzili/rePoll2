@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/**
+ * Default implementation of {@link UserService}.
+ */
 @Service
 @Primary
 public class UserServiceImpl implements UserService {
@@ -37,11 +40,17 @@ public class UserServiceImpl implements UserService {
         this.pollEntryService = pollEntryService;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Iterable<User> getAll() {
         return userRepository.findAll();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User addUser(String username, String password, String fullName, String email, String role) {
         Optional<User> existingUser = userRepository.findByUsername(username);
@@ -60,11 +69,17 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User getUser(UUID id) {
         return userRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User getUser(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> {
@@ -72,6 +87,9 @@ public class UserServiceImpl implements UserService {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User updateUser(UUID userId, String newUsername, String fullName, String email, String role) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
@@ -103,12 +121,18 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User updateUser(String oldUsername, String newUsername, String fullName, String email, String role) {
         User user = userRepository.findByUsername(oldUsername).orElseThrow(NotFoundException::new);
         return updateUser(user.getId(), newUsername, fullName, email, role);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeUser(UUID id) {
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
@@ -126,34 +150,52 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeUser(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
         userRepository.delete(user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserDetails loadUserByUsername(final String username) {
         return getUser(username);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> getRoles(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
         return user.getRoles();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> getRoles(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
         return user.getRoles();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getRole(UUID userId) {
         return getUser(userId).getHighestRole();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getRole(String username) {
         List<String> roles = getRoles(username);

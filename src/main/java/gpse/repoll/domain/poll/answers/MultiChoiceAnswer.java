@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Answer to {@link gpse.repoll.domain.poll.questions.MultiChoiceQuestion}
  * One or more chosen answers of multiple options.
  */
 @Entity

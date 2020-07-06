@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Default implementation of {@link PollSectionService}.
+ */
 @Service
 public class PollSectionServiceImpl implements PollSectionService {
 
@@ -30,6 +33,9 @@ public class PollSectionServiceImpl implements PollSectionService {
         this.pollRepository = pollRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void save(PollSection pollSection) {
         pollSectionRepository.save(pollSection);
@@ -67,8 +73,7 @@ public class PollSectionServiceImpl implements PollSectionService {
         return findSectionOfPoll(poll, sectionId);
     }
 
-    private PollSection findSectionOfPoll(final Poll poll, final UUID sectionId)
-            throws BadRequestException, NotFoundException {
+    private PollSection findSectionOfPoll(final Poll poll, final UUID sectionId) {
         if (sectionId == null) {
             throw new BadRequestException("No sectionId defined");
         }

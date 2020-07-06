@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents a set of answers given by one participant.
+ * Represents a set of {@link Answer}s given by one {@link Participant}.
  */
 @Entity
 public class PollEntry {

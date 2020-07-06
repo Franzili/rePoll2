@@ -9,7 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A question that can be answered with a @link{SingleChoiceAnswer}.
+ * A question with one answer option
+ * that can be answered with a {@link gpse.repoll.domain.poll.answers.SingleChoiceAnswer}.
  */
 @Entity
 public class SingleChoiceQuestion extends Question {

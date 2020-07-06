@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Represents a single question belonging to a poll.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @Entity
 public abstract class Question {
     @Id

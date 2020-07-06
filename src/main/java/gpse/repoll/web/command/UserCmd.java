@@ -1,8 +1,5 @@
 package gpse.repoll.web.command;
 
-/**
- * User helper Object used for JSON serialization.
- */
 public class UserCmd {
     private String username;
     private String password;

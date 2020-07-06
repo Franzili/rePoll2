@@ -11,31 +11,33 @@ import java.util.UUID;
  */
 public interface QuestionService {
 
+    /**
+     * Saves a {@link Question} in the repository.
+     * @param question The question
+     */
     void save(Question question);
 
     /**
-     * Add a new TextQuestion to a Poll.
-     * @param pollId The Poll's ID
-     * @param questionTitle The title of the Question
-     * @param questionOrder The order for the Questions
-     * @param charLimit The char limit for the answer.
-     * @return The newly created TextQuestion
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
+     * Adds a new {@link TextQuestion} to a {@link gpse.repoll.domain.poll.Poll}.
+     * @param pollId The ID of the poll
+     * @param questionTitle The title of the question
+     * @param questionOrder The order for the questions
+     * @param charLimit The char limit for the {@link gpse.repoll.domain.poll.answers.TextAnswer}
+     * @return The new question
      */
     TextQuestion addTextQuestion(UUID pollId, String questionTitle, Integer questionOrder, int charLimit);
 
     /**
-     * Add a new ScaleQuestion to a Poll.
-     * @param pollId The Poll's ID
-     * @param questionTitle The title of the Question
-     * @param questionOrder The order for the Questions
+     * Adds a new {@link ScaleQuestion} to a {@link gpse.repoll.domain.poll.Poll}.
+     * @param pollId The ID of the poll
+     * @param questionTitle The title of the question
+     * @param questionOrder The order for the questions
      * @param scaleNameLeft The name for the left part of the scale
      * @param scaleNameRight The name for the right part of the scale
      * @param stepCount The number of steps the scale has
      * @param min The minimum of the scale
      * @param max The maximum of the scale
-     * @return The newly created ScaleQuestion
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
+     * @return The new question
      */
     @SuppressWarnings("checkstyle:ParameterNumber")
     ScaleQuestion addScaleQuestion(
@@ -49,15 +51,14 @@ public interface QuestionService {
             Integer max);
 
     /**
-     * Add a new SingleChoiceQuestion to a Poll.
-     * @param pollId The Poll's ID
-     * @param questionTitle The title of the Question
-     * @param questionOrder The order for the Questions
+     * Adds a new {@link SingleChoiceQuestion} to a {@link gpse.repoll.domain.poll.Poll}.
+     * @param pollId The ID of the poll
+     * @param questionTitle The title of the question
+     * @param questionOrder The order for the questions
      * @param choices The possible answers
-     * @param numberOfBonusChoices the highest possible amount of choices for the question
+     * @param numberOfBonusChoices The highest possible amount of choices for the question
      * @param displayVariant The display variant
-     * @return The newly created SingleChoiceQuestion
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
+     * @return The new question
      */
     SingleChoiceQuestion addSingleChoiceQuestion(
             UUID pollId,
@@ -68,14 +69,13 @@ public interface QuestionService {
             String displayVariant);
 
     /**
-     * Add a new MultiChoiceQuestion to a Poll.
-     * @param pollId The Poll's ID
-     * @param questionTitle The title of the Question
-     * @param questionOrder The order for the Questions
+     * Adds a new {@link MultiChoiceQuestion} to a {@link gpse.repoll.domain.poll.Poll}.
+     * @param pollId The ID of the poll
+     * @param questionTitle The title of the question
+     * @param questionOrder The order for the questions
      * @param choices The possible answers
      * @param numberOfBonusChoices the highest possible amount of choices for the question
-     * @return The newly created MultiChoiceQuestion
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the corresponding Poll could not be found.
+     * @return The new question
      */
     MultiChoiceQuestion addMultiChoiceQuestion(
             UUID pollId,
@@ -85,32 +85,28 @@ public interface QuestionService {
             Integer numberOfBonusChoices);
 
     /**
-     * Gets all Questions belonging to a Poll.
-     * @param pollId The Polls's ID
-     * @return The list of all Questions
+     * Gets all {@link Question}s.
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @return The list of all questions
      */
     List<Question> getAllQuestions(UUID pollId);
 
     /**
-     * Gets a Question belonging to a Poll.
-     * @param pollId The Poll's ID
-     * @param questionId The Questions's ID
-     * @return The Question
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
-     * could not be found.
+     * Gets a {@link Question} belonging to a {@link gpse.repoll.domain.poll.Poll}.
+     * @param pollId The ID of the poll
+     * @param questionId The ID of the question
+     * @return The question
      */
     Question getQuestion(UUID pollId, Long questionId);
 
     /**
-     * Update a TextQuestion.
-     * @param pollId The Poll's ID
-     * @param questionId The Question's ID
-     * @param questionOrder The order for the Questions
-     * @param questionTitle The title of the Question
-     * @param charLimit The limit of characters for the answer
-     * @return The changed TextQuestion
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
-     * could not be found.
+     * Updates a {@link TextQuestion}.
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param questionId The ID of the question
+     * @param questionOrder The order for the questions
+     * @param questionTitle The title of the question
+     * @param charLimit The limit of characters for the {@link gpse.repoll.domain.poll.answers.TextAnswer}
+     * @return The updated question
      */
     TextQuestion updateTextQuestion(
             UUID pollId,
@@ -120,19 +116,17 @@ public interface QuestionService {
             int charLimit);
 
     /**
-     * Update a ScaleQuestion.
-     * @param pollId The Poll's ID
-     * @param questionId The Question's ID
-     * @param questionOrder The order for the Questions
-     * @param questionTitle The title of the Question
+     * Updates a {@link ScaleQuestion}.
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param questionId The ID of the question
+     * @param questionOrder The order for the questions
+     * @param questionTitle The title of the question
      * @param scaleNameLeft The name of the left part of the scale
      * @param scaleNameRight The name of the right part of the scale
      * @param stepCount The number of steps the scale has
      * @param min The minimum of the scale
      * @param max The maximum of the scale
-     * @return The changed ScaleQuestion
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
-     * could not be found.
+     * @return The updated question
      */
     @SuppressWarnings("checkstyle:ParameterNumber")
     ScaleQuestion updateScaleQuestion(
@@ -147,16 +141,14 @@ public interface QuestionService {
             Integer max);
 
     /**
-     * Update a SingleChoiceQuestion.
-     * @param pollId The Poll's ID
-     * @param questionId The Question's ID
-     * @param questionOrder The order for the Questions
-     * @param questionTitle The title of the Question
+     * Updates a {@link SingleChoiceQuestion}.
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param questionId The ID of the question
+     * @param questionOrder The order for the question
+     * @param questionTitle The title of the question
      * @param choices The possible answers
      * @param numberOfBonusChoices the highest possible amount of choices for the question
-     * @return The changed SingleChoiceQuestion
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
-     * could not be found.
+     * @return The updated question
      */
     SingleChoiceQuestion updateSingleChoiceQuestion(
             UUID pollId,
@@ -167,16 +159,14 @@ public interface QuestionService {
             Integer numberOfBonusChoices);
 
     /**
-     * Update a MultiChoiceQuestion.
-     * @param pollId The Poll's ID
-     * @param questionId The Question's ID
-     * @param questionTitle The title of the Question
-     * @param questionOrder The order for the Questions
+     * Updates a {@link MultiChoiceQuestion}.
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param questionId The ID of the question
+     * @param questionTitle The title of the question
+     * @param questionOrder The order for the questions
      * @param choices The possible answers
      * @param numberOfBonusChoices the highest possible amount of choices for the question
-     * @return The changed MultiChoiceQuestion
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll
-     * could not be found.
+     * @return The updated question
      */
     MultiChoiceQuestion updateMultiChoiceQuestion(
             UUID pollId,
@@ -187,15 +177,27 @@ public interface QuestionService {
             Integer numberOfBonusChoices);
 
     /**
-     * Remove a Question.
-     * @param pollId The Poll's ID
-     * @param questionId The Question's ID
-     * @throws gpse.repoll.domain.exceptions.NotFoundException If the Question or the corresponding Poll could
-     * not be found.
+     * Deletes a {@link Question}.
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param questionId The ID of the question
      */
     void removeQuestion(UUID pollId, Long questionId);
 
+    /**
+     * Adds a custom {@link Choice} of a {@link gpse.repoll.domain.poll.Participant} to a {@link SingleChoiceQuestion}
+     * or {@link MultiChoiceQuestion}.
+     * @param pollID The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param questionID The ID of the question
+     * @param bonusChoice The custom choice
+     */
     void addBonusChoice(UUID pollID, Long questionID, Choice bonusChoice);
 
+    /**
+     * Adds all custom {@link Choice}s of a {@link gpse.repoll.domain.poll.Participant}
+     * to a {@link MultiChoiceQuestion}.
+     * @param pollID The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param questionID The ID of the question
+     * @param bonusChoices The custom choices
+     */
     void addAllBonusChoices(UUID pollID, Long questionID, List<Choice> bonusChoices);
 }
