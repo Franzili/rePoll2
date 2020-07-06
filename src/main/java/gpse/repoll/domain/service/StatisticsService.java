@@ -18,7 +18,7 @@ public interface StatisticsService {
     List<QuestionStatistics> getAll(UUID pollId);
 
     /**
-     * Gets a {@link QuestionStatistics}
+     * Gets a {@link QuestionStatistics}.
      * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
      * @param questionId The ID of the {@link gpse.repoll.domain.poll.questions.Question}
      * @return the statistics

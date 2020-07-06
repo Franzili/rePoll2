@@ -1,9 +1,8 @@
 package gpse.repoll.domain.poll;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gpse.repoll.domain.exceptions.*;
 import gpse.repoll.domain.poll.questions.Question;
-import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -115,6 +114,7 @@ public class Poll extends Auditable<User> {
         return id;
     }
 
+    @JsonIgnore
     public List<PollEntry> getPollEntries() {
         if (currentIteration != null) {
             return Collections.unmodifiableList(currentIteration.getPollEntries());

@@ -10,13 +10,13 @@
             <b-col align-self="start">
                 <p class="status">{{this.pollStatus}}</p>
             </b-col>
-
+            <!--
             <b-col
                 align-self="center">
                 <p v-show="poll.status !== 'IN_PROCESS'&& poll.status !== 'READY'"
                 ><span class="participants">Participants: </span>{{poll.pollEntries.length}}</p>
             </b-col>
-
+            -->
             <b-col cols="4" style="text-align: end">
                 <span @click="loadTo" class="configLink"
                 data-toggle="tooltip"

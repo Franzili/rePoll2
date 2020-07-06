@@ -68,7 +68,10 @@
                         text: this.customChoice
                     }
                 }
-            }
+            },
+            ...mapState('currentPoll', {
+                poll: 'poll',
+            })
         },
         watch: {
             bonusChoice: function() {
@@ -85,13 +88,15 @@
                 deep: true
             },
             customChoice: function (val) {
-                if (!val.isEmpty()) {
+                if (val !== null && val.length > 0) {
                     this.selected = null
                 }
             },
-            ...mapState('currentPoll', {
-                poll: 'poll',
-            })
+            selected: function (val) {
+                if (val !== null) {
+                    this.customChoice = null
+                }
+            }
         },
         props: {
             model: {
