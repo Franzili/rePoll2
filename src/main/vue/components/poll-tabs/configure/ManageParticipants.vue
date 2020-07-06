@@ -41,6 +41,7 @@
                 <b-col cols="6">
                     <p>
                         Known participants will receive a custom link to the poll automatically, when they are invited.
+                        The Reminder-Mails will only be send to the participants who have not answered the poll yet.
                     </p>
                     <p>
                         <b-row class="align-items-center">
