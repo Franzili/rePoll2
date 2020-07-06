@@ -5,7 +5,7 @@ import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
-import gpse.repoll.domain.repositories.ChoiceRepository;
+import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.service.ParticipantService;
 import gpse.repoll.domain.service.PollEntryService;
 import gpse.repoll.domain.service.QuestionService;
@@ -29,15 +29,14 @@ import java.util.*;
 public class PollEntriesController {
 
     private final PollEntryService pollEntryService;
-    private final ChoiceRepository choiceRepository;
     private final ParticipantService participantService;
     private final QuestionService questionService;
 
     @Autowired
-    public PollEntriesController(PollEntryService pollEntryService, ChoiceRepository choiceRepository,
-                                 ParticipantService participantService, QuestionService questionService) {
+    public PollEntriesController(PollEntryService pollEntryService,
+                                 ParticipantService participantService,
+                                 QuestionService questionService) {
         this.pollEntryService = pollEntryService;
-        this.choiceRepository = choiceRepository;
         this.participantService = participantService;
         this.questionService = questionService;
     }
@@ -98,45 +97,51 @@ public class PollEntriesController {
                 ((ScaleAnswer) answer).setScaleNumber(scaleNumber);
             } else if (answerCmd instanceof SingleChoiceAnswerCmd) {
                 answer = new SingleChoiceAnswer();
-                Long choiceId;
-                if (((SingleChoiceAnswerCmd) answerCmd).getBonusChoiceCmd() == null) {
+                Long choiceId = null;
+                if (((SingleChoiceAnswerCmd) answerCmd).getBonusChoiceCmd() == null
+                || ((SingleChoiceAnswerCmd) answerCmd).getBonusChoiceCmd().getText() == null
+                || ((SingleChoiceAnswerCmd) answerCmd).getBonusChoiceCmd().getText().equals("")) {
                     choiceId = ((SingleChoiceAnswerCmd) answerCmd).getChoiceId();
                 } else {
                     ChoiceCmd bonusChoiceCmd = ((SingleChoiceAnswerCmd) answerCmd).getBonusChoiceCmd();
-                    Choice bonusChoice = new Choice(bonusChoiceCmd.getText());
-                    choiceRepository.save(bonusChoice);
-                    questionService.addBonusChoice(pollID, questionID, bonusChoice);
-                    choiceId = bonusChoice.getId();
+                    if (bonusChoiceCmd.getText() != null && !bonusChoiceCmd.getText().equals("")) {
+                        Choice bonusChoice = new Choice(bonusChoiceCmd.getText());
+                        Question question = questionService.getQuestion(pollID, questionID);
+                        bonusChoice.setParentQuestion(question);
+                        questionService.addBonusChoice(pollID, questionID, bonusChoice);
+                        choiceId = bonusChoice.getId();
+                    }
                 }
                 if (choiceId == null) {
                     answers.put(questionID, null);
                     continue;
                 }
-                Choice choice = choiceRepository.findById(choiceId).orElseThrow(() -> {
-                    throw new BadRequestException("The choice does not exist!");
-                });
+                Choice choice = questionService.getChoice(pollID, questionID, choiceId);
                 ((SingleChoiceAnswer) answer).setChoice(choice);
             } else if (answerCmd instanceof MultiChoiceAnswerCmd) {
                 answer = new MultiChoiceAnswer();
                 List<Long> choiceIds = ((MultiChoiceAnswerCmd) answerCmd).getChoiceIds();
                 List<ChoiceCmd> bonusChoicesCmd = ((MultiChoiceAnswerCmd) answerCmd).getBonusChoices();
                 List<Choice> bonusChoices = new ArrayList<>();
+                Question question = questionService.getQuestion(pollID, questionID);
                 for (ChoiceCmd bonusChoiceCmd : bonusChoicesCmd) {
-                    Choice choice = new Choice(bonusChoiceCmd.getText());
-                    choiceRepository.save(choice);
-                    bonusChoices.add(choice);
-                    choiceIds.add(choice.getId());
+                    if (bonusChoiceCmd.getText() != null && !bonusChoiceCmd.getText().equals("")) {
+                        Choice choice = new Choice(bonusChoiceCmd.getText());
+                        choice.setParentQuestion(question);
+                        bonusChoices.add(choice);
+                    }
                 }
                 questionService.addAllBonusChoices(pollID, questionID, bonusChoices);
+                for (Choice choice : bonusChoices) {
+                    choiceIds.add(choice.getId());
+                }
                 if (choiceIds.isEmpty()) {
                     answers.put(questionID, null);
                     continue;
                 }
                 List<Choice> choices = new ArrayList<>();
                 for (Long choiceId : choiceIds) {
-                    choices.add(choiceRepository.findById(choiceId).orElseThrow(() -> {
-                      throw new BadRequestException("At least one choice does not exist!");
-                    }));
+                    choices.add(questionService.getChoice(pollID, questionID, choiceId));
                 }
                 ((MultiChoiceAnswer) answer).setChoices(choices);
             } else {

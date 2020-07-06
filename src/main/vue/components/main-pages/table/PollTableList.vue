@@ -6,6 +6,8 @@
                 <p>
                     <b-button variant="primary"
                               class="addButton"
+                              data-toggle="tooltip"
+                              title="Create new Poll"
                               :disabled="!hasCreatorPrivileges"
                               @click="modalRadio = 'new'"
                               v-b-modal.new-poll

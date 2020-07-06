@@ -4,6 +4,7 @@ import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.PollIterationStatusException;
 import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.poll.PollEditStatus;
 import gpse.repoll.domain.poll.PollIteration;
 import gpse.repoll.domain.poll.PollIterationStatus;
 import gpse.repoll.domain.repositories.PollIterationRepository;
@@ -70,6 +71,11 @@ public class PollIterationServiceImpl implements PollIterationService {
                                           final Instant end,
                                           final PollIterationStatus status) {
         Poll poll = pollService.getPoll(pollID);
+
+        // we can only add iterations if the poll is LAUNCHED.
+        if (poll.getStatus() != PollEditStatus.LAUNCHED) {
+            throw new PollIterationStatusException();
+        }
 
         final PollIteration pollIteration = new PollIteration(start, end);
         if (status != null) {
@@ -231,6 +237,8 @@ public class PollIterationServiceImpl implements PollIterationService {
             case CLOSED:
                 pollIteration.setEnd(Instant.now());
                 poll.setCurrentIteration(null);
+                break;
+            default:
                 break;
         }
         pollIteration.setStatus(status);

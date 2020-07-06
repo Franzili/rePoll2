@@ -1,9 +1,8 @@
 package gpse.repoll.domain.poll;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gpse.repoll.domain.exceptions.*;
 import gpse.repoll.domain.poll.questions.Question;
-import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -31,7 +30,7 @@ public class Poll extends Auditable<User> {
     private Anonymity anonymity;
 
     @OneToOne
-    private Design design;// = new Design(); //TODO
+    private Design design;
 
     @Column
     @Lob
@@ -68,7 +67,6 @@ public class Poll extends Auditable<User> {
         this.title = title;
         this.status = PollEditStatus.EDITING;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
-      //  this.design = new Design();
     }
 
     /**
@@ -79,7 +77,7 @@ public class Poll extends Auditable<User> {
     public Poll(Poll poll, List<PollSection> pollSections) {
        this.status = PollEditStatus.EDITING;
        this.anonymity = poll.anonymity;
-       this.title = poll.title;
+       this.title = "Copy of " + poll.title;
        this.pollSections.addAll(pollSections);
        for (PollSection pollSection : this.pollSections) {
            questions.addAll(pollSection.getQuestions());
@@ -116,6 +114,7 @@ public class Poll extends Auditable<User> {
         return id;
     }
 
+    @JsonIgnore
     public List<PollEntry> getPollEntries() {
         if (currentIteration != null) {
             return Collections.unmodifiableList(currentIteration.getPollEntries());

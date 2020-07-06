@@ -28,7 +28,9 @@ const iterations = {
 
     getters: {
         iterations(state, getters, rootState) {
-            return rootState.currentPoll.poll.pollIterations.map(iteration => makeIteration(iteration));
+            return rootState.currentPoll.poll.pollIterations
+                .map(iteration => makeIteration(iteration))
+                .sort((a, b) => a.start - b.start);
         },
         current(state, getters, rootState) {
             return makeIteration(rootState.currentPoll.poll.currentIteration);
@@ -38,7 +40,7 @@ const iterations = {
         },
         previous(state, getters) {
             return getters['iterations'].filter(it => it.status === 'CLOSED');
-        }
+        },
     },
 
     mutations: {
@@ -80,7 +82,6 @@ const iterations = {
 
     actions: {
         update({rootState, commit}, iterationCmd) {
-            console.log("In action. got obj: " + JSON.stringify(iterationCmd));
             commit('update', iterationCmd);
             return new Promise((resolve, reject) => {
                 api.iterations.update(rootState.currentPoll.poll.id, iterationCmd.id, iterationCmd)

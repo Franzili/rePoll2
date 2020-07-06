@@ -1,5 +1,6 @@
 package gpse.repoll.domain.poll.questions;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Choice;
 
@@ -28,7 +29,7 @@ public class MultiChoiceQuestion extends Question {
     @Column
     private Integer numberOfBonusChoices = 0;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true, mappedBy = "parentQuestion")
     private final List<Choice> bonusChoices = new ArrayList<>();
 
     public MultiChoiceQuestion() {
@@ -57,7 +58,7 @@ public class MultiChoiceQuestion extends Question {
 
     public void addAllBonusChoices(List<Choice> choices) {
         if (choices.size() <= numberOfBonusChoices) {
-            this.choices.addAll(choices);
+            this.bonusChoices.addAll(choices);
         } else {
             throw new BadRequestException("Not so many bonus choices allowed");
         }
@@ -81,6 +82,14 @@ public class MultiChoiceQuestion extends Question {
     public void setBonusChoices(List<Choice> bonusChoices) {
         this.bonusChoices.clear();
         this.bonusChoices.addAll(bonusChoices);
+    }
+
+    @JsonIgnore
+    public List<Choice> getChoicesAndBonusChoices() {
+        List<Choice> allChoices = new ArrayList<>();
+        allChoices.addAll(choices);
+        allChoices.addAll(bonusChoices);
+        return Collections.unmodifiableList(allChoices);
     }
 }
 // CPD-ON

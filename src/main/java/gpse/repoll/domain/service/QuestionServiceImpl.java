@@ -170,6 +170,25 @@ public class QuestionServiceImpl implements QuestionService {
         return question;
     }
 
+    @Override
+    public Choice getChoice(UUID pollId, Long questionId, Long choiceId) {
+        Question question = getQuestion(pollId, questionId);
+        Choice choice  = choiceRepository.findById(choiceId).orElseThrow(() -> {
+            throw new NotFoundException("The choice does not exits!");
+        });
+        if (question instanceof SingleChoiceQuestion) {
+            if (((SingleChoiceQuestion) question).getChoicesAndBonusChoices().contains(choice)) {
+                return choice;
+            }
+        }
+        if (question instanceof MultiChoiceQuestion) {
+            if (((MultiChoiceQuestion) question).getChoicesAndBonusChoices().contains(choice)) {
+                return choice;
+            }
+        }
+        throw new BadRequestException("The question is not a choice question or the choice does not belong to it!");
+    }
+
     /**
      * Checks whether the {@link Question} belongs to the {@link Poll}.
      * @param poll The poll
@@ -336,10 +355,12 @@ public class QuestionServiceImpl implements QuestionService {
     public void addBonusChoice(final UUID pollID, final Long questionID, final Choice bonusChoice) {
         Question question = getQuestion(pollID, questionID);
         if (question instanceof SingleChoiceQuestion) {
-            ((SingleChoiceQuestion) question).addAllBonusChoices(List.of(bonusChoice));
+            ((SingleChoiceQuestion) question).addBonusChoice(bonusChoice);
         } else {
             throw new InternalServerErrorException();
         }
+        choiceRepository.save(bonusChoice);
+        questionBaseRepository.save(question);
     }
 
     /**
@@ -352,6 +373,9 @@ public class QuestionServiceImpl implements QuestionService {
             ((MultiChoiceQuestion) question).addAllBonusChoices(bonusChoices);
         } else {
             throw new InternalServerErrorException();
+        }
+        for (Choice choice : bonusChoices) {
+            choiceRepository.save(choice);
         }
         questionBaseRepository.save(question);
     }
