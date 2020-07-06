@@ -302,6 +302,10 @@
             closeManually: function(newVal) {
                 if (newVal === true) {
                     this.model.end = null;
+                } else {
+                    let newEnd = new Date(this.model.start)
+                    newEnd.setHours(newEnd.getHours() + 1);
+                    this.model.end = newEnd;
                 }
             }
         }
