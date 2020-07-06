@@ -82,7 +82,6 @@ const iterations = {
 
     actions: {
         update({rootState, commit}, iterationCmd) {
-            console.log("In action. got obj: " + JSON.stringify(iterationCmd));
             commit('update', iterationCmd);
             return new Promise((resolve, reject) => {
                 api.iterations.update(rootState.currentPoll.poll.id, iterationCmd.id, iterationCmd)

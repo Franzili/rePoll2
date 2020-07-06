@@ -208,7 +208,6 @@
                     return this.model.start;
                 },
                 set(newValue) {
-                    console.log("SETTING");
                     if (!this.model.start) {
                         this.model.start = new Date();
                     } else {
@@ -251,7 +250,6 @@
                     return this.model.end;
                 },
                 set(newValue) {
-                    console.log("SETTING");
                     if (!this.model.end) {
                         this.model.end = new Date();
                     } else {
