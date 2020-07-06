@@ -8,7 +8,7 @@
                         <span class="text-muted">Open</span>
                         <div class="d-flex">
                             <b-form-datepicker :id="'open-date-' + model.id"
-                                               class="flex-grow-1 date-spacing"
+                                               class="flex-grow-1 date-spacing invalid-fix"
                                                v-model="openDate"
                                                value-as-date
                                                size="sm"
@@ -17,7 +17,7 @@
                                                :min="now"
                                                placeholder=""/>
                             <b-form-timepicker :id="'open-time-' + model.id"
-                                               class="flex-grow-1"
+                                               class="flex-grow-1 invalid-fix"
                                                v-model="openTime"
                                                :state="startValid ? null : false"
                                                size="sm"
@@ -53,7 +53,7 @@
 
                         <div class="d-flex">
                             <b-form-datepicker :id="'close-date-' + model.id"
-                                               class="flex-grow-1 date-spacing"
+                                               class="flex-grow-1 date-spacing invalid-fix"
                                                v-model="closeDate"
                                                value-as-date
                                                ref="closeDatePicker"
@@ -64,7 +64,7 @@
                                                :state="endValid ? null : false"
                                                placeholder=""/>
                             <b-form-timepicker :id="'close-time-' + model.id"
-                                               class="flex-grow-1"
+                                               class="flex-grow-1 invalid-fix"
                                                v-model="closeTime"
                                                ref="closeTimePicker"
                                                size="sm"
@@ -338,6 +338,14 @@
     }
     .list-item-container {
         padding: 0;
+    }
+
+    /*
+        fixes issue where the "invalid"-Warning sign appears twice
+     */
+    .invalid-fix.is-invalid {
+        background-image: none !important;
+        padding-right: 0 !important;
     }
 
 </style>
