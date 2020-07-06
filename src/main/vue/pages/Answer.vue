@@ -17,9 +17,12 @@
             </b-img>
         </b-container>
 
-        <h1 :style="'font-family: ' + poll.design.font + ';color: ' + poll.design.textColour">
-            {{ poll.title }}
-        </h1>
+
+        <b-container style="margin-top: 10vh">
+            <h1 :style="'font-family: ' + poll.design.font + ';color: ' + poll.design.textColour">
+                {{ poll.title }}
+            </h1>
+        </b-container>
 
         <ul class="poll-main-view">
             <PollItem v-for="item in pollStructure"
@@ -31,14 +34,17 @@
             />
         </ul>
 
-        <b-button
-            :style="'margin-bottom: 20px;background-color:' + poll.design.textColour + ';color:' + poll.design.backgroundColour + ';border-color:' + poll.design.textColour"
-            v-on:click="answerPoll">Save</b-button>
-        <!--
-        Submit Button for later
-        Final Submit, then answers can't be edited anymore
-        <b-button class="my-button" variant="success">Submit!</b-button>
-        -->
+        <b-container>
+
+            <b-button
+                :style="'margin-bottom: 20px;background-color:' + poll.design.textColour + ';color:' + poll.design.backgroundColour + ';border-color:' + poll.design.textColour"
+                v-on:click="answerPoll">Save</b-button>
+            <!--
+            Submit Button for later
+            Final Submit, then answers can't be edited anymore
+            <b-button class="my-button" variant="success">Submit!</b-button>
+            -->
+        </b-container>
     </b-container>
 
 </template>
