@@ -1,7 +1,5 @@
 package gpse.repoll.download_formats;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gpse.repoll.domain.poll.Participant;
 import gpse.repoll.domain.poll.Poll;
 
@@ -10,7 +8,7 @@ public class ParticipantsCSV {
     private static final String NEW_LINE = "\n";
     private static final String COMMA = ",";
 
-    public String getData(Poll currentPoll) {
+    public String getData(Poll currentPoll, String serverPrefix) {
 
         StringBuilder csv = new StringBuilder();
 
@@ -25,7 +23,12 @@ public class ParticipantsCSV {
             csv.append(COMMA);
 
             // personalized link
-            csv.append("link");
+            csv.append(serverPrefix);
+            csv.append("/answer/");
+            csv.append(currentPoll.getId());
+            csv.append("/");
+            csv.append(participant.getId());
+
 
             csv.append(NEW_LINE);
 

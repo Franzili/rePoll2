@@ -6,6 +6,7 @@ import gpse.repoll.download_formats.PollJSON;
 import gpse.repoll.download_formats.PollTxt;
 import gpse.repoll.domain.poll.Poll;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -17,6 +18,9 @@ import java.util.UUID;
 public class DownloadServiceImpl implements DownloadService {
 
     private final PollService pollService;
+
+    @Value("${repoll.serverAddress}")
+    private String serverPrefix;
 
     @Autowired
     public DownloadServiceImpl(PollService pollService) {
@@ -43,7 +47,7 @@ public class DownloadServiceImpl implements DownloadService {
         } else if (type.equals("entries")) {
             return new EntriesJSON().getData(currentPoll);
         } else if (type.equals("participants") && format.equals("csv")) {
-            return new ParticipantsCSV().getData(currentPoll);
+            return new ParticipantsCSV().getData(currentPoll, serverPrefix);
         }
 
         return "";
