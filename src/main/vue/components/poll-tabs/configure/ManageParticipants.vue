@@ -30,8 +30,7 @@
                             v-b-modal.newParticipant
                             style="margin-bottom: 2vh"
                             data-toggle="tooltip"
-                            title="Invite a new Participant"
-                            v-b-modal.newParticipant>
+                            title="Invite a new Participant">
                             Invite New
                         </b-button>
                     </p>
@@ -56,13 +55,10 @@
                         </b-row>
                         <b-row>
                             <b-col>
-                                <b-button style="margin-top: 2vh" class="float-right">Remind</b-button>
-                            </b-col>
-                            <b-col cols="6">
                                 <b-button class="float-right"
-                                data-toggle="tooltip"
-                                title="Send Reminder-Mails"
-                                v-on:click="reminder">Remind</b-button>
+                                          data-toggle="tooltip"
+                                          title="Send Reminder-Mails"
+                                          v-on:click="reminder">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
