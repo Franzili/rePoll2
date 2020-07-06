@@ -1,5 +1,4 @@
 <template>
-    <!-- :title="poll.title" -->
     <b-card
         no-body
         border-variant="primary"
@@ -27,6 +26,7 @@
                                 </b-button>
                                 <b-button
                                     @click="loadTo('poll-stats')"
+                                    :disabled="poll.status === 'EDITING'"
                                     variant="outline-secondary"
                                     title="Analysis">
                                     <b-icon icon="graph-up"></b-icon>
@@ -51,31 +51,10 @@
                     {{poll.creator.username}}
                 </b-col>
                 <b-col class="text-muted">
-                    <h6>Participants:</h6>
+                    <h6>Participants:(total)</h6>
                     <span v-if="poll.status === 'EDITING'">N/A</span>
-                    <span v-else>placeholder 0</span>
+                    <span v-else>{{participants}}</span>
                 </b-col>
-                <!--
-                <b-col v-if="poll.currentIteration !== null">
-                    {{poll.currentIteration.end}}
-                </b-col>
-                -->
-                <!--
-                <b-col
-                    align-self="center">
-                    <p v-show="poll.status !== 'EDITING'"
-                    ><span class="participants">Participants: </span>{{poll.pollEntries}}</p>
-                </b-col>
-                -->
-
-                <!--
-                <b-col cols="2">
-                    <b-button variant="primary"
-                              @click="copyPoll">
-                        Copy Poll
-                    </b-button>
-                </b-col>
-                -->
             </b-row>
 
             <b-container>
@@ -100,6 +79,7 @@
             return {
                 pollStatus: '',
                 iterationData: {},
+                participants: 0,
                 current: null,
                 dateTimeFormat: new Intl.DateTimeFormat('en', {
                     year: 'numeric',
@@ -108,17 +88,21 @@
                     weekday: 'short',
                     hour: 'numeric',
                     minute: 'numeric',
-                    second: 'numeric'
                 })
             }
         },
         created() {
-            if (this.poll.status === 'LAUNCHED' &&this.poll.currentIteration !== null) {
+            if (this.poll.status === 'LAUNCHED' && this.poll.currentIteration !== null) {
                 this.current = true;
                 this.iterationData = this.poll.currentIteration
             } else if (this.poll.status === 'LAUNCHED'){
                 this.current = null;
                 this.iterationData = this.getLastIteration(this.poll.pollIterations);
+            }
+            if (this.poll.status === 'LAUNCHED') {
+                this.poll.pollIterations.forEach(iteration => {
+                    this.participants = this.participants + iteration.pollEntries
+                })
             }
 
         },
@@ -138,24 +122,12 @@
             ...mapActions('currentPoll', {
                 loadPoll: "load"
             }),
-            ...mapActions('myPolls', {
-                duplicatePoll: "duplicate"
-            }),
             async loadTo(adr) {
                 await this.loadPoll(this.poll.id)
                 return this.$router.push({
                     name: adr,
                     params: {
                         pollId: this.poll.id
-                    }
-                })
-            },
-            async copyPoll() {
-                let newPoll = await this.duplicatePoll(this.poll.id);
-                return this.$router.push({
-                    name: 'edit-poll',
-                    params: {
-                        pollId: newPoll.id
                     }
                 })
             },

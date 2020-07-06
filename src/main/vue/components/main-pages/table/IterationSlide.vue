@@ -40,7 +40,6 @@
                     weekday: 'short',
                     hour: 'numeric',
                     minute: 'numeric',
-                    second: 'numeric'
                 })
             }
         },
