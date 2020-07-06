@@ -17,6 +17,13 @@
             </b-img>
         </b-container>
 
+
+        <b-container style="margin-top: 10vh">
+            <h1 :style="'font-family: ' + poll.design.font + ';color: ' + poll.design.textColour">
+                {{ poll.title }}
+            </h1>
+        </b-container>
+
         <ul class="poll-main-view">
             <PollItem v-for="item in pollStructure"
                       v-bind:key="item.id"
@@ -27,14 +34,18 @@
             />
         </ul>
 
-        <b-button
-            :style="'margin-bottom: 20px;background-color:' + poll.design.textColour + ';color:' + poll.design.backgroundColour + ';border-color:' + poll.design.textColour"
-            v-on:click="answerPoll">Save</b-button>
-        <!--
-        Submit Button for later
-        Final Submit, then answers can't be edited anymore
-        <b-button class="my-button" variant="success">Submit!</b-button>
-        -->
+
+        <b-container>
+
+            <b-button
+                :style="'margin-bottom: 20px;background-color:' + poll.design.textColour + ';color:' + poll.design.backgroundColour + ';border-color:' + poll.design.textColour"
+                v-on:click="answerPoll">Save</b-button>
+            <!--
+            Submit Button for later
+            Final Submit, then answers can't be edited anymore
+            <b-button class="my-button" variant="success">Submit!</b-button>
+            -->
+        </b-container>
     </b-container>
 
 </template>
@@ -48,6 +59,8 @@
         name: "Answer",
         data() {
             return {
+                pollId: null,
+                participantId: null,
                 currentlyEditing: null,
                 loaded: false
             }
@@ -80,7 +93,11 @@
                     console.log(pollHTMLAnswers[i].__vue__.answer)
                 }
 
-                let entrysOfPoll = {pollId: this.$route.params.id, entryCmd: entryCmd}
+                let entrysOfPoll = {
+                    pollId: this.pollId,
+                    participantId: this.participantId,
+                    entryCmd: entryCmd
+                }
 
                 this.rootEntry(entrysOfPoll)
                 return this.$router.push('/poll-response/')
@@ -88,8 +105,9 @@
         },
         async mounted() {
             this.loaded = false
-            let pollId = this.$route.params.id
-            await this.loadPoll(pollId)
+            this.pollId = this.$route.params.pollId
+            this.participantId = this.$route.params.participantId
+            await this.loadPoll(this.pollId)
             this.loaded = true
         },
         components: { PollItem }

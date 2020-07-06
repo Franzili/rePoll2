@@ -1,6 +1,7 @@
 package gpse.repoll.domain.service;
 
 import gpse.repoll.domain.poll.Participant;
+import gpse.repoll.domain.utils.Pair;
 
 import java.util.UUID;
 
@@ -25,7 +26,7 @@ public interface ParticipantService {
      * @param pollId The ID of the poll
      * @return The new participant
      */
-    Participant addParticipant(String fullName, String email, UUID pollId);
+    Pair<Participant> addParticipant(String fullName, String email, UUID pollId);
 
     /**
      * Gets one {@link Participant}.
@@ -50,4 +51,11 @@ public interface ParticipantService {
      * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
      */
     void removeParticipant(UUID id, UUID pollId);
+
+    /**
+     * Send a reminder E-Mail to all participants of a specific poll, that have not participated until now.
+     * @param pollId Poll-ID
+     * @return an answer, whether the mails have been sent or not
+     */
+    String remindParticipant(UUID pollId);
 }

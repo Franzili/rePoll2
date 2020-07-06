@@ -44,7 +44,7 @@ let router = new VueRouter({
             }
         },
         {
-            path: '/poll/:id/answer',
+            path: '/answer/:pollId/:participantId',
             component: Answer,
             name: 'answer',
         },

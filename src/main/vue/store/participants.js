@@ -2,7 +2,8 @@ import api from "../api";
 
 const participants = {
     state: {
-        participants: []
+        participants: [],
+        mailAnswer: ''
     },
     getters: {},
     mutations: {
@@ -16,6 +17,12 @@ const participants = {
         },
         delete(state, id) {
             state.participants.filter(participants => participants.id !== id);
+        },
+        add(state, mailAnswer) {
+            state.mailAnswer = mailAnswer;
+        },
+        remind(state, mailAnswer) {
+            state.mailAnswer = mailAnswer;
         }
     },
     actions: {
@@ -58,14 +65,35 @@ const participants = {
         /**
          * Creates a new Participant
          */
-        create({rootState, dispatch}, participantCmd) {
+        //create({rootState, dispatch}, participantCmd) {
+        create({commit, rootState}, participantCmd) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
                 return;
             }
             return new Promise(function (resolve, reject) {
-                api.poll.addParticipant(rootState.currentPoll.poll.id, participantCmd).then(() => {
-                    dispatch('loadParticipant', rootState.currentPoll.poll.id)
+                api.poll.addParticipant(rootState.currentPoll.poll.id, participantCmd).then((res) => {
+                    commit('add', res.data);
+                    resolve();
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
+        },
+        /*
+         * Sends reminder emails to every participant that did not participated until now.
+         */
+        remind({commit, rootState}) {
+            if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
+                console.warn("PollId is undefined");
+                return;
+            }
+            return new Promise(function (resolve, reject) {
+                //api.poll.addParticipant(rootState.currentPoll.poll.id, participantCmd).then(() => {
+                //    dispatch('loadParticipant', rootState.currentPoll.poll.id)
+                api.poll.sendReminder(rootState.currentPoll.poll.id).then((res) => {
+                    commit('remind', res.data);
                     resolve();
                 }).catch(function (error) {
                     console.log(error);
