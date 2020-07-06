@@ -293,8 +293,20 @@
         watch: {
             model: {
                 handler: function(newVal) {
-                    if (this.startValid && this.endValid) {
-                        this.update(newVal);
+                    switch(this.model.status) {
+                        case 'SCHEDULED':
+                            if (this.startValid && this.endValid) {
+                                this.update(newVal);
+                            }
+                            break;
+                        case 'OPEN':
+                            if (this.endValid) {
+                                this.update(newVal);
+                            }
+                            break;
+                        case 'CLOSED':
+                            // A closed model should not change.
+                            break;
                     }
                 },
                 deep: true
