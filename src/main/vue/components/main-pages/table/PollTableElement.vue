@@ -19,9 +19,10 @@
                         <b-form-group>
                             <b-button-group size="sm">
                                 <b-button
+                                    data-toggle="tooltip"
                                     @click="loadTo('poll-tabbed')"
                                     variant="outline-secondary"
-                                    title="Setup">
+                                    title="Go to the Configuration-Page">
                                     <b-icon icon="gear-fill"></b-icon>
                                 </b-button>
                                 <b-button
