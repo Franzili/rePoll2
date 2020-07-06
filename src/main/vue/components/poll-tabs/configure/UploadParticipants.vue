@@ -3,14 +3,14 @@
     <div>
         <input type="file"
                data-toggle="tooltip"
-               title="Select a csv-file to import"
+               title="Select a .csv-file to import"
                data-placement="auto"
                id="selectFile"
                value="Import"
                accept=".csv"
                style="margin-bottom: 2vh"/><br />
         <b-button data-toggle="tooltip"
-                  title="Import the Participants"
+                  title="Import data"
                   @click="handleFiles">Import File</b-button>
         <div class="output"></div>
 

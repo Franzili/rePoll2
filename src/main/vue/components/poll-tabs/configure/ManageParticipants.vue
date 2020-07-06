@@ -48,7 +48,7 @@
                             <b-col cols="6">
                                 <b-button class="float-right"
                                 data-toggle="tooltip"
-                                title="Send Reminder-Mails to the Participants">Remind</b-button>
+                                title="Send Reminder-Mails">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
@@ -129,7 +129,9 @@
                             </b-col>
 
                             <b-col cols="6">
-                                <b-button class="float-right">Remind</b-button>
+                                <b-button class="float-right"
+                                          data-toggle="tooltip"
+                                          title="Send Reminder-Mails">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
