@@ -41,7 +41,7 @@
         </b-row>
 
         <b-row>
-            <b-col>
+            <b-col style="margin-bottom: 2vh">
                 <b-input-group size="sm">
                     <b-form-input
                         v-model="filter"
@@ -61,6 +61,8 @@
                 </b-form-checkbox-group>
             </b-col>
         </b-row>
+
+
 
         <b-row>
             <!-- TODO I WANT TO BE A COMPONENT IF I BECOME MORE COMPLEX -->
@@ -101,10 +103,6 @@
                 totalRows: 1,
                 filter: '',
                 filterOn: [],
-                sortDesc: false,
-                sortDirection: 'asc',
-
-
                 // TODO Prototype for deeper analyses
                 //selQuest: [],
             }

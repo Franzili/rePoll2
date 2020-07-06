@@ -9,6 +9,10 @@
                         <b-table
                             show-empty
                             small
+                            striped
+                            hover
+                            fixed
+                            outlined
                             sticky-header="true"
                             :items="this.participants"
                             :fields="fields"
