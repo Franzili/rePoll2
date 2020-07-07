@@ -100,6 +100,15 @@ public interface QuestionService {
     Question getQuestion(UUID pollId, Long questionId);
 
     /**
+     * Gets a {@link Choice} belonging to a {@link Question}.
+     * @param pollId The ID of the poll
+     * @param questionId The ID of the question
+     * @param choiceId The ID of the choice
+     * @return The choice
+     */
+    Choice getChoice(UUID pollId, Long questionId, Long choiceId);
+
+    /**
      * Updates a {@link TextQuestion}.
      * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
      * @param questionId The ID of the question
