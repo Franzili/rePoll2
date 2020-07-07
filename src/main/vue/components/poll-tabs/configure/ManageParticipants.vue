@@ -11,7 +11,7 @@
                             small
                             striped
                             hover
-                            fixed
+                            responsive
                             outlined
                             sticky-header="true"
                             :items="this.participants"
@@ -135,12 +135,14 @@
 
                     <p>
                         <b-row class="align-items-center">
-                            <b-col cols="6">
+                            <b-col>
                                 {{ n_participated }} participated, <br/>
                                 {{ n_invites_pending }} invites pending.
                             </b-col>
+                        </b-row>
 
-                            <b-col cols="6">
+                        <b-row>
+                            <b-col>
                                 <b-button class="float-right"
                                           data-toggle="tooltip"
                                           title="Send Reminder-Mails"
