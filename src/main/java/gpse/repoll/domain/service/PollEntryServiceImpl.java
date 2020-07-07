@@ -1,5 +1,6 @@
 package gpse.repoll.domain.service;
 
+import gpse.repoll.domain.exceptions.NoIterationOpenException;
 import gpse.repoll.domain.poll.*;
 import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
@@ -22,6 +23,7 @@ public class PollEntryServiceImpl implements PollEntryService {
     private final PollService pollService;
     private final ParticipantService participantService;
 
+    private final PollIterationRepository pollIterationRepository;
     private final PollEntryRepository pollEntryRepository;
     private final QuestionBaseRepository<Question> questionRepository;
     private final TextAnswerRepository textAnswerRepository;
@@ -34,6 +36,7 @@ public class PollEntryServiceImpl implements PollEntryService {
     public PollEntryServiceImpl(
             PollService pollService,
             ParticipantService participantService,
+            PollIterationRepository pollIterationRepository,
             PollEntryRepository pollEntryRepository,
             QuestionBaseRepository<Question> questionRepository,
             TextAnswerRepository textAnswerRepository,
@@ -42,6 +45,7 @@ public class PollEntryServiceImpl implements PollEntryService {
             MultiChoiceAnswerRepository multiChoiceAnswerRepository) {
         this.pollService = pollService;
         this.participantService = participantService;
+        this.pollIterationRepository = pollIterationRepository;
         this.pollEntryRepository = pollEntryRepository;
         this.questionRepository = questionRepository;
         this.textAnswerRepository = textAnswerRepository;
@@ -100,6 +104,12 @@ public class PollEntryServiceImpl implements PollEntryService {
                                   final Map<Long, Answer> associations,
                                   final UUID participantID) {
         Poll poll = pollService.getPoll(pollId);
+
+        //
+        if (poll.getCurrentIteration() == null) {
+            throw new NoIterationOpenException();
+        }
+
         PollEntry pollEntry = new PollEntry();
         Participant participant;
         if (poll.getAnonymity().equals(Anonymity.NON_ANONYMOUS) || poll.getAnonymity().equals(Anonymity.PSEUDONYMOUS)) {
@@ -115,8 +125,10 @@ public class PollEntryServiceImpl implements PollEntryService {
         pollEntry.setParticipant(participant);
         createAnswers(poll, pollEntry, associations);
         pollEntryRepository.save(pollEntry);
-        poll.add(pollEntry);
-        pollService.save(poll);
+
+        PollIteration currentIteration = poll.getCurrentIteration();
+        currentIteration.add(pollEntry);
+        pollIterationRepository.save(currentIteration);
         return pollEntry;
     }
 

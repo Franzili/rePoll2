@@ -4,6 +4,7 @@ import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.exceptions.PollIterationStatusException;
 import gpse.repoll.domain.poll.Poll;
+import gpse.repoll.domain.poll.PollEditStatus;
 import gpse.repoll.domain.poll.PollIteration;
 import gpse.repoll.domain.poll.PollIterationStatus;
 import gpse.repoll.domain.repositories.PollIterationRepository;
@@ -11,9 +12,7 @@ import gpse.repoll.domain.repositories.PollRepository;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -68,10 +67,15 @@ public class PollIterationServiceImpl implements PollIterationService {
      */
     @Override
     public PollIteration addPollIteration(final UUID pollID,
-                                          final LocalDateTime start,
-                                          final LocalDateTime end,
+                                          final Instant start,
+                                          final Instant end,
                                           final PollIterationStatus status) {
         Poll poll = pollService.getPoll(pollID);
+
+        // we can only add iterations if the poll is LAUNCHED.
+        if (poll.getStatus() != PollEditStatus.LAUNCHED) {
+            throw new PollIterationStatusException();
+        }
 
         final PollIteration pollIteration = new PollIteration(start, end);
         if (status != null) {
@@ -111,8 +115,8 @@ public class PollIterationServiceImpl implements PollIterationService {
     @Override
     public PollIteration updatePollIteration(final UUID pollID,
                                              final Long pollIterationID,
-                                             final LocalDateTime start,
-                                             final LocalDateTime end,
+                                             final Instant start,
+                                             final Instant end,
                                              final PollIterationStatus status) {
         final PollIteration pollIteration = getPollIteration(pollID, pollIterationID);
         final Poll poll = pollService.getPoll(pollID);
@@ -140,8 +144,16 @@ public class PollIterationServiceImpl implements PollIterationService {
     public void removePollIteration(final UUID pollID, final Long pollIterationID) {
         final PollIteration pollIteration = getPollIteration(pollID, pollIterationID);
 
-        scheduleRemove(pollIteration);
+        // deleting only makes sense if the iteration has not already been opened
+        if (pollIteration.getStatus() != PollIterationStatus.SCHEDULED) {
+            throw new PollIterationStatusException();
+        }
 
+        Poll poll = pollService.getPoll(pollID);
+        poll.remove(pollIteration);
+        pollService.save(poll);
+
+        scheduleRemove(pollIteration);
         pollIterationRepository.delete(pollIteration);
     }
 
@@ -155,7 +167,6 @@ public class PollIterationServiceImpl implements PollIterationService {
     private void scheduleIteration(final PollIteration iteration, final Poll poll) {
         scheduleRemove(iteration);
 
-        ZoneOffset offset = OffsetDateTime.now().getOffset();
         PollIterationStatus status = iteration.getStatus();
         ScheduledFuture<?> task;
 
@@ -166,7 +177,7 @@ public class PollIterationServiceImpl implements PollIterationService {
                     updateIterationStatus(PollIterationStatus.OPEN, iteration, poll);
                     pollIterationRepository.save(iteration);
                     openTasks.remove(iteration.getId());
-                }, iteration.getStart().toInstant(offset));
+                }, iteration.getStart());
                 openTasks.put(iteration.getId(), task);
             }
         }
@@ -178,7 +189,7 @@ public class PollIterationServiceImpl implements PollIterationService {
                     updateIterationStatus(PollIterationStatus.CLOSED, iteration, poll);
                     pollIterationRepository.save(iteration);
                     openTasks.remove(iteration.getId());
-                }, iteration.getEnd().toInstant(offset));
+                }, iteration.getEnd());
                 closeTasks.put(iteration.getId(), task);
             }
         }
@@ -211,9 +222,12 @@ public class PollIterationServiceImpl implements PollIterationService {
                 break;
 
             case OPEN:
+                pollIteration.setStart(Instant.now());
+
                 // if there is another iteration running, close it.
                 if (poll.getCurrentIteration() != null) {
                     PollIteration previous = poll.getCurrentIteration();
+                    previous.setEnd(Instant.now());
                     previous.setStatus(PollIterationStatus.CLOSED);
                     pollIterationRepository.save(previous);
                 }
@@ -221,10 +235,14 @@ public class PollIterationServiceImpl implements PollIterationService {
                 break;
 
             case CLOSED:
+                pollIteration.setEnd(Instant.now());
                 poll.setCurrentIteration(null);
                 break;
+            default:
+                break;
         }
-        pollRepository.save(poll);
         pollIteration.setStatus(status);
+        pollIterationRepository.save(pollIteration);
+        pollRepository.save(poll);
     }
 }

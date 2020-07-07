@@ -1,12 +1,8 @@
 package gpse.repoll.domain.poll;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import gpse.repoll.domain.exceptions.BadRequestException;
-import gpse.repoll.domain.exceptions.InternalServerErrorException;
-import gpse.repoll.domain.exceptions.NotFoundException;
-import gpse.repoll.domain.exceptions.PollAlreadyLaunchedException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import gpse.repoll.domain.exceptions.*;
 import gpse.repoll.domain.poll.questions.Question;
-import gpse.repoll.domain.serialization.SerializePollEntries;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -34,16 +30,12 @@ public class Poll extends Auditable<User> {
     private Anonymity anonymity;
 
     @OneToOne
-    private Design design;// = new Design(); //TODO
+    private Design design;
 
     @Column
     @Lob
     @NotEmpty
     private String title;
-
-    @JsonSerialize(using = SerializePollEntries.class)
-    @OneToMany
-    private final List<PollEntry> pollEntries = new ArrayList<>();
 
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     private final Set<PollIteration> pollIterations = new HashSet<>();
@@ -75,7 +67,6 @@ public class Poll extends Auditable<User> {
         this.title = title;
         this.status = PollEditStatus.EDITING;
         this.anonymity = Anonymity.NON_ANONYMOUS; // default: non-anonymous poll
-      //  this.design = new Design();
     }
 
     /**
@@ -86,7 +77,7 @@ public class Poll extends Auditable<User> {
     public Poll(Poll poll, List<PollSection> pollSections) {
        this.status = PollEditStatus.EDITING;
        this.anonymity = poll.anonymity;
-       this.title = poll.title;
+       this.title = "Copy of " + poll.title;
        this.pollSections.addAll(pollSections);
        for (PollSection pollSection : this.pollSections) {
            questions.addAll(pollSection.getQuestions());
@@ -119,19 +110,17 @@ public class Poll extends Auditable<User> {
         this.design = design;
     }
 
-
-
     public UUID getId() {
         return id;
     }
 
+    @JsonIgnore
     public List<PollEntry> getPollEntries() {
-        return Collections.unmodifiableList(pollEntries);
-    }
-
-    public void setPollEntries(List<PollEntry> pollEntries) {
-        this.pollEntries.clear();
-        this.pollEntries.addAll(pollEntries);
+        if (currentIteration != null) {
+            return Collections.unmodifiableList(currentIteration.getPollEntries());
+        } else {
+            return null;
+        }
     }
 
     public Set<PollIteration> getPollIterations() {
@@ -285,19 +274,31 @@ public class Poll extends Auditable<User> {
     }
 
     public void add(PollEntry pollEntry) {
-        pollEntries.add(pollEntry);
+        if (currentIteration != null) {
+            currentIteration.add(pollEntry);
+        } else {
+            throw new NoIterationOpenException();
+        }
     }
 
     public void addAllPollEntries(Collection<PollEntry> pollEntries) {
-        this.pollEntries.addAll(pollEntries);
+        if (currentIteration != null) {
+            currentIteration.addAll(pollEntries);
+        } else {
+            throw new NoIterationOpenException();
+        }
     }
 
     public boolean contains(PollEntry pollEntry) {
-        return pollEntries.contains(pollEntry);
+        if (currentIteration != null) {
+            return currentIteration.getPollEntries().contains(pollEntry);
+        } else {
+            throw new NoIterationOpenException();
+        }
     }
 
     public void add(PollIteration pollIteration) {
-        pollIterations.add(pollIteration);
+            pollIterations.add(pollIteration);
     }
 
     public void remove(PollIteration pollIteration) {

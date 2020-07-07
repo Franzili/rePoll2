@@ -2,13 +2,17 @@
     <b-card>
         <!-- TODO: adapt type names to backend terminology -->
         <div v-if="poll.anonymity === 'NON_ANONYMOUS'">
-            <h6>Participants:</h6>
+            <h6>Participants:  {{this.participants.length}}</h6>
             <b-row>
                 <b-col cols="6">
                     <p>
                         <b-table
                             show-empty
                             small
+                            striped
+                            hover
+                            fixed
+                            outlined
                             sticky-header="true"
                             :items="this.participants"
                             :fields="fields"
@@ -23,18 +27,25 @@
                         <b-button
                             class="float-right"
                             variant="primary"
+                            data-toggle="tooltip"
+                            title="Invite a new Participant"
                             v-b-modal.newParticipant>
                             Invite New
                         </b-button>
                     </p>
-                    <p>
+                    <div>
+                        <DownloadPersonalizedLinks></DownloadPersonalizedLinks>
+
                         <UploadParticipants></UploadParticipants>
-                    </p>
+                    </div>
                 </b-col>
 
                 <b-col cols="6">
                     <p>
                         Known participants will receive a custom link to the poll automatically, when they are invited.
+                    </p>
+                    <p>
+                        The Remind-Button will send a mail only to the participants who have not answered the poll yet.
                     </p>
                     <p>
                         <b-row class="align-items-center">
@@ -44,7 +55,10 @@
                             </b-col>
 
                             <b-col cols="6">
-                                <b-button class="float-right">Remind</b-button>
+                                <b-button class="float-right"
+                                data-toggle="tooltip"
+                                title="Send Reminder-Mails"
+                                v-on:click="reminder">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
@@ -97,7 +111,10 @@
                         ></b-form-textarea>
                     </p>
                     <p>
-                        <b-button class="float-right" variant="primary">Invite</b-button>
+                        <b-button class="float-right"
+                                  data-toggle="tooltip"
+                                  title="Invite a new Participant"
+                                  variant="primary">Invite</b-button>
                     </p>
                 </b-col>
 
@@ -122,7 +139,10 @@
                             </b-col>
 
                             <b-col cols="6">
-                                <b-button class="float-right">Remind</b-button>
+                                <b-button class="float-right"
+                                          data-toggle="tooltip"
+                                          title="Send Reminder-Mails"
+                                          v-on:click="reminder">Remind</b-button>
                             </b-col>
                         </b-row>
                     </p>
@@ -144,7 +164,10 @@
                             ></b-form-textarea>
                         </p>
                         <p>
-                            <b-button class="float-right" variant="primary">Invite</b-button>
+                            <b-button class="float-right"
+                                      data-toggle="tooltip"
+                                      title="Invite a new Participant"
+                                      variant="primary">Invite</b-button>
                         </p>
                     </b-col>
 
@@ -179,10 +202,11 @@
 <script>
     import {mapState, mapActions} from "vuex";
     import UploadParticipants from "./UploadParticipants";
+    import DownloadPersonalizedLinks from "./DownloadPersonalizedLinks";
 
     export default {
         name: "ManageParticipants",
-        components: {UploadParticipants},
+        components: {DownloadPersonalizedLinks, UploadParticipants},
 
         data() {
             return {
@@ -200,7 +224,10 @@
 
                 // For a single participant
                 name: '',
-                eMail: ''
+                eMail: '',
+
+                participantMailPair: '',
+                mailSentCounter: 0
             }
         },
 
@@ -208,7 +235,8 @@
             ...mapState('currentPoll', {
                 poll: 'poll'}),
             ...mapState('participants', {
-                participants: 'participants'
+                participants: 'participants',
+                mailAnswer: 'mailAnswer'
             })
         },
 
@@ -218,7 +246,8 @@
                 loadParticipant: 'loadParticipant'
             }),
             ...mapActions('participants', {
-                create: "create"
+                create: "create",
+                remind: "remind"
             }),
             async addParticipant() {
                 let participantCmd = {
@@ -226,6 +255,29 @@
                     email: this.eMail
                 }
                 await this.create(participantCmd)
+                this.makeToast(this.mailAnswer)
+            },
+            /**
+             * Sends a reminder email to every participant that did not participated until now.
+             * If you try to send emails twice in one page mount, you get a toast that this is not smart :D
+             */
+            async reminder() {
+                if (this.mailSentCounter > 0) {
+                    this.makeToast("You have sent Reminders just a few moments ago!\n" +
+                        "Reload the page and try again to sent them anyway")
+                } else {
+                    this.makeToast("Sending Mails ...")
+                    await this.remind();
+                    this.mailSentCounter++;
+                    this.makeToast(this.mailAnswer)
+                }
+            },
+            makeToast(message) {
+                this.$bvToast.toast(message, {
+                    title: 'Mail',
+                    autoHideDelay: 10000,
+                    appendToast: false
+                })
             }
         },
         mounted() {

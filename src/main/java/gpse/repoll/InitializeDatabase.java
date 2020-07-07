@@ -5,6 +5,7 @@ import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.poll.questions.Question;
 import gpse.repoll.domain.repositories.*;
 import gpse.repoll.domain.service.*;
+import gpse.repoll.domain.utils.Pair;
 import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -28,6 +30,7 @@ public class InitializeDatabase implements InitializingBean {
     private final PollSectionService pollSectionService;
     private final QuestionService questionService;
     private final PollEntryService pollEntryService;
+    private final PollIterationService pollIterationService;
     private final UserService userService;
     private final TransactionTemplate transactionTemplate;
     private final PollRepository pollRepository;
@@ -42,6 +45,7 @@ public class InitializeDatabase implements InitializingBean {
     public InitializeDatabase(final PollService pollService,
                               final QuestionService questionService,
                               final PollEntryService pollEntryService,
+                              final PollIterationService pollIterationService,
                               final UserService userService,
                               final PlatformTransactionManager transactionManager,
                               final PollSectionService pollSectionService,
@@ -56,6 +60,7 @@ public class InitializeDatabase implements InitializingBean {
         this.pollSectionService = pollSectionService;
         this.questionService = questionService;
         this.pollEntryService = pollEntryService;
+        this.pollIterationService = pollIterationService;
         this.userService = userService;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
         this.pollRepository = pollRepository;
@@ -128,18 +133,18 @@ public class InitializeDatabase implements InitializingBean {
 
             List<Participant> participants = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
-                Participant tmpUser;
+                Pair<Participant> tmpUser;
                     tmpUser = participantService.addParticipant(
                         "Patti" + i,
                         // Passwort: GutenTag
                         //"{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
                         //"Privat Patti" + i,
-                        "x@404.com",
+                        "zizimeyer4@gmail.com",
                         poll.getId()
                         );
                         //Roles.PARTICIPANT);
 
-                participants.add(tmpUser);
+                participants.add(tmpUser.getObject());
             }
 
 
@@ -202,7 +207,7 @@ public class InitializeDatabase implements InitializingBean {
             choicesChoiceQuestionList.add(choice4);
             Question question3 = questionService.addMultiChoiceQuestion(poll.getId(),
                 "Which artist do yo like the most?",
-                4, choicesChoiceQuestionList, 4);
+                4, choicesChoiceQuestionList, 7);
 
             Question question4 = questionService.addScaleQuestion(poll.getId(),
                 "How satisfied are you with our services?",
@@ -386,6 +391,16 @@ public class InitializeDatabase implements InitializingBean {
             textMap10.put(question3.getId(), multiChoiceAnswer10);
             textMap10.put(question4.getId(), scaleAnswer10);
 
+            poll.setStatus(PollEditStatus.LAUNCHED);
+            pollRepository.save(poll);
+            poll2.setStatus(PollEditStatus.LAUNCHED);
+            pollRepository.save(poll2);
+            poll3.setStatus(PollEditStatus.LAUNCHED);
+            pollRepository.save(poll3);
+
+            pollIterationService.addPollIteration(poll.getId(), Instant.now(), null, PollIterationStatus.OPEN);
+            pollIterationService.addPollIteration(poll2.getId(), Instant.now(), null, PollIterationStatus.OPEN);
+            pollIterationService.addPollIteration(poll3.getId(), Instant.now(), null, PollIterationStatus.OPEN);
 
             pollEntryService.addPollEntry(poll.getId(), textMap1, participants.get(0).getId());
             pollEntryService.addPollEntry(poll.getId(), textMap2, participants.get(1).getId());

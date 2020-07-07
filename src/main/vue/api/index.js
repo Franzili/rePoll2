@@ -8,6 +8,7 @@ import entry from "./entry";
 import admin from "./admin";
 import design from "./design";
 import consistency from "./consistency";
+import iterations from "./iterations";
 
 export default {
     auth,
@@ -18,5 +19,6 @@ export default {
     design,
     consistency,
     users,
-    admin
+    admin,
+    iterations
 }

@@ -1,5 +1,6 @@
 package gpse.repoll.domain.poll.questions;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.poll.Choice;
 
@@ -21,7 +22,7 @@ public class SingleChoiceQuestion extends Question {
     @Column
     private Integer numberOfBonusChoices = 0;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(orphanRemoval = true, mappedBy = "parentQuestion")
     private final List<Choice> bonusChoices = new ArrayList<>();
 
     @Column
@@ -60,9 +61,9 @@ public class SingleChoiceQuestion extends Question {
         this.choices.addAll(choices);
     }
 
-    public void addAllBonusChoices(List<Choice> choices) {
-        if (choices.size() <= numberOfBonusChoices) {
-            this.choices.addAll(choices);
+    public void addBonusChoice(Choice bonusChoice) {
+        if (numberOfBonusChoices == 1) {
+            this.bonusChoices.add(bonusChoice);
         } else {
             throw new BadRequestException("Not so many bonus choices allowed");
         }
@@ -86,5 +87,13 @@ public class SingleChoiceQuestion extends Question {
     public void setBonusChoices(List<Choice> bonusChoices) {
         this.bonusChoices.clear();
         this.bonusChoices.addAll(bonusChoices);
+    }
+
+    @JsonIgnore
+    public List<Choice> getChoicesAndBonusChoices() {
+        List<Choice> allChoices = new ArrayList<>();
+        allChoices.addAll(choices);
+        allChoices.addAll(bonusChoices);
+        return Collections.unmodifiableList(allChoices);
     }
 }
