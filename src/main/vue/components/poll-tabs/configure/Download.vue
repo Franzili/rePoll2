@@ -6,7 +6,7 @@
         <div v-if="isMobile()">
 
             <b-container>
-                <b-row style="margin-bottom: 2vh">
+                <b-row style="margin-bottom: 1vh">
                     <b-dropdown text="Download poll">
                         <b-dropdown-item @click="downloadFromStore('poll', 'txt')">
                             Download Poll as txt file
