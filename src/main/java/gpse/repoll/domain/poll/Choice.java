@@ -1,6 +1,8 @@
 package gpse.repoll.domain.poll;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gpse.repoll.domain.exceptions.BadRequestException;
+import gpse.repoll.domain.poll.questions.Question;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -15,6 +17,10 @@ public class Choice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @JsonIgnore
+    @ManyToOne
+    private Question parentQuestion;
 
     /**
      * The name of the choice.
@@ -49,6 +55,14 @@ public class Choice {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Question getParentQuestion() {
+        return parentQuestion;
+    }
+
+    public void setParentQuestion(Question parentQuestion) {
+        this.parentQuestion = parentQuestion;
     }
 
     @Override

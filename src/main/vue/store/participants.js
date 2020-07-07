@@ -65,7 +65,7 @@ const participants = {
         /**
          * Creates a new Participant
          */
-        create({commit, rootState}, participantCmd) {
+        create({commit, rootState, dispatch}, participantCmd) {
             if (rootState.currentPoll.poll.id === undefined || rootState.currentPoll.poll.id === null) {
                 console.warn("PollId is undefined");
                 return;
@@ -73,6 +73,7 @@ const participants = {
             return new Promise(function (resolve, reject) {
                 api.poll.addParticipant(rootState.currentPoll.poll.id, participantCmd).then((res) => {
                     commit('add', res.data);
+                    dispatch('loadParticipant', rootState.currentPoll.poll.id)
                     resolve();
                 }).catch(function (error) {
                     console.log(error);
@@ -80,7 +81,7 @@ const participants = {
                 })
             })
         },
-        /*
+        /**
          * Sends reminder emails to every participant that did not participated until now.
          */
         remind({commit, rootState}) {

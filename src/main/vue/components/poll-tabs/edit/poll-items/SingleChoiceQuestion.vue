@@ -20,13 +20,20 @@
                                           :value="choice.id">{{choice.text}}</b-form-select-option>
                 </b-form-select>
             </p>
+            <p v-if="model.numberOfBonusChoices === 1 && !editable">
+                or<br>
+                Custom choice
+                <b-input v-model="customChoice"></b-input>
+            </p>
         </template>
 
         <template v-else>
             <h6>Choices:</h6>
             <ChoiceEditor :choices="model.choices"
                           v-on:choicesChanged="model.choices = $event"/>
-
+            <b-form-checkbox v-model="bonusChoice">
+                Allow custom choice
+            </b-form-checkbox>
             <h6>Display Variant:</h6>
             <p>
                 <b-form-select v-model="model.displayVariant">
@@ -47,19 +54,49 @@
         name: "SingleChoiceQuestion",
         data() {
             return {
-                selected: null
+                selected: null,
+                bonusChoice: null,
+                customChoice: null
             }
         },
         computed: {
             answer: function() {
                 return {
                     type: "SingleChoiceAnswer",
-                    choiceId: this.selected
+                    choiceId: this.selected,
+                    bonusChoiceCmd: {
+                        text: this.customChoice
+                    }
                 }
             },
             ...mapState('currentPoll', {
                 poll: 'poll',
             })
+        },
+        watch: {
+            bonusChoice: function() {
+                if (this.bonusChoice) {
+                    this.model.numberOfBonusChoices = 1;
+                } else {
+                    this.model.numberOfBonusChoices = 0;
+                }
+            },
+            model: {
+                handler: function() {
+                    this.$emit('modelChanged', this.model)
+                },
+                deep: true
+            },
+            customChoice: function (val) {
+                if (val !== null && val.length > 0) {
+                    this.selected = null
+                }
+            },
+            selected: function (val) {
+                if (val !== null) {
+                    this.customChoice = null
+                }
+            }
         },
         props: {
             model: {

@@ -34,7 +34,7 @@
                         :disabled="actives[8] === false"
                         v-if="actives[8] !== null"
                         title="table-chart">
-                        <b-icon icon="pen"></b-icon>
+                        <b-icon icon="table"></b-icon>
                     </b-button>
                     <b-button
                         variant="outline-secondary"

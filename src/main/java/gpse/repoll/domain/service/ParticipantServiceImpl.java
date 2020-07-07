@@ -20,6 +20,8 @@ import java.util.UUID;
  */
 @Service
 public class ParticipantServiceImpl implements ParticipantService {
+    private static final String ANSWER = "/answer/";
+
     private final ParticipantRepository participantRepository;
     private final PollRepository pollRepository;
     private final MailService mailService;
@@ -69,7 +71,7 @@ public class ParticipantServiceImpl implements ParticipantService {
                 "You were invited to participate in the poll %s.\n"
                     + "Click the link below to participate:\n\n%s",
                 poll.getTitle(),
-                serverPrefix + "/answer/" + poll.getId() + "/" + participant.getId()
+                serverPrefix + ANSWER + poll.getId() + "/" + participant.getId()
             );
             String mailMessage = mailService.sendEmail(email, "You've been invited to a poll", message);
             return new Pair<>(participant, mailMessage);
@@ -143,7 +145,7 @@ public class ParticipantServiceImpl implements ParticipantService {
             mailService.sendEmail(
                 participant.getEmail(), String.format("REMINDER: The poll %s is waiting for you!", poll.getTitle()),
                 String.format("If you want to participate, please follow this link: %s",
-                serverPrefix + "/answer/" + poll.getId() + "/" + participant.getId()));
+                serverPrefix + ANSWER + poll.getId() + "/" + participant.getId()));
         }
         return "Mails sent!";
     }

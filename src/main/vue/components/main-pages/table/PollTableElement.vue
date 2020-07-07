@@ -1,63 +1,119 @@
 <template>
     <b-card
+        no-body
         border-variant="primary"
-        :title="poll.title"
+
         align="left"
         bg-variant="light"
     >
-        <b-row class="align-items-center">
 
-            <b-col align-self="start">
-                <p class="status">{{this.pollStatus}}</p>
-            </b-col>
+        <b-card-body>
+            <b-row>
+                <b-col>
+                    <h4>
+                {{poll.title}}
+                    </h4>
+                </b-col>
+                <b-col style="text-align: end">
+                    <b-button-toolbar class="float-right">
+                        <b-form-group>
+                            <b-button-group size="sm">
+                                <b-button
+                                    data-toggle="tooltip"
+                                    @click="loadTo('poll-tabbed')"
+                                    variant="outline-secondary"
+                                    title="Go to the Configuration-Page">
+                                    <b-icon icon="gear-fill"></b-icon>
+                                </b-button>
+                                <b-button
+                                    @click="loadTo('poll-stats')"
+                                    :disabled="poll.status === 'EDITING'"
+                                    variant="outline-secondary"
+                                    title="Analysis">
+                                    <b-icon icon="graph-up"></b-icon>
+                                </b-button>
+                            </b-button-group>
+                        </b-form-group>
+                    </b-button-toolbar>
+                </b-col>
+            </b-row>
 
-            <b-col
-                align-self="center">
-                <p v-show="poll.status !== 'IN_PROCESS'&& poll.status !== 'READY'"
-                ><span class="participants">Participants: </span>{{poll.pollEntries.length}}</p>
-            </b-col>
-
-            <b-col cols="4" style="text-align: end">
-                <span @click="loadTo" class="configLink"
-                data-toggle="tooltip"
-                title="Go to the Configuration-Page">Setup
-                </span>
-            </b-col>
-            <b-col cols="2">
-                <b-button variant="primary"
-                        @click="copyPoll">
-                    Copy Poll
-                </b-button>
-            </b-col>
-        </b-row>
+            <b-row class="align-items-center">
+                <b-col>
+                    <h6 class="text-muted">Status:</h6>
+                    <strong style="color: #3eab37;">{{this.pollStatus}}</strong>
+                </b-col>
+                <b-col class="text-muted">
+                    <h6>Creation Date:</h6>
+                    {{(dateTimeFormat.format(new Date(poll.creationTime)))}}
+                </b-col>
+                <b-col class="text-muted">
+                    <h6>Creator:</h6>
+                    {{poll.creator.username}}
+                </b-col>
+                <b-col class="text-muted">
+                    <h6>Participants:(total)</h6>
+                    <span v-if="poll.status === 'EDITING'">N/A</span>
+                    <span v-else>{{participants}}</span>
+                </b-col>
+            </b-row>
+            <b-container>
+                <IterationSlide v-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED'
+                    && !(new Date(iterationData.start) > Date.now())"
+                    v-bind:current="current"
+                    v-bind:iteration-data="iterationData"></IterationSlide>
+            </b-container>
+        </b-card-body>
 
     </b-card>
 </template>
 
 <script>
+    import IterationSlide from "./IterationSlide";
     import {mapActions} from "vuex";
 
     export default {
+
         name: "PollListElement",
         props: ["poll"],
         data() {
             return {
-                pollStatus: ''
+                pollStatus: '',
+                iterationData: {},
+                participants: 0,
+                current: null,
+                dateTimeFormat: new Intl.DateTimeFormat('en', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    weekday: 'short',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                })
             }
+        },
+        created() {
+            if (this.poll.status === 'LAUNCHED' && this.poll.currentIteration !== null) {
+                this.current = true;
+                this.iterationData = this.poll.currentIteration
+            } else if (this.poll.status === 'LAUNCHED'){
+                this.current = null;
+                this.iterationData = this.getLastIteration(this.poll.pollIterations);
+            }
+            if (this.poll.status === 'LAUNCHED') {
+                this.poll.pollIterations.forEach(iteration => {
+                    this.participants = this.participants + iteration.pollEntries
+                })
+            }
+
         },
         beforeMount() {
             switch (this.poll.status) {
-                case 'IN_PROCESS':
-                    this.pollStatus = 'in process';
+                case 'EDITING':
+                    this.pollStatus = 'editing';
                     break;
-                case 'READY':
-                    this.pollStatus = 'ready';
-                    break;
-                case 'ACTIVATED':
-                    this.pollStatus = 'activated';
-                    break;
-                case 'DEACTIVATED':
-                    this.pollStatus = 'deactivated';
+                case 'LAUNCHED':
+                    this.pollStatus = 'launched';
                     break;
                 case null:
                     this.pollStatus = ''
@@ -67,28 +123,32 @@
             ...mapActions('currentPoll', {
                 loadPoll: "load"
             }),
-            ...mapActions('myPolls', {
-                duplicatePoll: "duplicate"
-            }),
-            async loadTo() {
+            async loadTo(adr) {
                 await this.loadPoll(this.poll.id)
                 return this.$router.push({
-                    name: 'poll-tabbed',
+                    name: adr,
                     params: {
                         pollId: this.poll.id
                     }
                 })
             },
-            async copyPoll() {
-                let newPoll = await this.duplicatePoll(this.poll.id);
-                return this.$router.push({
-                    name: 'edit-poll',
-                    params: {
-                        pollId: newPoll.id
+            getLastIteration(iterations) {
+                let res = null;
+                iterations.forEach(iteration => {
+                    if (res === null) {
+                        res = iteration
+                    } else {
+                        if (new Date(res.end) - new Date(iteration.end) < 0) {
+                            res = iteration
+                        }
                     }
                 })
+                return res;
             }
         },
+        components: {
+            IterationSlide
+        }
 
     }
 </script>
@@ -101,11 +161,6 @@
     }
     .configLink:hover {
         text-decoration: underline
-    }
-    .status {
-        font-size: 18px;
-        font-style: italic;
-        color: #3eab37;
     }
     .participants {
         font-style: italic;

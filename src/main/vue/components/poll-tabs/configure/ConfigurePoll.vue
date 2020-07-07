@@ -13,11 +13,11 @@
         </p>
 
         <p>
-            <Design></Design>
+            <ManageParticipants></ManageParticipants>
         </p>
 
-        <p>
-            <ManageParticipants></ManageParticipants>
+        <p v-if="poll.status !== 'LAUNCHED'">
+            <Design></Design>
         </p>
 
         <p>
