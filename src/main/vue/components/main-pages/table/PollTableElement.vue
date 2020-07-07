@@ -58,10 +58,16 @@
                 </b-col>
             </b-row>
             <b-container>
-                <IterationSlide v-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED'
+                <IterationSlide v-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED' && !isMobile()
                     && !(new Date(iterationData.start) > Date.now())"
                     v-bind:current="current"
                     v-bind:iteration-data="iterationData"></IterationSlide>
+                <IterationSlideMobile v-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED' && isMobile()
+                    && !(new Date(iterationData.start) > Date.now())"
+                                      v-bind:current="current"
+                                      v-bind:iteration-data="iterationData">
+
+                </IterationSlideMobile>
             </b-container>
         </b-card-body>
 
@@ -70,6 +76,7 @@
 
 <script>
     import IterationSlide from "./IterationSlide";
+    import IterationSlideMobile from "./IterationSlideMobile";
     import {mapActions} from "vuex";
 
     export default {
@@ -123,6 +130,13 @@
             ...mapActions('currentPoll', {
                 loadPoll: "load"
             }),
+            isMobile() {
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    return true
+                } else {
+                    return false
+                }
+            },
             async loadTo(adr) {
                 await this.loadPoll(this.poll.id)
                 return this.$router.push({
@@ -147,7 +161,8 @@
             }
         },
         components: {
-            IterationSlide
+            IterationSlide,
+            IterationSlideMobile
         }
 
     }
