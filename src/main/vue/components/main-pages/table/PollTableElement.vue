@@ -57,9 +57,9 @@
                     <span v-else>{{participants}}</span>
                 </b-col>
             </b-row>
-
             <b-container>
-                <IterationSlide v-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED'"
+                <IterationSlide v-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED'
+                    && !(new Date(iterationData.start) > Date.now())"
                     v-bind:current="current"
                     v-bind:iteration-data="iterationData"></IterationSlide>
             </b-container>
