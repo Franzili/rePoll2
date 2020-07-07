@@ -28,21 +28,26 @@
 
 
             <b-col>
-                <b-nav pills align="right">
-                    <b-nav-item active-class="active"
-                                :to="{ name: 'configure-poll', params: { pollId: $route.params.pollId }}">
-                        Configure
-                    </b-nav-item>
-                    <b-nav-item active-class="active"
+                <b-nav align="right">
+                    <b-button variant="primary"
+                        active-class="active"
+                    :to="{ name: 'configure-poll', params: { pollId: $route.params.pollId }}">Configure
+
+                    </b-button>
+                    <b-button style="margin-left: 0.25rem"
+                        variant="primary"
+                        active-class="active"
                                 :to="{ name: 'edit-poll', params: { pollId: $route.params.pollId }}"
                                 :disabled="poll.status === 'LAUNCHED'">
                         Edit
-                    </b-nav-item>
-                    <b-nav-item active-class="active"
+                    </b-button>
+                    <b-button style="margin-left: 0.25rem"
+                        variant="primary"
+                        active-class="active"
                                 :to="{ name: 'poll-stats', params: { pollId: $route.params.pollId }}"
                                 :disabled="poll.status === 'EDITING'">
                         Statistics
-                    </b-nav-item>
+                    </b-button>
                 </b-nav>
             </b-col>
         </b-row>
@@ -120,7 +125,6 @@
     }
 
     .nav-link.disabled {
-        text-decoration: line-through;
         font-style: italic;
     }
 </style>
