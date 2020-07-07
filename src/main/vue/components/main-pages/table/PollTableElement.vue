@@ -96,7 +96,11 @@
                     weekday: 'short',
                     hour: 'numeric',
                     minute: 'numeric',
-                })
+                }),
+                window: {
+                    width: 0,
+                    height: 0
+                }
             }
         },
         created() {
@@ -112,7 +116,8 @@
                     this.participants = this.participants + iteration.pollEntries
                 })
             }
-
+            window.addEventListener('resize', this.handleResize);
+            this.handleResize();
         },
         beforeMount() {
             switch (this.poll.status) {
@@ -126,16 +131,24 @@
                     this.pollStatus = ''
             }
         },
+        destroyed() {
+            window.removeEventListener('resize', this.handleResize);
+        },
         methods: {
             ...mapActions('currentPoll', {
                 loadPoll: "load"
             }),
             isMobile() {
-                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                    this.window.width < 1200) {
                     return true
                 } else {
                     return false
                 }
+            },
+            handleResize() {
+                this.window.width = window.innerWidth;
+                this.window.height = window.innerHeight;
             },
             async loadTo(adr) {
                 await this.loadPoll(this.poll.id)
