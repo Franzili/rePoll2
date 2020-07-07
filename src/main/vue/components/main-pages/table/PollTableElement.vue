@@ -58,16 +58,15 @@
                 </b-col>
             </b-row>
             <b-container>
-                <IterationSlide v-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED' && !isMobile()
-                    && !(new Date(iterationData.start) > Date.now())"
-                    v-bind:current="current"
-                    v-bind:iteration-data="iterationData"></IterationSlide>
-                <IterationSlideMobile v-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED' && isMobile()
+                <IterationSlide v-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED'
+                    && !(new Date(iterationData.start) > Date.now())
+                    && !this.mobile"
+                                v-bind:current="current"
+                                v-bind:iteration-data="iterationData"></IterationSlide>
+                <IterationSlideMobile v-else-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED'
                     && !(new Date(iterationData.start) > Date.now())"
                                       v-bind:current="current"
-                                      v-bind:iteration-data="iterationData">
-
-                </IterationSlideMobile>
+                                      v-bind:iteration-data="iterationData"></IterationSlideMobile>
             </b-container>
         </b-card-body>
 
@@ -100,7 +99,8 @@
                 window: {
                     width: 0,
                     height: 0
-                }
+                },
+                mobile: false
             }
         },
         created() {
@@ -139,16 +139,17 @@
                 loadPoll: "load"
             }),
             isMobile() {
-                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-                    this.window.width < 1200) {
+                if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                    this.mobile = true
                     return true
                 } else {
+                    this.mobile = false
                     return false
                 }
             },
             handleResize() {
                 this.window.width = window.innerWidth;
-                this.window.height = window.innerHeight;
+                this.mobile = this.window.width < 1200;
             },
             async loadTo(adr) {
                 await this.loadPoll(this.poll.id)

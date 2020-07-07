@@ -70,6 +70,10 @@
 
             <div style="white-space: nowrap">
                 <b-table v-if="selected !== null"
+                         show-empty
+                         small
+                         striped
+                         hover
                          responsive
                          :no-border-collapse="true"
                          :sticky-header="true"
