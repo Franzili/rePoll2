@@ -69,6 +69,9 @@
             ...mapGetters('currentPoll', {
                 pollStructure: 'pollStructureFlat'
             }),
+            ...mapGetters('currentPoll/iterations', {
+                currentIteration: 'current'
+            }),
             ...mapState('currentPoll', {
                 poll: 'poll',
             })
@@ -81,7 +84,7 @@
                 rootEntry: 'rootEntry'
             }),
 
-            answerPoll() {
+            async answerPoll() {
                 //TODO is this the first time answering this poll, then "answerFirst(poll)" else "answerAgain(poll) in polls.js"
                 let pollHTMLAnswers = document.querySelectorAll('.question-body')
 
@@ -99,15 +102,33 @@
                     entryCmd: entryCmd
                 }
 
-                this.rootEntry(entrysOfPoll)
+                try {
+                    await this.rootEntry(entrysOfPoll)
+                } catch {
+                    return this.$router.push('/poll-response-error/')
+                }
+
                 return this.$router.push('/poll-response/')
             },
         },
         async mounted() {
             this.loaded = false
+
             this.pollId = this.$route.params.pollId
-            this.participantId = this.$route.params.participantId
+
+            // we might not have a participantId, if the poll is anonymous.
+            if (this.$route.params.participantId === undefined) {
+                this.participantId = null;
+            } else {
+                this.participantId = this.$route.params.participantId
+            }
+
             await this.loadPoll(this.pollId)
+
+            if (this.currentIteration === null) {
+                return this.$router.push('/poll-response-error-closed/')
+            }
+
             this.loaded = true
         },
         components: { PollItem }

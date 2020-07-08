@@ -123,9 +123,11 @@ public class PollIterationServiceImpl implements PollIterationService {
         if (start != null) {
             pollIteration.setStart(start);
         }
-        if (end != null) {
-            pollIteration.setEnd(end);
-        }
+
+        // We need to do this regardless of whether end null or not, so we can delete the end date. (closeManually)
+        // This is due to the wrong PUT / PATCH semantics in our requests... :/
+        pollIteration.setEnd(end);
+
         if (status != null) {
             updateIterationStatus(status, pollIteration, poll);
         }
@@ -222,12 +224,9 @@ public class PollIterationServiceImpl implements PollIterationService {
                 break;
 
             case OPEN:
-                pollIteration.setStart(Instant.now());
-
                 // if there is another iteration running, close it.
                 if (poll.getCurrentIteration() != null) {
                     PollIteration previous = poll.getCurrentIteration();
-                    previous.setEnd(Instant.now());
                     previous.setStatus(PollIterationStatus.CLOSED);
                     pollIterationRepository.save(previous);
                 }
@@ -235,7 +234,6 @@ public class PollIterationServiceImpl implements PollIterationService {
                 break;
 
             case CLOSED:
-                pollIteration.setEnd(Instant.now());
                 poll.setCurrentIteration(null);
                 break;
             default:

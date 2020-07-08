@@ -15,20 +15,33 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MockTestUsers implements UserDetailsService {
-    public static final String TEST_USER = "TestUser";
+
+    public static final String ADMIN_USER = "AdminUser";
+    public static final String CREATOR_USER = "CreatorUser";
+    public static final String EDITOR_USER = "EditorUser";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // TODO: Create users for every role
+        User user = new User();
         switch (username) {
-            case TEST_USER:
-                User user = new User();
-                user.setUsername(TEST_USER);
-                user.setFullName("Test User");
-                user.setEmail("testUser@mail.com");
-                user.setRoles(Roles.NO_ROLE);
+            case ADMIN_USER:
+                user.setUsername(ADMIN_USER);
+                user.setFullName("Admin User");
+                user.setEmail("adminuser@mail.com");
+                user.setRoles(Roles.ADMIN);
                 return user;
-
+            case CREATOR_USER:
+                user.setUsername(CREATOR_USER);
+                user.setFullName("Creator User");
+                user.setEmail("creatoruser@mail.com");
+                user.setRoles(Roles.POLL_CREATOR);
+                return user;
+            case EDITOR_USER:
+                user.setUsername(EDITOR_USER);
+                user.setFullName("Editor User");
+                user.setEmail("editoruser@mail.com");
+                user.setRoles(Roles.POLL_EDITOR);
+                return user;
             default:
                 throw new UsernameNotFoundException(
                     "This is a MOCK for UserDetailsService. DONT USE if you are not testing. "
