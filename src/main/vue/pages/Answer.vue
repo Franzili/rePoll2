@@ -105,8 +105,16 @@
         },
         async mounted() {
             this.loaded = false
+
             this.pollId = this.$route.params.pollId
-            this.participantId = this.$route.params.participantId
+
+            // we might not have a participantId, if the poll is anonymous.
+            if (this.$route.params.participantId === undefined) {
+                this.participantId = null;
+            } else {
+                this.participantId = this.$route.params.participantId
+            }
+
             await this.loadPoll(this.pollId)
             this.loaded = true
         },

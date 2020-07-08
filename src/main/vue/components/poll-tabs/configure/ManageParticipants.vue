@@ -288,7 +288,7 @@
         created: function() {
             let id = this.$route.params.pollId;
             let domain = window.location.origin;
-            this.link = domain + '/poll/' + id + '/answer';
+            this.link = domain + '/answer/' + id;
         },
 
     }
