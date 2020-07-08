@@ -81,7 +81,7 @@
                 rootEntry: 'rootEntry'
             }),
 
-            answerPoll() {
+            async answerPoll() {
                 //TODO is this the first time answering this poll, then "answerFirst(poll)" else "answerAgain(poll) in polls.js"
                 let pollHTMLAnswers = document.querySelectorAll('.question-body')
 
@@ -99,7 +99,12 @@
                     entryCmd: entryCmd
                 }
 
-                this.rootEntry(entrysOfPoll)
+                try {
+                    await this.rootEntry(entrysOfPoll)
+                } catch {
+                    return this.$router.push('/poll-response-error/')
+                }
+
                 return this.$router.push('/poll-response/')
             },
         },

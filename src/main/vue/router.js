@@ -6,6 +6,7 @@ import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
 import Admin from "./pages/Admin";
 import PollResponse from "./pages/PollResponse";
+import PollResponseError from "./pages/PollResponseError";
 
 import TestCharts from "./pages/TestCharts";
 
@@ -104,6 +105,14 @@ let router = new VueRouter({
             name: 'response',
             meta: {
                 title: "Thank you for participating | RePoll"
+            }
+        },
+        {
+            path: '/poll-response-error/',
+            component: PollResponseError,
+            name: 'response',
+            meta: {
+                title: "Error | RePoll"
             }
         },
         //for Charts testing
