@@ -95,11 +95,13 @@ public class QuestionsController {
         throw new InternalServerErrorException();
     }
 
+    @Secured(Roles.POLL_EDITOR)
     @GetMapping("/{pollId}/questions/")
     public List<Question> listQuestions(@PathVariable("pollId") final UUID pollId) {
         return questionService.getAllQuestions(pollId);
     }
 
+    @Secured(Roles.POLL_EDITOR)
     @GetMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question getQuestion(@PathVariable("pollId") final UUID pollId,
                                 @PathVariable("questionId") final String questionId) {
