@@ -29,6 +29,7 @@
                     <b-button variant="primary"
                               class="float-right"
                               @click="openNew">
+                        Open New
                     </b-button>
                 </template>
             </b-list-group-item>
@@ -93,8 +94,9 @@
 </template>
 
 <script>
-    import {mapGetters, mapActions} from "vuex";
+    import {mapActions, mapGetters} from "vuex";
     import IterationListElement from "./IterationListElement";
+
     export default {
         name: "Iterations",
         components: {IterationListElement},
@@ -114,12 +116,24 @@
         methods: {
             onUpdate(model) {
                 this.update(model);
-                let timeout = model.start.getTime() - Date.now();
-                let timeoutId = setTimeout(() => {
-                    delete this.timeoutIds[model.id];
+
+                clearTimeout(this.timeoutIds[model.id]);
+                delete this.timeoutIds[model.id];
+
+                if (model.status === 'OPEN' && model.end !== null) {
+                    this.scheduleReload(model.id, model.end);
+                }
+
+                if (model.status === 'SCHEDULED') {
+                    this.scheduleReload(model.id, model.start);
+                }
+            },
+            scheduleReload(modelId, time) {
+                let timeout = time.getTime() - Date.now();
+                this.timeoutIds[modelId] = setTimeout(() => {
+                    delete this.timeoutIds[modelId];
                     location.reload();
                 }, timeout);
-                this.timeoutIds[model.id] = timeoutId;
             },
             ...mapActions("currentPoll/iterations", {
                 openNew: "openNew",
