@@ -117,16 +117,23 @@
             onUpdate(model) {
                 this.update(model);
 
-                if (model.end === null) {
-                    clearTimeout(this.timeoutIds[model.id]);
-                    delete this.timeoutIds[model.id];
-                } else {
-                    let timeout = model.end.getTime() - Date.now();
-                    this.timeoutIds[model.id] = setTimeout(() => {
-                        delete this.timeoutIds[model.id];
-                        location.reload();
-                    }, timeout);
+                clearTimeout(this.timeoutIds[model.id]);
+                delete this.timeoutIds[model.id];
+
+                if (model.status === 'OPEN' && model.end !== null) {
+                    this.scheduleReload(model.id, model.end);
                 }
+
+                if (model.status === 'SCHEDULED') {
+                    this.scheduleReload(model.id, model.start);
+                }
+            },
+            scheduleReload(modelId, time) {
+                let timeout = time.getTime() - Date.now();
+                this.timeoutIds[modelId] = setTimeout(() => {
+                    delete this.timeoutIds[modelId];
+                    location.reload();
+                }, timeout);
             },
             ...mapActions("currentPoll/iterations", {
                 openNew: "openNew",
