@@ -123,9 +123,11 @@ public class PollIterationServiceImpl implements PollIterationService {
         if (start != null) {
             pollIteration.setStart(start);
         }
-        if (end != null) {
-            pollIteration.setEnd(end);
-        }
+
+        // We need to do this regardless of whether end null or not, so we can delete the end date. (closeManually)
+        // This is due to the wrong PUT / PATCH semantics in our requests... :/
+        pollIteration.setEnd(end);
+
         if (status != null) {
             updateIterationStatus(status, pollIteration, poll);
         }
