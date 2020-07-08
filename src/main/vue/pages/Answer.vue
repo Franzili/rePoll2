@@ -69,6 +69,9 @@
             ...mapGetters('currentPoll', {
                 pollStructure: 'pollStructureFlat'
             }),
+            ...mapGetters('currentPoll/iterations', {
+                currentIteration: 'current'
+            }),
             ...mapState('currentPoll', {
                 poll: 'poll',
             })
@@ -121,6 +124,11 @@
             }
 
             await this.loadPoll(this.pollId)
+
+            if (this.currentIteration === null) {
+                return this.$router.push('/poll-response-error-closed/')
+            }
+
             this.loaded = true
         },
         components: { PollItem }

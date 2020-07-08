@@ -7,6 +7,7 @@ import PollTable from "./pages/PollTable";
 import Admin from "./pages/Admin";
 import PollResponse from "./pages/PollResponse";
 import PollResponseError from "./pages/PollResponseError";
+import PollResponseErrorClosed from "./pages/PollResponseErrorClosed";
 
 import TestCharts from "./pages/TestCharts";
 
@@ -113,6 +114,14 @@ let router = new VueRouter({
             name: 'response',
             meta: {
                 title: "Error | RePoll"
+            }
+        },
+        {
+            path: '/poll-response-error-closed/',
+            component: PollResponseErrorClosed,
+            name: 'response',
+            meta: {
+                title: "Closed | RePoll"
             }
         },
         //for Charts testing
