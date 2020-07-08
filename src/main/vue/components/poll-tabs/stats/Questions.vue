@@ -68,22 +68,21 @@
             <!-- TODO I WANT TO BE A COMPONENT IF I BECOME MORE COMPLEX -->
             <!--TODO Prototype for deeper analyses, "&& selQuest.length > 0"-->
 
-            <div style="white-space: nowrap">
-                <b-table v-if="selected !== null"
-                         show-empty
-                         small
-                         striped
-                         hover
-                         responsive
-                         :no-border-collapse="true"
-                         :sticky-header="true"
-                         :items="answerSet"
-                         :fields="fields"
-                         :filter="filter"
-                         :filterIncludedFields="filterOn"
-                         @filtered="onFiltered"
-                ></b-table>
-            </div>
+            <b-col>
+                <div style="white-space: nowrap">
+                    <b-table v-if="selected !== null"
+                             show-empty
+                             small
+                             responsive
+                             :sticky-header="true"
+                             :items="answerSet"
+                             :fields="fields"
+                             :filter="filter"
+                             :filterIncludedFields="filterOn"
+                             @filtered="onFiltered"
+                    ></b-table>
+                </div>
+            </b-col>
         </b-row>
     </b-container>
 </template>
@@ -101,7 +100,7 @@
                 selected: null,
                 answerSet: [],
                 fields: [
-                    {stickyColumn: true, isRowHeader: true, key: 'Username', sortable: true},
+                    {isRowHeader: true, key: 'Username', sortable: true},
                     {key: 'Answers', sortable: true}
                 ],
                 structure: [],
