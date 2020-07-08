@@ -80,6 +80,17 @@ public class PollIteration {
     }
 
     public void setStatus(PollIterationStatus status) {
+        switch (status) {
+            case SCHEDULED:
+                break;
+            case OPEN:
+                this.start = Instant.now();
+                break;
+            case CLOSED:
+                this.end = Instant.now();
+                break;
+            default:
+        }
         this.status = status;
     }
 
