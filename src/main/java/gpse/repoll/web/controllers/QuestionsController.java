@@ -35,7 +35,6 @@ public class QuestionsController {
         this.questionService = questionService;
     }
 
-    @Secured(Roles.POLL_EDITOR)
     @PostMapping("/{pollId}/questions/")
     public Question addQuestion(@PathVariable("pollId") final UUID pollId,
                                 @RequestBody QuestionCmd questionCmd) {
@@ -95,7 +94,6 @@ public class QuestionsController {
         throw new InternalServerErrorException();
     }
 
-    @Secured(Roles.POLL_EDITOR)
     @GetMapping("/{pollId}/questions/")
     public List<Question> listQuestions(@PathVariable("pollId") final UUID pollId) {
         return questionService.getAllQuestions(pollId);
