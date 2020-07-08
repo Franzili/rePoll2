@@ -4,8 +4,6 @@
         <b-card>
             <h6>Design</h6>
 
-
-            <p style="font-family: AnjaliOldLipi">hallo</p>
                 <b-card>
                     <b-row>
                         <b-col>

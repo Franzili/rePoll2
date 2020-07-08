@@ -15,9 +15,6 @@
 
             <b-collapse id="navbar-toggle-collapse" is-nav>
                 <b-navbar-nav class="ml-auto">
-                    <b-nav-item>
-                        <router-link class="link" :to="'/account/'">Account</router-link>
-                    </b-nav-item>
                     <b-nav-item v-if="hasAdminPrivileges">
                         <router-link class="link" :to="'/admin/'">Admin</router-link>
                     </b-nav-item>
