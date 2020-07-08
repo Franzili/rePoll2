@@ -29,22 +29,20 @@ import java.util.*;
 public class PollEntriesController {
 
     private final PollEntryService pollEntryService;
-    private final ParticipantService participantService;
     private final QuestionService questionService;
 
     @Autowired
     public PollEntriesController(PollEntryService pollEntryService,
-                                 ParticipantService participantService,
                                  QuestionService questionService) {
         this.pollEntryService = pollEntryService;
-        this.participantService = participantService;
         this.questionService = questionService;
     }
 
     @Secured(Roles.POLL_CREATOR)
-    @GetMapping("/{pollId}/entries/")
-    public List<PollEntry> listPollEntries(@PathVariable("pollId") final UUID pollId) {
-        return pollEntryService.getAll(pollId);
+    @GetMapping("/{pollId}/iterations/{iterationId:\\d+}/entries/")
+    public List<PollEntry> listPollEntries(@PathVariable("pollId") final UUID pollId,
+                                           @PathVariable("iterationId") final String iterationId) {
+        return pollEntryService.getAll(pollId, Long.valueOf(iterationId));
     }
 
     // todo @securityService.isParticipant(principal.username)
@@ -57,10 +55,11 @@ public class PollEntriesController {
     }
 
 
-    @GetMapping("/{pollId}/entries/{entryId:\\d+}/")
+    @GetMapping("/{pollId}/iterations/{iterationId:\\d+}/entries/{entryId:\\d+}/")
     public PollEntry getPollEntry(@PathVariable("pollId") final UUID pollId,
+                                  @PathVariable("iterationId") final String iterationId,
                                   @PathVariable("entryId") final String entryId) {
-        return  pollEntryService.getPollEntry(pollId, Long.valueOf(entryId));
+        return  pollEntryService.getPollEntry(pollId, Long.valueOf(iterationId), Long.valueOf(entryId));
     }
 
     // todo remove commented method if updating PollEntry is not allowed else remove comment

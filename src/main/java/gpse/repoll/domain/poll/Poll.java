@@ -290,11 +290,12 @@ public class Poll extends Auditable<User> {
     }
 
     public boolean contains(PollEntry pollEntry) {
-        if (currentIteration != null) {
-            return currentIteration.getPollEntries().contains(pollEntry);
-        } else {
-            throw new NoIterationOpenException();
+        for (PollIteration iteration : pollIterations) {
+            if (iteration.getPollEntries().contains(pollEntry)) {
+                return true;
+            }
         }
+        return false;
     }
 
     public void add(PollIteration pollIteration) {
