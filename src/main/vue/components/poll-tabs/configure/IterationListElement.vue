@@ -321,7 +321,13 @@
                 if (newVal === true) {
                     this.model.end = null;
                 } else {
-                    let newEnd = new Date()
+                    // select the maximum date:
+                    // if the poll has already openened, we want an end date that is an hour from now.
+                    // if the poll is scheduled to open in the future, we want an end date that is an hour from
+                    // the scheduled start date.
+                    let newEnd = new Date(
+                        Math.max(this.model.start.getTime(), Date.now())
+                    );
                     newEnd.setHours(newEnd.getHours() + 1);
                     this.model.end = newEnd;
                 }
