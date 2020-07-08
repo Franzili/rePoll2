@@ -22,6 +22,7 @@ import java.util.UUID;
  */
 @CrossOrigin
 @RestController
+@Secured(Roles.POLL_EDITOR)
 @RequestMapping("/api/v1/polls")
 public class QuestionsController {
 
@@ -109,7 +110,6 @@ public class QuestionsController {
     }
 
     // CPD-OFF
-    @Secured(Roles.POLL_EDITOR)
     @PutMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question updateQuestion(@PathVariable("pollId") final UUID pollId,
                                    @PathVariable("questionId") final String qId,
@@ -168,7 +168,6 @@ public class QuestionsController {
     }
     // CPD-ON
 
-    @Secured(Roles.POLL_EDITOR)
     @DeleteMapping("/{pollId}/questions/{questionId}/")
     public void removeQuestion(@PathVariable("pollId") final UUID pollId,
                                @PathVariable("questionId") final Long questionId) {

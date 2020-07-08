@@ -1,7 +1,9 @@
 package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.service.DownloadService;
+import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
@@ -11,6 +13,7 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/download")
+@Secured(Roles.POLL_CREATOR)
 public class DownloadsController {
 
     private final DownloadService downloadService;
