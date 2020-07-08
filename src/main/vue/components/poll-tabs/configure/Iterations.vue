@@ -94,8 +94,9 @@
 </template>
 
 <script>
-    import {mapGetters, mapActions} from "vuex";
+    import {mapActions, mapGetters} from "vuex";
     import IterationListElement from "./IterationListElement";
+
     export default {
         name: "Iterations",
         components: {IterationListElement},
@@ -115,12 +116,17 @@
         methods: {
             onUpdate(model) {
                 this.update(model);
-                let timeout = model.start.getTime() - Date.now();
-                let timeoutId = setTimeout(() => {
+
+                if (model.end === null) {
+                    clearTimeout(this.timeoutIds[model.id]);
                     delete this.timeoutIds[model.id];
-                    location.reload();
-                }, timeout);
-                this.timeoutIds[model.id] = timeoutId;
+                } else {
+                    let timeout = model.end.getTime() - Date.now();
+                    this.timeoutIds[model.id] = setTimeout(() => {
+                        delete this.timeoutIds[model.id];
+                        location.reload();
+                    }, timeout);
+                }
             },
             ...mapActions("currentPoll/iterations", {
                 openNew: "openNew",
