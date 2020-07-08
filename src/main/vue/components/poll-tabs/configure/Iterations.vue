@@ -29,6 +29,7 @@
                     <b-button variant="primary"
                               class="float-right"
                               @click="openNew">
+                        Open New
                     </b-button>
                 </template>
             </b-list-group-item>
