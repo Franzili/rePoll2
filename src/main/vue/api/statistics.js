@@ -1,8 +1,11 @@
 import axios from 'axios';
 
 export default {
-    get(id) {
+    list(id) {
         return axios.get('/api/v1/polls/' + id + '/statistics/')
+    },
+    byIteration(getCmd) {
+        return axios.get('/api/v1/polls/' + getCmd.pollId + '/statistics/' + getCmd.iterationId + '/')
     },
     getPollAnswers(id) {
         return axios.get('/api/v1/polls/' + id + '/answers/')

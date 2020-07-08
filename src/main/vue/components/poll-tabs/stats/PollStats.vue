@@ -10,11 +10,16 @@
 
 
         <b-tabs v-if="renderComponent" lazy nav-class="invisible" v-model="activeTab">
-            <b-tab><Overview v-on:toQuestion="doSwitch($event)"></Overview></b-tab>
-            <b-tab><Compare></Compare></b-tab>
+            <b-tab><Overview
+                v-bind:iteration-list="iterationDateList"
+            ></Overview></b-tab>
+            <b-tab><Compare v-bind:iteration-list="iterationDateList"
+            ></Compare></b-tab>
             <b-tab><Trends></Trends></b-tab>
-            <b-tab><Entries></Entries></b-tab>
-            <b-tab><Questions :qId="tmpQID"></Questions></b-tab>
+            <b-tab><Entries v-bind:iteration-list="iterationDateList"
+            ></Entries></b-tab>
+            <b-tab><Questions v-bind:iteration-list="iterationDateList"
+            ></Questions></b-tab>
         </b-tabs>
     </div>
 </template>
@@ -25,53 +30,61 @@
     import Trends from "./Trends";
     import Entries from "./Entries";
     import Questions from "./Questions";
-    import {mapActions, mapState} from "vuex";
+    import {mapActions, mapGetters, mapState} from "vuex";
 
     export default {
         name: "PollStats",
         data() {
             return {
+                iterationDateList: [],
                 renderComponent: true,
                 activeTab: 0,
                 pollId: 0,
                 tmpQID: 0,
                 timer: '',
-                stats: []
+                localStats: [],
+                dateTimeFormat: new Intl.DateTimeFormat('en', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    weekday: 'short',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                }),
             }
         },
         watch: {
-            stats: function () {
+            localStats: function () {
                 this.forceRerender()
             }
         },
         computed: {
             ...mapState('currentPoll', {
                 poll: 'poll',
-                statistics: 'statistics'
+                statistics: 'statistics',
+                iteration: 'iteration'
+            }),
+            ...mapGetters('currentPoll', {
+                getIterationList: 'getIterationsListFormed'
             })
         },
         methods: {
             ...mapActions('currentPoll', {
-                loadStatistics: 'loadMetaStats',
+                loadStatistics: 'loadPollStats',
                 loadEntries: 'loadEntries',
                 loadPollAnswers: 'loadPollAnswers'
             }),
             equalStats(a, b) {
                 const a1 = JSON.stringify(a)
-                console.log(a1)
                 const b1 = JSON.stringify(b)
                 if (a1.length === b1.length) return true;
             },
-            async fetchEventList() {
-                await this.loadStatistics(this.poll.id)
-                await this.loadEntries(this.poll.id)
-                if (!this.equalStats(this.stats, this.statistics)) {
-                    this.stats = this.statistics
+            fetchEventList() {
+                this.loadStatistics(this.poll.id)
+                this.loadEntries(this.poll.id)
+                if (!this.equalStats(this.localStats, this.statistics)) {
+                    this.localStats = this.statistics
                 }
-            },
-            doSwitch(qId) {
-                this.tmpQID = qId;
-                this.activeTab = 4
             },
             forceRerender() {
                 this.renderComponent = false;
@@ -81,17 +94,32 @@
             },
             cancelAutoUpdate () {
                 clearInterval(this.timer)
-            }
+            },
         },
         created() {
             this.fetchEventList()
             const timeout = 300000; // update statistics every 5 minutes
             this.timer = setInterval(this.fetchEventList, timeout)
         },
-        async mounted() {
-            this.loadPollAnswers(this.poll.id);
-            this.loadStatistics(this.poll.id);
-            await this.loadEntries(this.poll.id)
+        mounted() {
+            this.iterationDateList = this.getIterationList
+            this.iterationDateList.forEach(iteration => {
+                iteration.text = new Intl.DateTimeFormat('en', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    weekday: 'short',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                }).format(new Date(iteration.text))
+            })
+            this.$store.commit('currentPoll/setIterationId',this.iterationDateList[0].value)
+            //this.loadPollAnswers(this.poll.id); // not needed in this version dunno
+            //this.loadStatistics(this.poll.id); // life stats fucked this up xD
+            //await this.loadEntries(this.poll.id)
+        },
+        beforeDestroy() {
+            this.$store.commit('currentPoll/setIterationId', 0)
         },
         destroyed() {
             this.cancelAutoUpdate()

@@ -41,12 +41,49 @@ const currentPoll = {
          * The statistics belonging to that poll object.
          */
         statistics: [],
+        iterationStats: [],
         entries: [],
         tmpDownload: [],
-        downloadFileName: ''
+        downloadFileName: '',
+        iteration: 0,
     },
 
     getters: {
+        getStatByIteration: state => {
+            let res = []
+            state.statistics.forEach(stats => {
+                if (stats.pollIteration.id === state.iteration) {
+                    res =  stats
+                }
+            })
+            if (res !== []) {
+                return res.questionStats
+            }
+            return undefined
+
+        },
+
+        getIterationsListFormed: state => {
+            if (state.poll.pollIterations !== undefined
+                && state.poll.pollIterations !== null
+                && state.poll.pollIterations.length > 0) {
+                let iterationList = []
+                state.poll.pollIterations.forEach(iteration => {
+                    if (new Date(iteration.start) < Date.now()) {
+                        iterationList.push({
+                            value: iteration.id,
+                            text: iteration.start
+                        })
+                    }
+                })
+                iterationList.reverse()
+                return iterationList;
+            }
+            return null;
+        },
+        getIterationId: state => {
+            return state.iteration
+        },
         /**
          * Gets the poll structure as a flat array.
          * Array members are either questions or section headers, as defined in the PollItemModel classes
@@ -177,16 +214,20 @@ const currentPoll = {
 
         statStructureObj: state => {
             let strObj = [];
-            state.poll.pollSections.forEach(section => {
-                let statObjList = []
-                section.questions.forEach(q => {
-                    let stats = state.statistics.find(stat => stat.question.id === q.id)
-                    statObjList.push(stats)
+            let itStats = state.statistics.find(statistic => statistic.id = state.iteration)
+            if (itStats !== undefined) {
+                state.poll.pollSections.forEach(section => {
+                    let statObjList = []
+                    section.questions.forEach(q => {
+                        let stats = itStats.questionStats.find(stat => stat.question.id === q.id)
+                        statObjList.push(stats)
+                    })
+                    let secObj = {title: section.title, id: section.id, statistics: statObjList}
+                    strObj.push(secObj)
                 })
-                let secObj = {title: section.title,id: section.id, statistics: statObjList}
-                strObj.push(secObj)
-            })
+            }
             return strObj
+
         },
 
         pollStructureObj: state => {
@@ -277,6 +318,10 @@ const currentPoll = {
     },
 
     mutations: {
+
+        setIterationId(state, newIteration) {
+            state.iteration = newIteration
+        },
 
         tmpDownloadSet(state, newDownload) {
             state.tmpDownload = newDownload;
@@ -371,8 +416,12 @@ const currentPoll = {
             Vue.set(state.poll, 'pollSections', pollSections);
         },
 
-        setMetaStats(state, newMetaStats) {
-            state.statistics = newMetaStats
+        setPollStats(state, newPollStats) {
+            state.statistics = newPollStats
+        },
+
+        setIterationStats(state, newStats) {
+            state.iterationStats = newStats
         },
 
         addQuestion(state, question) {
@@ -446,10 +495,21 @@ const currentPoll = {
             });
         },
 
-        loadMetaStats({commit}, id) {
+        loadPollStats({commit}, id) {
             return new Promise((resolve, reject) => {
-                api.statistics.get(id).then(function (res) {
-                    commit('setMetaStats', res.data);
+                api.statistics.list(id).then(function (res) {
+                    commit('setPollStats', res.data);
+                    resolve(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                    reject();
+                })
+            })
+        },
+        loadIterationStats({commit}, getCmd) {
+            return new Promise((resolve,reject) => {
+                api.statistics.byIteration(getCmd).then(function (res) {
+                    commit('setIterationStats', res.data);
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);

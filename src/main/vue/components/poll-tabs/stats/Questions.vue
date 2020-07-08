@@ -2,14 +2,13 @@
     <b-container>
         <p>
             <b-row style="margin-top: 2vh">
-
-                <!-- TODO select for serial questions
                 <b-col cols="4">
-                    <b-form-select></b-form-select>
+                    <b-form-group description="Iteration launch date">
+                        <b-form-select v-model="iteration"
+                                       :options="iterationList"></b-form-select>
+                    </b-form-group>
                 </b-col>
-                -->
-
-                <b-col cols="8">
+                <b-col cols="5">
                     <b-form-select v-model="selected" :options="this.structure">
                         <template v-slot:first>
                             <b-form-select-option :value="null" disabled>Select a question for display
@@ -86,11 +85,10 @@
 <script>
 
     import {mapActions, mapGetters, mapState} from "vuex";
-    //import FilterQuestions from "./utils/FilterQuestions";
 
     export default {
         name: "Questions",
-        props: ['qId'],
+        props: ['iterationList'],
         data() {
             return {
                 selected: null,
@@ -110,12 +108,18 @@
         async mounted() {
             await this.loadPollAnswers(this.poll.id);
             this.structure = this.getPollStructure;
-            if (this.qId !== 0) {
-                this.selected = this.qId
-            }
+
             this.totalRows = this.answerSet.length
         },
         computed: {
+            iteration: {
+                get() {
+                    return this.$store.getters["currentPoll/getIterationId"];
+                },
+                set(val) {
+                    this.$store.commit('currentPoll/setIterationId', val)
+                }
+            },
             ...mapState('currentPoll', {
                 poll: 'poll',
                 pollAnswers: 'pollAnswers'
