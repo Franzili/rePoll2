@@ -32,13 +32,12 @@ public class SerializationTest {
     @Test
     public void testSubtypeSerializationNormal() throws JsonProcessingException {
         TextQuestion textQuestion = new TextQuestion();
-        String text = null;
-        text = objectMapper.writeValueAsString(textQuestion);
+        String text = objectMapper.writeValueAsString(textQuestion);
         assertThat(text).containsPattern("\"type\":\\s*\"TextQuestion\"");
     }
 
     /**
-     * Test if, given only the Abstract class, the Jackson Object Mapper selects the correct Concrete Class.
+     * Tests if, given only the abstract class, the Jackson Object Mapper selects the correct concrete class.
      * @throws JsonProcessingException
      */
     @Test

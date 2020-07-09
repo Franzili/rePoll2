@@ -7,7 +7,6 @@ import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.PollCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +27,7 @@ public class PollsController {
         this.pollService = pollService;
     }
 
-    @Secured(Roles.POLL_CREATOR)
+    @Secured(Roles.POLL_EDITOR)
     @GetMapping("/")
     public List<Poll> listPolls() {
         List<Poll> polls = new ArrayList<>();
@@ -56,7 +55,7 @@ public class PollsController {
         }
     }
 
-    @PreAuthorize("@securityService.isEditor(principal.username)")
+    @Secured(Roles.POLL_EDITOR)
     @PutMapping("/{id}/")
     public Poll updatePoll(@PathVariable("id") final UUID id, @RequestBody PollCmd pollCmd) {
         Map<UUID, List<Long>> structure = null;

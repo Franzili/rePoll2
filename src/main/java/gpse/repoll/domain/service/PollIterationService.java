@@ -13,6 +13,12 @@ import java.util.UUID;
 public interface PollIterationService {
 
     /**
+     * Saves a {@link PollIteration}.
+     * @param pollIteration The iteration
+     */
+    void save(PollIteration pollIteration);
+
+    /**
      * Gets all {@link PollIteration}s of a {@link gpse.repoll.domain.poll.Poll}.
      * @param pollID The ID of the poll
      * @return A set of all poll iterations

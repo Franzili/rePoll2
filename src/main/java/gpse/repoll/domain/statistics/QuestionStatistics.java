@@ -37,7 +37,7 @@ public class QuestionStatistics {
 
     private Double median;
 
-    private Boxplot boxplot;
+    private BoxPlot boxplot;
 
     public QuestionStatistics(Question question, List<PollEntry> pollEntries) {
         this.question = question;
@@ -52,7 +52,7 @@ public class QuestionStatistics {
             computeFrequencies(question, answerList);
             computeCumulativeFrequencies(question);
             computeMode();
-            computeMedianAndQuartiles();
+            this.boxplot = computeBoxPlot();
             this.arithmeticMean = computeArithmeticMean();
         } else {
             answerList.addAll(answers);
@@ -214,7 +214,7 @@ public class QuestionStatistics {
         return values;
     }
 
-    private void computeMedianAndQuartiles() {
+    private BoxPlot computeBoxPlot() {
         List<Integer> values = getSortedListIntegers(this.frequencies);
         int sizeVal = values.size();
         if (sizeVal == 0) {
@@ -232,12 +232,10 @@ public class QuestionStatistics {
         }
         int listSize = MIN_LIST_SIZE;
         if (sizeVal == listSize) {
-            this.boxplot = new Boxplot(findMinChoice(), (double) values.get(1), (double) values.get(1),
+            return new BoxPlot(findMinChoice(), (double) values.get(1), (double) values.get(1),
                     findMaxChoice());
-            return;
         } else if (sizeVal < listSize) {
-            this.boxplot = null;
-            return;
+            return null;
         }
         List<Integer> firstHalf;
         List<Integer> secondHalf;
@@ -261,7 +259,7 @@ public class QuestionStatistics {
         } else {
             thirdQuartile = secondHalf.get(secondHalfSize / 2);
         }
-        this.boxplot = new Boxplot(findMinChoice(), firstQuartile, thirdQuartile, findMaxChoice());
+        return new BoxPlot(findMinChoice(), firstQuartile, thirdQuartile, findMaxChoice());
     }
 
     private int findMinChoice() {
@@ -291,7 +289,7 @@ public class QuestionStatistics {
             final int[] value = {0};
             frequencies.forEach(frequency -> value[0] += frequency.getAbsolute()
                 * Integer.parseInt(frequency.getChoice().getText()));
-            return (double) value[0] / frequencies.size();
+            return (double) value[0] / answers.size();
         } catch (NumberFormatException e) {
             return null;
         }
@@ -319,7 +317,7 @@ public class QuestionStatistics {
         return median;
     }
 
-    public Boxplot getBoxplot() {
+    public BoxPlot getBoxPlot() {
         return boxplot;
     }
 

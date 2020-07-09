@@ -59,9 +59,14 @@
             </b-row>
             <b-container>
                 <IterationSlide v-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED'
+                    && !(new Date(iterationData.start) > Date.now())
+                    && !this.mobile"
+                                v-bind:current="current"
+                                v-bind:iteration-data="iterationData"></IterationSlide>
+                <IterationSlideMobile v-else-if="poll.pollIterations.length > 0 && poll.status === 'LAUNCHED'
                     && !(new Date(iterationData.start) > Date.now())"
-                    v-bind:current="current"
-                    v-bind:iteration-data="iterationData"></IterationSlide>
+                                      v-bind:current="current"
+                                      v-bind:iteration-data="iterationData"></IterationSlideMobile>
             </b-container>
         </b-card-body>
 
@@ -70,6 +75,7 @@
 
 <script>
     import IterationSlide from "./IterationSlide";
+    import IterationSlideMobile from "./IterationSlideMobile";
     import {mapActions} from "vuex";
 
     export default {
@@ -89,7 +95,12 @@
                     weekday: 'short',
                     hour: 'numeric',
                     minute: 'numeric',
-                })
+                }),
+                window: {
+                    width: 0,
+                    height: 0
+                },
+                mobile: false
             }
         },
         created() {
@@ -105,7 +116,8 @@
                     this.participants = this.participants + iteration.pollEntries
                 })
             }
-
+            window.addEventListener('resize', this.handleResize);
+            this.handleResize();
         },
         beforeMount() {
             switch (this.poll.status) {
@@ -119,10 +131,26 @@
                     this.pollStatus = ''
             }
         },
+        destroyed() {
+            window.removeEventListener('resize', this.handleResize);
+        },
         methods: {
             ...mapActions('currentPoll', {
                 loadPoll: "load"
             }),
+            isMobile() {
+                if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                    this.mobile = true
+                    return true
+                } else {
+                    this.mobile = false
+                    return false
+                }
+            },
+            handleResize() {
+                this.window.width = window.innerWidth;
+                this.mobile = this.window.width < 1200;
+            },
             async loadTo(adr) {
                 await this.loadPoll(this.poll.id)
                 return this.$router.push({
@@ -147,7 +175,8 @@
             }
         },
         components: {
-            IterationSlide
+            IterationSlide,
+            IterationSlideMobile
         }
 
     }

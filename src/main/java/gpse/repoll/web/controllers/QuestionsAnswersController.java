@@ -31,13 +31,15 @@ public class QuestionsAnswersController {
     }
 
     @JsonSerialize(keyUsing = SerializeParticipant.class)
-    @GetMapping("/{pollID}/answers/{questionID:\\d+}/")
-    public Map<Participant, Answer> listEntriesAnswers(@PathVariable UUID pollID, @PathVariable String questionID) {
-        return answerService.getAnswers(pollID, Long.valueOf(questionID));
+    @GetMapping("/{pollID}/iterations/{iterationID:\\d+}/answers/{questionID:\\d+}/")
+    public Map<Participant, Answer> listEntriesAnswers(@PathVariable UUID pollID,
+                                                       @PathVariable String iterationID,
+                                                       @PathVariable String questionID) {
+        return answerService.getAnswers(pollID, Long.valueOf(iterationID), Long.valueOf(questionID));
     }
 
-    @GetMapping("/{pollID}/answers/")
-    public List<QuestionAnswersSet> listAnswersToQuestion(@PathVariable UUID pollID) {
-        return answerService.getAll(pollID);
+    @GetMapping("/{pollID}/iterations/{iterationID:\\d+}/answers/")
+    public List<QuestionAnswersSet> listAnswersToQuestion(@PathVariable UUID pollID, @PathVariable String iterationID) {
+        return answerService.getAll(pollID, Long.valueOf(iterationID));
     }
 }

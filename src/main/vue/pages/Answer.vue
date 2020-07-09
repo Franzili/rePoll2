@@ -85,7 +85,6 @@
             }),
 
             async answerPoll() {
-                //TODO is this the first time answering this poll, then "answerFirst(poll)" else "answerAgain(poll) in polls.js"
                 let pollHTMLAnswers = document.querySelectorAll('.question-body')
 
                 let entryCmd = {}

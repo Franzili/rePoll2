@@ -22,6 +22,7 @@ import java.util.UUID;
  */
 @CrossOrigin
 @RestController
+@Secured(Roles.POLL_EDITOR)
 @RequestMapping("/api/v1/polls")
 public class QuestionsController {
 
@@ -34,7 +35,6 @@ public class QuestionsController {
         this.questionService = questionService;
     }
 
-    @Secured(Roles.POLL_EDITOR)
     @PostMapping("/{pollId}/questions/")
     public Question addQuestion(@PathVariable("pollId") final UUID pollId,
                                 @RequestBody QuestionCmd questionCmd) {
@@ -99,6 +99,7 @@ public class QuestionsController {
         return questionService.getAllQuestions(pollId);
     }
 
+    @Secured(Roles.POLL_EDITOR)
     @GetMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question getQuestion(@PathVariable("pollId") final UUID pollId,
                                 @PathVariable("questionId") final String questionId) {
@@ -109,7 +110,6 @@ public class QuestionsController {
     }
 
     // CPD-OFF
-    @Secured(Roles.POLL_EDITOR)
     @PutMapping("/{pollId}/questions/{questionId:\\d+}/")
     public Question updateQuestion(@PathVariable("pollId") final UUID pollId,
                                    @PathVariable("questionId") final String qId,
@@ -168,7 +168,6 @@ public class QuestionsController {
     }
     // CPD-ON
 
-    @Secured(Roles.POLL_EDITOR)
     @DeleteMapping("/{pollId}/questions/{questionId}/")
     public void removeQuestion(@PathVariable("pollId") final UUID pollId,
                                @PathVariable("questionId") final Long questionId) {
