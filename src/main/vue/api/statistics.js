@@ -7,10 +7,11 @@ export default {
     byIteration(getCmd) {
         return axios.get('/api/v1/polls/' + getCmd.pollId + '/statistics/' + getCmd.iterationId + '/')
     },
-    getPollAnswers(id) {
-        return axios.get('/api/v1/polls/' + id + '/answers/')
+    getPollAnswers(getCmd) {
+        return axios.get('/api/v1/polls/' + getCmd.pollId + '/iterations/' + getCmd.iterationId + '/answers/')
     },
-    getAnswersById(pollId, questionId) {
-        return axios.get('/api/v1/polls/' + pollId + '/answers/' + questionId + '/');
+    getAnswersById(getCmd) {
+        return axios.get('/api/v1/polls/' + getCmd.pollId + '/iterations/' + getCmd.iterationId + '/answers/'
+            + getCmd.questionId + '/');
     }
 }

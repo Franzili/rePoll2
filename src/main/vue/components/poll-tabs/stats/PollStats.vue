@@ -81,7 +81,7 @@
             },
             fetchEventList() {
                 this.loadStatistics(this.poll.id)
-                this.loadEntries(this.poll.id)
+                //this.loadEntries(pollId: this.poll.id)
                 if (!this.equalStats(this.localStats, this.statistics)) {
                     this.localStats = this.statistics
                 }
