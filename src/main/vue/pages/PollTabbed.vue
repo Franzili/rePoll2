@@ -77,7 +77,8 @@
         },
         computed: {
             ...mapState('currentPoll', {
-                poll: 'poll'
+                poll: 'poll',
+                iteration: 'iteration'
             })
         },
         methods: {
@@ -109,7 +110,7 @@
         },
         components: {
             EditableLabel
-        }
+        },
     }
 </script>
 

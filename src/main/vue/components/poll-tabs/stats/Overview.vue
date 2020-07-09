@@ -1,50 +1,84 @@
 <template>
-    <div>
+    <b-container>
         <!--
-        {{getStatStructure}}
+        <p>
+            {{getStatistics}}
+        </p>
         -->
 
-        <b-container style="margin-top: 4rem"
-                     v-bind:key="section.id"
-                     v-for="section in getStatStructure"
-        >
-            <h5>
-                Section: {{section.title}}
-            </h5>
+        <b-row style="margin-top: 2vh">
+            <b-col cols="4">
+                <b-form-group description="Iteration launch date">
+                    <b-form-select v-model="iteration"
+                                   :options="iterationList"></b-form-select>
+                </b-form-group>
+            </b-col>
+        </b-row>
 
-            <div v-if="section.statistics[0] !== undefined">
-                <b-card  border-variant="dark"
-                         style="margin-top: 1rem; margin-bottom: 1rem"
-                         v-bind:key="statistic.question.id"
-                         v-for="statistic in section.statistics">
+        <div v-if="loaded && getStatStructure.length > 0">
+            <b-container style="margin-top: 2rem"
+                         v-bind:key="section.id"
+                         v-for="section in getStatStructure"
+            >
+                <h3>
+                    Section: {{section.title}}
+                </h3>
 
-                    <ChartCards v-on:changeTab="$emit('toQuestion', $event)"
-                        v-bind:statistic="statistic"></ChartCards>
-                </b-card>
-            </div>
+                <div v-if="section.statistics[0] !== undefined">
+                    <b-card  border-variant="dark"
+                             style="margin-top: 1rem; margin-bottom: 1rem"
+                             v-bind:key="statistic.question.id"
+                             v-for="statistic in section.statistics">
+
+                        <ChartCards v-on:changeTab="$emit('toQuestion', $event)"
+                                    v-bind:statistic="statistic"></ChartCards>
+                    </b-card>
+                </div>
+            </b-container>
+        </div>
 
 
-        </b-container>
-
-    </div>
+    </b-container>
 </template>
 
 <script>
-    import {mapGetters, mapState} from "vuex";
+    import {mapActions, mapGetters, mapState} from "vuex";
     import ChartCards from "./utils/ChartCards";
     export default {
         name: "Overview",
+        props: ['iterationList'],
         data() {
             return {
-                statStructure: []
+                statStructure: [],
+                loaded: false,
             }
         },
+        methods: {
+            ...mapActions('currentPoll', {
+                loadPollAnswers: 'loadPollAnswers'
+            })
+        },
+        async mounted() {
+            this.loaded = false
+            await this.loadPollAnswers(this.$route.params.pollId);
+            this.loaded = true
+
+        },
         computed: {
+            iteration: {
+                get() {
+                    return this.$store.getters["currentPoll/getIterationId"];
+                },
+                set(val) {
+                    this.$store.commit('currentPoll/setIterationId', val)
+                }
+            },
             ...mapState('currentPoll', {
-                statistics: 'statistics'
+                statistics: 'statistics',
             }),
             ...mapGetters('currentPoll', {
-                getStatStructure: 'statStructureObj'
+                getStatStructure: 'statStructureObj',
+                getStatistics: 'getStatByIteration'
             })
         },
         components: {
