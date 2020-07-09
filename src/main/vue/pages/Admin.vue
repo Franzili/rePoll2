@@ -23,15 +23,7 @@
                                 v-model="username">
                             </b-form-input>
                         </b-form-group>
-                        <b-form-group
-                            v-if="isUpdate"
-                            label="Click the button to change the password">
-                        <b-button size="sm"
-                                  v-b-modal.modal-2
-                                  @click="updateStart(row.item)">
-                            Change
-                        </b-button>
-                        </b-form-group>
+
 
                         <b-form-group
                             v-if="!isUpdate"
@@ -185,7 +177,6 @@
             let role_Admin = ['ROLE_ADMIN'];
             let role_Creator = ['ROLE_POLL_CREATOR'];
             let role_Editor = ['ROLE_POLL_EDITOR'];
-            let role_Par = ['ROLE_PARTICIPANT'];
             return {
                 isUpdate: false,
                 items: [],
@@ -193,8 +184,7 @@
                 options: [
                     { value: role_Admin, text: 'Admin'},
                     { value: role_Creator, text: 'Creator'},
-                    { value: role_Editor, text: 'Editor'},
-                    { value: role_Par, text: 'Participant'}
+                    { value: role_Editor, text: 'Editor'}
                 ],
                 username: '',
                 password: '',
