@@ -46,6 +46,11 @@ const currentPoll = {
         tmpDownload: [],
         downloadFileName: '',
         iteration: 0,
+        trendCharts: [{
+            questionId: '',
+            labels: [],
+            datasets: [],
+        }]
     },
 
     getters: {
@@ -319,6 +324,59 @@ const currentPoll = {
 
     mutations: {
 
+        setTrends(state, iterationStatistics) {
+            console.log(iterationStatistics)
+            let tmpLabels = []
+            iterationStatistics.forEach(itStats => {
+                tmpLabels.push(new Intl.DateTimeFormat('en', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    weekday: 'short',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                }).format(new Date(itStats.pollIteration.start)))
+            })
+            let tmpTrends = []
+            let first  = iterationStatistics[0]
+            first.questionStats.forEach(qStat => {
+                console.log(qStat)
+                tmpTrends.push({
+                    questionId: qStat.question.id,
+                    labels: tmpLabels,
+                    datasets: [],
+                })
+            })
+            first.questionStats.forEach(qStat => {
+                let tmpTrend = tmpTrends.find(trend => trend.questionId === qStat.question.id)
+                if (qStat.question.type !== 'TextQuestion'){
+                    tmpTrend.datasets.push({fill: true,
+                        data: [],
+                        label: qStat.frequencies[0].choice.text,
+                        backgroundColor: '',
+                        borderColor: ''})
+                    for(let i = 1; i< qStat.frequencies.length; i++) {
+                        tmpTrend.datasets.push({fill: '-1',
+                            data: [],
+                            label: qStat.frequencies[i].choice.text,
+                            backgroundColor: '',
+                            borderColor: ''})
+                    }
+                }
+            })
+            iterationStatistics.forEach(itStats => {
+                itStats.questionStats.forEach(qStat => {
+                    let tmpTrend = tmpTrends.find(trend => trend.questionId === qStat.question.id)
+                    for(let i = 0; i< qStat.frequencies.length; i++) {
+                        tmpTrend.datasets[i].data.push(qStat.frequencies[i].absolute)
+                    }
+                })
+            })
+            console.log('result', tmpTrends)
+            state.trendCharts = tmpTrends
+            console.log(iterationStatistics)
+        },
+
         setIterationId(state, newIteration) {
             state.iteration = newIteration
         },
@@ -499,6 +557,7 @@ const currentPoll = {
             return new Promise((resolve, reject) => {
                 api.statistics.list(id).then(function (res) {
                     commit('setPollStats', res.data);
+                    commit('setTrends', res.data);
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);
