@@ -171,9 +171,6 @@
         <div>
             <MailServerConfigs></MailServerConfigs>
         </div>
-        <div>
-            <PrivacyPolicy></PrivacyPolicy>
-        </div>
     </b-container>
 
 </template>
@@ -181,7 +178,6 @@
 <script>
     import {mapActions, mapState} from "vuex";
     import MailServerConfigs from "../components/MailServerConfigs";
-    import PrivacyPolicy from "./PrivacyPolicy";
 
     export default {
         name: "Admin",
@@ -292,7 +288,6 @@
             }
         },
         components:{
-            PrivacyPolicy,
             MailServerConfigs
         }
     }
