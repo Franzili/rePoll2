@@ -77,6 +77,7 @@ public class UsersControllerTest {
         userCmd.setUsername("abc");
         userCmd.setFullName("def");
         userCmd.setEmail("abc@def.de");
+        userCmd.setPassword("");
         userCmd.setRole(Roles.NO_ROLE);
         return userCmd;
     }
