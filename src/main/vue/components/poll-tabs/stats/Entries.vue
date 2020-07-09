@@ -17,13 +17,11 @@
                     <h6 class="section">{{section.section}}</h6>
 
                     <b-col>
-                        <div v-if="section.idQA[0]" style="white-space: nowrap">
+                        <div v-if="section.idQA[0]">
                             <b-table
-                                striped hover
+                                striped
+                                hover
                                 responsive
-                                :sticky-header="true"
-                                :no-border-collapse="false"
-                                :fixed="true"
                                 :fields="['question', 'answer']"
                                 :items="section.idQA"
                             ></b-table>

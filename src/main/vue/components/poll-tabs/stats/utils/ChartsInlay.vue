@@ -29,6 +29,7 @@
         <b-row v-else-if="chartsObj.currentChart === 'table'">
             <b-col cols="12">
                 <b-table
+                    responsive
                     :items="chartsObj.tableAnswers">
                 </b-table>
             </b-col>
