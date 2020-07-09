@@ -9,6 +9,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -41,31 +42,31 @@ public class WriteConfigFile implements InitializingBean {
             return;
         }
 
-        // Check if the user set a path to a config file manually.
-        if (environment.getProperty("spring.config.location") == null) {
-            Path configFile = Paths.get("./application.properties");
+        Path configFile = Paths.get("./application.properties");
 
-            // if the default config file does not exist, write one
-            try {
-                if (!Files.exists(configFile)) {
-                    System.out.println("No config file found. Writing default...");
+        // if the default config file does not exist, write one
+        try {
+            if (!Files.exists(configFile)) {
+                System.out.println("No config file found. Writing default...");
 
-                    Path templatePath = Paths.get(ClassLoader.getSystemResource("defaultConfig.properties").toURI());
-                    String template = String.join("\n", Files.readAllLines(templatePath));
-                    String contents = template.replace("$SECRET", generateSecret());
-                    Files.writeString(configFile, contents);
+                String defaultConfig = "repoll.serverAddress=localhost:8080\n"
+                    + "repoll.port=8088\n"
+                    + "repoll.secret=$SECRET\n"
+                    + "repoll.database=./repoll\n";
 
-                    System.out.println("Wrote config file. Restart Repoll to get started! :)");
-                    ((ConfigurableApplicationContext) applicationContext).close();
+                String contents = defaultConfig.replace("$SECRET", generateSecret());
+                Files.writeString(configFile, contents);
 
-                } else {
-                    System.out.println("Found config file, not writing default.");
-                }
-            } catch (IOException | URISyntaxException e) {
-                System.err.println("Could not write config file. Aborting.");
-                e.printStackTrace();
-                System.exit(1);
+                System.out.println("Wrote config file. Restart Repoll to get started! :)");
+                System.exit(0);
+
+            } else {
+                System.out.println("Found config file, not writing default.");
             }
+        } catch (IOException e) {
+            System.err.println("Could not write config file. Aborting.");
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 

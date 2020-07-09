@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Service
-@DependsOn("writeConfigFile") // so that his bean is run after the config file has been written
 public class InitializeProductionDatabase implements InitializingBean {
     private final UserService userService;
     private final PlatformTransactionManager transactionManager;
