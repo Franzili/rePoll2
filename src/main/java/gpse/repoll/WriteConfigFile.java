@@ -35,7 +35,7 @@ public class WriteConfigFile implements InitializingBean {
     }
 
     @Override
-    @SuppressWarnings("PMD.SystemPrintln")
+    @SuppressWarnings({"PMD.SystemPrintln", "PMD.DoNotCallSystemExit"})
     public void afterPropertiesSet() {
         if (!productionMode) {
             return;
