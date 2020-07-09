@@ -7,7 +7,7 @@
             </p>
         </b-row>
         -->
-        <b-row>
+        <b-row v-if="!isMobile">
             <b-col cols="6">
                 <h5>{{statistic.question.title}}</h5>
             </b-col>
@@ -19,6 +19,22 @@
                     v-on:chart="chartsObj.currentChart = $event"
                     v-on:frequency="frequency = $event"
                     class="float-right"></ToolBar>
+            </b-col>
+
+        </b-row>
+
+        <b-row v-else>
+            <b-col>
+                <h5>{{statistic.question.title}}</h5>
+            </b-col>
+
+            <b-col>
+                <ToolBar
+                    v-bind:actives="actives"
+                    v-bind:frequency="frequency"
+                    v-on:chart="chartsObj.currentChart = $event"
+                    v-on:frequency="frequency = $event"
+                    class="float-left"></ToolBar>
             </b-col>
 
         </b-row>
@@ -47,6 +63,15 @@
                 chartsObj: {},
                 actives: [true,true,true,true,null,null,null,null,true],
                 frequency: 'abs',
+            }
+        },
+        methods: {
+            isMobile() {
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    return true
+                } else {
+                    return false
+                }
             }
         },
         computed: {

@@ -30,22 +30,23 @@
             <b-col>
                 <b-nav align="right">
                     <b-button variant="primary"
-                        active-class="active"
-                    :to="{ name: 'configure-poll', params: { pollId: $route.params.pollId }}">Configure
+                              active-class="active"
+                              style="margin-top: 0.25rem"
+                              :to="{ name: 'configure-poll', params: { pollId: $route.params.pollId }}">Configure
 
                     </b-button>
-                    <b-button style="margin-left: 0.25rem"
-                        variant="primary"
-                        active-class="active"
-                                :to="{ name: 'edit-poll', params: { pollId: $route.params.pollId }}"
-                                :disabled="poll.status === 'LAUNCHED'">
+                    <b-button style="margin-left: 0.25rem; margin-top: 0.25rem"
+                              variant="primary"
+                              active-class="active"
+                              :to="{ name: 'edit-poll', params: { pollId: $route.params.pollId }}"
+                              :disabled="poll.status === 'LAUNCHED'">
                         Edit
                     </b-button>
-                    <b-button style="margin-left: 0.25rem"
-                        variant="primary"
-                        active-class="active"
-                                :to="{ name: 'poll-stats', params: { pollId: $route.params.pollId }}"
-                                :disabled="poll.status === 'EDITING'">
+                    <b-button style="margin-left: 0.25rem; margin-top: 0.25rem"
+                              variant="primary"
+                              active-class="active"
+                              :to="{ name: 'poll-stats', params: { pollId: $route.params.pollId }}"
+                              :disabled="poll.status === 'EDITING'">
                         Statistics
                     </b-button>
                 </b-nav>

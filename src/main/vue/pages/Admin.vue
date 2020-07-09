@@ -112,9 +112,13 @@
                         </b-row>
 
                         <!-- User table -->
+                        <div style="white-space: nowrap">
                         <b-table
                             show-empty
                             small
+                            responsive
+                            :no-border-collapse="true"
+                            :sticky-header="true"
                             :items="this.users"
                             :fields="fields"
                             :filter="filter"
@@ -123,12 +127,12 @@
                             :sort-direction="sortDirection"
                             @filtered="onFiltered"
                         >
-                            <template v-slot:cell(name)="row">
+                            <template v-slot:cell(name)="row" class="text-nowrap" style="position: sticky">
                                 {{ row.value.username }}
                             </template>
 
                             <!-----Delete and Edit Button--->
-                            <template v-slot:cell(actions)="row">
+                            <template v-slot:cell(actions)="row" class="text-nowrap">
                                 <b-button size="sm"
                                           variant="primary"
                                           v-b-modal.modal-1
@@ -145,6 +149,7 @@
                                 </b-button>
                             </template>
                         </b-table>
+                        </div>
                         <!---- Add button to create new user--->
                         <b-col >
                             <b-button class="addButton"
