@@ -13,11 +13,12 @@ import java.util.UUID;
 public interface PollEntryService {
 
     /**
-     * Gets all {@link PollEntry}s of a {@link gpse.repoll.domain.poll.Poll}.
-     * @param pollId The ID of the poll
+     * Gets all {@link PollEntry}s of a {@link gpse.repoll.domain.poll.PollIteration}.
+     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param iterationId The ID of the iteration
      * @return The list of the poll entries
      */
-    List<PollEntry> getAll(UUID pollId);
+    List<PollEntry> getAll(UUID pollId, Long iterationId);
 
     /**
      * Adds a new {@link PollEntry} to a {@link gpse.repoll.domain.poll.Poll}.
@@ -30,12 +31,13 @@ public interface PollEntryService {
     PollEntry addPollEntry(UUID pollId, Map<Long, Answer> associations, UUID participantID);
 
     /**
-     * Gets a {@link PollEntry}.
+     * Gets a {@link PollEntry} of a {@link gpse.repoll.domain.poll.PollIteration}.
      * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param iterationId The ID of the iteration
      * @param entryId The ID of the poll entry
      * @return The poll entry
      */
-    PollEntry getPollEntry(UUID pollId, Long entryId);
+    PollEntry getPollEntry(UUID pollId, Long iterationId, Long entryId);
 
     /**
      Updates a {@link PollEntry} of a {@link gpse.repoll.domain.poll.Poll}.

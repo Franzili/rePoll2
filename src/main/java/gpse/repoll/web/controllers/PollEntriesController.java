@@ -6,7 +6,6 @@ import gpse.repoll.domain.poll.answers.*;
 import gpse.repoll.domain.exceptions.BadRequestException;
 import gpse.repoll.domain.exceptions.InternalServerErrorException;
 import gpse.repoll.domain.poll.questions.Question;
-import gpse.repoll.domain.service.ParticipantService;
 import gpse.repoll.domain.service.PollEntryService;
 import gpse.repoll.domain.service.QuestionService;
 import gpse.repoll.security.Roles;
@@ -29,26 +28,24 @@ import java.util.*;
 public class PollEntriesController {
 
     private final PollEntryService pollEntryService;
-    private final ParticipantService participantService;
     private final QuestionService questionService;
 
     @Autowired
     public PollEntriesController(PollEntryService pollEntryService,
-                                 ParticipantService participantService,
                                  QuestionService questionService) {
         this.pollEntryService = pollEntryService;
-        this.participantService = participantService;
         this.questionService = questionService;
     }
 
     @Secured(Roles.POLL_CREATOR)
-    @GetMapping("/{pollId}/entries/")
-    public List<PollEntry> listPollEntries(@PathVariable("pollId") final UUID pollId) {
-        return pollEntryService.getAll(pollId);
+    @GetMapping("/{pollId}/iterations/{iterationId:\\d+}/entries/")
+    public List<PollEntry> listPollEntries(@PathVariable("pollId") final UUID pollId,
+                                           @PathVariable("iterationId") final String iterationId) {
+        return pollEntryService.getAll(pollId, Long.valueOf(iterationId));
     }
 
-    // todo @securityService.isParticipant(principal.username)
-    @PreAuthorize("@securityService.hasStatusLaunched(#pollId)")
+    @PreAuthorize("@securityService.hasStatusLaunched(#pollId)"
+            + "&& @securityService.hasNotParticipated(#pollId, #pollEntryCmd.participantID)")
     @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
@@ -56,24 +53,13 @@ public class PollEntriesController {
         return pollEntryService.addPollEntry(pollId, answers, pollEntryCmd.getParticipantID());
     }
 
-
-    @GetMapping("/{pollId}/entries/{entryId:\\d+}/")
+    @Secured(Roles.POLL_CREATOR)
+    @GetMapping("/{pollId}/iterations/{iterationId:\\d+}/entries/{entryId:\\d+}/")
     public PollEntry getPollEntry(@PathVariable("pollId") final UUID pollId,
+                                  @PathVariable("iterationId") final String iterationId,
                                   @PathVariable("entryId") final String entryId) {
-        return  pollEntryService.getPollEntry(pollId, Long.valueOf(entryId));
+        return  pollEntryService.getPollEntry(pollId, Long.valueOf(iterationId), Long.valueOf(entryId));
     }
-
-    // todo remove commented method if updating PollEntry is not allowed else remove comment
-    /*
-    // todo @securityService.isOwnEntry(principal.username, #entryId)
-    @PreAuthorize("@securityService.hasStatusLaunched(#pollId)")
-    @PutMapping("/{pollId}/entries/{entryId:\\d+}/")
-    public PollEntry updatePollEntry(@PathVariable("pollId") final UUID pollId,
-                                     @PathVariable("entryId") final String entryId,
-                                     @RequestBody PollEntryCmd pollEntryCmd) {
-        Map<Long, Answer> answers = createAnswers(pollEntryCmd);
-        return pollEntryService.updatePollEntry(pollId, Long.valueOf(entryId), answers);
-    }*/
 
     private Map<Long, Answer> createAnswers(UUID pollID, PollEntryCmd pollEntryCmd) {
         if (pollEntryCmd.getAnswers() == null) {

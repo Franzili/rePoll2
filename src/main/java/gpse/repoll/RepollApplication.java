@@ -31,6 +31,7 @@ public class RepollApplication {
     }
 
     public static void main(final String... args) {
+        //ensureConfigFile();
         SpringApplication.run(RepollApplication.class, args);
     }
 }

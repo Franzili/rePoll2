@@ -2,8 +2,10 @@ package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.PollIteration;
 import gpse.repoll.domain.service.PollIterationService;
+import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.PollIterationCmd;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -14,6 +16,7 @@ import java.util.UUID;
  */
 @CrossOrigin
 @RestController
+@Secured(Roles.POLL_CREATOR)
 @RequestMapping("/api/v1/polls")
 public class PollIterationsController {
 

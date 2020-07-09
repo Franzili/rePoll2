@@ -1,6 +1,5 @@
 <template>
     <b-card>
-        <!-- TODO: adapt type names to backend terminology -->
         <div v-if="poll.anonymity === 'NON_ANONYMOUS'">
             <h6>Participants:  {{this.participants.length}}</h6>
             <b-row>
@@ -49,12 +48,7 @@
                         The Remind-Button will send a mail only to the participants who have not answered the poll yet.
                     </p>
                     <p>
-                        <b-row class="align-items-center">
-                            <b-col>
-                                {{ n_participated }} participated, <br/>
-                                {{ n_invites_pending }} invites pending.
-                            </b-col>
-                        </b-row>
+
                         <b-row>
                             <b-col>
                                 <b-button class="float-right"
@@ -123,12 +117,6 @@
                     <br/>
 
                     <p>
-                        <b-row class="align-items-center">
-                            <b-col>
-                                {{ n_participated }} participated, <br/>
-                                {{ n_invites_pending }} invites pending.
-                            </b-col>
-                        </b-row>
 
                         <b-row>
                             <b-col>
@@ -201,10 +189,6 @@
                     { key: 'email', label: 'Email', sortable: true, sortDirection: 'desc' }],
                 sortDesc: false,
                 sortDirection: 'asc',
-
-                //TODO
-                n_participated: 6,
-                n_invites_pending: 32,
 
                 // For a single participant
                 name: '',

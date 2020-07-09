@@ -80,6 +80,25 @@ public class PollServiceImpl implements PollService {
      * {@inheritDoc}
      */
     @Override
+    public Poll getPollStripped(UUID id) {
+        Poll poll = getPoll(id);
+        PollIteration iteration = poll.getCurrentIteration();
+        if (iteration != null) {
+            poll.setPollIterations(List.of(iteration));
+            iteration.setPollEntries(List.of());
+        } else {
+            poll.setPollIterations(List.of());
+        }
+        poll.setCurrentIteration(iteration);
+        poll.setPollConsistencyGroups(List.of());
+        poll.setParticipants(List.of());
+        return poll;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Poll updatePoll(final UUID id, final String title, final PollEditStatus status,
                            final Anonymity anonymity,
                            final Map<UUID, List<Long>> structure) {

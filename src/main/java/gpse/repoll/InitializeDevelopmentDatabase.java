@@ -9,6 +9,7 @@ import gpse.repoll.domain.utils.Pair;
 import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,7 +25,7 @@ import java.util.*;
  * Fills the database with example data used for development purposes.
  */
 @Service
-public class InitializeDatabase implements InitializingBean {
+public class InitializeDevelopmentDatabase implements InitializingBean {
 
     private final PollService pollService;
     private final PollSectionService pollSectionService;
@@ -40,22 +41,25 @@ public class InitializeDatabase implements InitializingBean {
     private final ParticipantService participantService;
     private final ChoiceRepository choiceRepository;
 
+    @Value("${repoll.productionMode}")
+    private Boolean productionMode;
+
     @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
-    public InitializeDatabase(final PollService pollService,
-                              final QuestionService questionService,
-                              final PollEntryService pollEntryService,
-                              final PollIterationService pollIterationService,
-                              final UserService userService,
-                              final PlatformTransactionManager transactionManager,
-                              final PollSectionService pollSectionService,
-                              final PollRepository pollRepository,
-                              final PollSectionRepository pollSectionRepository,
-                              final UserRepository userRepository,
-                              final DesignService designService,
-                              final DesignRepository designRepository,
-                              final ParticipantService participantService,
-                              final ChoiceRepository choiceRepository) {
+    public InitializeDevelopmentDatabase(final PollService pollService,
+                                         final QuestionService questionService,
+                                         final PollEntryService pollEntryService,
+                                         final PollIterationService pollIterationService,
+                                         final UserService userService,
+                                         final PlatformTransactionManager transactionManager,
+                                         final PollSectionService pollSectionService,
+                                         final PollRepository pollRepository,
+                                         final PollSectionRepository pollSectionRepository,
+                                         final UserRepository userRepository,
+                                         final DesignService designService,
+                                         final DesignRepository designRepository,
+                                         final ParticipantService participantService,
+                                         final ChoiceRepository choiceRepository) {
         this.pollService = pollService;
         this.pollSectionService = pollSectionService;
         this.questionService = questionService;
@@ -82,14 +86,18 @@ public class InitializeDatabase implements InitializingBean {
             need to be executed using transactionTemplate.execute(() -> {}); !!!
          */
 
+        // only run this if we are not in production mode
+        if (productionMode) {
+            return;
+        }
+
         transactionTemplate.execute(status -> {
             try {
                 userService.getUser("JamesBond");
             } catch (UsernameNotFoundException e) {
                 final User user = userService.addUser(
                     "JamesBond",
-                    // Passwort: GutenTag
-                    "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                    "GutenTag",
                     "Bob", "jbond@mi6.com",
                         Roles.ADMIN
                 );
@@ -122,8 +130,7 @@ public class InitializeDatabase implements InitializingBean {
             } catch (UsernameNotFoundException e) {
                 nobody = userService.addUser(
                         "Nemo",
-                        // Passwort: GutenTag
-                        "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                        "GutenTag",
                         "Cpt Nemo",
                         "x@404.com",
                         Roles.POLL_CREATOR);

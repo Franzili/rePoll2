@@ -13,7 +13,10 @@ public class SerializeParticipant extends JsonSerializer<Participant> {
     public void serialize(Participant participant,
                           JsonGenerator jsonGenerator,
                           SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeString("{\nid: " + participant.getId() + ",\nfullName: " + participant.getFullName()
-        + ",\nemail: " + participant.getEmail() + "\n}");
+        if (participant.getFullName() == null) {
+            jsonGenerator.writeString("Anonymous");
+        } else {
+            jsonGenerator.writeString(participant.getFullName());
+        }
     }
 }

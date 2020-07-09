@@ -1,6 +1,7 @@
 package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.service.StatisticsService;
+import gpse.repoll.domain.statistics.PollIterationStatistics;
 import gpse.repoll.domain.statistics.QuestionStatistics;
 import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,23 @@ public class StatisticsController {
     }
 
     @GetMapping("{pollId}/statistics/")
-    public List<QuestionStatistics> listStatistics(@PathVariable UUID pollId) {
+    public List<PollIterationStatistics> listStatistics(@PathVariable UUID pollId) {
         return statisticsService.getAll(pollId);
     }
 
-    @GetMapping("{pollId}/statistics/{questionId:\\d+}/")
-    public QuestionStatistics getStatistics(@PathVariable UUID pollId, @PathVariable String questionId) {
-         return statisticsService.getStatistics(pollId, Long.valueOf(questionId));
+    @GetMapping("{pollId}/statistics/{pollIterationId:\\d+}/")
+    public PollIterationStatistics getIterationStatistics(@PathVariable UUID pollId,
+                                                          @PathVariable String pollIterationId) {
+        return statisticsService.getIterationStatistics(pollId, Long.valueOf(pollIterationId));
+    }
+
+    @GetMapping("{pollId}/statistics/{pollIterationId:\\d+}/{questionId:\\d+}/")
+    public QuestionStatistics getStatistics(@PathVariable UUID pollId,
+                                            @PathVariable String pollIterationId,
+                                            @PathVariable String questionId) {
+         return statisticsService.getQuestionStatistics(
+                 pollId,
+                 Long.valueOf(pollIterationId),
+                 Long.valueOf(questionId));
     }
 }

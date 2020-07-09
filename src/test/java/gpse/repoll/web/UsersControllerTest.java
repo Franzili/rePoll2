@@ -17,6 +17,7 @@ import org.springframework.security.test.context.support.WithSecurityContextTest
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.ServletTestExecutionListener;
@@ -28,6 +29,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
+@TestPropertySource(properties = { "repoll.productionMode=false" })
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
 @TestExecutionListeners(listeners={
@@ -57,7 +59,7 @@ public class UsersControllerTest {
         UserCmd userCmd = makeUserCmd();
 
         usersController.updateUser(uuid, userCmd);
-        verify(userService).updateUser(any(UUID.class), anyString(), anyString(), anyString(), anyString());
+        verify(userService).updateUser(any(UUID.class), anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
     @Test
@@ -67,7 +69,7 @@ public class UsersControllerTest {
         UserCmd userCmd = makeUserCmd();
 
         usersController.updateUser(uuid, userCmd);
-        verify(userService).updateUser(anyString(), anyString(), anyString(), anyString(), anyString());
+        verify(userService).updateUser(anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
     private UserCmd makeUserCmd() {
@@ -75,6 +77,7 @@ public class UsersControllerTest {
         userCmd.setUsername("abc");
         userCmd.setFullName("def");
         userCmd.setEmail("abc@def.de");
+        userCmd.setPassword("");
         userCmd.setRole(Roles.NO_ROLE);
         return userCmd;
     }

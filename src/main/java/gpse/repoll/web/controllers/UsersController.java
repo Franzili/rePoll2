@@ -38,14 +38,13 @@ public class UsersController {
 
     @PostMapping("/")
     public User addUser(@RequestBody UserCmd userCmd) {
-        User user = userService.addUser(
+        return userService.addUser(
             userCmd.getUsername(),
             userCmd.getPassword(),
             userCmd.getFullName(),
             userCmd.getEmail(),
             userCmd.getRole()
         );
-        return user;
     }
 
     /**
@@ -71,12 +70,15 @@ public class UsersController {
      * @param userCmd The Command object.
      * @return The modified user.
      */
+    @PreAuthorize("@securityService.isCurrentUser(principal.username, #userId)"
+            + "or @securityService.isAdmin(principal.username)")
     @PutMapping("/{userId}/")
     public User updateUser(@PathVariable String userId, @RequestBody UserCmd userCmd) {
         if (isValidUuid(userId)) {
             return userService.updateUser(
                 UUID.fromString(userId),
                 userCmd.getUsername(),
+                userCmd.getPassword(),
                 userCmd.getFullName(),
                 userCmd.getEmail(),
                 userCmd.getRole()
@@ -85,6 +87,7 @@ public class UsersController {
             return userService.updateUser(
                 userId,
                 userCmd.getUsername(),
+                userCmd.getPassword(),
                 userCmd.getFullName(),
                 userCmd.getEmail(),
                 userCmd.getRole()

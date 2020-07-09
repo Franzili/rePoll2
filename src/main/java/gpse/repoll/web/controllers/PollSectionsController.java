@@ -16,6 +16,7 @@ import java.util.UUID;
  */
 @CrossOrigin
 @RestController
+@Secured(Roles.POLL_EDITOR)
 @RequestMapping("/api/v1/polls")
 public class PollSectionsController {
 
@@ -31,7 +32,6 @@ public class PollSectionsController {
         return pollSectionService.getAllSections(pollId);
     }
 
-    @Secured(Roles.POLL_EDITOR)
     @PostMapping("/{pollId}/sections/")
     public PollSection addPollSection(@PathVariable("pollId") final UUID pollId,
                                       @RequestBody PollSectionCmd pollSectionCmd) {
@@ -47,7 +47,6 @@ public class PollSectionsController {
         return pollSectionService.getPollSection(pollId, sectionId);
     }
 
-    @Secured(Roles.POLL_EDITOR)
     @PutMapping("/{pollId}/sections/{sectionId}/")
     public PollSection updatePollSection(@PathVariable("pollId") final UUID pollId,
                                          @PathVariable("sectionId") final UUID sectionId,
@@ -59,7 +58,6 @@ public class PollSectionsController {
                 pollSectionCmd.getDescription());
     }
 
-    @Secured(Roles.POLL_EDITOR)
     @DeleteMapping("/{pollId}/sections/{sectionId}/")
     public void deletePollSection(@PathVariable("pollId") final UUID pollId,
                                   @PathVariable("sectionId") final UUID sectionId) {

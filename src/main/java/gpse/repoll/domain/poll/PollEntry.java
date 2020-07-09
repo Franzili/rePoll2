@@ -22,7 +22,7 @@ public class PollEntry {
 
     @ManyToMany
     @JsonSerialize(keyUsing = SerializeQuestion.class)
-    private final Map<Question, Answer> associations = new HashMap<>(); // Todo insert all questions
+    private final Map<Question, Answer> associations = new HashMap<>();
 
     @OneToOne
     private Participant participant;

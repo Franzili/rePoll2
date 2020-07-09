@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/")
 public class MailController {
 
-    private static final String ACCOUNT = "zizimeyer4@gmail.com";
-    private static final String TEST = "zizimeyer4@gmail.com,zizimeyer3@gmail.com";
+    private static final String ACCOUNT = "";
+    private static final String TEST = "";
     private final MailService mailService;
 
     @Autowired
@@ -25,6 +25,7 @@ public class MailController {
         this.mailService = mailService;
     }
 
+    @Secured(Roles.ADMIN)
     @PostMapping("/configs/")
     public String setServerConfigs(@RequestBody final MailCmd mailCmd) {
         if (mailService.setServerConfigs(
@@ -35,11 +36,13 @@ public class MailController {
         }
     }
 
+    @Secured(Roles.ADMIN)
     @RequestMapping("/configs/getMailConfigs/")
     public MailConfig getConfigs() {
         return mailService.getMailConfigs();
     }
 
+    @Secured(Roles.POLL_EDITOR)
     @ResponseBody
     @RequestMapping("/polls/mail/")
     public String sendSimpleEmail() {
