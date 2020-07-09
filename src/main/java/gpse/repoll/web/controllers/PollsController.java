@@ -8,6 +8,7 @@ import gpse.repoll.web.command.PollCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -44,10 +45,15 @@ public class PollsController {
         return pollService.addPoll(pollCmd.getTitle());
     }
 
-    @Secured(Roles.POLL_EDITOR)
     @GetMapping("/{id}/")
-    public Poll getPoll(@PathVariable("id") final UUID id) {
-        return pollService.getPoll(id);
+    public Poll getPoll(Authentication authentication, @PathVariable("id") final UUID id) {
+        // if the caller is not authenticated (i.e. they answer the poll),
+        // return a stripped version of the poll object.
+        if (authentication == null) {
+            return pollService.getPollStripped(id);
+        } else {
+            return pollService.getPoll(id);
+        }
     }
 
     @PreAuthorize("@securityService.isEditor(principal.username)")
