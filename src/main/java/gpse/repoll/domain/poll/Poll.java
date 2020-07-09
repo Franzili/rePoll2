@@ -1,8 +1,10 @@
 package gpse.repoll.domain.poll;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gpse.repoll.domain.exceptions.*;
 import gpse.repoll.domain.poll.questions.Question;
+import gpse.repoll.domain.serialization.SerializeParticipant;
 import gpse.repoll.security.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -53,6 +55,7 @@ public class Poll extends Auditable<User> {
     private final List<Question> questions = new ArrayList<>();
 
     @OneToMany
+    @JsonSerialize(contentUsing = SerializeParticipant.class)
     private final List<Participant> participants = new ArrayList<>();
 
     protected Poll() {

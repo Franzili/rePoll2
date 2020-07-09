@@ -16,15 +16,17 @@ public interface AnswerService {
     /**
      * Gets all {@link Answer}s to a {@link gpse.repoll.domain.poll.questions.Question}.
      * @param pollID The ID of the {@link gpse.repoll.domain.poll.Poll}
-     * @param questionID The ID of the {@link gpse.repoll.domain.poll.questions.Question}
+     * @param iterationID The ID of the {@link gpse.repoll.domain.poll.PollIteration}
+     * @param questionID The ID of the question
      * @return The answers of the {@link Participant}s.
      */
-    Map<Participant, Answer> getAnswers(UUID pollID, Long questionID);
+    Map<Participant, Answer> getAnswers(UUID pollID, Long iterationID, Long questionID);
 
     /**
      * Gets all {@link Answer}s to all {@link gpse.repoll.domain.poll.questions.Question}s.
-     * @param pollId The ID of the {@link gpse.repoll.domain.poll.Poll}
-     * @return A list of all {@link Answer}s to all {@link gpse.repoll.domain.poll.questions.Question}s
+     * @param pollID The ID of the {@link gpse.repoll.domain.poll.Poll}
+     * @param iterationID The ID of the {@link gpse.repoll.domain.poll.PollIteration}
+     * @return A list of all {@link Answer}s to all questions
      */
-    List<QuestionAnswersSet> getAll(UUID pollId);
+    List<QuestionAnswersSet> getAll(UUID pollID, Long iterationID);
 }

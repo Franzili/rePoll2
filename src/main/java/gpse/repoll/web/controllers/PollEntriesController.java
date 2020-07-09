@@ -44,7 +44,8 @@ public class PollEntriesController {
         return pollEntryService.getAll(pollId, Long.valueOf(iterationId));
     }
 
-    @PreAuthorize("@securityService.hasStatusLaunched(#pollId)")
+    @PreAuthorize("@securityService.hasStatusLaunched(#pollId)"
+            + "&& @securityService.hasNotParticipated(#pollId, #pollEntryCmd.participantID)")
     @PostMapping("/{pollId}/entries/")
     public PollEntry addPollEntry(@PathVariable("pollId") final UUID pollId,
                                   @RequestBody PollEntryCmd pollEntryCmd) {
