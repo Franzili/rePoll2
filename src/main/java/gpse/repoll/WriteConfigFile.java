@@ -43,17 +43,17 @@ public class WriteConfigFile implements InitializingBean {
         }
 
         Path configFile = Paths.get("./application.properties");
-        Path smallPrintFile = Paths.get("./smallPrint.html");
+        Path finePrintFile = Paths.get("./finePrint.html");
 
         // if the default config file does not exist, write one
         try {
-            if (!Files.exists(smallPrintFile)) {
+            if (!Files.exists(finePrintFile)) {
                 System.out.println("Writing small print template...");
 
-                String smallPrintTemplate = "<h1>Privacy Policy</h1>\n"
+                String finePrintTemplate = "<h1>Privacy Policy</h1>\n"
                     + "<p>Here you can add your privacy policy, imprint and other fine print.</p>\n"
                     + "You can use all valid html tags.\n";
-                Files.writeString(smallPrintFile, smallPrintTemplate);
+                Files.writeString(finePrintFile, finePrintTemplate);
                 System.out.println("Wrote fine print file.");
             } else {
                 System.out.println("Fine print exists. skipping.");
