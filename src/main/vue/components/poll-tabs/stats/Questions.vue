@@ -10,12 +10,22 @@
                 -->
 
                 <b-col cols="8">
+                    <!-- selecting for displaying question -->
                     <b-form-select v-model="selected" :options="this.structure">
                         <template v-slot:first>
                             <b-form-select-option :value="null" disabled>Select a question for display
                             </b-form-select-option>
                         </template>
                     </b-form-select>
+
+                    <!-- selecting for comparision with other question -->
+                    <b-form-select v-model="compareWith" :options="this.structure">
+                        <template v-slot:first>
+                            <b-form-select-option :value="null" disabled>Select an other question for display
+                            </b-form-select-option>
+                        </template>
+                    </b-form-select>
+
                 </b-col>
                 <b-col cols="4"></b-col>
             </b-row>
@@ -38,6 +48,10 @@
 
         <b-row v-if="selected !==null">
             <h6>{{(poll.questions.find(question => question.id === selected).title)}}</h6>
+        </b-row>
+
+        <b-row v-if="compareWith !==null">
+            <h6>{{(poll.questions.find(question => question.id === compareWith).title)}}</h6>
         </b-row>
 
         <b-row>
@@ -69,19 +83,38 @@
             <!--TODO Prototype for deeper analyses, "&& selQuest.length > 0"-->
 
             <b-col>
-                <div style="white-space: nowrap">
-                    <b-table v-if="selected !== null"
-                             show-empty
-                             small
-                             responsive
-                             :sticky-header="true"
-                             :items="answerSet"
-                             :fields="fields"
-                             :filter="filter"
-                             :filterIncludedFields="filterOn"
-                             @filtered="onFiltered"
-                    ></b-table>
+                <div id="wrapper">
+                    <div id="first" style="white-space: nowrap">
+                        <!-- displaying first question answers -->
+                        <b-table v-if="selected !== null"
+                                 show-empty
+                                 small
+                                 responsive
+                                 :sticky-header="true"
+                                 :items="answerSet"
+                                 :fields="fields"
+                                 :filter="filter"
+                                 :filterIncludedFields="filterOn"
+                                 @filtered="onFiltered"
+                        ></b-table>
+                    </div>
+
+                    <div id="second" style="white-space: nowrap">
+                        <!-- displaying second question answers -->
+                        <b-table v-if="compareWith !== null"
+                                 show-empty
+                                 small
+                                 responsive
+                                 :sticky-header="true"
+                                 :items="answerSet"
+                                 :fields="fields"
+                                 :filter="filter"
+                                 :filterIncludedFields="filterOn"
+                                 @filtered="onFiltered"
+                        ></b-table>
+                    </div>
                 </div>
+
             </b-col>
         </b-row>
     </b-container>
@@ -98,6 +131,7 @@
         data() {
             return {
                 selected: null,
+                compareWith: null,
                 answerSet: [],
                 fields: [
                     {isRowHeader: true, key: 'Username', sortable: true},
@@ -140,6 +174,13 @@
 
                 // TODO Prototype for deeper analyses
                 //this.addQuestToSelected(val)
+            },
+            compareWith: function (val) {
+                if (val !== null) {
+                    this.answerSet = this.getPollAnswers(val)
+                } else {
+                    this.answerSet = []
+                }
             }
         },
         methods: {
@@ -178,5 +219,21 @@
 </script>
 
 <style scoped>
+
+    #wrapper {
+        //width: 500px;
+        overflow: auto; /* add this to contain floated children */
+    }
+    #first {
+        //width: 300px;
+        float:left; /* add this */
+        overflow: auto;
+    }
+    #second {
+        //border: 1px solid green;
+        float: right; /* add this */
+        overflow: auto;
+    }
+
 
 </style>
