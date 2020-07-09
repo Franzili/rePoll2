@@ -1,6 +1,5 @@
 <template>
     <b-card>
-        <!-- TODO: adapt type names to backend terminology -->
         <div v-if="poll.anonymity === 'NON_ANONYMOUS'">
             <h6>Participants:  {{this.participants.length}}</h6>
             <b-row>
