@@ -106,7 +106,7 @@
     .stats-tab-bar {
         //position: absolute;
         //margin-top: -8px;
-        top: 122px;
+        top: 79px;
         background-color: $floating-background-color;
     }
 

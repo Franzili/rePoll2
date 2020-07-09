@@ -222,7 +222,7 @@
 
     #wrapper {
         //width: 500px;
-        overflow: auto; /* add this to contain floated children */
+        //overflow: auto; /* add this to contain floated children */
     }
     #first {
         //width: 300px;
