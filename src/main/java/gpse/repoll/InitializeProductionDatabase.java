@@ -36,7 +36,8 @@ public class InitializeProductionDatabase implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() {
+    @SuppressWarnings({"PMD.SystemPrintln", "PMD.DoNotCallSystemExit"})
+    public void afterPropertiesSet() throws IOException {
         if (!productionMode) {
             return;
         }

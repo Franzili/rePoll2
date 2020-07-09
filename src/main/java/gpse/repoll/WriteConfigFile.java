@@ -1,5 +1,6 @@
 package gpse.repoll;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +35,7 @@ public class WriteConfigFile implements InitializingBean {
     }
 
     @Override
+    @SuppressWarnings("PMD.SystemPrintln")
     public void afterPropertiesSet() {
         if (!productionMode) {
             return;
