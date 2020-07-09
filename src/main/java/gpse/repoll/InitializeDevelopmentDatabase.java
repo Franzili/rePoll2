@@ -41,8 +41,8 @@ public class InitializeDevelopmentDatabase implements InitializingBean {
     private final ParticipantService participantService;
     private final ChoiceRepository choiceRepository;
 
-    @Value("repoll.productionMode")
-    private boolean productionMode;
+    @Value("${repoll.productionMode}")
+    private Boolean productionMode;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
@@ -87,7 +87,7 @@ public class InitializeDevelopmentDatabase implements InitializingBean {
          */
 
         // only run this if we are not in production mode
-        if (!productionMode) {
+        if (productionMode) {
             return;
         }
 
@@ -97,8 +97,7 @@ public class InitializeDevelopmentDatabase implements InitializingBean {
             } catch (UsernameNotFoundException e) {
                 final User user = userService.addUser(
                     "JamesBond",
-                    // Passwort: GutenTag
-                    "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                    "GutenTag",
                     "Bob", "jbond@mi6.com",
                         Roles.ADMIN
                 );
@@ -131,8 +130,7 @@ public class InitializeDevelopmentDatabase implements InitializingBean {
             } catch (UsernameNotFoundException e) {
                 nobody = userService.addUser(
                         "Nemo",
-                        // Passwort: GutenTag
-                        "{bcrypt}$2a$04$l7XuBX6cPlD2gFP6Qfiggur/j9Mea43E8ToPVpn8VpdXxq9KAa97i",
+                        "GutenTag",
                         "Cpt Nemo",
                         "x@404.com",
                         Roles.POLL_CREATOR);

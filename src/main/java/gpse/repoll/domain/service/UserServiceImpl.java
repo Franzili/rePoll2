@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PollEntryRepository pollEntryRepository;
     private final PollEntryService pollEntryService;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
@@ -32,12 +34,14 @@ public class UserServiceImpl implements UserService {
                            MailService mailService,
                            PollService pollService,
                            PollEntryRepository pollEntryRepository,
-                           PollEntryService pollEntryService) {
+                           PollEntryService pollEntryService,
+                           PasswordEncoder passwordEncoder) {
         this.pollService = pollService;
         this.mailService = mailService;
         this.userRepository = userRepository;
         this.pollEntryRepository = pollEntryRepository;
         this.pollEntryService = pollEntryService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -60,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setFullName(fullName);
         user.setEmail(email);
         user.setRoles(role);
@@ -91,7 +95,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public User updateUser(UUID userId, String newUsername, String fullName, String email, String role) {
+    public User updateUser(UUID userId, String newUsername, String password, String fullName, String email, String role) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
 
         /* If we want to change the username */
@@ -116,6 +120,9 @@ public class UserServiceImpl implements UserService {
         if (role != null) {
             user.setRoles(role);
         }
+        if (password != null) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
 
         userRepository.save(user);
         return user;
@@ -125,9 +132,9 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public User updateUser(String oldUsername, String newUsername, String fullName, String email, String role) {
+    public User updateUser(String oldUsername, String newUsername, String password, String fullName, String email, String role) {
         User user = userRepository.findByUsername(oldUsername).orElseThrow(NotFoundException::new);
-        return updateUser(user.getId(), newUsername, fullName, email, role);
+        return updateUser(user.getId(), newUsername, password, fullName, email, role);
     }
 
     /**
