@@ -267,4 +267,7 @@ $RECYCLE.BIN/
 # data directory (db persistence)
 data
 
+# application properties
+./application.properties
+
 tmp.txt
