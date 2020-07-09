@@ -54,7 +54,7 @@ public class InitializeProductionDatabase implements InitializingBean {
                 BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
                 String msg = "=============================================\n" +
                     "Setting up user admin.\n" +
-                    "Enter an initial password:\n";
+                    "Enter an initial password:";
                 System.out.println(msg);
 
                 String password = "";
@@ -65,16 +65,7 @@ public class InitializeProductionDatabase implements InitializingBean {
                     System.exit(1);
                 }
 
-                System.out.println("Enter an email address:");
-                String email = "";
-                try {
-                    email = r.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    System.exit(1);
-                }
-
-                userService.addUser("admin", password, "Admin", email, Roles.ADMIN);
+                userService.addUser("admin", password, "Admin", null, Roles.ADMIN);
 
                 System.out.println("Awesome, welcome to RePoll!");
                 System.out.println("=============================================");
