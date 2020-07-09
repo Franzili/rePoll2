@@ -1,11 +1,11 @@
 package gpse.repoll;
 
-import gpse.repoll.domain.exceptions.NotFoundException;
 import gpse.repoll.domain.service.UserService;
 import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Service
+@DependsOn("writeConfigFile") // so that his bean is run after the config file has been written
 public class InitializeProductionDatabase implements InitializingBean {
     private final UserService userService;
     private final PlatformTransactionManager transactionManager;
@@ -35,7 +36,7 @@ public class InitializeProductionDatabase implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         if (!productionMode) {
             return;
         }
@@ -52,9 +53,9 @@ public class InitializeProductionDatabase implements InitializingBean {
 
             if (createUser) {
                 BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
-                String msg = "=============================================\n" +
-                    "Setting up user admin.\n" +
-                    "Enter an initial password:";
+                String msg = "=============================================\n"
+                    + "Setting up user admin.\n"
+                    + "Enter an initial password:";
                 System.out.println(msg);
 
                 String password = "";
