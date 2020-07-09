@@ -11,18 +11,12 @@
 
         </b-form-textarea>
 
-        <p></p>
-
-        <div>
-            {{ privacyPolicyText }}
-        </div>
 
 
+        <template>
+            <div v-html="privacyPolicyText"></div>
+        </template>
 
-        <b-button
-            class="float-right"
-            variant="primary"
-            >Save</b-button>
 
 
     </b-card>
