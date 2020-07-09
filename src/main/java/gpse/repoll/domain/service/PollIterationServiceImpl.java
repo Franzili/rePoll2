@@ -57,6 +57,14 @@ public class PollIterationServiceImpl implements PollIterationService {
      * {@inheritDoc}
      */
     @Override
+    public void save(PollIteration pollIteration) {
+        pollIterationRepository.save(pollIteration);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Set<PollIteration> getAll(final UUID pollID) {
         final Poll poll = pollService.getPoll(pollID);
         return poll.getPollIterations();

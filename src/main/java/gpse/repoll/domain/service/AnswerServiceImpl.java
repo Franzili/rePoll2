@@ -15,20 +15,22 @@ import java.util.*;
  */
 @Service
 public class AnswerServiceImpl implements AnswerService {
+
     private final PollService pollService;
+    private final PollEntryService pollEntryService;
 
     @Autowired
-    public AnswerServiceImpl(PollService pollService) {
+    public AnswerServiceImpl(PollService pollService, PollEntryService pollEntryService) {
         this.pollService = pollService;
+        this.pollEntryService = pollEntryService;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Map<Participant, Answer> getAnswers(UUID pollID, Long questionID) {
-        // TODO for anonymous polls
-        List<PollEntry> entries = new ArrayList<>(pollService.getPoll(pollID).getPollEntries());
+    public Map<Participant, Answer> getAnswers(UUID pollID, Long iterationID, Long questionID) {
+        List<PollEntry> entries = new ArrayList<>(pollEntryService.getAll(pollID, iterationID));
         Map<Participant, Answer> userAnswerMap = new HashMap<>();
         for (PollEntry entry : entries) {
             Participant key = entry.getParticipant();
@@ -52,12 +54,11 @@ public class AnswerServiceImpl implements AnswerService {
      * {@inheritDoc}
      */
     @Override
-    public List<QuestionAnswersSet> getAll(UUID pollId) {
+    public List<QuestionAnswersSet> getAll(UUID pollId, Long iterationID) {
         List<QuestionAnswersSet> answersSets = new ArrayList<>();
         List<Question> questions = pollService.getPoll(pollId).getQuestions();
-        questions.forEach((question) -> {
-            answersSets.add(new QuestionAnswersSet(getAnswers(pollId, question.getId()), question));
-        });
+        questions.forEach((question) -> answersSets.add(new QuestionAnswersSet(
+                getAnswers(pollId, iterationID, question.getId()), question)));
         return answersSets;
     }
 }

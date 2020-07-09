@@ -1,16 +1,12 @@
 import VueRouter from "vue-router";
 
 import Start from "./pages/Start";
-import Account from "./pages/Account";
 import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
 import Admin from "./pages/Admin";
 import PollResponse from "./pages/PollResponse";
 import PollResponseError from "./pages/PollResponseError";
 import PollResponseErrorClosed from "./pages/PollResponseErrorClosed";
-
-import TestCharts from "./pages/TestCharts";
-
 import PollTabbed from "./pages/PollTabbed";
 import EditPoll from "./components/poll-tabs/edit/EditPoll";
 import PollStats from "./components/poll-tabs/stats/PollStats";
@@ -27,14 +23,6 @@ let router = new VueRouter({
         {
             path: '/',
             component: Start
-        },
-        {
-            path: '/account/',
-            component: Account,
-            meta: {
-                requiresPrivileges: "ROLE_POLL_EDITOR",
-                title: "My Account | RePoll"
-            }
         },
         {
             path: '/polls/',
@@ -123,11 +111,6 @@ let router = new VueRouter({
             meta: {
                 title: "Closed | RePoll"
             }
-        },
-        //for Charts testing
-        {
-            path: '/test/',
-            component: TestCharts
         },
         {
             name: 'not-found',

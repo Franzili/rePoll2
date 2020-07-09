@@ -25,6 +25,7 @@ public class MailController {
         this.mailService = mailService;
     }
 
+    @Secured(Roles.ADMIN)
     @PostMapping("/configs/")
     public String setServerConfigs(@RequestBody final MailCmd mailCmd) {
         if (mailService.setServerConfigs(
@@ -35,11 +36,13 @@ public class MailController {
         }
     }
 
+    @Secured(Roles.ADMIN)
     @RequestMapping("/configs/getMailConfigs/")
     public MailConfig getConfigs() {
         return mailService.getMailConfigs();
     }
 
+    @Secured(Roles.POLL_EDITOR)
     @ResponseBody
     @RequestMapping("/polls/mail/")
     public String sendSimpleEmail() {

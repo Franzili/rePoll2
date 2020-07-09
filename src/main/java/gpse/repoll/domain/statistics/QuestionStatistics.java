@@ -37,7 +37,7 @@ public class QuestionStatistics {
 
     private Double median;
 
-    private BoxPlot boxplot; // todo rename to boxPlot
+    private BoxPlot boxplot;
 
     public QuestionStatistics(Question question, List<PollEntry> pollEntries) {
         this.question = question;
