@@ -79,6 +79,7 @@ public class PollServiceImpl implements PollService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Poll getPollStripped(UUID id) {
         Poll poll = getPoll(id);
         PollIteration iteration = poll.getCurrentIteration();
