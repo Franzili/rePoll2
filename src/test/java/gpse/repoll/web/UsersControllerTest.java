@@ -17,6 +17,7 @@ import org.springframework.security.test.context.support.WithSecurityContextTest
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.ServletTestExecutionListener;
@@ -28,6 +29,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
+@TestPropertySource(properties = { "repoll.productionMode=false" })
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
 @TestExecutionListeners(listeners={
