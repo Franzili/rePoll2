@@ -1,6 +1,7 @@
 <template>
 
     <div>
+
         <b-form-file
             type="file"
             id="selectFile"
@@ -34,7 +35,7 @@
 <script>
 
 
-    import {mapActions} from "vuex";
+    import {mapActions, mapState} from "vuex";
     export default {
         name: "UploadParticipants",
         data() {
@@ -43,9 +44,23 @@
                 participant: [],
             }
         },
+        computed: {
+            ...mapState('participants', {mailAnswer: 'mailAnswer'})
+        },
         methods: {
             ...mapActions('participants', {create: "create"}),
-            handleFiles() {
+            async addParticipant(participantCmd) {
+                await this.create(participantCmd)
+                this.makeToast(this.mailAnswer)
+            },
+            makeToast(message) {
+                this.$bvToast.toast(message, {
+                    title: 'Mail',
+                    autoHideDelay: 10000,
+                    appendToast: false
+                })
+            },
+            async handleFiles() {
                 const input = document.getElementById('selectFile').files;
                 if (input[0] != null) {
                     const reader = new FileReader();
@@ -61,12 +76,28 @@
                         var res = this.newParticipant.split("\n");
                         for (var i = 0; i < res.length - 1; i++) {
                             this.participant = res[i];
-                            var tmp = this.participant.split(",");
-                            let participantCmd = {
-                                fullName: tmp[0],
-                                email: tmp[1],
-                            };
-                            this.create(participantCmd);
+                            if(res[i].length === 2) {
+                                var tmp = this.participant.split(",");
+                                let participantCmd = {
+                                    fullName: tmp[0],
+                                    email: tmp[1],
+                                };
+                                this.addParticipant(participantCmd);
+                            } else {
+                                if(this.participant.includes("@")) {
+                                    let participantCmd = {
+                                        fullName: '',
+                                        email: this.participant,
+                                    };
+                                    this.addParticipant(participantCmd);
+                                } else {
+                                    this.makeToast("Input not valid. ")
+                                }
+
+
+                            }
+
+
                         }
 
 

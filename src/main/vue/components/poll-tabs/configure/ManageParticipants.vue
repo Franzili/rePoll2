@@ -105,19 +105,8 @@
 
             <b-row>
                 <b-col cols="6">
-                    <p>
-                        <b-form-textarea
-                            placeholder="Enter e-Mail addresses to invite."
-                            size="sm"
-                            rows="10"
-                        ></b-form-textarea>
-                    </p>
-                    <p>
-                        <b-button class="float-right"
-                                  data-toggle="tooltip"
-                                  title="Invite a new Participant"
-                                  variant="primary">Invite</b-button>
-                    </p>
+                    <ReadEmails></ReadEmails>
+                    <UploadParticipants></UploadParticipants>
                 </b-col>
 
                 <b-col cols="6">
@@ -161,19 +150,8 @@
                 <b-row align-h="between">
                     <b-col cols="6">
                     <h6>Invite new participants</h6>
-                        <p>
-                            <b-form-textarea
-                                placeholder="Enter E-Mail addresses to invite."
-                                size="sm"
-                                rows="10"
-                            ></b-form-textarea>
-                        </p>
-                        <p>
-                            <b-button class="float-right"
-                                      data-toggle="tooltip"
-                                      title="Invite a new Participant"
-                                      variant="primary">Invite</b-button>
-                        </p>
+                        <ReadEmails></ReadEmails>
+                        <UploadParticipants></UploadParticipants>
                     </b-col>
 
                     <b-col cols="6">
@@ -208,10 +186,11 @@
     import {mapState, mapActions} from "vuex";
     import UploadParticipants from "./UploadParticipants";
     import DownloadPersonalizedLinks from "./DownloadPersonalizedLinks";
+    import ReadEmails from "./ReadEmails";
 
     export default {
         name: "ManageParticipants",
-        components: {DownloadPersonalizedLinks, UploadParticipants},
+        components: {DownloadPersonalizedLinks, UploadParticipants, ReadEmails},
 
         data() {
             return {
@@ -232,7 +211,8 @@
                 eMail: '',
 
                 participantMailPair: '',
-                mailSentCounter: 0
+                mailSentCounter: 0,
+
             }
         },
 
@@ -248,7 +228,7 @@
 
         methods: {
             ...mapActions('participants', {
-                loadParticipant: 'loadParticipant'
+                loadParticipant: 'loadParticipant',
             }),
             ...mapActions('participants', {
                 create: "create",
@@ -283,7 +263,7 @@
                     autoHideDelay: 10000,
                     appendToast: false
                 })
-            }
+            },
         },
         mounted() {
             this.loadParticipant(this.poll.id);
