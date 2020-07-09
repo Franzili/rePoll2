@@ -77,6 +77,7 @@ public class UsersController {
             return userService.updateUser(
                 UUID.fromString(userId),
                 userCmd.getUsername(),
+                userCmd.getPassword(),
                 userCmd.getFullName(),
                 userCmd.getEmail(),
                 userCmd.getRole()
@@ -85,6 +86,7 @@ public class UsersController {
             return userService.updateUser(
                 userId,
                 userCmd.getUsername(),
+                userCmd.getPassword(),
                 userCmd.getFullName(),
                 userCmd.getEmail(),
                 userCmd.getRole()

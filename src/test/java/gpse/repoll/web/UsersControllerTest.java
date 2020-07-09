@@ -57,7 +57,7 @@ public class UsersControllerTest {
         UserCmd userCmd = makeUserCmd();
 
         usersController.updateUser(uuid, userCmd);
-        verify(userService).updateUser(any(UUID.class), anyString(), anyString(), anyString(), anyString());
+        verify(userService).updateUser(any(UUID.class), anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
     @Test
@@ -67,7 +67,7 @@ public class UsersControllerTest {
         UserCmd userCmd = makeUserCmd();
 
         usersController.updateUser(uuid, userCmd);
-        verify(userService).updateUser(anyString(), anyString(), anyString(), anyString(), anyString());
+        verify(userService).updateUser(anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
     private UserCmd makeUserCmd() {
