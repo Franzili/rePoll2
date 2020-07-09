@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-tabs v-if="renderComponent" small lazy class="relative stats-tab-bar" v-model="activeTab">
+        <b-tabs v-if="renderComponent" small lazy class="sticky-top stats-tab-bar" v-model="activeTab">
             <b-tab title="Overview"> </b-tab>
             <b-tab title="Compare"> </b-tab>
             <b-tab title="Trends"> </b-tab>
@@ -104,6 +104,8 @@
     @import "../../../assets/stylesheet.scss";
 
     .stats-tab-bar {
+        //position: absolute;
+        //margin-top: -8px;
         top: 122px;
         background-color: $floating-background-color;
     }
