@@ -110,7 +110,7 @@
             }
         },
         async mounted() {
-            await this.loadPollAnswers(this.poll.id);
+            await this.loadPollAnswers({pollId: this.poll.id, iterationId: this.iteration});
             this.structure = this.getPollStructure;
 
             this.totalRows = this.answerSet.length

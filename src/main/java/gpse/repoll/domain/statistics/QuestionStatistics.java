@@ -219,6 +219,7 @@ public class QuestionStatistics {
         int sizeVal = values.size();
         if (sizeVal == 0) {
             this.median = null;
+            return null;
         }
         int medianIndex;
         if (sizeVal % 2 == 0) {
