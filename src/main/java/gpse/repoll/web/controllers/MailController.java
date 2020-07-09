@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/")
 public class MailController {
 
-    private static final String ACCOUNT = "zizimeyer4@gmail.com";
-    private static final String TEST = "zizimeyer4@gmail.com,zizimeyer3@gmail.com";
+    private static final String ACCOUNT = "";
+    private static final String TEST = "";
     private final MailService mailService;
 
     @Autowired
