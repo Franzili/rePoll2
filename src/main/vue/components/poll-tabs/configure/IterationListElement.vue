@@ -254,15 +254,17 @@
                     return this.model.end;
                 },
                 set(newValue) {
+                    let newEnd = null;
                     if (!this.model.end) {
-                        this.model.end = new Date();
+                        newEnd = new Date();
                     } else {
                         // needed to make property watching work
-                        this.model.end = new Date(this.model.end);
+                        newEnd = new Date(this.model.end);
                     }
-                    this.model.end.setFullYear(newValue.getFullYear());
-                    this.model.end.setMonth(newValue.getMonth());
-                    this.model.end.setDate(newValue.getDate());
+                    newEnd.setFullYear(newValue.getFullYear());
+                    newEnd.setMonth(newValue.getMonth());
+                    newEnd.setDate(newValue.getDate());
+                    this.model.end = newEnd;
                 },
                 deep: true
             },
@@ -277,16 +279,18 @@
                     }
                 },
                 set(newValue) {
+                    let newEnd = null;
                     if (!this.model.end) {
-                        this.model.end = new Date();
+                        newEnd = new Date();
                     } else {
                         // needed to make property watching work
-                        this.model.end = new Date(this.model.end);
+                        newEnd = new Date(this.model.end);
                     }
                     let numbers = newValue.split(":").map(Number);
-                    this.model.end.setHours(numbers[0]);
-                    this.model.end.setMinutes(numbers[1]);
-                    this.model.end.setSeconds(numbers[2]);
+                    newEnd.setHours(numbers[0]);
+                    newEnd.setMinutes(numbers[1]);
+                    newEnd.setSeconds(numbers[2]);
+                    this.model.end = newEnd;
                 },
                 deep: true
             },
@@ -317,7 +321,13 @@
                 if (newVal === true) {
                     this.model.end = null;
                 } else {
-                    let newEnd = new Date(this.model.start)
+                    // select the maximum date:
+                    // if the poll has already openened, we want an end date that is an hour from now.
+                    // if the poll is scheduled to open in the future, we want an end date that is an hour from
+                    // the scheduled start date.
+                    let newEnd = new Date(
+                        Math.max(this.model.start.getTime(), Date.now())
+                    );
                     newEnd.setHours(newEnd.getHours() + 1);
                     this.model.end = newEnd;
                 }

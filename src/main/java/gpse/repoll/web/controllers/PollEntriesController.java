@@ -90,6 +90,10 @@ public class PollEntriesController {
             if (answerCmd instanceof TextAnswerCmd) {
                 answer = new TextAnswer();
                 String text = ((TextAnswerCmd) answerCmd).getText();
+                if (text == null || text.equals("")) {
+                    answers.put(questionID, null);
+                    continue;
+                }
                 ((TextAnswer) answer).setText(text);
             } else if (answerCmd instanceof ScaleAnswerCmd) {
                 answer = new ScaleAnswer();

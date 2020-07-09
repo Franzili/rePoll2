@@ -24,6 +24,8 @@ const currentPoll = {
         poll: {
             questions: [],
             pollSections: [],
+            pollEntries: '',
+            pollIterations: [],
             design: {
                 font: '',
                 textColour: '',
@@ -31,7 +33,6 @@ const currentPoll = {
                 logoPosition: '',
                 logo: ''
             },
-            pollIterations: [],
             pollConsistencyGroups: []
         },
         answers: [],

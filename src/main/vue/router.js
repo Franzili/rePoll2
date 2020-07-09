@@ -6,6 +6,8 @@ import Answer from "./pages/Answer";
 import PollTable from "./pages/PollTable";
 import Admin from "./pages/Admin";
 import PollResponse from "./pages/PollResponse";
+import PollResponseError from "./pages/PollResponseError";
+import PollResponseErrorClosed from "./pages/PollResponseErrorClosed";
 
 import TestCharts from "./pages/TestCharts";
 
@@ -44,7 +46,7 @@ let router = new VueRouter({
             }
         },
         {
-            path: '/poll/:pollId/answer/:participantId',
+            path: '/answer/:pollId/:participantId?',
             component: Answer,
             name: 'answer',
         },
@@ -104,6 +106,22 @@ let router = new VueRouter({
             name: 'response',
             meta: {
                 title: "Thank you for participating | RePoll"
+            }
+        },
+        {
+            path: '/poll-response-error/',
+            component: PollResponseError,
+            name: 'response',
+            meta: {
+                title: "Error | RePoll"
+            }
+        },
+        {
+            path: '/poll-response-error-closed/',
+            component: PollResponseErrorClosed,
+            name: 'response',
+            meta: {
+                title: "Closed | RePoll"
             }
         },
         //for Charts testing

@@ -1,5 +1,6 @@
 package gpse.repoll.domain.service;
 
+import gpse.repoll.domain.exceptions.AlreadyParticipatedException;
 import gpse.repoll.domain.exceptions.NoIterationOpenException;
 import gpse.repoll.domain.poll.*;
 import gpse.repoll.domain.poll.answers.*;
@@ -105,7 +106,6 @@ public class PollEntryServiceImpl implements PollEntryService {
                                   final UUID participantID) {
         Poll poll = pollService.getPoll(pollId);
 
-        //
         if (poll.getCurrentIteration() == null) {
             throw new NoIterationOpenException();
         }
@@ -117,6 +117,14 @@ public class PollEntryServiceImpl implements PollEntryService {
                 throw new BadRequestException("Unknown participant!");
             }
             participant = participantService.getParticipant(participantID);
+
+            // check if that participant has already participated
+            if (poll.getCurrentIteration().getPollEntries().stream().anyMatch(
+                (PollEntry entry) -> entry.getParticipant().getId().equals(participantID)
+            )) {
+                throw new AlreadyParticipatedException();
+            }
+
             pollEntry.setParticipant(participant);
         } else {
             participant = new Participant();
