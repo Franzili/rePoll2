@@ -9,6 +9,7 @@ import gpse.repoll.domain.utils.Pair;
 import gpse.repoll.security.Roles;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,7 +25,7 @@ import java.util.*;
  * Fills the database with example data used for development purposes.
  */
 @Service
-public class InitializeDatabase implements InitializingBean {
+public class InitializeDevelopmentDatabase implements InitializingBean {
 
     private final PollService pollService;
     private final PollSectionService pollSectionService;
@@ -40,22 +41,25 @@ public class InitializeDatabase implements InitializingBean {
     private final ParticipantService participantService;
     private final ChoiceRepository choiceRepository;
 
+    @Value("${repoll.productionMode}")
+    private Boolean productionMode;
+
     @SuppressWarnings("checkstyle:ParameterNumber")
     @Autowired
-    public InitializeDatabase(final PollService pollService,
-                              final QuestionService questionService,
-                              final PollEntryService pollEntryService,
-                              final PollIterationService pollIterationService,
-                              final UserService userService,
-                              final PlatformTransactionManager transactionManager,
-                              final PollSectionService pollSectionService,
-                              final PollRepository pollRepository,
-                              final PollSectionRepository pollSectionRepository,
-                              final UserRepository userRepository,
-                              final DesignService designService,
-                              final DesignRepository designRepository,
-                              final ParticipantService participantService,
-                              final ChoiceRepository choiceRepository) {
+    public InitializeDevelopmentDatabase(final PollService pollService,
+                                         final QuestionService questionService,
+                                         final PollEntryService pollEntryService,
+                                         final PollIterationService pollIterationService,
+                                         final UserService userService,
+                                         final PlatformTransactionManager transactionManager,
+                                         final PollSectionService pollSectionService,
+                                         final PollRepository pollRepository,
+                                         final PollSectionRepository pollSectionRepository,
+                                         final UserRepository userRepository,
+                                         final DesignService designService,
+                                         final DesignRepository designRepository,
+                                         final ParticipantService participantService,
+                                         final ChoiceRepository choiceRepository) {
         this.pollService = pollService;
         this.pollSectionService = pollSectionService;
         this.questionService = questionService;
@@ -81,6 +85,11 @@ public class InitializeDatabase implements InitializingBean {
             DB actions that depend on each other (i.e. create a poll and then add some questions to it)
             need to be executed using transactionTemplate.execute(() -> {}); !!!
          */
+
+        // only run this if we are not in production mode
+        if (productionMode) {
+            return;
+        }
 
         transactionTemplate.execute(status -> {
             try {
