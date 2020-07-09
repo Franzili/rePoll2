@@ -30,7 +30,6 @@ public class AnswerServiceImpl implements AnswerService {
      */
     @Override
     public Map<Participant, Answer> getAnswers(UUID pollID, Long iterationID, Long questionID) {
-        // TODO for anonymous polls
         List<PollEntry> entries = new ArrayList<>(pollEntryService.getAll(pollID, iterationID));
         Map<Participant, Answer> userAnswerMap = new HashMap<>();
         for (PollEntry entry : entries) {
