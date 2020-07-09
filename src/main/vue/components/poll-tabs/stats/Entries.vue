@@ -40,7 +40,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapState} from "vuex";
+    import {mapActions, mapGetters, mapState} from "vuex";
 
     export default {
         name: "Entries",
@@ -49,11 +49,15 @@
             return {
                 selected: null,
                 structure: [],
-                items: []
+                items: [],
+                loaded: false
             }
         },
-        mounted() {
+        async mounted() {
+            this.loaded = false
+            await this.loadEntries({pollId: this.$route.params.pollId, iterationId: this.iteration})
             this.structure = this.getEntries;
+            this.loaded = true
         },
         computed: {
             iteration: {
@@ -71,7 +75,12 @@
                 getEntries: 'entriesWithSections',
                 getNames: 'entriesUserNames'
             })
-        }
+        },
+        methods: {
+            ...mapActions('currentPoll', {
+                loadEntries: 'loadEntries',
+            }),
+        },
     }
 </script>
 

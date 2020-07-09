@@ -60,7 +60,7 @@
         },
         async mounted() {
             this.loaded = false
-            await this.loadPollAnswers(this.$route.params.pollId);
+            await this.loadPollAnswers({pollId: this.$route.params.pollId, iterationId: this.iteration});
             this.loaded = true
 
         },

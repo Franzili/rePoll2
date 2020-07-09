@@ -507,9 +507,9 @@ const currentPoll = {
             });
         },
 
-        loadEntries({commit}, id) {
+        loadEntries({commit}, getCmd) {
             return new Promise((resolve, reject) => {
-                api.entries.list(id).then(function (res) {
+                api.entries.list(getCmd).then(function (res) {
                     commit('setEntries', res.data);
                     resolve(res.data);
                 }).catch(function (error) {
@@ -714,9 +714,9 @@ const currentPoll = {
             }
         },
 
-        loadPollAnswers({commit}, id) {
+        loadPollAnswers({commit}, getCmd) {
             return new Promise((resolve, reject) => {
-                api.statistics.getPollAnswers(id).then(function (res) {
+                api.statistics.getPollAnswers(getCmd).then(function (res) {
                     commit('setPollAnswers', res.data);
                     resolve(res.data);
                 }).catch(function (error) {
@@ -726,9 +726,9 @@ const currentPoll = {
             })
         },
 
-        loadAnswersById({commit}, answerCmd) {
+        loadAnswersById({commit}, getCmd) {
             return new Promise((resolve, reject) => {
-                api.statistics.getAnswersById(answerCmd.poll, answerCmd.quest).then(function (res) {
+                api.statistics.getAnswersById(getCmd).then(function (res) {
                     commit('setAnswersById', res.data);
                     resolve(res.data);
                 }).catch(function (error) {
