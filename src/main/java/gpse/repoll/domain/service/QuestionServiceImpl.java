@@ -116,7 +116,9 @@ public class QuestionServiceImpl implements QuestionService {
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
         question.setChoices(choices);
-        question.setNumberOfBonusChoices(numberOfBonusChoices);
+        if (numberOfBonusChoices != null) {
+            question.setNumberOfBonusChoices(numberOfBonusChoices);
+        }
         question.setDisplayVariant(displayVariant);
         singleChoiceQuestionRepository.save(question);
         poll.add(question);
@@ -141,7 +143,9 @@ public class QuestionServiceImpl implements QuestionService {
         question.setTitle(questionTitle);
         question.setQuestionOrder(questionOrder);
         question.setChoices(choices);
-        question.setNumberOfBonusChoices(numberOfBonusChoices);
+        if (numberOfBonusChoices != null) {
+            question.setNumberOfBonusChoices(numberOfBonusChoices);
+        }
         multiChoiceQuestionRepository.save(question);
         poll.add(question);
         pollService.save(poll);

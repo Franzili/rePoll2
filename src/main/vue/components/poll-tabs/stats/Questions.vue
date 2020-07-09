@@ -2,14 +2,13 @@
     <b-container>
         <p>
             <b-row style="margin-top: 2vh">
-
-                <!-- TODO select for serial questions
                 <b-col cols="4">
-                    <b-form-select></b-form-select>
+                    <b-form-group description="Iteration launch date">
+                        <b-form-select v-model="iteration"
+                                       :options="iterationList"></b-form-select>
+                    </b-form-group>
                 </b-col>
-                -->
-
-                <b-col cols="8">
+                <b-col cols="5">
                     <b-form-select v-model="selected" :options="this.structure">
                         <template v-slot:first>
                             <b-form-select-option :value="null" disabled>Select a question for display
@@ -67,36 +66,39 @@
         <b-row>
             <!-- TODO I WANT TO BE A COMPONENT IF I BECOME MORE COMPLEX -->
             <!--TODO Prototype for deeper analyses, "&& selQuest.length > 0"-->
-            <b-table v-if="selected !== null"
-                     striped
-                     hover
-                     fixed
-                     outlined
-                     :items="answerSet"
-                     :fields="fields"
-                     :filter="filter"
-                     :filterIncludedFields="filterOn"
-                     @filtered="onFiltered"
-            ></b-table>
-        </b-row>
 
+            <b-col>
+                <div style="white-space: nowrap">
+                    <b-table v-if="selected !== null"
+                             show-empty
+                             small
+                             responsive
+                             :sticky-header="true"
+                             :items="answerSet"
+                             :fields="fields"
+                             :filter="filter"
+                             :filterIncludedFields="filterOn"
+                             @filtered="onFiltered"
+                    ></b-table>
+                </div>
+            </b-col>
+        </b-row>
     </b-container>
 </template>
 
 <script>
 
     import {mapActions, mapGetters, mapState} from "vuex";
-    //import FilterQuestions from "./utils/FilterQuestions";
 
     export default {
         name: "Questions",
-        props: ['qId'],
+        props: ['iterationList'],
         data() {
             return {
                 selected: null,
                 answerSet: [],
                 fields: [
-                    {key: 'Username', sortable: true},
+                    {isRowHeader: true, key: 'Username', sortable: true},
                     {key: 'Answers', sortable: true}
                 ],
                 structure: [],
@@ -110,12 +112,18 @@
         async mounted() {
             await this.loadPollAnswers(this.poll.id);
             this.structure = this.getPollStructure;
-            if (this.qId !== 0) {
-                this.selected = this.qId
-            }
+
             this.totalRows = this.answerSet.length
         },
         computed: {
+            iteration: {
+                get() {
+                    return this.$store.getters["currentPoll/getIterationId"];
+                },
+                set(val) {
+                    this.$store.commit('currentPoll/setIterationId', val)
+                }
+            },
             ...mapState('currentPoll', {
                 poll: 'poll',
                 pollAnswers: 'pollAnswers'

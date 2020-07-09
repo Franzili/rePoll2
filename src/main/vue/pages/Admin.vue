@@ -23,15 +23,7 @@
                                 v-model="username">
                             </b-form-input>
                         </b-form-group>
-                        <b-form-group
-                            v-if="isUpdate"
-                            label="Click the button to change the password">
-                        <b-button size="sm"
-                                  v-b-modal.modal-2
-                                  @click="updateStart(row.item)">
-                            Change
-                        </b-button>
-                        </b-form-group>
+
 
                         <b-form-group
                             v-if="!isUpdate"
@@ -112,9 +104,13 @@
                         </b-row>
 
                         <!-- User table -->
+                        <div style="white-space: nowrap">
                         <b-table
                             show-empty
                             small
+                            responsive
+                            :no-border-collapse="true"
+                            :sticky-header="true"
                             :items="this.users"
                             :fields="fields"
                             :filter="filter"
@@ -123,12 +119,12 @@
                             :sort-direction="sortDirection"
                             @filtered="onFiltered"
                         >
-                            <template v-slot:cell(name)="row">
+                            <template v-slot:cell(name)="row" class="text-nowrap" style="position: sticky">
                                 {{ row.value.username }}
                             </template>
 
                             <!-----Delete and Edit Button--->
-                            <template v-slot:cell(actions)="row">
+                            <template v-slot:cell(actions)="row" class="text-nowrap">
                                 <b-button size="sm"
                                           variant="primary"
                                           v-b-modal.modal-1
@@ -145,6 +141,7 @@
                                 </b-button>
                             </template>
                         </b-table>
+                        </div>
                         <!---- Add button to create new user--->
                         <b-col >
                             <b-button class="addButton"
@@ -180,7 +177,6 @@
             let role_Admin = ['ROLE_ADMIN'];
             let role_Creator = ['ROLE_POLL_CREATOR'];
             let role_Editor = ['ROLE_POLL_EDITOR'];
-            let role_Par = ['ROLE_PARTICIPANT'];
             return {
                 isUpdate: false,
                 items: [],
@@ -188,8 +184,7 @@
                 options: [
                     { value: role_Admin, text: 'Admin'},
                     { value: role_Creator, text: 'Creator'},
-                    { value: role_Editor, text: 'Editor'},
-                    { value: role_Par, text: 'Participant'}
+                    { value: role_Editor, text: 'Editor'}
                 ],
                 username: '',
                 password: '',

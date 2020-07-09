@@ -78,7 +78,7 @@
 
     .nav-container {
         //position: relative;
-        //z-index: $zindex-sticky;
+        z-index: $zindex-sticky + 1;
         top: 0;
         padding-bottom: 21px;
         background-color: $floating-background-color;

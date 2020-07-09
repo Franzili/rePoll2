@@ -51,7 +51,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
+    @WithUserDetails(value = MockTestUsers.ADMIN_USER, userDetailsServiceBeanName = "mockTestUsers")
     public void testUpdateUsersValidUuid() {
         String uuid = "b4ff71f9-a8ab-40cf-9403-5f2e7868bdcd";
         UserCmd userCmd = makeUserCmd();
@@ -61,7 +61,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
+    @WithUserDetails(value = MockTestUsers.ADMIN_USER, userDetailsServiceBeanName = "mockTestUsers")
     public void testUpdateUsersOtherStr() {
         String uuid = "sdlkfslkjlkjss";
         UserCmd userCmd = makeUserCmd();

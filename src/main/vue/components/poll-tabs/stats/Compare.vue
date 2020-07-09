@@ -1,5 +1,13 @@
 <template>
     <b-container>
+        <b-row style="margin-top: 2vh">
+            <b-col cols="4">
+                <b-form-group description="Iteration launch date">
+                    <b-form-select v-model="iteration"
+                                   :options="iterationList"></b-form-select>
+                </b-form-group>
+            </b-col>
+        </b-row>
         <b-row style="margin-top: 1rem">
             <b-col>
                 <b-button variant="primary"
@@ -63,6 +71,7 @@
     // TODO persistence functionality
     export default {
         name: "Compare",
+        props: ['iterationList'],
         data() {
             return {
                 cardList: [],
@@ -75,13 +84,22 @@
             }
         },
         computed: {
+            iteration: {
+                get() {
+                    return this.$store.getters["currentPoll/getIterationId"];
+                },
+                set(val) {
+                    this.$store.commit('currentPoll/setIterationId', val)
+                }
+            },
             ...mapState('currentPoll', {
                 statistics: 'statistics',
                 poll: 'poll'
             }),
             //TODO only for show
             ...mapGetters('currentPoll', {
-                getPollStructure: 'statStructureObj'
+                getPollStructure: 'statStructureObj',
+                getIteration: 'getStatByIteration'
             })
         },
         created() {
@@ -94,7 +112,7 @@
                     let group = this.poll.pollConsistencyGroups[i]
                     let statSet = []
                     group.questions.forEach(quest => {
-                        statSet.push(this.statistics.find(stat => stat.question.id === quest.id))
+                        statSet.push(this.getIteration.find(stat => stat.question.id === quest.id))
                     })
                     let cardObj = {id: Date.now() + Math.random(),compSet: statSet, showTitle: 'Consistency ' + (i+1)}
                     this.consistSelectOpt.push({value: i, text: 'Consistency ' + (i+1)})
@@ -108,7 +126,7 @@
                 if (compSet.length > 0) {
                     let statSet = []
                     compSet.forEach(entry => {
-                        statSet.push(this.statistics.find(stat => stat.question.id === entry))
+                        statSet.push(this.getIteration.find(stat => stat.question.id === entry))
                     })
                     let cardObj = {id: Date.now() + Math.random(),compSet: statSet}
                     this.cardList.push(cardObj)

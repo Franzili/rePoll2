@@ -2,8 +2,8 @@ package gpse.repoll.security;
 
 import gpse.repoll.domain.poll.Poll;
 import gpse.repoll.domain.poll.PollEditStatus;
+import gpse.repoll.domain.poll.PollEntry;
 import gpse.repoll.domain.poll.User;
-import gpse.repoll.domain.repositories.PollEntryRepository;
 import gpse.repoll.domain.service.PollService;
 import gpse.repoll.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +18,11 @@ import java.util.UUID;
 public class SecurityService {
 
     private final PollService pollService;
-    private final PollEntryRepository pollEntryRepository;
     private final UserService userService;
 
     @Autowired
-    public SecurityService(PollService pollService, PollEntryRepository pollEntryRepository, UserService userService) {
+    public SecurityService(PollService pollService, UserService userService) {
         this.pollService = pollService;
-        this.pollEntryRepository = pollEntryRepository;
         this.userService = userService;
     }
 
@@ -61,6 +59,18 @@ public class SecurityService {
     public boolean isEditor(String username) {
         User user = userService.getUser(username);
         return user.getRoles().contains(Roles.POLL_EDITOR);
+    }
+
+    public boolean hasNotParticipated(UUID pollID, UUID participantID) {
+        Poll poll = pollService.getPoll(pollID);
+        if (poll.getCurrentIteration() != null) {
+            for (PollEntry entry : poll.getCurrentIteration().getPollEntries()) {
+                if (entry.getParticipant().getId().equals(participantID)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**

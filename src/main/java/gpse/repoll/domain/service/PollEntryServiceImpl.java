@@ -24,7 +24,7 @@ public class PollEntryServiceImpl implements PollEntryService {
     private final PollService pollService;
     private final ParticipantService participantService;
 
-    private final PollIterationRepository pollIterationRepository;
+    private final PollIterationService pollIterationService;
     private final PollEntryRepository pollEntryRepository;
     private final QuestionBaseRepository<Question> questionRepository;
     private final TextAnswerRepository textAnswerRepository;
@@ -37,7 +37,7 @@ public class PollEntryServiceImpl implements PollEntryService {
     public PollEntryServiceImpl(
             PollService pollService,
             ParticipantService participantService,
-            PollIterationRepository pollIterationRepository,
+            PollIterationService pollIterationService,
             PollEntryRepository pollEntryRepository,
             QuestionBaseRepository<Question> questionRepository,
             TextAnswerRepository textAnswerRepository,
@@ -46,7 +46,7 @@ public class PollEntryServiceImpl implements PollEntryService {
             MultiChoiceAnswerRepository multiChoiceAnswerRepository) {
         this.pollService = pollService;
         this.participantService = participantService;
-        this.pollIterationRepository = pollIterationRepository;
+        this.pollIterationService = pollIterationService;
         this.pollEntryRepository = pollEntryRepository;
         this.questionRepository = questionRepository;
         this.textAnswerRepository = textAnswerRepository;
@@ -92,9 +92,9 @@ public class PollEntryServiceImpl implements PollEntryService {
      * {@inheritDoc}
      */
     @Override
-    public List<PollEntry> getAll(UUID pollId) {
-        Poll poll = pollService.getPoll(pollId);
-        return poll.getPollEntries();
+    public List<PollEntry> getAll(UUID pollId, Long iterationId) {
+        PollIteration pollIteration = pollIterationService.getPollIteration(pollId, iterationId);
+        return pollIteration.getPollEntries();
     }
 
     /**
@@ -136,7 +136,7 @@ public class PollEntryServiceImpl implements PollEntryService {
 
         PollIteration currentIteration = poll.getCurrentIteration();
         currentIteration.add(pollEntry);
-        pollIterationRepository.save(currentIteration);
+        pollIterationService.save(currentIteration);
         return pollEntry;
     }
 
@@ -144,9 +144,14 @@ public class PollEntryServiceImpl implements PollEntryService {
      * {@inheritDoc}
      */
     @Override
-    public PollEntry getPollEntry(final UUID pollId, final Long pollEntryId) {
+    public PollEntry getPollEntry(final UUID pollId, final Long iterationId, final Long pollEntryId) {
         Poll poll = pollService.getPoll(pollId);
-        return findEntryOfPoll(poll, pollEntryId);
+        PollEntry pollEntry = findEntryOfPoll(poll, pollEntryId);
+        PollIteration pollIteration = pollIterationService.getPollIteration(pollId, iterationId);
+        if (pollIteration.getPollEntries().contains(pollEntry)) {
+            return pollEntry;
+        }
+        throw new BadRequestException("The entry does not belong to this iteration!");
     }
 
     /**

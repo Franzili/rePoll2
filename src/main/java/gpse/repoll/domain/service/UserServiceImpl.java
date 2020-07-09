@@ -138,7 +138,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
         Iterable<Poll> listAll = pollService.getAll();
         for (Poll listEle: listAll) {
-            //TODO: Liste von Participants auch durchgehen
             if (listEle.getCreator() != null && listEle.getCreator().getId() == id) {
                 listEle.setCreator(null);
             }

@@ -56,7 +56,6 @@ public class PollsControllerTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         controller = new PollsController(pollService);
-
         // Tie userService mock method calls to our Test User class.
         when(userService.getUser(anyString())).thenAnswer((Answer<UserDetails>) invocationOnMock -> {
             String username = invocationOnMock.getArgument(0);
@@ -65,7 +64,7 @@ public class PollsControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
+    @WithUserDetails(value = MockTestUsers.ADMIN_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testGetAllNormal() {
         Poll poll1 = new Poll("Poll1");
         Poll poll2 = new Poll("Poll2");
@@ -78,14 +77,14 @@ public class PollsControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
+    @WithUserDetails(value = MockTestUsers.ADMIN_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testGetAllEmpty() {
         when(pollService.getAll()).thenReturn(new ArrayList<Poll>());
         assertThat(controller.listPolls()).isEmpty();
     }
 
     @Test
-    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
+    @WithUserDetails(value = MockTestUsers.ADMIN_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testAddPollNormal() {
         PollCmd cmd = new PollCmd();
         cmd.setTitle("Poll 1");
@@ -94,7 +93,7 @@ public class PollsControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
+    @WithUserDetails(value = MockTestUsers.ADMIN_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testAddPollEmptyTitle() {
         PollCmd cmd = new PollCmd();
         cmd.setTitle("");
@@ -104,7 +103,7 @@ public class PollsControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = MockTestUsers.TEST_USER, userDetailsServiceBeanName = "mockTestUsers")
+    @WithUserDetails(value = MockTestUsers.ADMIN_USER, userDetailsServiceBeanName = "mockTestUsers")
     void testRemovePollNormal() {
         PollCmd cmd = new PollCmd();
         UUID uuid = UUID.randomUUID();
