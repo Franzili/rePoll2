@@ -88,6 +88,9 @@
             setEditingTitle(edit) {
                 this.editTitle = edit;
                 if (!edit) {
+                    if (this.pollTitle === "") {
+                        this.pollTitle = "Unnamed Poll"
+                    }
                     this.update({id: this.poll.id, title: this.pollTitle});
                 }
             }
