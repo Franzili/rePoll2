@@ -2,8 +2,10 @@ package gpse.repoll.web.controllers;
 
 import gpse.repoll.domain.poll.Design;
 import gpse.repoll.domain.service.DesignService;
+import gpse.repoll.security.Roles;
 import gpse.repoll.web.command.DesignCmd;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
+@Secured(Roles.POLL_EDITOR)
 public class DesignController {
 
     private DesignService designService;

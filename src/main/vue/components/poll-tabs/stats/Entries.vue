@@ -24,7 +24,13 @@
 
                     <b-col>
                         <div v-if="section.idQA[0]">
-                            <b-table striped hover :fixed="true" :fields="['question', 'answer']" :items="section.idQA"></b-table>
+                            <b-table
+                                striped
+                                hover
+                                responsive
+                                :fields="['question', 'answer']"
+                                :items="section.idQA"
+                            ></b-table>
                         </div>
                     </b-col>
                 </div>
