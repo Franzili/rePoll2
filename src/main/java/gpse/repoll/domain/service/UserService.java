@@ -46,23 +46,25 @@ public interface UserService extends UserDetailsService {
      * Updates a {@link User} by ID.
      * @param userId The ID of a user
      * @param userName The new username
+     * @param password The new password
      * @param fullName The new full name
      * @param email The new e-mail
      * @param role The new role
      * @return The updated user
      */
-    User updateUser(UUID userId, String userName, String fullName, String email, String role);
+    User updateUser(UUID userId, String userName, String password, String fullName, String email, String role);
 
     /**
      * Updates a {@link User} by username.
      * @param oldUsername The old username
      * @param userName The new username
+     * @param password The new password
      * @param fullName The new full name
      * @param email The new e-mail
      * @param role The new role
      * @return The updated user
      */
-    User updateUser(String oldUsername, String userName, String fullName, String email, String role);
+    User updateUser(String oldUsername, String userName, String password, String fullName, String email, String role);
 
     /**
      * Deletes a {@link User} by ID.

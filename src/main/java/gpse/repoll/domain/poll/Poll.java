@@ -210,7 +210,7 @@ public class Poll extends Auditable<User> {
     }
 
     public void add(PollSection pollSection) {
-        pollSections.add(pollSection); // todo create exceptions here
+        pollSections.add(pollSection);
     }
 
     public void addAllSections(Collection<PollSection> pollSections) {

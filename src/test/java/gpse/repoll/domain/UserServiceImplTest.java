@@ -19,6 +19,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -30,6 +32,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
+@TestPropertySource(properties = { "repoll.productionMode=false" })
 public class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
@@ -49,10 +52,13 @@ public class UserServiceImplTest {
     @Autowired
     private PollEntryService pollEntryService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        userService = new UserServiceImpl(userRepository, mailService, pollService, pollEntryRepository, pollEntryService);
+        userService = new UserServiceImpl(userRepository, mailService, pollService, pollEntryRepository, pollEntryService, passwordEncoder);
     }
 
     @Test
@@ -87,6 +93,7 @@ public class UserServiceImplTest {
 
         userService.updateUser(uuid,
                 "PeterLustig",
+                "GutenTag",
                 "Peter Lustig",
                 "plustig@gmail.com",
                 Roles.POLL_EDITOR);
@@ -103,7 +110,7 @@ public class UserServiceImplTest {
         User user = Mockito.mock(User.class);
         when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
 
-        userService.updateUser(uuid, null, null, "plustig@gmail.com", Roles.POLL_CREATOR);
+        userService.updateUser(uuid, null, null, null, "plustig@gmail.com", Roles.POLL_CREATOR);
         verify(user, never()).setUsername(anyString());
         verify(user, never()).setFullName(anyString());
         verify(user).setEmail("plustig@gmail.com");
@@ -119,6 +126,7 @@ public class UserServiceImplTest {
         assertThatThrownBy(() -> {
             userService.updateUser(uuid,
                     "PeterLustig",
+                    "GutenTag",
                     "Peter Lustig",
                     "plustig@gmail.com",
                     null);
@@ -143,7 +151,7 @@ public class UserServiceImplTest {
         when(userRepository.findByUsername(eq("Username2"))).thenReturn(Optional.of(otherUser));
 
         assertThatThrownBy(() -> {
-            userService.updateUser(uuidMyUser, "Username2", null, null, null);
+            userService.updateUser(uuidMyUser, "Username2", null, null, null, null);
         }).isInstanceOf(UserNameAlreadyTakenException.class);
     }
 

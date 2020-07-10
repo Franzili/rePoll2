@@ -40,6 +40,13 @@ public interface PollService {
     Poll getPoll(UUID id);
 
     /**
+     * Gets a {@link Poll}, but strips sensitive fields so that it can be sent to non-authenticated users.
+     * @param id The ID of the poll
+     * @return the stripped poll
+     */
+    Poll getPollStripped(UUID id);
+
+    /**
      * Updates a {@link Poll}.
      * @param id The ID of the poll
      * @param title The new title

@@ -6,7 +6,7 @@ class ScaleQuestionModel extends PollItemModel {
         this.id = id;
         this.type = "ScaleQuestion";
         this.title = "Scale Question";
-        this.min = 0;
+        this.min = 1;
         this.max = 10;
         this.stepCount = 1;
         this.scaleNameLeft = "Lower Bound";

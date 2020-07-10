@@ -14,7 +14,7 @@ public class QuestionAnswersSet {
     private Question question;
 
     @JsonSerialize(keyUsing = SerializeParticipant.class)
-    private final Map<Participant, Answer> participantAnswerMap = new HashMap<>(); // Todo participant instead of user
+    private final Map<Participant, Answer> participantAnswerMap = new HashMap<>();
 
     public QuestionAnswersSet(Map<Participant, Answer> participantAnswerMap, Question question) {
         this.question = question;

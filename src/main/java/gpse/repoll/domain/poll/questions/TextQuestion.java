@@ -1,5 +1,7 @@
 package gpse.repoll.domain.poll.questions;
 
+import gpse.repoll.domain.exceptions.BadRequestException;
+
 import javax.persistence.Entity;
 
 /**
@@ -8,7 +10,7 @@ import javax.persistence.Entity;
 @Entity
 public class TextQuestion extends Question {
 
-    private int charLimit; // todo > 0 at least
+    private int charLimit;
 
     public TextQuestion() {
 
@@ -25,6 +27,10 @@ public class TextQuestion extends Question {
     }
 
     public void setCharLimit(int charLimit) {
-        this.charLimit = charLimit;
+        if (charLimit > 0) {
+            this.charLimit = charLimit;
+        } else {
+            throw new BadRequestException("Character limit must be > 0!");
+        }
     }
 }
