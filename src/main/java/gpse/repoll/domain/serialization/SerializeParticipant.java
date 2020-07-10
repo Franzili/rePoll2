@@ -14,9 +14,10 @@ public class SerializeParticipant extends JsonSerializer<Participant> {
                           JsonGenerator jsonGenerator,
                           SerializerProvider serializerProvider) throws IOException {
         if (participant.getFullName() == null) {
-            jsonGenerator.writeString("Anonymous");
+            jsonGenerator.writeFieldName("Anonymous");
+                //writeString("Anonymous");
         } else {
-            jsonGenerator.writeString(participant.getFullName());
+            jsonGenerator.writeFieldName(participant.getFullName());
         }
     }
 }

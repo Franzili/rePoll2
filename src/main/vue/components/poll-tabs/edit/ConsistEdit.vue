@@ -106,7 +106,6 @@
                     }
                     await this.addConst(addCmd)
                 } else { //update
-                    console.log('id: ', this.consistencies[this.activeIndex].id)
                     let updCmd = {
                         pollId: this.$route.params.pollId,
                         constId: this.consistencies[this.activeIndex].id,

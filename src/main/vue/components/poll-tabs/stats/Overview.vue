@@ -4,6 +4,9 @@
         <p>
             {{getStatistics}}
         </p>
+        <p>
+            {{getStatStructure}}
+        </p>
         -->
 
         <b-row style="margin-top: 2vh">
@@ -15,27 +18,37 @@
             </b-col>
         </b-row>
 
-        <div v-if="loaded && getStatStructure.length > 0">
-            <b-container style="margin-top: 2rem"
-                         v-bind:key="section.id"
-                         v-for="section in getStatStructure"
-            >
-                <h3>
-                    Section: {{section.title}}
-                </h3>
+        <b-container v-if="notEmpty">
+            <div v-if="loaded && getStatStructure.length > 0">
+                <b-container style="margin-top: 2rem"
+                             v-bind:key="section.id"
+                             v-for="section in getStatStructure"
+                >
+                    <h3>
+                        Section: {{section.title}}
+                    </h3>
 
-                <div v-if="section.statistics[0] !== undefined">
-                    <b-card  border-variant="dark"
-                             style="margin-top: 1rem; margin-bottom: 1rem"
-                             v-bind:key="statistic.question.id"
-                             v-for="statistic in section.statistics">
+                    <div v-if="section.statistics[0] !== undefined">
+                        <b-card  border-variant="dark"
+                                 style="margin-top: 1rem; margin-bottom: 1rem"
+                                 v-bind:key="statistic.question.id"
+                                 v-for="statistic in section.statistics">
 
-                        <ChartCards v-on:changeTab="$emit('toQuestion', $event)"
-                                    v-bind:statistic="statistic"></ChartCards>
-                    </b-card>
-                </div>
-            </b-container>
-        </div>
+                            <ChartCards v-on:changeTab="$emit('toQuestion', $event)"
+                                        v-bind:statistic="statistic"></ChartCards>
+                        </b-card>
+                    </div>
+                </b-container>
+            </div>
+        </b-container>
+
+        <b-row style="margin-top: 25vh; color: lightgrey"
+               align-h="center"
+               v-show="!notEmpty">
+            <b-card>
+                <h5> Please wait a moment.<br> No entries were made. </h5>
+            </b-card>
+        </b-row>
 
 
     </b-container>
@@ -51,6 +64,15 @@
             return {
                 statStructure: [],
                 loaded: false,
+                notEmpty: true,
+
+            }
+        },
+        created() {
+            this.notEmpty = false
+            let iteration = this.getIterationById
+            if (iteration.pollEntries > 0){
+                this.notEmpty = true
             }
         },
         methods: {
@@ -60,7 +82,7 @@
         },
         async mounted() {
             this.loaded = false
-            await this.loadPollAnswers(this.$route.params.pollId);
+            await this.loadPollAnswers({pollId: this.$route.params.pollId, iterationId: this.iteration});
             this.loaded = true
 
         },
@@ -78,8 +100,20 @@
             }),
             ...mapGetters('currentPoll', {
                 getStatStructure: 'statStructureObj',
-                getStatistics: 'getStatByIteration'
-            })
+                getStatistics: 'getStatByIteration',
+                getIterationById: 'getIterationById'
+            }),
+        },
+        watch: {
+            iteration: function () {
+                this.notEmpty = false
+                let iteration = this.getIterationById
+                if (iteration.pollEntries > 0){
+                    this.notEmpty = true
+                }
+                this.statStructure = this.getStatStructure
+                this.loadPollAnswers({pollId: this.$route.params.pollId, iterationId: this.iteration});
+            }
         },
         components: {
             ChartCards

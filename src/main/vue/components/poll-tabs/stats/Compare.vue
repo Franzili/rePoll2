@@ -172,7 +172,19 @@
                 if (!this.cardList.includes(this.consistCards[val])) {
                     this.cardList.push(this.consistCards[val])
                 }
+            },
+            iteration: {
+                handler() {
+                    this.cardList = []
+                    this.consistCards = []
+                    this.getConsistencies()
+                    this.cardList = this.consistCards
+                    this.loadPollAnswers({pollId: this.$route.params.pollId, iterationId: this.iteration});
+
+
+                }
             }
+
         },
         components: {
             CheckModal,
