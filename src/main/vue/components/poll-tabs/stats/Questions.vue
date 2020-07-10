@@ -19,7 +19,7 @@
                     </b-form-select>
 
                     <!-- selecting for comparision with other question -->
-                    <b-form-select v-model="compareWith" :options="this.structure">
+                    <b-form-select v-model="compareWith" :options="this.structureSecond">
                         <template v-slot:first>
                             <b-form-select-option :value="null" disabled>Select an other question for display
                             </b-form-select-option>
@@ -96,6 +96,8 @@
                                  :filter="filter"
                                  :filterIncludedFields="filterOn"
                                  @filtered="onFiltered"
+                                 border="1"
+                                 inline-block
                         ></b-table>
                     </div>
 
@@ -106,11 +108,13 @@
                                  small
                                  responsive
                                  :sticky-header="true"
-                                 :items="answerSet"
+                                 :items="answerSetSecond"
                                  :fields="fields"
                                  :filter="filter"
                                  :filterIncludedFields="filterOn"
                                  @filtered="onFiltered"
+                                 border="1"
+                                 inline-block
                         ></b-table>
                     </div>
                 </div>
@@ -141,6 +145,9 @@
                 totalRows: 1,
                 filter: '',
                 filterOn: [],
+                answerSetSecond: [],
+                structureSecond: [],
+                totalRowsSecond: 1,
                 // TODO Prototype for deeper analyses
                 //selQuest: [],
             }
@@ -152,6 +159,13 @@
                 this.selected = this.qId
             }
             this.totalRows = this.answerSet.length
+
+            //await this.loadPollAnswers(this.poll.id);
+            this.structureSecond = this.getPollStructure;
+            if (this.qId !== 0) {
+                this.compareWith = this.qId
+            }
+            this.totalRowsSecond = this.answerSetSecond.length
         },
         computed: {
             ...mapState('currentPoll', {
@@ -177,9 +191,9 @@
             },
             compareWith: function (val) {
                 if (val !== null) {
-                    this.answerSet = this.getPollAnswers(val)
+                    this.answerSetSecond = this.getPollAnswers(val)
                 } else {
-                    this.answerSet = []
+                    this.answerSetSecond = []
                 }
             }
         },
@@ -221,17 +235,17 @@
 <style scoped>
 
     #wrapper {
-        //width: 500px;
-        //overflow: auto; /* add this to contain floated children */
+        /*width: 500px;*/
+        overflow: auto; /* add this to contain floated children */
     }
     #first {
-        //width: 300px;
+        /*width: 300px;*/
         float:left; /* add this */
         overflow: auto;
     }
     #second {
-        //border: 1px solid green;
-        float: right; /* add this */
+        /*border: 1px solid green;*/
+        float: left; /* add this */
         overflow: auto;
     }
 
