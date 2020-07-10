@@ -63,7 +63,7 @@ public class WriteConfigFile implements InitializingBean {
                 System.out.println("No config file found. Writing default...");
 
                 String defaultConfig = "repoll.serverAddress=localhost:8080\n"
-                    + "repoll.port=8088\n"
+                    + "repoll.port=8080\n"
                     + "repoll.secret=$SECRET\n"
                     + "repoll.database=./repoll\n";
 
