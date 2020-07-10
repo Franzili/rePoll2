@@ -24,13 +24,13 @@
     </div>
 
     <div v-else>
-        <b-form>
+        <b-form name="scaleConfiguration">
             Min:
-            <b-form-input v-model="model.min"></b-form-input>
+            <b-form-input type="number" name="min" value="" v-on:keyup="minIsNumber" v-model="model.min"></b-form-input>
             Max:
-            <b-form-input v-model="model.max"></b-form-input>
+            <b-form-input type="number" name="max" v-on:keyup="maxIsNumber" v-model="model.max"></b-form-input>
             Step Size:
-            <b-form-input v-model="model.stepCount"></b-form-input>
+            <b-form-input type="number" name="step" v-on:keyup="stepIsNumber" v-model="model.stepCount"></b-form-input>
             Minimum Label:
             <b-form-input v-model="model.scaleNameLeft"></b-form-input>
             Maximum Label:
@@ -46,11 +46,44 @@
         name: "ScaleQuestion",
         data() {
             return {
+                maxValid: this.model.min < this.model.max,
+                stepValid: true,
+
                 // start value is the average of min and max, rounded to the
                 // nearest multiple of stepCount
                 selected: Math.round(((this.model.min + this.model.max) / 2)
                     / this.model.stepCount) * this.model.stepCount
             }
+        },
+
+        methods: {
+            minIsNumber() {
+                if (document.scaleConfiguration.min.value <"0" ||
+                    document.scaleConfiguration.min.value > "9") {
+                    document.scaleConfiguration.min.value = "1";
+                    return false
+                }
+                return true
+            },
+            maxIsNumber() {
+                console.log("jap")
+                if (document.scaleConfiguration.max.value <"0" ||
+                    document.scaleConfiguration.max.value > "9") {
+                    document.scaleConfiguration.max.value = this.model.min;
+                    return false
+                }
+                return true
+            },
+            stepIsNumber() {
+                console.log("jap")
+                if (document.scaleConfiguration.step.value <"0" ||
+                    document.scaleConfiguration.step.value > "9") {
+                    document.scaleConfiguration.step.value = "1";
+                    return false
+                }
+                return true
+            },
+
         },
         computed: {
             answer: function() {
