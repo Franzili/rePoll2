@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 @RequestMapping("/api/v1/fineprint")
 public class FinePrintController {
 
+    @SuppressWarnings("PMD.PreserveStackTrace")
     @GetMapping("/")
     public String getFinePrint() {
 

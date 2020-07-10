@@ -4,7 +4,6 @@
         <footer>
             <div
                 style="margin-top: 20px"
-                class="text-muted"
                 v-html="privacyPolicyText"></div>
         </footer>
 
