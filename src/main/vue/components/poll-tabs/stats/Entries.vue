@@ -80,7 +80,16 @@
             ...mapActions('currentPoll', {
                 loadEntries: 'loadEntries',
             }),
+            async helper(id) {
+                await this.loadEntries({pollId: this.$route.params.pollId, iterationId: id})
+                this.structure = this.getEntries;
+            }
         },
+        watch: {
+            iteration: function (val) {
+                this.helper(val)
+            }
+        }
     }
 </script>
 

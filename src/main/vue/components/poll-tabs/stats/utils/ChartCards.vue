@@ -39,13 +39,14 @@
 
         </b-row>
 
-        <b-row>
+        <b-row v-if="trendStats === undefined">
             <b-col v-if="statistic.mode[0] !== undefined">
                 <p> mode: {{statistic.mode[0].text}}</p>
             </b-col>
         </b-row>
 
-        <ChartsInlay v-bind:chartsObj="chartsObj"></ChartsInlay>
+        <ChartsInlay v-bind:trend-charts="trendStats"
+            v-bind:chartsObj="chartsObj"></ChartsInlay>
 
     </b-container>
 </template>
@@ -57,7 +58,7 @@
     import ToolBar from "./ToolBar";
     export default {
         name: "ChartCards",
-        props: ['statistic'],
+        props: ['statistic','trendStats'],
         data() {
             return {
                 chartsObj: {},
@@ -93,6 +94,9 @@
             }
         },
         created() {
+            if (this.trendStats !== undefined) {
+                this.actives = [null,null,null,null,null,null,null,null,null];
+            }
             let value = this.statistic;
             this.chartsObj = this.getChartData(value);
             this.chartsObj.tableAnswers = this.getAnswers(value.question.id);
@@ -103,6 +107,9 @@
             if (value.question.type === 'TextQuestion') {
                 this.actives = [null,null,null,null,null,null,null,null,null];
                 this.chartsObj.currentChart = 'table';
+            }
+            if (this.trendStats !== undefined) {
+                this.actives = [null,null,null,null,null,null,null,null,null];
             }
         },
         components: {

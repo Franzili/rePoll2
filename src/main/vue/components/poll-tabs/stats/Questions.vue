@@ -144,6 +144,10 @@
 
                 // TODO Prototype for deeper analyses
                 //this.addQuestToSelected(val)
+            },
+            iteration: function () {
+                this.helper()
+                this.$forceUpdate()
             }
         },
         methods: {
@@ -152,6 +156,11 @@
             }),
             onFiltered(filteredItems) {
                 this.totalRows = filteredItems.length
+            },
+            async helper() {
+                await this.loadPollAnswers({pollId: this.poll.id, iterationId: this.iteration});
+                this.structure = this.getPollStructure;
+                this.answerSet = this.getPollAnswers(this.selected)
             }
 
 

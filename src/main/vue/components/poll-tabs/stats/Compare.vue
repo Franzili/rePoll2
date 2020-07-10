@@ -172,7 +172,7 @@
                 if (!this.cardList.includes(this.consistCards[val])) {
                     this.cardList.push(this.consistCards[val])
                 }
-            }
+            },
         },
         components: {
             CheckModal,

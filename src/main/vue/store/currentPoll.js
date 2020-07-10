@@ -226,7 +226,11 @@ const currentPoll = {
         entriesUserNames: state => {
             let res = [];
             state.entries.forEach(entry => {
-                let entryUser = {text: entry.participant.fullName, value: entry.participant.id};
+                let name = entry.participant.fullName
+                if (name === null) {
+                    name = 'Anonymous'
+                }
+                let entryUser = {text: name, value: entry.participant.id};
                 res.push(entryUser)
             });
             return res;
