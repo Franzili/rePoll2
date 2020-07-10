@@ -69,6 +69,10 @@ const currentPoll = {
     },
 
     getters: {
+        getIterationById: state => {
+            return state.poll.pollIterations.find(iteration => iteration.id === state.iteration)
+        },
+
         getStatByIteration: state => {
             let res = []
             state.statistics.forEach(stats => {
@@ -238,7 +242,7 @@ const currentPoll = {
 
         statStructureObj: state => {
             let strObj = [];
-            let itStats = state.statistics.find(statistic => statistic.id = state.iteration)
+            let itStats = state.statistics.find(statistic => statistic.pollIteration.id === state.iteration)
             if (itStats !== undefined) {
                 state.poll.pollSections.forEach(section => {
                     let statObjList = []

@@ -67,7 +67,8 @@
                 statistics: 'statistics'
             }),
             ...mapGetters('currentPoll', {
-                getChartData: 'transformToChartData'
+                getChartData: 'transformToChartData',
+                getAnswers: 'getAnswerSetByID'
             })
         },
         created() {
@@ -93,7 +94,12 @@
             fillChartObjs() {
                 this.chartObjs = []
                 this.compareData.compSet.forEach(set => {
-                    this.chartObjs.push({qId: set.question.id, chartObj: this.getChartData(set)})
+                    let tmp = {qId: set.question.id, chartObj: this.getChartData(set)}
+                    tmp.chartObj.tableAnswers = this.getAnswers(tmp.qId)
+                    if(tmp.chartObj.qType === 'TextQuestion') {
+                        tmp.chartObj.currentChart = 'table'
+                    }
+                    this.chartObjs.push(tmp)
                 })
 
             },
@@ -110,6 +116,12 @@
             }
         },
         watch: {
+            compareData: {
+                handler() {
+                    this.fillChartObjs()
+                },
+                deep: true
+            },
             frequency: function (freq) {
                 let index = this.chartObjs.findIndex(objs => objs.qId === this.question)
                 if (freq === 'abs') {

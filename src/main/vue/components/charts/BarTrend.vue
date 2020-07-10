@@ -29,10 +29,7 @@
             }
         },
         mounted() {
-            console.log(this.chartData)
-
             this.getMoreColors()
-            console.log(this.chartData)
             this.renderChart({
                 type: 'bar',
                 labels: this.chartLabels,

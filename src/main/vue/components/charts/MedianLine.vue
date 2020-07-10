@@ -51,18 +51,13 @@
             }
         },
         mounted() {
-            //console.log(this.YLabels)
-            //console.log(this.XLabels)
-            //console.log('chartData ',this.chartData)
-            //this.datasets.data = this.chartData
-           //console.log('datasets ', this.chartData)
             this.renderChart({
                 type: 'line',
                 xLabels: this.XLabels,
-                yLabels: this.YLabels,//['', 'Blau', 'Grün', 'Lila', 'Rot' ],
+                yLabels: this.YLabels,
                 datasets: [{
-                    label: 'My First dataset',
-                    data: this.chartData,//[ "Grün", "Blau", "Lila", "Lila", "Lila" ],
+                    label: 'mode line',
+                    data: this.chartData,
                     fill: false,
                     borderColor: '#56a137',
                     backgroundColor: 'rgba(86,161,55,0.5)'

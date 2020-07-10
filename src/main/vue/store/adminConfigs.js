@@ -17,7 +17,6 @@ const adminConfigs = {
          * Update the Mail Configurations.
          */
         updateConfigs({commit}, mailCmd) {
-            console.log(mailCmd)
             return new Promise((resolve, reject) => {
                 api.admin.updateConfigs(mailCmd).then(function (res) {
                     commit('updateConfigs', res.data);

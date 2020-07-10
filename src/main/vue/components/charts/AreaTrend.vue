@@ -58,7 +58,6 @@
 
         methods: {
             getMoreColors() {
-                console.log('[RePoll] Causing error from unknown source')
                 //setting different background colors of choices
                 if (this.chartData.length > this.backgroundColors.length){
 

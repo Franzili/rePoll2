@@ -13,6 +13,7 @@
                               v-b-modal.new-poll
                               >+</b-button>
                     <b-modal
+                        auto-focus-button="ok"
                         hide-header-close
                         centered
                         id="new-poll"

@@ -4,7 +4,11 @@
         <p>
             {{getStatistics}}
         </p>
+        <p>
+            {{getStatStructure}}
+        </p>
         -->
+
         <b-row style="margin-top: 2vh">
             <b-col cols="4">
                 <b-form-group description="Iteration launch date">
@@ -66,11 +70,10 @@
         },
         created() {
             this.notEmpty = false
-            let iteration = this.getStatistics
-            if (iteration[0].frequencies.length > 0){
+            let iteration = this.getIterationById
+            if (iteration.pollEntries > 0){
                 this.notEmpty = true
             }
-            console.log(this.notEmpty)
         },
         methods: {
             ...mapActions('currentPoll', {
@@ -97,12 +100,19 @@
             }),
             ...mapGetters('currentPoll', {
                 getStatStructure: 'statStructureObj',
-                getStatistics: 'getStatByIteration'
+                getStatistics: 'getStatByIteration',
+                getIterationById: 'getIterationById'
             }),
         },
         watch: {
             iteration: function () {
-                this.$forceUpdate()
+                this.notEmpty = false
+                let iteration = this.getIterationById
+                if (iteration.pollEntries > 0){
+                    this.notEmpty = true
+                }
+                this.statStructure = this.getStatStructure
+                this.loadPollAnswers({pollId: this.$route.params.pollId, iterationId: this.iteration});
             }
         },
         components: {
