@@ -46,6 +46,10 @@
             <b-button class="my-button" variant="success">Submit!</b-button>
             -->
         </b-container>
+
+        <b-container>
+            <FinePrint></FinePrint>
+        </b-container>
     </b-container>
 
 </template>
@@ -54,6 +58,7 @@
     import {mapGetters, mapActions, mapState} from "vuex"
 
     import PollItem from "../components/poll-tabs/edit/poll-items/PollItem";
+    import FinePrint from "./FinePrint";
 
     export default {
         name: "Answer",
@@ -130,7 +135,7 @@
 
             this.loaded = true
         },
-        components: { PollItem }
+        components: {FinePrint, PollItem }
     }
 </script>
 
