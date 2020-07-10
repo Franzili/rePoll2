@@ -55,7 +55,6 @@ public class Poll extends Auditable<User> {
     private final List<Question> questions = new ArrayList<>();
 
     @OneToMany
-    @JsonSerialize(contentUsing = SerializeParticipant.class)
     private final List<Participant> participants = new ArrayList<>();
 
     protected Poll() {

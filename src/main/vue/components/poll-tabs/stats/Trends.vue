@@ -4,10 +4,27 @@
             {{trends}}
         </p>
 
+
         <p>
             <AreaTrend
                 v-bind:chart-labels="chart.labels"
                 v-bind:chart-data="chart.datasets"></AreaTrend>
+        </p>
+
+        <!--
+        v-bind:y-labels="mode.yLabels"
+                v-bind:x-labels="mode.xLabels"
+                v-bind:chart-data="mode.data"
+        -->
+        <p>
+            <MedianLine v-bind:y-labels="mode.yLabels"
+                        v-bind:x-labels="mode.xLabels"
+                        v-bind:chart-data="mode.data"></MedianLine>
+        </p>
+
+        <p>
+            <BarTrend v-bind:chart-data="bar.datasets"
+                v-bind:chart-labels="bar.labels"></BarTrend>
         </p>
 
         <p>
@@ -22,25 +39,35 @@
 </template>
 
 <script>
+    import BarTrend from "../../charts/BarTrend";
     import AreaTrend from "../../charts/AreaTrend";
+    import MedianLine from "../../charts/MedianLine";
     import {mapState} from "vuex";
     export default {
         name: "Trends",
         data() {
             return {
-                chart: {}
+                chart: {},
+                mode: {},
+                bar: {}
             }
         },
         computed: {
             ...mapState('currentPoll', {
-                trends: 'trendCharts'
+                trends: 'trendCharts',
+                modes: 'modeCharts',
+                bTrend: 'barTrends'
             })
         },
         created() {
-            this.chart = this.trends[1]
+            this.bar = this.bTrend[2]
+            this.chart = this.trends[2]
+            this.mode = this.modes[4]
         },
         components: {
-            AreaTrend
+            AreaTrend,
+            MedianLine,
+            BarTrend
         }
     }
 </script>

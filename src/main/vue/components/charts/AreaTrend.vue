@@ -13,36 +13,6 @@
         },
         data() {
             return {
-                datasets: [
-                    {
-                        fill: true,
-                        data: [1,2,1,2,1,2]
-                    },
-                    {
-                        fill: '-1',
-                        data: [6,5,8,4,6,2]
-                    },
-                    {
-                        fill: '-1',
-                        data: [3,7,2,1,8,5]
-                    },
-                    {
-                        fill: '-1',
-                        data: [1,2,3,4,5,6]
-                    },
-                    {
-                        fill: '-1',
-                        data: [1,1,3,4,5,6]
-                    },
-                    {
-                        fill: '-1',
-                        data: [1,2,3,4,5,6]
-                    },
-                    {
-                        fill: false,
-                        data: [1,2,3,4,5,6]
-                    },
-                ],
                 borderColors: ['#56a137',
                     '#cb4b16',
                     '#02a097',
@@ -79,8 +49,6 @@
 
         mounted() {
             this.getMoreColors()
-            console.log('labels', this.chartLabels)
-            console.log('chart', this.chartData)
             this.renderChart({
                 type: 'line',
                 labels: this.chartLabels,
@@ -90,6 +58,7 @@
 
         methods: {
             getMoreColors() {
+                console.log('[RePoll] Causing error from unknown source')
                 //setting different background colors of choices
                 if (this.chartData.length > this.backgroundColors.length){
 

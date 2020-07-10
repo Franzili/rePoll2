@@ -50,6 +50,21 @@ const currentPoll = {
             questionId: '',
             labels: [],
             datasets: [],
+        }],
+        modeCharts : [{
+            questionId: '',
+            xLabels: [],
+            yLabels: [],
+            data: [],
+        }],
+        barTrends: [{
+            questionId: '',
+            labels: [],
+            datasets: [{
+                label: '',
+                backgroundColour: '',
+                data: []
+            }]
         }]
     },
 
@@ -324,8 +339,95 @@ const currentPoll = {
 
     mutations: {
 
+        setBarTrend(state, iterationStatistics) {
+            let tmpBarTrends = []
+            let first = iterationStatistics[0]
+
+            first.questionStats.forEach(qStat => {
+                tmpBarTrends.push({
+                    questionId: qStat.question.id,
+                    labels: [],
+                    datasets: []
+                })
+            })
+            iterationStatistics.forEach(itStats => {
+                for (let i = 0; i < itStats.questionStats.length; i++) {
+                    let tmpLabels = []
+                    if (itStats.questionStats[i].question.type !== 'TextQuestion') {
+                        itStats.questionStats[i].frequencies.forEach(frq => {
+                            tmpLabels.push(frq.choice.text)
+                        })
+                    }
+                    tmpBarTrends[i].labels = tmpLabels
+                }
+            })
+            for (let i = 0; i < tmpBarTrends.length; i++) {
+                iterationStatistics.forEach(itStats => {
+                    let tmpData = []
+                    itStats.questionStats[i].frequencies.forEach(frq => {
+                        tmpData.push(frq.absolute)
+                    })
+                    tmpBarTrends[i].datasets.push({
+                        label: new Intl.DateTimeFormat('en', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: '2-digit',
+                            weekday: 'short',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                        }).format(new Date(itStats.pollIteration.start)),
+                        backgroundColor: '',
+                        data: tmpData
+                    })
+                })
+            }
+            state.barTrends = tmpBarTrends
+        },
+
+        setModes(state, iterationStatistics) {
+            let tmpModes = []
+            let tmpXLabels = []
+            iterationStatistics.forEach(itStats => {
+                tmpXLabels.push(new Intl.DateTimeFormat('en', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    weekday: 'short',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                }).format(new Date(itStats.pollIteration.start)))
+            })
+            let first  = iterationStatistics[0]
+            first.questionStats.forEach(qStat => {
+                let tmpYLabels = ['']
+                if (qStat.question.type !== 'TextQuestion' && qStat.question.type !== 'ScaleQuestion') {
+                    qStat.question.choices.forEach(choice => {
+                        tmpYLabels.push(choice.text)
+                    })
+                }
+                if (qStat.question.type === 'ScaleQuestion') {
+                    qStat.frequencies.forEach(frq => {
+                        tmpYLabels.push(frq.choice.text)
+                    })
+                }
+                tmpModes.push({
+                    questionId: qStat.question.id,
+                    xLabels: tmpXLabels,
+                    yLabels: tmpYLabels,
+                    data: []
+                })
+            })
+            iterationStatistics.forEach(itStats => {
+                for (let i = 0; i < itStats.questionStats.length; i++) {
+                    if (itStats.questionStats[i].mode[0] !== undefined) {
+                        tmpModes[i].data.push(itStats.questionStats[i].mode[0].text);
+                    }
+                }
+            })
+            state.modeCharts = tmpModes
+        },
+
         setTrends(state, iterationStatistics) {
-            console.log(iterationStatistics)
             let tmpLabels = []
             iterationStatistics.forEach(itStats => {
                 tmpLabels.push(new Intl.DateTimeFormat('en', {
@@ -340,7 +442,6 @@ const currentPoll = {
             let tmpTrends = []
             let first  = iterationStatistics[0]
             first.questionStats.forEach(qStat => {
-                console.log(qStat)
                 tmpTrends.push({
                     questionId: qStat.question.id,
                     labels: tmpLabels,
@@ -372,9 +473,7 @@ const currentPoll = {
                     }
                 })
             })
-            console.log('result', tmpTrends)
             state.trendCharts = tmpTrends
-            console.log(iterationStatistics)
         },
 
         setIterationId(state, newIteration) {
@@ -558,6 +657,8 @@ const currentPoll = {
                 api.statistics.list(id).then(function (res) {
                     commit('setPollStats', res.data);
                     commit('setTrends', res.data);
+                    commit('setModes', res.data);
+                    commit('setBarTrend', res.data);
                     resolve(res.data);
                 }).catch(function (error) {
                     console.log(error);
