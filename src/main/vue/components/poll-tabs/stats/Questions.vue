@@ -119,6 +119,23 @@
                     </div>
                 </div>
 
+                <div id="combined" style="white-space: nowrap">
+                    <!-- displaying second question answers -->
+                    <b-table v-if="selected !== null && compareWith !== null"
+                             show-empty
+                             small
+                             responsive
+                             :sticky-header="true"
+                             :items="answerSetCombined"
+
+                             :filter="filter"
+                             :filterIncludedFields="filterOn"
+                             @filtered="onFiltered"
+                             border="1"
+                             inline-block
+                    ></b-table>
+                </div>
+
             </b-col>
         </b-row>
     </b-container>
@@ -148,6 +165,13 @@
                 answerSetSecond: [],
                 structureSecond: [],
                 totalRowsSecond: 1,
+                answerSetCombined: [],
+                fieldsCombined: [
+                    {isRowHeader: true, key: 'Username', sortable: true},
+                    {key: 'Answers', sortable: true},
+                    {isRowHeader: true, key: 'Username', sortable: true},
+                    {key: 'Answers', sortable: true}
+                ]
                 // TODO Prototype for deeper analyses
                 //selQuest: [],
             }
@@ -195,6 +219,7 @@
                 } else {
                     this.answerSetSecond = []
                 }
+                this.combineTables()
             }
         },
         methods: {
@@ -203,6 +228,15 @@
             }),
             onFiltered(filteredItems) {
                 this.totalRows = filteredItems.length
+            },
+
+            combineTables(){
+                for (let i = 0; i < this.answerSet.length; i++) {
+                    this.answerSetCombined[i] = this.answerSet[i] + this.answerSetSecond[i].getPollAnswers
+                    console.log('set: ', this.answerSet[i]);
+                    console.log('set: ', this.answerSetSecond[i].getPollAnswers);
+                    console.log('set: ', this.answerSetCombined[i]);
+                }
             }
 
 
