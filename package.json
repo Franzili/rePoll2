@@ -16,6 +16,7 @@
     "chart.js": "^2.9.3",
     "core-js": "^3.6.5",
     "dependencies": "0.0.1",
+    "qrcode.vue": "^1.7.0",
     "uuid": "^7.0.3",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.0",
