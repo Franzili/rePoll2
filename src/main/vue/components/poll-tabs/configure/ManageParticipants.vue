@@ -162,6 +162,20 @@
                         <p>
                             You also have the possibility to share the link above via other platforms.
                         </p>
+                        <b-button
+                            style="float: right"
+                            v-b-modal.qrCode
+                        >
+                            QR-Code
+                        </b-button>
+
+                        <b-modal
+                            id="qrCode"
+                            title="QR-Code"
+                            centered
+                        >
+                            <QRCode v-bind:link="this.link"></QRCode>
+                        </b-modal>
 
                     </b-col>
                 </b-row>
@@ -175,10 +189,11 @@
     import UploadParticipants from "./UploadParticipants";
     import DownloadPersonalizedLinks from "./DownloadPersonalizedLinks";
     import ReadEmails from "./ReadEmails";
+    import QRCode from "./QRCode";
 
     export default {
         name: "ManageParticipants",
-        components: {DownloadPersonalizedLinks, UploadParticipants, ReadEmails},
+        components: {DownloadPersonalizedLinks, UploadParticipants, ReadEmails, QRCode},
 
         data() {
             return {
@@ -196,7 +211,6 @@
 
                 participantMailPair: '',
                 mailSentCounter: 0,
-
             }
         },
 
